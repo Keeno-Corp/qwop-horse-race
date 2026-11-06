@@ -1,16 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 75
-**Did**
-- Found a likely cause for `hills` never showing: `scene.fog` far was 130 and the `hills` ramp began ~170 m from the side camera, so they were fully fogged to the sky colour. view.js:312 fog is now `Fog(0xb4c6c4, 30, 320)`; view.js:317 the `hills` rise now uses `smooth(10, 80, -z)` (was 28..110), so they start closer.
-**Saw**
-- Opened and `look`ed at the title card only: page loads, no console errors, tote/LIVE/lower-third show. `look` still lists `hills` under Never visible (in view); I did not see a race-phase picture with the new fog, and ran no `perf`. My `interact` call used a bad step (`frames` alone), so nothing was played.
-**Next**
-- `interact` `{"until":{"phase":"race"}}` then `look` to see whether hills/trees now show above the grandstand; if the sky band is still bare, raise the camera pitch or add hills nearer than z -80.
-- 50-pair scripted human-finish proof (Judge 73 item 2); track dirt-to-grass gradient; longer legs.
-**Open**
-- Fog/hills change unverified in the race view. Human finish still unproven.
-
 ### Judge 75
 
 **Judge 75: scores**
@@ -51,3 +40,15 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
    - Add a "MOST FACE-PLANTS" line to the results card when the max is above 0.
 
 SCORE: 7.9
+
+## Iteration 76
+**Did**
+- view.js `track` colours: added `d4` (0x8a9a3e) and a far-edge dirt-to-trampled-grass blend, `smooth(1.2, 4.7, z)` with noise grain.
+- Checked the postpass: broadcast.js:98 already calls `setRenderTarget(null)`, so the Judge 75 warning needs no change. The treeline (`trees`, 90 spheres) already exists at view.js:333.
+**Saw**
+- Race phase at raceT 1.0: no console errors, the green slope shows behind the grandstand, and the track still reads orange. The far-edge blend is under the fence, so it is barely visible. `look` still lists `hills` under Never visible. No `perf` run.
+**Next**
+- Prove a human finish with a generated 50-pair Q+P / W+O `interact` script (asked 18 times).
+- Make the grass-to-dirt blend stronger, or draw a visible grass strip in front of the near fence; lengthen the legs.
+**Open**
+- Human finish still unproven; the `hills` flag is unexplained; the trees are not visible in the picture.

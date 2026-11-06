@@ -345,11 +345,12 @@ export function buildEnvironment(scene, _tex, rng) {
   const tg = new THREE.PlaneGeometry(190, 9.4, 76, 8).rotateX(-Math.PI / 2), tp = tg.attributes.position;
   for (let i = 0; i < tp.count; i++) tp.setY(i, (noise2(tp.getX(i) * 0.7, tp.getZ(i) * 0.7) - 0.5) * 0.07);
   const tn = tg.toNonIndexed(); tn.computeVertexNormals();
-  const tcol = [], d1 = new THREE.Color(0xcc8930), d2 = new THREE.Color(0xb87a2c), d3 = new THREE.Color(0xe0a850), tq = tn.attributes.position;
+  const tcol = [], d1 = new THREE.Color(0xcc8930), d2 = new THREE.Color(0xb87a2c), d3 = new THREE.Color(0xe0a850), d4 = new THREE.Color(0x8a9a3e), tq = tn.attributes.position;
   for (let i = 0; i < tq.count; i += 3) {
     const z = tq.getZ(i), x = tq.getX(i); cc.copy(d1).lerp(d2, rng() * 0.8);
     if (Math.abs((z + 4.7 + Math.sin(x * 0.05) * 0.6) % (1.4 + 0.5 * noise2(Math.floor(x / 12), 3))) < 0.2) cc.lerp(d3, 0.55);
     cc.offsetHSL(0, 0, (noise2(x * 0.15, z * 0.9) - 0.5) * 0.06 + (noise2(x * 0.03 + 9, z * 0.3) - 0.5) * 0.08);
+    cc.lerp(d4, 0.7 * smooth(1.2, 4.7, z) * (0.6 + 0.4 * noise2(x * 0.4, z * 2)));   // far edge fades dirt into trampled grass
     for (let k = 0; k < 3; k++) tcol.push(cc.r, cc.g, cc.b);
   }
   tn.setAttribute('color', new THREE.Float32BufferAttribute(tcol, 3));
