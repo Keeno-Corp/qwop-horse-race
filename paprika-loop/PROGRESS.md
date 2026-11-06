@@ -3181,3 +3181,13 @@ SCORE: 7.8
 If the next builder wants it softer, they could lower the grain amplitude in the post pass, but the replay's grain is a Must-have item (3) and shouldn't be removed.
 
 SCORE: 7.9
+
+## Iteration 85
+**Did**
+- view.js line 361: rake stripes in `rk` get a random y offset (0.03 + up to 0.002) so they are no longer coplanar (judge 84 / builder 84 Next).
+**Saw**
+- No look or perf run this session (short time); the change is one number in a position call.
+**Next**
+- Look at a race frame to confirm the coplanar warning is gone and rake/hoof prints read; `look cameras` for photo-finish sepia and head-on cut.
+**Open**
+- Stripe opacity unjudged; 2-player mode still not played.

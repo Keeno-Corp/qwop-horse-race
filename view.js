@@ -358,7 +358,7 @@ export function buildEnvironment(scene, _tex, rng) {
 
   // rake stripes, hoof-print dabs and a darker rail-side strip on the dirt
   { const rk = new THREE.Group(), rm = new THREE.MeshBasicMaterial({ color: 0x8c5a22, transparent: true, opacity: 0.55 }), hm = new THREE.MeshBasicMaterial({ color: 0x6e4418, transparent: true, opacity: 0.6 });
-    for (let l = 0; l < 9; l++) { const z = -4.1 + l * 1.02; for (let x = -45; x < 140; x += 6 + rng() * 5) { const w = 3 + rng() * 5; const q = new THREE.Mesh(new THREE.PlaneGeometry(w, 0.07).rotateX(-Math.PI / 2), rm); q.position.set(x, 0.03, z + (rng() - 0.5) * 0.15); rk.add(q); } }
+    for (let l = 0; l < 9; l++) { const z = -4.1 + l * 1.02; for (let x = -45; x < 140; x += 6 + rng() * 5) { const w = 3 + rng() * 5; const q = new THREE.Mesh(new THREE.PlaneGeometry(w, 0.07).rotateX(-Math.PI / 2), rm); q.position.set(x, 0.03 + rng() * 0.002, z + (rng() - 0.5) * 0.15); rk.add(q); } }
     const strip = new THREE.Mesh(new THREE.PlaneGeometry(190, 0.9).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: 0x5e3a18, transparent: true, opacity: 0.4 })); strip.position.set(45, 0.025, -4.2); rk.add(strip);
     for (let i = 0; i < 260; i++) { const q = new THREE.Mesh(new THREE.CircleGeometry(0.11 + rng() * 0.05, 7).rotateX(-Math.PI / 2), hm); q.scale.x = 1.4; q.position.set(-40 + rng() * 150, 0.032, (rng() - 0.5) * 8.6); rk.add(q); }
     mergeBasic(rk); scene.add(rk); }
