@@ -272,9 +272,15 @@ function updateRace(dt) {
   if (S.phase === 'race' || S.phase === 'finishing') {
     horses.forEach((h, i) => { const r = roles[i]; if (r.ai) { if (h.finished) for (let k = 0; k < 4; k++) h.setHeld(k, false); else r.ai.update(h, dt, xs[i] - mean); } });
   }
-  if ((S.phase === 'race' || S.phase === 'finishing') && AI.leadX > 34) { // closing sprint: the best chaser draws level for a photo finish
-    let ch = null; horses.forEach((h, i) => { if (roles[i].ai && h.state === 'run' && !h.finished && xs[i] < AI.leadX - 0.2 && xs[i] > 28 && (!ch || xs[i] > xs[ch.idx])) ch = h; });
-    if (ch && AI.leadX - xs[ch.idx] < 20) for (const p of ch.parts) { const v = p.body.linvel(); if (v.x < 10.5) p.body.setLinvel({ x: v.x * 1.02 + 0.03, y: v.y, z: v.z }, true); }
+  if ((S.phase === 'race' || S.phase === 'finishing') && AI.leadX > 34) { // closing sprint: the best chaser is dragged level for a photo finish
+    let ld = null; horses.forEach((h) => { if (!h.finished && (!ld || h.pos().x > ld.pos().x)) ld = h; });
+    let ch = null; horses.forEach((h, i) => { if (roles[i].ai && h !== ld && !h.finished && xs[i] > 14 && (!ch || xs[i] > xs[ch.idx])) ch = h; });
+    if (ch && ld) {
+      if (ch.state !== 'run') { ch.rise(); ch.guard = 99; }
+      const gap = ld.pos().x - ch.pos().x, sh = Math.min(Math.max(0, gap - 0.7), (gap > 8 ? 7 : 3.2) * dt);
+      if (sh > 0) for (const p of ch.parts) { const t = p.body.translation(); p.body.setTranslation({ x: t.x + sh, y: t.y, z: t.z }, true); }
+      for (const p of ch.parts) { const v = p.body.linvel(), lv = ld.torso.body.linvel().x; if (v.x < lv) p.body.setLinvel({ x: v.x + (lv - v.x) * 0.1, y: v.y, z: v.z }, true); }
+    }
   }
   const steps = Math.round(dt / DT);
   for (let s = 0; s < steps; s++) physStep();
