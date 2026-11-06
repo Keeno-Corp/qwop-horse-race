@@ -26,6 +26,8 @@ canvas{display:block}
 #popups{inset:0}
 .pop{position:absolute;text-align:center;font-size:clamp(30px,5vw,70px);line-height:1;white-space:nowrap;-webkit-text-stroke:3px #3a2416;paint-order:stroke fill;text-shadow:0 8px 0 #3a2416}
 .pop span{display:block;font-size:.28em;margin-top:6px;-webkit-text-stroke:2px #3a2416}
+.pop span{text-shadow:0 3px 0 #3a2416}
+body.replaying .pop{top:30vh!important}
 #count{inset:0;display:flex;align-items:center;justify-content:center;font-size:clamp(120px,24vw,320px);-webkit-text-stroke:5px #3a2416;paint-order:stroke fill}
 #replay{inset:0;display:none}
 #replay .bar{position:absolute;left:0;right:0;height:9vh;background:#000}

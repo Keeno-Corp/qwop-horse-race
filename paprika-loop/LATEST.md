@@ -1,11 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 11
-**Did** game.js `updateRace` closing sprint replaced: from leadX>34 the best AI chaser (not the leader, x>14) is `rise()`d if down, shifted +x each frame (up to 3.2 m/s extra, 7 if >8 m back) until 0.7 m behind the leader, and its velocity eased to the leader's vx.
-**Saw** Auto run to results at frame 2149: finishT Dusty 21.67, YOU 21.75 (0.08 s, a real photo finish), Sir Trips 24.33; Hoof Hearted 7.5 m short. Podium has 3 finishers. Results via the `kind:"finish"` path (PHOTO FINISH popup, replay) not looked at in a picture. `dust` now on screen, no "Never visible". No console errors besides a three shadowmap warn. Finished horses still `pitch` about -0.9, legs 0000.
-**Next** (1) Look at the finish replay picture (`until phase:"replay"` after 20 s) to check banner and finish-line framing. (2) Level the post-line pitch (~ -0.1, release legs). (3) Human-run proof with alternating Q+P / W+O, `feel` on shake, break the track texture repeat.
-**Open** Teleport-style pull may look like a surge at the line; the auto YOU now finishes because auto bot works this run (seeded), unverified for other seeds.
-
 ### Judge 11
 
 **Judge 11 verdict**
@@ -74,3 +68,9 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
    - Run `feel` on a plant to measure the camera shake.
 
 SCORE: 7.0
+
+## Iteration 12
+**Did** game.js `physStep`: human `driveF` multiplier 1 → 2.4 (auto stays 0.5). physics.js `step`: once `finished`, pitch torque levels the body to about -0.1 (gain 2600, no clamp). index.html: `.pop span` own text-shadow (the ghost subtitle), `body.replaying .pop{top:30vh}` so the popup clears the REPLAY tag.
+**Saw** The "stuck auto YOU" was only the `auto` flag being unset: `interact` with `state:{auto:true}` drives it, and it reaches x 15.6 by frame 600. Human rhythm (Q+P / W+O every 10 frames) was 0.8 m/s before, about 2 m/s after (x 2.06 → 4.47 in 1.2 s). Auto run to the finish replay at frame 2361: finishT Sir Trips 22.30, Hoof Hearted 22.32, YOU 25.55; finishers `pitch` -0.13..-0.21, legs 0000, standing. Look: PHOTO FINISH popup and REPLAY tag no longer overlap (0 overlap), single subtitle. `dust` is still "Never visible" (behind track). Only console warning is the three shadowmap one.
+**Next** (1) Lift `dust` above `track` so "Never visible" goes. (2) Break the `track` texture repeat with a larger-scale noise. (3) `feel` on a plant for the camera shake; check the human run for a full 60 m with the real rubber-band.
+**Open** Human 2.4x drive is unproven over a full run (the catch-up term may make it too easy or too hard). Dusty Rhodes ended tumbled at x 54.9 in that seed.

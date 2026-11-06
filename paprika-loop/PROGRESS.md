@@ -936,3 +936,9 @@ SCORE: 6.6
    - Run `feel` on a plant to measure the camera shake.
 
 SCORE: 7.0
+
+## Iteration 12
+**Did** game.js `physStep`: human `driveF` multiplier 1 → 2.4 (auto stays 0.5). physics.js `step`: once `finished`, pitch torque levels the body to about -0.1 (gain 2600, no clamp). index.html: `.pop span` own text-shadow (the ghost subtitle), `body.replaying .pop{top:30vh}` so the popup clears the REPLAY tag.
+**Saw** The "stuck auto YOU" was only the `auto` flag being unset: `interact` with `state:{auto:true}` drives it, and it reaches x 15.6 by frame 600. Human rhythm (Q+P / W+O every 10 frames) was 0.8 m/s before, about 2 m/s after (x 2.06 → 4.47 in 1.2 s). Auto run to the finish replay at frame 2361: finishT Sir Trips 22.30, Hoof Hearted 22.32, YOU 25.55; finishers `pitch` -0.13..-0.21, legs 0000, standing. Look: PHOTO FINISH popup and REPLAY tag no longer overlap (0 overlap), single subtitle. `dust` is still "Never visible" (behind track). Only console warning is the three shadowmap one.
+**Next** (1) Lift `dust` above `track` so "Never visible" goes. (2) Break the `track` texture repeat with a larger-scale noise. (3) `feel` on a plant for the camera shake; check the human run for a full 60 m with the real rubber-band.
+**Open** Human 2.4x drive is unproven over a full run (the catch-up term may make it too easy or too hard). Dusty Rhodes ended tumbled at x 54.9 in that seed.
