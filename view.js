@@ -328,7 +328,7 @@ export function buildEnvironment(scene, _tex, rng) {
     for (let k = 0; k < 3; k++) hc.push(cc.r, cc.g, cc.b);
   }
   hn.setAttribute('color', new THREE.Float32BufferAttribute(hc, 3));
-  const hills = new THREE.Mesh(hn, new THREE.MeshToonMaterial({ vertexColors: true, gradientMap: ramp, fog: true })); hills.position.set(50, 0, -55); hills.receiveShadow = true; hills.name = 'hills'; scene.add(hills);
+  const hills = new THREE.Mesh(hn, new THREE.MeshToonMaterial({ vertexColors: true, gradientMap: ramp, fog: true })); hills.position.set(50, 0, -55); hills.receiveShadow = true; hills.name = 'hills'; hills.frustumCulled = false; scene.add(hills);
 
   // treeline on the far hills
   const treeG = new THREE.SphereGeometry(1, 12, 8), trunkG = cyl(0.12, 0.18, 1, 5), tcols = [0x5f7a2e, 0x6f8a3a, 0x7a8a34, 0x9a7a2a, 0x4f6a2a];
@@ -337,7 +337,7 @@ export function buildEnvironment(scene, _tex, rng) {
   scene.add(trees);
 
   // infield lake behind the gap between the stands
-  const lake = new THREE.Mesh(new THREE.CircleGeometry(1, 36).rotateX(-Math.PI / 2), toon(0x9cc3bd)); lake.scale.set(22, 1, 11); lake.position.set(32, 0.05, -36); lake.receiveShadow = true; lake.name = 'lake'; scene.add(lake);
+  const lake = new THREE.Mesh(new THREE.CircleGeometry(1, 36).rotateX(-Math.PI / 2), toon(0x9cc3bd)); lake.scale.set(22, 1, 11); lake.position.set(32, 0.05, -36); lake.receiveShadow = true; lake.name = 'lake'; lake.frustumCulled = false; scene.add(lake);
   const glint = new THREE.MeshBasicMaterial({ color: 0xfff6d0, transparent: true, opacity: 0.8, fog: true });
   { const gl = new THREE.Group(); for (let i = 0; i < 40; i++) { const q = new THREE.Mesh(new THREE.PlaneGeometry(1 + rng() * 4, 0.3).rotateX(-Math.PI / 2), glint); q.position.set(32 + (rng() - 0.3) * 26, 0.075 + i * 1e-4, -36 + (rng() - 0.5) * 12); gl.add(q); } mergeBasic(gl); lake.parent.add(gl); }
 

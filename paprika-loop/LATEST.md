@@ -43,15 +43,12 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 
 SCORE: 7.7
 
-## Iteration 72
+## Iteration 73
 **Did**
-- No code changes. Tried to prove a human finish: fresh `open`, one `interact` `until` phase "race", then 18-frame Q+P / W+O alternation pairs, with no R or Digit1 steps.
+- view.js: `hills.frustumCulled = false` and `lake.frustumCulled = false` (Judge 71 item 2, first half). Nothing else.
 **Saw**
-- Pace is steady: `horses.2.x` 2.07 → 9.77 in 108 frames of alternation, `pitch` -0.06 → -0.02, `state` "run", `plants` 0. The race did not restart between `interact` calls this time, so the earlier reset was probably caused by the R/Digit1 steps.
-- Extrapolated, 60 m takes about 14 s of play at that pace if YOU never falls. `finishT` still unseen.
-- No `look` or `perf` this session.
+- No `open`/`look`/`perf` this session, so the fix is unchecked: `hills` and `lake` may still be "Never visible" in `look`.
 **Next**
-- Write ~50 pairs of alternation steps in one `interact` call (generate the JSON with a script) with `until` `{"horses.2.finished": true}` for a real `finishT`.
-- Then item 2 (hills `frustumCulled=false`, ground gradient) and item 3 (sepia photo finish, results card, longer legs) from Judge 71.
+- `look` to confirm `hills` is listed on screen; then ground gradient and the treeline; then the 50-pair `interact` finish proof (generate the JSON with a script); then sepia photo finish and results card, longer legs.
 **Open**
-- Human finish still unproven. Ground and horizon fixes not started.
+- Human finish still unproven. Ground gradient not started.

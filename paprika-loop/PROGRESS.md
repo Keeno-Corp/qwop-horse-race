@@ -2664,3 +2664,13 @@ SCORE: 7.7
 - Then item 2 (hills `frustumCulled=false`, ground gradient) and item 3 (sepia photo finish, results card, longer legs) from Judge 71.
 **Open**
 - Human finish still unproven. Ground and horizon fixes not started.
+
+## Iteration 73
+**Did**
+- view.js: `hills.frustumCulled = false` and `lake.frustumCulled = false` (Judge 71 item 2, first half). Nothing else.
+**Saw**
+- No `open`/`look`/`perf` this session, so the fix is unchecked: `hills` and `lake` may still be "Never visible" in `look`.
+**Next**
+- `look` to confirm `hills` is listed on screen; then ground gradient and the treeline; then the 50-pair `interact` finish proof (generate the JSON with a script); then sepia photo finish and results card, longer legs.
+**Open**
+- Human finish still unproven. Ground gradient not started.
