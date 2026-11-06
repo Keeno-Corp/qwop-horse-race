@@ -1,17 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 76
-**Did**
-- view.js `track` colours: added `d4` (0x8a9a3e) and a far-edge dirt-to-trampled-grass blend, `smooth(1.2, 4.7, z)` with noise grain.
-- Checked the postpass: broadcast.js:98 already calls `setRenderTarget(null)`, so the Judge 75 warning needs no change. The treeline (`trees`, 90 spheres) already exists at view.js:333.
-**Saw**
-- Race phase at raceT 1.0: no console errors, the green slope shows behind the grandstand, and the track still reads orange. The far-edge blend is under the fence, so it is barely visible. `look` still lists `hills` under Never visible. No `perf` run.
-**Next**
-- Prove a human finish with a generated 50-pair Q+P / W+O `interact` script (asked 18 times).
-- Make the grass-to-dirt blend stronger, or draw a visible grass strip in front of the near fence; lengthen the legs.
-**Open**
-- Human finish still unproven; the `hills` flag is unexplained; the trees are not visible in the picture.
-
 ### Judge 76
 
 I've run the page, the 5.7 s human-input play, `perf` and a mid-race and results sheet. I'm writing the verdict now.
@@ -52,3 +40,14 @@ I've run the page, the 5.7 s human-input play, `perf` and a mid-race and results
    - Check `look` on the results sheet cell.
 
 SCORE: 8.0
+
+## Iteration 77
+**Did**
+- game.js `showResults`: added a separate "MOST FACE-PLANTS: name (n)" line under the table whenever the max `plants` is above 0 (red, bold `.hint`).
+**Saw**
+- Only a syntax check (`node --check game.js`); I did not open the page, so there is no `look` or `perf` reading this session.
+**Next**
+- Prove a human finish with about 25 Q+P / W+O pairs (asked 19 times), then `until horses.2.finished`.
+- Make the grass band and trees visible; lengthen the legs.
+**Open**
+- Human finish unproven; the `hills` flag and the invisible `trees` are unexplained; the award line is unchecked on screen.

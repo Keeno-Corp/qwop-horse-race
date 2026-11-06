@@ -433,7 +433,7 @@ function showResults() {
     return `<tr><td class="n">${k + 1}</td><td><i style="background:${hex(i)}"></i>${roles[i].name}${aw}</td><td>${t}</td><td class="n">${h.plants} face-plant${h.plants === 1 ? '' : 's'}</td></tr>`;
   }).join('');
   const photo = res.gap < 1.0 ? `PHOTO FINISH · ${res.gap.toFixed(2)}s` : 'RESULTS';
-  $('results').querySelector('.box').innerHTML = `<h1>${roles[ord[0]].name === 'YOU' ? 'YOU WIN!' : roles[ord[0]].name + ' WINS!'}<small>${photo}</small></h1><div class="pod">${pod}</div><table>${rows}</table><div class="hint">${mode === 1 ? 'Press R' : 'Press Enter'} for another race · 1 / 2 = players</div>`;
+  $('results').querySelector('.box').innerHTML = `<h1>${roles[ord[0]].name === 'YOU' ? 'YOU WIN!' : roles[ord[0]].name + ' WINS!'}<small>${photo}</small></h1><div class="pod">${pod}</div><table>${rows}</table>${maxP > 0 ? `<div class="hint" style="font-size:14px;color:var(--tomato);font-weight:bold">MOST FACE-PLANTS: ${roles[worst].name} (${maxP})</div>` : ''}<div class="hint">${mode === 1 ? 'Press R' : 'Press Enter'} for another race · 1 / 2 = players</div>`;
   $('results').style.display = 'flex'; S.resultsShown = true; for (const p of S.popups) p.el.remove(); S.popups = [];
 }
 

@@ -2836,3 +2836,14 @@ I've run the page, the 5.7 s human-input play, `perf` and a mid-race and results
    - Check `look` on the results sheet cell.
 
 SCORE: 8.0
+
+## Iteration 77
+**Did**
+- game.js `showResults`: added a separate "MOST FACE-PLANTS: name (n)" line under the table whenever the max `plants` is above 0 (red, bold `.hint`).
+**Saw**
+- Only a syntax check (`node --check game.js`); I did not open the page, so there is no `look` or `perf` reading this session.
+**Next**
+- Prove a human finish with about 25 Q+P / W+O pairs (asked 19 times), then `until horses.2.finished`.
+- Make the grass band and trees visible; lengthen the legs.
+**Open**
+- Human finish unproven; the `hills` flag and the invisible `trees` are unexplained; the award line is unchecked on screen.
