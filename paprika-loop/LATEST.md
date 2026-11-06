@@ -1,34 +1,34 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-### Judge 43
-
-**Verdict, session 43**
-
-1. **Plays as DESIGN.md's Core loop and Controls say: 8.** `phase` went countdown → race. `div#top-r` holds `1 PLAYER`, `2 PLAYERS (2)` and `RESTART`. `div#keys` shows the Q, W, O, P caps. `div#tips` says "Alternate legs: Q+P then W+O · R restart · 2 = two players". I did not press R after a finish.
-2. **Real Rapier jointed ragdoll, face-plant, auto-right: 8.** The `YOU` ragdoll has jointed legs and a `player-body` with a saddle. I did not see a face-plant this session, because the steady rhythm stayed upright.
-3. **Replay: 7.** I did not reach a replay this session. It is carried over from session 42.
-4. **Photo finish and tangled AI collapse: 6.** In my run `YOU` led, and the AIs never collapsed up to `raceT` 4.2. They were still at x ~10.4–11, with 0 plants each. No tangle or photo finish was seen.
-5. **Results with most face-plants award: 7.** Not viewed this session. It is carried over from session 39.
-6. **Looks as LOOK.md says: 8.** The look shows `grandstand` with a blocky crowd, a white rail, orange-brown `track`, green `hills`, and a white horse with a blue saddle and dark mane. Saturation is 70%, with 0% near black and 0% blown out. `player-body` takes 3% of the frame, the blue `player-marker-*` ring is clear, and the `dust*` particles show.
-7. **window.__game convention, index.html at root: 9.** `observe` returns `phase`, `raceT` and `horses`.
-8. **Clip moments in the first minute: 6.** With a steady rhythm, nothing funny happens by `raceT` 4.2. `YOU` is alone at the front, about 6 m ahead of the AIs, and all four horses run upright. The player's lead may now be hiding the photo finish.
-9. **Controls feel learnable: 8.** The 14-frame Q+P / W+O loop gave `YOU` x 6.1 at `raceT` 1.4 and x 17.0 at `raceT` 4.2, about 3.9 m/s. Pitch stayed between -0.05 and -0.02, with 0 plants. The face-plant at 5–7 s from session 42 is not at the same point now, but I did not run to the finish. At this pace the 60 m takes about 15 s.
-10. **Horses read as horses, match refs/01.jpg: 9.** In `look`, `player-body` shows head, neck, mane, tail and white socks. The sunny stand, rail and hills fit refs/01.jpg.
-11. **Juice: 7.** Blip, powerup and cheer sounds fired at the start. The `div#chips` plant counts, the 4.2 s timer and the progress bar with its finish flag all show. I did not run `feel` on the shake.
-12. **Local 2-player discoverable from the HUD: 9.** The `2 PLAYERS (2)` button and the "2 = two players" tip both show.
-13. **Static page, vendored lib, no network: 9.** `perf` shows 378 draw calls, 33.5k triangles and 0 MB of assets. The 99 ms frame is SwiftShader and not counted.
-
-**Faults: 8.** I saw no console errors. The `Never visible` object is `sky`, which is a backdrop. The finish, the jitter spread and the results screen are unverified.
-
-**Next:**
-1. **Keep the race close and make the AI funny (asked again).** The assist floor of 2.5 gives a steady player a lead of about 6 m by `raceT` 4. That is a lead of about 7 m at `raceT` 7, and it kills the photo finish and the pile-up. Raise the AI pace or add a rubber-band for AIs that are behind. Keep the planned early tangle among Sir Trips-a-Lot, Hoof Hearted and Dusty Rhodes at `raceT` 4–8. Run the same 14-frame loop with `until {"horses.2.finished":true}`. It should end with `YOU.finishT` between 15 and 40, a finish gap under 1 s to at least one AI, `phase` "replay", and `tangles` of 1 or more.
-2. **Verify the jitter spread with `deadHeat` off (asked again).** Run 3 seeds to the results, and check that `results[*].finishT` spreads by more than 0.3 s. Report the numbers in Open. Also look at the results screen and the most-face-plants award with `look`.
-3. **Fix the remaining small faults.** Move one hidden `grandstand` box 0.001 off y = 0.00, so the `Surfaces:` line goes. Run `feel` on the face-plant shake. Check the 2-player Q W E R vs U I O P play with one `interact`.
-
-SCORE: 7.8
-
 ## Iteration 45
 **Did** Found that the AI `band` slowdown (game.js lines 59–60) was keyed to `AI.leadX`, the leader including the player, so a fast player slowed the AIs behind. Added `AI.aiLeadX` (max x of AI horses only, set beside `AI.leadX` in the tick) and used it in both `band` lines. The drive boost on line 61 still uses `AI.leadX`.
 **Saw** Before the change: Q+P / W+O loop gave `YOU` x 24.3 at raceT 6.2, AIs 17.3–17.6 (a tight pack, about 7 m behind). After: `YOU` x 11.5 at raceT 2.93, AIs 5.5–6.6, a gap of about 5 m. I did not rerun to raceT 6.2, so the effect is unmeasured. Console clean.
 **Next** (1) Run to raceT 6.2 and `horses.2.finished` and compare with the 7 m gap; if still over 3 m, raise `this.base` speed or the line 61 drive. Check `finishT`, finish gap, `phase` "replay" and `tangles`. (2) Jitter spread over 3 seeds with `deadHeat` off. (3) `grandstand` y = 0.00 fix, `feel` on the shake, one 2-player play.
 **Open** Finish, replay, results screen and jitter spread are still unverified. Long `interact` step lists are very large; a helper in `window.__game.act` that holds a Q+P / W+O rhythm would shorten the test runs.
+
+### Judge 45
+
+**Verdict, session 45**
+
+1. **Plays as DESIGN.md's Core loop and Controls say: 8.** I played the 14-frame Q+P / W+O loop. `YOU` went from x 6.1 at `raceT` 1.55 to x 15.2 at `raceT` 3.88, and `div#keys` showed the Q, W, O, P caps. `div#top-r` holds `1 PLAYER`, `2 PLAYERS (2)` and `RESTART`. I did not press R after a finish or play 2-player.
+2. **Real Rapier jointed ragdoll, face-plant, auto-right: 8.** Without input after `raceT` 3.9, the `YOU` ragdoll face-planted: pitch -0.89 and `plants` 1. Sir Trips-a-Lot and Hoof Hearted also went to state `down`. I did not watch the auto-right.
+3. **Replay: 8.** At `raceT` 7.53 `phase` went to "replay" with `kind` "plant", `rate` 0.25 and `of` 450. The `REPLAY` banner and "SPACE to skip" both show, and the side view is clear. I did not check Space or a finish replay.
+4. **Photo finish and tangled AI collapse: 6.** `tangles` was 1 at `raceT` 7.5, with a tangle of `horse0`, `horse1` and `player-body` visible in the replay. I did not reach the finish, so no photo finish was seen.
+5. **Results with most face-plants award: 6.** I did not reach the results screen this session. It is carried over.
+6. **Looks as LOOK.md says: 8.** I saw the covered `grandstand` with its blocky crowd, a white rail, orange-brown `track`, green `hills` and dust. Saturation was 67%, with 0% near black and 0% blown out. `player-body` takes 2.9% of the frame and the blue `player-marker-*` ring is clear. A `Surfaces:` line remains: two `grandstand` boxes share the y = 0.00 plane.
+7. **window.__game convention, index.html at root: 9.** `observe` returns `phase`, `raceT`, `horses`, `replay` and `tangles`.
+8. **Clip moments in the first minute: 8.** Without input, a pile-up and a replay arrived at `raceT` 7.5, which is funny. The photo finish is still unseen, and the pile-up came after the player's input stopped, not from the AIs alone.
+9. **Controls feel learnable: 7.** The rhythm held for 3.9 s at about 3.5 m/s with 0 plants. Then the player, who had stopped pressing keys, plunged into the pile-up. I did not finish with the keys held. The AIs are about 5.5 m behind (x 15.2 against 8.9–9.7), so the AI slowdown fix did not close the gap.
+10. **Horses read as horses, match refs/01.jpg: 9.** I saw head, neck, dark mane and tail, white socks and dark hooves. The blue saddle, `grandstand`, rail and `hills` all show.
+11. **Juice: 8.** The sounds that fired were thud, gasp, boing and cheer. The `REPLAY` banner, `div#chips` plant counts and the progress bar all show. I did not run `feel` on the shake.
+12. **Local 2-player discoverable from the HUD: 9.** The `2 PLAYERS (2)` button and the "2 = two players" tip both show.
+13. **Static page, vendored lib, no network: 9.** `perf` shows 378 draw calls, 33.5k triangles and 0 MB of assets. The 80 ms frame is SwiftShader and not counted.
+
+**Faults: 8.** I saw no console errors. The `Never visible` object is `sky`, which is a backdrop. The `grandstand` `Surfaces:` line remains. The finish, the results screen and the jitter spread are unverified.
+
+**Next:**
+1. **Verify the finish and results (asked again).** Hold the Q+P / W+O loop until `horses.2.finished` is true. `YOU.finishT` should be between 15 and 40 s, `phase` should go to "replay" and then "results", and the finish gap to the nearest AI should be under 1 s. Then `look` at the results screen for the most-face-plants award. Put the numbers in Open. A `window.__game.act` autoplayer that holds the rhythm would make this run cheap.
+2. **Shrink the 5.5 m player lead (asked again).** The `aiLeadX` change did not close the gap: at `raceT` 3.9, `YOU` x was 15.2 and the AIs 8.9–9.7. Raise the AI `base` speed, or rubber-band AIs that are behind the player so the pack stays within about 2 m. Check with the same loop at `raceT` 3.88. The AIs should be at x 13 or more.
+3. **Small faults.** Move one hidden `grandstand` box 0.001 off y = 0.00 so the `Surfaces:` line goes. Run `feel` on the face-plant shake. Check the 2-player Q W E R vs U I O P play with one `interact`.
+
+SCORE: 8.0
