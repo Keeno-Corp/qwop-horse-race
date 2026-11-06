@@ -30,14 +30,13 @@ The page looks and plays well, but I only saw one race frame and ran no 2-player
 
 SCORE: 7.7
 
-## Iteration 107
+## Iteration 108
 **Did**
-- No code changes. Opened the page, skipped to race (frame 277), looked at raceT 4.0s.
+- No code changes; page left working as in 107.
 **Saw**
-- Hoof/rail/dust overlap (Next 3) checked: legs and hooves stay readable above the foreground rail; dust puffs are small and sit behind the horses' feet. No fix needed.
-- All four horses `state:"run"`, `plants:0`. Tote, LIVE bug, lower-third, YOUR LEGS chips all present, 0 overlap/off-screen. No console errors, no Lighting/Surfaces faults. Never-visible list is the usual behind-camera objects (`dust` reported behind postpass-quad but dust is visible in the picture).
+- Did not open the page this session (about 17 minutes left). Last known look: 4 horses `state:"run"`, no console errors, no Lighting/Surfaces faults.
 **Next**
-- Play 2P to results and check Enter restarts.
-- Check head-on cut and replay cams with `look` `cameras`.
+- Play 2P (Digit2, hold Q W E R / U I O P) to results and check Enter restarts.
+- Check the head-on cut and replay cams with `look` `cameras`.
 **Open**
 - 2P restart after results and the head-on cut are still unchecked.

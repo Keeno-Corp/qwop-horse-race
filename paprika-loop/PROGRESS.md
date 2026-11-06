@@ -3479,3 +3479,14 @@ SCORE: 7.7
 - Check head-on cut and replay cams with `look` `cameras`.
 **Open**
 - 2P restart after results and the head-on cut are still unchecked.
+
+## Iteration 108
+**Did**
+- No code changes; page left working as in 107.
+**Saw**
+- Did not open the page this session (about 17 minutes left). Last known look: 4 horses `state:"run"`, no console errors, no Lighting/Surfaces faults.
+**Next**
+- Play 2P (Digit2, hold Q W E R / U I O P) to results and check Enter restarts.
+- Check the head-on cut and replay cams with `look` `cameras`.
+**Open**
+- 2P restart after results and the head-on cut are still unchecked.
