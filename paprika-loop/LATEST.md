@@ -1,37 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-### Judge 25
-
-**Judge 25**
-
-I played a solo race through to `phase:"results"` and then started 2-player mode with `Digit2`. I ran `perf` once. There were no console errors. I did not play a full human finish: I held keys for about 3.4 s of race time, and YOU then idled at x 13.3 until the race ended at raceT 27.7. I did not see the head-on cut or the sepia photo-finish replay itself. I saw only the results card that follows it.
-
-1. **Plays as DESIGN.md's Core loop and Controls say: 8.** Q+P then W+O pulses took YOU from x 4.36 to 9.28 by raceT 3.4 and made YOU the leader. Pitch went to -0.44 at frame 34, then recovered to -0.07 with `plants:0`. The new 3 s start guard works. In 2-player mode `Digit2` gave `mode:2`, with horses `P1` and `P2` and the `div#keys` "PLAYER 1 Q W E R / PLAYER 2 U I O P".
-2. **Real Rapier jointed ragdoll horses, face-plant collapse and auto-right: 8.** The idle race gave `plants` of 5 for Sir Trips-a-Lot and 2 each for YOU and Hoof Hearted. The sound log shows repeated thud, gasp and boing. The 1-player state strings `legs:"0110"` and `"1001"` show the legs driven. Sir Trips-a-Lot ended at pitch 0.84 and stayed `state:"run"` while still hurt. I did not see the 2 s auto-right clearly.
-3. **Replay (last ~4 s, 0.25x, Space skips, sepia photo-finish): 6.** The results card reads "PHOTO FINISH · 0.19s", so the photo-finish logic fires. I stepped straight to `results` and did not look at a replay frame, so the sepia, grain, scratches and "PHOTO FINISH" frame are still unseen by every judge.
-4. **Photo finish and tangled AI collapse within the first minute: 8.** With no input from the AI side, Hoof Hearted beat Dusty Rhodes by 0.19 s at 21.15 s, and `tangles:1`. This is the second race in a row that has given a photo finish.
-5. **Results with most face-plants award: 9.** `div#results` shows a podium and a table. The badges are "SMOOTH OPERATOR" for Dusty Rhodes and "DIRT EATER · MOST FACE-PLANTS" for Sir Trips-a-Lot. DNF rows show "1 M SHORT" and "45 M SHORT".
-6. **Looks as LOOK.md says: 8.** The picture shows toon steps with outlines, an orange and yellow 70s palette, warm light, and `div#crt` over `postpass-quad`. The `look` Depth line still says "no fog: depth does not read". `hills` is still "Never visible" while in view. The `look` reply on the results frame also flags a render target left bound ("every render call drew into a render target, none to the screen").
-7. **window.__game convention, static deploy: 9.** `index.html` is at the root. Assets total 0.32 MB, the fonts are vendored, and nothing is fetched at runtime.
-8. **Horses match CHARACTERS.md and horse.png: 8.** The look shows chunky bodies, white socks, dark hooves, big eyes, a bristly mane, blinkers and a bridle. The saddle cloths are red diamonds, green stripes, blue polka dots and the `#4` black/yellow. `look` reports 0 of 3 named parts for `horse0`, so the horse parts are not named for inspection.
-9. **Broadcast overlay: 9.** `div#tote` shows silks, face-plant counts and odds that moved (5-1 → 2-1, 30-1 for YOU). `div#lower` carries the Hank "Hoofbeat" Pruitt play-by-play, and its line changed to "THIS ONE IS GOING TO THE PHOTOGRAPHERS... TOO CLOSE TO CALL!". `LIVE`, the `3:58 PM` clock, `RACE TIME` and the progress bar are all present.
-10. **Camera: 7.** The side-tracking telephoto reads well, with the grandstand behind the horses. I did not see the head-on cut or the replay cams.
-11. **Controls feel learnable: 6.** The pulse pattern gave a fast start and recovery from a -0.44 pitch dip. I did not measure a human finish under 60 s, and YOU stalled at 13.3 m when the keys stopped.
-12. **Local 2-player: 7.** The mode switches in the HUD and both players' key panels show. Q and U held together gave both horses a pitch of about -0.22 at raceT 1.08. I did not play it to a finish.
-13. **Style judged as hard as gameplay: 8.** The 70s TV look holds, with the tote, lower-third, CRT and results card. The picture is a little flat with no depth fog, and the `hills` backdrop never registers.
-
-**Faults: 6.**
-- `perf` showed 411 draw calls and 184k triangles. The 185 ms frame is a software renderer on host load 2.9, so it is not a budget signal. The draw-call count is still high.
-- `hills` is "Never visible" and there is no fog.
-- The results-frame render-target warning above.
-
-**Next:**
-1. Play one full human finish and the replay. Use a long `interact` that alternates Q+P and W+O in 20-frame pulses with `{until:{phase:"results"}, max:3000}`, and record YOU's `finishT`. Then `look` right after the finish, once with `observe` for the replay state, to see the sepia "PHOTO FINISH" frame with grain and scratches. Items 3, 10 and 11 stay lowest until this is seen. Also check the head-on cut, and whether the results frame's render-target warning is real.
-2. Add depth fog (asked again). Set `scene.fog` to the sky or haze colour and make the toon and `merged` materials fog-aware. Make `hills` visible, for example by checking its position against the camera. `look` with `sample` at far pixels should show them paler than near pixels, and the `Depth:` line should no longer say "no fog".
-3. Cut draw calls from 411 to under 250 (asked again). Merge `merged` and `merged-outline` per material, and instance `tail` and the crowd. Name the horse parts so `look target:"horse0"` finds more than 0 of 3. `perf` `variants` should show the draw-call count dropping.
-
-SCORE: 7.7
-
 ## Iteration 28
 **Did**
 - `dustM` (game.js:110) icosahedron detail 1 → 0: dust was 33.6k of 157k triangles; now ~8k.
@@ -42,3 +10,33 @@ SCORE: 7.7
 - Find why `merged` makes 142 calls (many materials per merge; share materials across horses), merge or instance `tail`, then re-run `perf` costs. Play a pulse run starting ~3 s of raceT in, to a finish, and `look` at the replay.
 **Open**
 - Dust change not re-checked visually; draw calls still ~411.
+
+### Judge 28
+
+**Judge 28.** I played the opening, a pulse run, and the plant replay, and ran `perf` once with `costs`. There were no console errors. I did not reach a human finish, the sepia PHOTO FINISH replay or the head-on cut. The last `look` flagged that every render call drew into a render target, so that picture may be a frame from earlier than the state it was taken at.
+
+1. **Plays as DESIGN.md's Core loop and Controls say: 7.** The `GO!` start, `div#keys` and `div#tips` all show. I held Q+P then W+O in 18-frame pulses from the start. At raceT 5.25 YOU was at x 3.66 against 9–11 for the AI, with `plants:1` and a pitch low of -0.73 at frame 186. The new start guard did not stop that dip. In 2-player mode and R restart I only read the keys line. I did not play either.
+2. **Real Rapier jointed ragdoll horses, face-plant collapse and auto-right: 8.** The horse states `run` and `down` change, the `legs` strings (`"0110"`, `"1001"`) show the legs driven, and the sound log shows thud, gasp and boing. The ragdoll collapse on the AI horses at x ~15 gave `tangles:1`. I did not see the ~2 s auto-right clearly.
+3. **Replay (last ~4 s, 0.25x, Space skips, sepia photo-finish): 6.** `replay{kind:"plant",rate:0.25}` runs, with the red "INSTANT REPLAY · 0.25X" tag, "SPACE to skip" and a letterbox. I saw the plant replay but not the sepia finish replay. The plant replay frame looks little different from live play, apart from the letterbox and tag. This is the first judge to see a replay frame. The sepia, grain, scratches and "PHOTO FINISH" frame are still unseen by every judge.
+4. **Photo finish and tangled AI collapse within the first minute: 8.** With no input from the AI side, `tangles:1` and two AI horses were `down` by raceT 7.7. Earlier judges saw photo finishes at about 21 s. I did not rerun the whole race to a finish this session.
+5. **Results with most face-plants award: 8.** Judge 25 saw the podium and the "DIRT EATER · MOST FACE-PLANTS" badge. I did not reach the results this session.
+6. **Looks as LOOK.md says: 8.** The picture has toon steps with outlines, an orange and yellow 70s palette, warm light and the CRT pass (`div#crt` over `postpass-quad`). The green `hills` backdrop is now visible behind the stand. It is still reported as "Never visible", and there is still no fog.
+7. **window.__game convention, static deploy: 9.** `index.html` is at the root, assets total 0.32 MB, fonts are vendored, and nothing is fetched at runtime.
+8. **Horses match CHARACTERS.md and horse.png: 8.** The look shows chunky barrel bodies, white socks, dark hooves, big round eyes, a bristly mane, blinkers and a bridle. The silks are a red diamond cloth, green stripes, blue polka dots and a black/yellow `#4` cloth. `look` reports 0 of 3 named parts for `horse0`.
+9. **Broadcast overlay: 9.** `div#tote` has silks, face-plant counts and odds. `div#lower` has the Hank "Hoofbeat" Pruitt line. The `LIVE` bug, the `3:58 PM` clock, `RACE TIME` and the progress bar are all there. The black rectangle above the lower-third is gone.
+10. **Camera: 7.** The side-tracking telephoto reads well, and the plant replay uses a second, wider camera at a different angle. I did not see the head-on cut.
+11. **Controls feel learnable: 5.** My 18-frame pulses from the start gave a pitch low of -0.73 and a face-plant by raceT ~3. YOU then idled at x 1.4 after the restart. I got no human finish.
+12. **Local 2-player: 7.** `div#keys`, `div#tips` and the "2 PLAYERS (2)" button show the mode in the HUD. I did not play it this session.
+13. **Style judged as hard as gameplay: 8.** The 70s TV look holds, with the tote, lower-third, CRT, letterbox and tag. The picture is a little flat with no depth fog.
+
+**Faults: 6.**
+- `perf` showed 411 draw calls, with `merged` at 142 and `merged-outline` at 45. Triangles fell from 184k to 159k after the dust change (`dust` is now 8.4k triangles). The 179 ms frame is a software renderer on host load 2.1, so it is not a budget signal.
+- A render target is left bound on the replay frame.
+- `hills` is still reported "Never visible" while visible, and there is no fog.
+
+**Next:**
+1. **Controls feel (asked again).** Make an 18-frame Q+P / W+O pulse pattern from the start run without a face-plant. Soften the leg motor torque, or add pitch-stabilising damping for the human horse during the first ~6 s. The `interact` that shows it done is the same pulse run with `trace` on `horses.2.pitch` and `horses.2.x`. It should show a pitch low above -0.3, `plants:0`, and x above 10 by raceT 5. Then play on until `phase:"results"` and `look` to see the finish replay.
+2. **Render-target fix.** Make sure `setRenderTarget(null)` runs before the final screen pass, in the replay and results phases. The `look` on the replay frame should no longer say "every render call drew into a render target".
+3. **Draw calls (asked again).** `merged` makes 142 calls. Merge by material across horses, instance `tail` (16 calls) and the `mesh-outline` meshes (18 calls), and share materials between horses. Then add depth fog: set `scene.fog` to the haze colour and make `hills` fog-aware, so the `look` Depth line no longer says "no fog". `perf` with `costs` should show `merged` well under 100 draw calls.
+
+SCORE: 7.5
