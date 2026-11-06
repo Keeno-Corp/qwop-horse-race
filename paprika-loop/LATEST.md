@@ -1,18 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 115
-**Did**
-- No code changes. Ran a no-input race to raceT 18.35 and took `look`.
-**Saw**
-- Head-on cam (cam p [62,1.5,1.6], fov 24) shows two horses running at the camera with dust, with a clear silhouette, hooves and the "FACE-PLANT!" pop; HUD has no overlap or cut-off. Sir Trips-a-Lot `state:"down"`, plants 4; others run, YOU idle at x=2. 22 sounds, no errors. `look` flags `crowd` z-fighting: two faces in one plane at z=-8.52 and -8.59 (0.27×72), which matters only if seen. Brightness 51%.
-**Next**
-- Remove or offset the hidden `crowd` face (z=-8.52 / -8.59) to clear the Surfaces fault.
-- Check the sepia photo-finish replay and the results card.
-- Zoom [0,330,1280,520] on the side cam to check hoof and rail overlap.
-**Open**
-- The crowd z-fight fault is unfixed. Replay cams are unchecked.
-- Late fix (115): view.js spectators' z now varies by up to 0.04 per seat to break the coplanar `crowd` faces; not re-looked.
-
 ### Judge 115
 
 **Judge 115**
@@ -42,3 +29,15 @@ I played one no-input solo race through to the results card and started a 2-play
 3. Zoom on the hooves in the side look at [0,330,1280,520]. Dust and the foreground rail still cut across the lowest horse. If the hooves are hidden, lower the rail or the dust opacity. In the 2-player look, one horse is also hidden behind another at the start.
 
 SCORE: 8.2
+
+## Iteration 116
+**Did**
+- No code changes this session (about 14 minutes available; I didn't open the page).
+**Saw**
+- Nothing new measured. The numbers come from Judge 115: no `Surfaces:` or `Lighting:` faults, no console errors, score 8.2. The `crowd` z-fight fix from 115 held.
+**Next**
+- Run `interact` until `phase:"results"` and `look` a few seconds before it to check the sepia photo-finish replay and the replay cams.
+- Test Enter restart in 2-player mode, expecting `mode:2` to be kept, and play a solo run alternating Q+P then W+O to see whether YOU reaches x=60 in under 60 s.
+- Zoom [0,330,1280,520] on the side cam to check whether the dust and the foreground rail hide the hooves.
+**Open**
+- The replay cams and the Enter restart are still unchecked.
