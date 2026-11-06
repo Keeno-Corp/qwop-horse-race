@@ -1,16 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 55
-**Did**
-- `view.js` `hills`: ridge height 34 → 55 (`far * 55`) and the ramp starts nearer (`smooth(5, 60, -z)`), per Iteration 54's Next.
-**Saw**
-- `look` at start: `hills` now listed on screen (0.82%, a strip at y 408-415 behind the track); before it was "Never visible". Brightness 52%, orange 42% / yellow 39% / grey 11%, no console errors. Never visible now: lake, posts, crowd, basic-merged, merged (all behind camera), dust. No perf run.
-**Next**
-- `hills` is only a thin strip; the grandstand still covers most of the horizon. Lower or pull the stand back or raise the camera pitch so the ridge and treeline read.
-- Merge `merged-outline`/`mesh-outline`/`tail` for draw calls; 2-player mode, head-on cut, human finish still unseen.
-**Open**
-- Nothing broken; the change was only checked on the intro frame.
-
 ### Judge 55
 
 **Scores**
@@ -37,3 +26,14 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. Cut draw calls (266, 141k triangles): merge or instance `merged-outline`, `mesh-outline`, `tail`, and the crowd and ad geometry. `perf` should then show the draw calls dropping, for example under 150.
 
 SCORE: 8.1
+
+## Iteration 56
+**Did**
+- `game.js` follow cam: look target y 2.7 → 3.2 (`tl.set(fx + 1.0, 3.2, 0.3)`), tilting the camera up so the sky/haze shows above the `grandstand` roof. Tried 3.6 first (sky clearly visible, but horses sank behind the `div#lower` caption), settled on 3.2 unchecked.
+**Saw**
+- At 3.6: `look` brightness 49%, orange 45% / yellow 37%; sky haze visible above the stand; `hills` still 0.82% strip (y 408-415) as it sits below the stand. No console errors. No perf run.
+**Next**
+- Look at the 3.2 value once; `hills` still hidden behind the stand — move stands back or shorten them.
+- Play a human finish (Q/W/O/P) and tune; draw-call merge (`merged-outline`, `mesh-outline`, `tail`).
+**Open**
+- 3.2 not viewed; horse framing vs the lower-third caption may need a tweak.

@@ -1981,3 +1981,14 @@ SCORE: 7.7
 3. Cut draw calls (266, 141k triangles): merge or instance `merged-outline`, `mesh-outline`, `tail`, and the crowd and ad geometry. `perf` should then show the draw calls dropping, for example under 150.
 
 SCORE: 8.1
+
+## Iteration 56
+**Did**
+- `game.js` follow cam: look target y 2.7 → 3.2 (`tl.set(fx + 1.0, 3.2, 0.3)`), tilting the camera up so the sky/haze shows above the `grandstand` roof. Tried 3.6 first (sky clearly visible, but horses sank behind the `div#lower` caption), settled on 3.2 unchecked.
+**Saw**
+- At 3.6: `look` brightness 49%, orange 45% / yellow 37%; sky haze visible above the stand; `hills` still 0.82% strip (y 408-415) as it sits below the stand. No console errors. No perf run.
+**Next**
+- Look at the 3.2 value once; `hills` still hidden behind the stand — move stands back or shorten them.
+- Play a human finish (Q/W/O/P) and tune; draw-call merge (`merged-outline`, `mesh-outline`, `tail`).
+**Open**
+- 3.2 not viewed; horse framing vs the lower-third caption may need a tweak.
