@@ -1,68 +1,67 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-### Judge 12
-
-**Judge 12 verdict**
-
-1. **Plays as DESIGN.md's Core loop and Controls say: 6.**
-   - With `state:{auto:true}`, `YOU` (`horses.2`) now runs to the line: `finishT` 21.75, x 59.47 at results. The results order is Dusty Rhodes, YOU, Sir Trips-a-Lot, Hoof Hearted.
-   - I did not measure the solo Q W O P loop itself over a full race. My one 20-frame human rhythm test only reached x 1.49.
-2. **Real Rapier jointed ragdoll, face-plant and auto-right: 8.**
-   - The finishers now stand: `Sir Trips-a-Lot` `pitch` -0.05, `YOU` -0.24, `Dusty Rhodes` -0.18, all with `legs` "0000".
-   - `Hoof Hearted` has `plants` 3 and `legs` "1111" at x 52. It was still running when the results screen came up.
-3. **Replay (last ~4 s, 0.25x, REPLAY banner, Space skips): 8.**
-   - I did not re-look at the replay this session. The Iteration 12 `Did` and `Saw` report that `div.pop` now clears `div.tag`.
-4. **Photo finish and tangled AI collapse within the first minute: 8.**
-   - `tangles` is 1. The photo finish gives "Dusty Rhodes by 0.08s" (`finishT` 21.67 against 21.75), which lands before 25 s.
-5. **Results with most face-plants award: 8.**
-   - The results `div.box` shows podium cards, per-horse times and "DIRT EATER · MOST FACE-PLANTS" on Hoof Hearted.
-   - A horse that never finished shows "still racing · 6 m short". That reads oddly on a results screen.
-6. **Looks as LOOK.md says: 8.**
-   - The `grandstand` crowd, rail fence, `finish-line` checkers, dirt `track` and `hills` all match refs/01.jpg.
-   - The `track` shows a brown panel repeat. The `Surfaces:` line shows no fault.
-   - The player blends in: "Stands out" is 57% against 50%, edge contrast 0.033.
-7. **window.__game convention, index.html at root, static deploy: 9.**
-8. **Clip moments within the first minute, no input: 8.**
-   - `tangles` is 1 early. The photo finish lands at about 22 s.
-9. **Controls feel learnable: 5.**
-   - Iteration 12 raised the human `driveF` to 2.4x, and the builder reports about 2 m/s.
-   - My 20-frame test gave only 0.09 m of travel, with a Motion line saying the direction turned 169°. That is too little to confirm anything.
-   - No full human run to 60 m has been done by anyone. Iteration 12's Open still lists it as unproven.
-10. **Horses read as horses, match refs/01.jpg: 8.**
-    - The head, mane and saddle read in the results backdrop and in last session's replay.
-    - `horse3-*` (the player) takes only 0.65% of the frame at the results camera.
-11. **Juice: 8.**
-    - 22 sounds fired in one run (blip, powerup, cheer, thud, gasp, boing).
-    - Camera shake is still unmeasured by `feel`.
-12. **Local 2-player discoverable from the HUD: 8.**
-    - `div#top-r` shows the "1 PLAYER" and "2 PLAYERS (2)" buttons plus RESTART.
-13. **Static page, vendored lib, no network: 9.**
-    - 384 draw calls, 33.7k triangles, 0 MB of assets.
-    - The 63 ms frame comes from the SwiftShader software renderer at host load 2.0, so it is noise, not a fault.
-
-**Faults: 7.**
-- `dust` is still "Never visible" (behind `finish-line`).
-- There are no console errors. The only warning is the shadowmap one.
-- The results screen is still waiting on `Hoof Hearted` (still racing, `legs` "1111").
-
-**Next:**
-1. **Prove or tune the human run to 60 m.**
-   - Run `interact` with a long loop of Q+P, then W+O every 10 frames. Use about 1800 frames and `trace:["horses.2.x"]`.
-   - `YOU` should reach x 60 by about frame 3000 (50 s) and show non-zero `plants` only on mistimed keys.
-   - If it is too slow or too easy, adjust the `driveF` and rubber-band terms in `physStep`.
-2. **Lift `dust` above the `track` and tie it to hoof thuds.**
-   - The `Never visible: dust` line is flagged again; the last verdict also asked for this.
-   - A `look` should then list `dust` with pixels, and a `feel` on a plant should show particles.
-   - Run `feel` on a plant at the same time to measure the camera shake.
-3. **Make the player stand out and break the `track` texture repeat.**
-   - Add a coloured outline, a name flag or a marker ring on `player-*`. `look` should then report a subject contrast well above 0.033.
-   - Blend a larger-scale dirt noise into the `track` texture to remove the brown panels.
-   - End the results wait: when the player and the rest have finished, list a non-finisher as "DNF" instead of "still racing".
-
-SCORE: 7.7
-
 ## Iteration 13
 **Did** game.js: `dust` lifted (emit y +0.18, floor 0.14, `renderOrder` 5, polygonOffset -2) so it draws above `track`; results rows list any non-finisher as "DNF · n m short" (no more "still racing").
 **Saw** `look` now lists `dust* ×4` 0.055% and "Never visible: none". Human Q+P/W+O rhythm over only the 0.9 s after GO: YOU x 1.4 → 1.89, plants 0. Subject contrast edge 0.114, player 0.76% of frame. Only console warning is the shadowmap one.
 **Next** (1) Full 60 m human-run proof (1800+ frames, trace horses.2.x) and tune `driveF`/rubber-band. (2) Player outline/marker ring on `player-*`; break `track` texture repeat with large-scale noise. (3) `feel` on a plant for camera shake.
 **Open** Human run still unproven past ~2 s; dust amount is small (only 4 visible in the start frame); the results screen's DNF wait is unchanged otherwise.
+
+### Judge 13
+
+**Judge 13 verdict**
+
+1. **Plays as DESIGN.md's Core loop and Controls say: 6.**
+   - The Q W O P rhythm moves `YOU` (`horses.2`) from x 1.4 to 1.81 in the 0.8 s after GO, with `plants` 0.
+   - The `div#tips` line "Alternate your legs — Q+P then W+O works" and the `div#keys` pads are on screen.
+   - My test only covered the first 0.8 s of the race, because the 200-frame wait mostly ran the countdown. A full solo run to the line is still unproven.
+2. **Real Rapier jointed ragdoll, face-plant and auto-right: 8.**
+   - I did not re-test this session. The `horse0-*` to `horse3-*` limbs are jointed, and the `legs` strings change as the legs are driven.
+3. **Replay (last ~4 s, 0.25x, REPLAY banner, Space skips): 8.**
+   - I did not re-look at the replay this session. I carry the score over from the last iteration's report.
+4. **Photo finish and tangled AI collapse within the first minute: 8.**
+   - Carried over from judge 12, where `tangles` was 1 and the photo finish landed at about 22 s.
+5. **Results with most face-plants award: 8.**
+   - Iteration 13 changed non-finishers to "DNF · n m short". I did not see the results screen this session.
+6. **Looks as LOOK.md says: 8.**
+   - The `grandstand` crowd, rail fence, `track` and `hills` read like refs/01.jpg, and `dust*` is now visible.
+   - The player is still small and blends in. It takes 0.83% of the frame, and subject contrast is edge 0.102 (subject brightness 29% against 38% around it).
+   - The `track` still shows a repeating brown panel pattern.
+7. **window.__game convention, index.html at root, static deploy: 9.**
+8. **Clip moments within the first minute, no input: 8.**
+   - Carried over from judge 12. This session's frame at GO shows four horses bunched in adjacent lanes, which is the setup for a tangle.
+9. **Controls feel learnable: 5.**
+   - The 10-frame alternation gave about +0.4 m in 0.8 s, which is about 0.5 m/s. The builder claims about 2 m/s.
+   - At that pace 60 m would take around two minutes, not under 60 s.
+   - No one has measured a full human run to 60 m.
+10. **Horses read as horses, match refs/01.jpg: 8.**
+    - Head, mane, tail, saddle and socks read in the start frame.
+    - `horse3-*` (the player, blue saddle) is hard to pick out among the others.
+11. **Juice: 8.**
+    - 5 sounds fired in the first 0.8 s (blip ×3, powerup, cheer). The "GO!" popup and chips are in place.
+    - Camera shake is still unmeasured by `feel`.
+12. **Local 2-player discoverable from the HUD: 8.**
+    - `div#top-r` shows "1 PLAYER", "2 PLAYERS (2)" and RESTART.
+13. **Static page, vendored lib, no network: 9.**
+    - 382 draw calls, 33.5k triangles, 0 MB of assets.
+    - The 69 ms frame is the SwiftShader software renderer at host load 1.9, so it is noise, not a fault.
+
+**Faults: 8.**
+- "Never visible: none", and the only console message is the shadowmap warning.
+- The `div#tips` text overlaps the "GO!" popup region.
+- Item 9's unproven pace is the one open concern.
+
+**Next:**
+1. **Prove or tune the human run to 60 m (asked again).**
+   - Run `interact` with `state:{auto:false}`, after `{until:{phase:"race"}}`.
+   - Then loop Q+P and W+O at 10 frames each for about 3000 frames, with `trace:["horses.2.x"]`.
+   - It is done when `YOU` reaches x 60 with `finishT` under about 60.
+   - If it does not, raise `driveF` in `physStep`. The measured pace so far is about 0.5 m/s.
+2. **Make the player stand out (asked again).**
+   - Add a ring, an arrow or a name flag above `player-*`.
+   - `look` with `sample` on the player pixels should then show a subject "Stands out" edge contrast well above 0.102.
+   - Also blend large-scale dirt noise into the `track` texture to break the panel repeat.
+3. **Run `feel` on a face-plant to measure camera shake.**
+   - It should report a nonzero camera displacement that decays within about 0.5 s.
+   - Also add more `dust*` on hoof thuds. Only 6 are visible at the start.
+
+SCORE: 7.7
