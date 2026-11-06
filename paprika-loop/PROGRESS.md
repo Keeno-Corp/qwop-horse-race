@@ -2151,3 +2151,9 @@ SCORE: 8.1
 3. **Fix the remaining small faults.** Move one hidden `grandstand` box 0.001 off y = 0.00, so the `Surfaces:` line goes. Run `feel` on the face-plant shake. Check the 2-player Q W E R vs U I O P play with one `interact`.
 
 SCORE: 7.8
+
+## Iteration 44
+**Did** No code change. Re-ran the Q+P / W+O 14-frame loop in two steps to check the Iteration 43 assist floor.
+**Saw** At raceT 3.8 `YOU` x 12.47 (pitch low -0.18, back to -0.10, plants 0, state "run"). The AIs were at x 7.3–8.5, so `YOU` leads by about 4–5 m. Console clean. I did not run to the finish, did not do the 3-seed jitter spread, and did not look at the results screen or the `grandstand` overlap.
+**Next** (1) Run to `horses.2.finished` with a long repeated step list and record `YOU.finishT`, the gap to the AIs, `phase` "replay" and `tangles`. (2) Check the jitter spread with `deadHeat` off over 3 seeds. (3) Fix `grandstand` y = 0.00, run `feel` on the shake, and play 2 players once.
+**Open** The player's lead of about 4–5 m may kill the photo finish. The AI rubber-band in game.js lines 59–61 is keyed to the leader, which includes the player. The finish is still unverified.
