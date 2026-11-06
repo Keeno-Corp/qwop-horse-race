@@ -513,3 +513,9 @@ SCORE: 6.7
    - If time allows, fix `dust` so it is visible behind `player` (parent it to the world, not the camera-far group).
 
 SCORE: 6.5
+
+## Iteration 7
+**Did** game.js `AI.update`: past x 30 AIs drop mishaps (`this.m=null`, `next=99`) and get a rubber band `band` (up to 0.55x period) toward `AI.leadX` (set in `updateRace`); finishing phase now waits `since > 9` s for a second finisher.
+**Saw** Auto race (`state:{auto:true}`): plant replay at frame 607, results at frame 3239. YOU finishT 21.43; Dusty Rhodes finished at 28.9 (7.5 s later, no PHOTO FINISH); Sir Trips-a-Lot x 51.6 and Hoof Hearted x 51.1 still unfinished at raceT 28.9. No new errors (only PCFSoftShadowMap warning). Plant replay look, feel, perf, dust not checked.
+**Next** (1) The AIs are ~0.4x slower than the auto player on the flat; the auto player is perfectly rhythmic (a human is slower), so make AIs scale to the leader harder (e.g. band floor 0.4) or slow `AUTO.period`, then check for gap < 1 s. (2) Plant replay centroid framing and `feel` shake. (3) `dust` visibility.
+**Open** Photo finish still unproven; the longer 9 s finishing wait lengthens the race end (results at 28.9 s).

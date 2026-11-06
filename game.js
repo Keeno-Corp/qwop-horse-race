@@ -55,8 +55,10 @@ class AI {
   constructor(skill) { this.skill = skill; this.phase = rr(0, 1); this.base = rr(0.57, 0.65) / skill; this.t = 0; this.delay = rr(0.05, 0.5); this.next = rr(7, 12); this.m = null; this.wob = rr(0, 6); this.chaos = rr(0.85, 1.25); }
   update(h, dt, lead) {
     this.t += dt; this.wob += dt;
+    const px = h.pos().x; let band = 1;
+    if (px > 30) { if (this.m) this.m = null; this.next = 99; const gapL = (AI.leadX || 0) - px; if (gapL > 0.5) band = 1 - clamp((gapL - 0.5) * 0.1, 0, 0.45); }
     if (this.t < this.delay) { for (let i = 0; i < 4; i++) h.setHeld(i, false); return; }
-    const per = this.base * (1 + 0.14 * Math.sin(this.wob * 1.7) + 0.08 * Math.sin(this.wob * 4.1)) * (1 + clamp(lead * 0.07, -0.35, 0.5)) * (h.pos().x > 40 ? 1 - clamp(lead * 0.06, -0.3, 0.3) : 1);
+    const per = band * this.base * (1 + 0.14 * Math.sin(this.wob * 1.7) + 0.08 * Math.sin(this.wob * 4.1)) * (1 + clamp(lead * 0.07, -0.35, 0.5)) * (h.pos().x > 40 ? 1 - clamp(lead * 0.06, -0.3, 0.3) : 1);
     this.phase = (this.phase + dt / per) % 1;
     const off = [0, 0.5, 0.5, 0], duty = 0.58;
     const flags = off.map((o) => ((this.phase + o) % 1) < duty);
@@ -266,7 +268,7 @@ function frontOrder() {
 
 function updateRace(dt) {
   // AI
-  const xs = horses.map((h) => h.pos().x), sorted = [...xs].sort((a, b) => b - a), mean = (sorted[0] + sorted[1] + sorted[2]) / 3;
+  const xs = horses.map((h) => h.pos().x); AI.leadX = Math.max(...xs); const sorted = [...xs].sort((a, b) => b - a), mean = (sorted[0] + sorted[1] + sorted[2]) / 3;
   if (S.phase === 'race' || S.phase === 'finishing') {
     horses.forEach((h, i) => { const r = roles[i]; if (r.ai) { if (h.finished) for (let k = 0; k < 4; k++) h.setHeld(k, false); else r.ai.update(h, dt, xs[i] - mean); } });
   }
@@ -303,7 +305,7 @@ function updateRace(dt) {
     }
     if (S.phase === 'finishing') {
       const since = S.raceT - S.firstFinish;
-      if (S.order.length >= 2 || since > 4 || horses.every((h) => h.finished)) startFinishReplay();
+      if (S.order.length >= 2 || since > 9 || horses.every((h) => h.finished)) startFinishReplay();
     } else if (S.raceT > 150) startFinishReplay();
   }
 }
