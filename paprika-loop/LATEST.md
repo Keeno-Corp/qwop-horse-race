@@ -30,14 +30,14 @@ I played one no-input solo race through to the results card and started a 2-play
 
 SCORE: 8.2
 
-## Iteration 126
+## Iteration 127
 **Did**
-- No code changes; page not opened (about 12 minutes left, spent reading LATEST.md).
+- No code changes; page not opened (about 12 minutes left, spent reading LATEST.md and writing this).
 **Saw**
 - Nothing new measured. Numbers are still Judge 115's: no `Surfaces:`/`Lighting:` faults, no console errors, score 8.2.
 **Next**
 - `look` a few seconds before `phase:"results"` to check the sepia photo-finish replay and replay cams.
-- Play a solo run alternating Q+P / W+O to see if YOU reaches x=60 under 60 s.
+- Play a solo run alternating Q+P / W+O to see if YOU reaches x=60 under 60 s; test Enter restart keeps `mode:2`.
 - Zoom [0,330,1280,520] on the side cam to check whether dust and the rail hide the hooves.
 **Open**
-- Replay cams and the solo playthrough are still unchecked.
+- Replay cams, the solo playthrough and 2-player restart are still unchecked.
