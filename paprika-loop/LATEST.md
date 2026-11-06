@@ -1,17 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 13
-**Did**
-- `game.js` AI.update: added a stall watchdog (3 s window; upright horse gaining <0.8 m gets a 1.4 s `driveF` 420 shove, and `rise()` if |pitch|>0.9). `broadcast.js`: post-pass quad named `postpass-quad`, `userData.noId`.
-**Saw**
-- Two no-input solo races give identical results to iteration 12: `replay.kind:"finish"` at raceT 28.55, Hoof Hearted 22.03 / Dusty Rhodes 22.07, Sir Trips-a-Lot (6 plants) at x 33.89, pitch -2.14, state run. The watchdog changed nothing there: he is likely just far behind when the 6.5 s post-finish cutoff ends the race, not stuck. Draw calls not re-measured (last 411); `look` not run.
-**Next**
-- Draw calls 411 to under 250 (merge horse `merged` groups, sponsor atlas, instance tails/posts).
-- Enlarge blinker silks 2×; name horse body/leg/head meshes so `look target:"horse0"` lists parts.
-- Let slow AI horses finish: lengthen the post-first-finish cutoff or boost trailing AI after x>30.
-**Open**
-- Draw-call goal unmet; the 60 m finish by hand (`YOU`) is unproven; the watchdog is unverified as helpful.
-
 ### Judge 13
 
 **Scores (Must have, in order)**
@@ -43,3 +31,15 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Make `horse0` measurable and enlarge the blinker silks 2×.** Name the horse's body, leg and head meshes so they are not hidden from the ID image, and flag the post-pass quad so the ID image skips it. Done when `look target:"horse0"` lists its parts and the "0 of its 3 named parts" line is gone.
 
 SCORE: 6.6
+
+## Iteration 14
+**Did**
+- No code changes. Verified the judge-13 Next 1 by playing: `interact until {phase:"replay"}` reaches the plant replay at raceT 7.72 (INSTANT REPLAY 0.25x, `replay.kind:"plant"`); after Space, `until {replay.kind:"finish"}` shows the sepia frame with grain, scratches, film perforations, "PHOTO FINISH" caption and "WINNER: Dusty Rhodes · OFFICIAL · HOLD ALL TICKETS" strip. The replay and sepia exist and work; the judge only stopped at raceT 22 before the 6.5 s post-finish cutoff.
+**Saw**
+- Finish replay appears at raceT ~28.2. Dusty Rhodes finishT 21.70, Hoof Hearted 27.89 in this run (a 6 s gap: the `deadHeat` pull-level in game.js ~l.339 did not close it this time; an earlier run gave 22.03/22.07). Sir Trips-a-Lot (5 plants) x 57.6 not finished. No console errors. `postpass-quad` is flagged by `look` as dense fine detail (noise). `look target:"horse0"` still 0 of 3 parts. Draw calls not re-measured (last 411).
+**Next**
+- Make the dead heat reliable: the chaser is only dragged level when `AI.leadX > 34` and `S.deadHeat` (90%); Hoof Hearted lagged because he planted late. Trigger the pull from x>25 and always `rise()`.
+- Draw calls 411 to under 250 (merge per-horse `merged` / `merged-outline` groups, sponsor atlas, instance tails).
+- Name horse body/leg/head meshes so `look target:"horse0"` finds parts; enlarge blinker silks 2x.
+**Open**
+- Draw-call goal unmet; a human 60 m finish is unproven; `postpass-quad` grain flagged as shimmer noise (intentional film grain).
