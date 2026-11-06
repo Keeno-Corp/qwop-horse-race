@@ -30,6 +30,12 @@ Object.assign(sun.shadow.camera, { left: -26, right: 26, top: 22, bottom: -12, n
 sun.shadow.bias = -0.0006; sun.shadow.normalBias = 0.03;
 scene.add(sun, sun.target);
 const env = buildEnvironment(scene, tex, rng);
+const clouds = new THREE.Group(); clouds.name = 'clouds';
+{ const cm = new THREE.MeshBasicMaterial({ color: 0xffffff, fog: false });
+  for (let i = 0; i < 14; i++) { const c = new THREE.Group(); const n = 4 + (i % 3);
+    for (let k = 0; k < n; k++) { const b = new THREE.Mesh(new THREE.IcosahedronGeometry(3 + (k % 3) * 1.4, 1), cm); b.position.set(k * 4.2 - n * 2, (k % 2) * 1.2, (k % 3) * 1.5); b.scale.y = 0.6; c.add(b); }
+    c.position.set(-60 + i * 14, 34 + (i % 4) * 6, -120 - (i % 3) * 25); clouds.add(c); }
+  scene.add(clouds); }
 
 // ---------- physics + horses ----------
 const world = createWorld(RAPIER);
@@ -144,8 +150,10 @@ function applyFrame(idx) { // idx: fractional absolute frame number
   }
 }
 function subjectAt(idx, hi) {
-  const i0 = Math.floor(idx), a = (i0 % RING) * FRAME + hi * NP * 7;
-  return new THREE.Vector3(ring[a], ring[a + 1], ring[a + 2]);
+  const i0 = Math.floor(idx), base = (i0 % RING) * FRAME, c = new THREE.Vector3(), m = base + hi * NP * 7;
+  let n = 0;
+  for (let h = 0; h < horses.length; h++) { const a = base + h * NP * 7; if (h === hi || Math.abs(ring[a] - ring[m]) < 5) { c.x += ring[a]; c.y += ring[a + 1]; c.z += ring[a + 2]; n++; } }
+  return c.multiplyScalar(1 / n);
 }
 
 // ---------- game state ----------
@@ -221,12 +229,13 @@ function onPlant(h, kind) {
 }
 
 // ---------- race logic ----------
+const AUTO = { period: 0.32 };
 function physStep() {
   for (const h of horses) {
     const r = roles[h.idx];
     if (r.human >= 0 && (S.phase === 'race' || S.phase === 'finishing') && !h.finished) {
-      const set = KEYS[mode][r.human]; for (let i = 0; i < 4; i++) { const d = held.has(set[i]); if (d && !h.held[i]) h.drive = Math.min(1.2, (h.drive || 0) + 0.2); h.setHeld(i, d); }
-      if (S.phase === 'race') { const others = horses.filter((o, j) => roles[j].ai).map((o) => o.pos().x); const avg = others.reduce((a, b) => a + b, 0) / Math.max(1, others.length); h.driveF = 150 + clamp(avg - h.pos().x - 4, 0, 30) * 6; }
+      const set = KEYS[mode][r.human]; const ph = Math.floor(S.raceT / AUTO.period) % 2; for (let i = 0; i < 4; i++) { const d = S.auto ? ((i === 0 || i === 3) === (ph === 0)) : held.has(set[i]); if (d && !h.held[i]) h.drive = Math.min(1.2, (h.drive || 0) + 0.2); h.setHeld(i, d); }
+      if (S.phase === 'race') { const others = horses.filter((o, j) => roles[j].ai).map((o) => o.pos().x); const avg = others.reduce((a, b) => a + b, 0) / Math.max(1, others.length); h.driveF = Math.max(0, 30 + clamp(avg - h.pos().x - 4, 0, 30) * 6 - clamp(h.pos().x - avg - 1, 0, 20) * 8); }
     } else if (r.human >= 0) for (let i = 0; i < 4; i++) h.setHeld(i, false);
     if (h.finished || S.phase === 'results') h.guard = 99;
     const ev = h.step(DT);
@@ -360,7 +369,7 @@ function updateCamera(dt) {
       tp.set(FINISH_X + 3.4 - prog * 0.8, 2.2, 11.5); tl.set(FINISH_X - 0.2, 1.0, 0); fov = 29 - prog * 4;
     } else {
       const prog = (rp.pos - rp.start) / Math.max(1, rp.end - rp.start), s = subjectAt(rp.pos, rp.subject), a = 0.35 + prog * 1.1;
-      tp.set(s.x + Math.sin(a) * 6.5, 1.3 + prog * 1.4, s.z + Math.cos(a) * 6.5); tl.set(s.x, 0.8, s.z); fov = 38;
+      tp.set(s.x + Math.sin(a) * 5.5, 1.3 + prog * 1.2, s.z + Math.cos(a) * 5.5); tl.set(s.x, 0.8, s.z); fov = 38;
     }
     camPos.lerp(tp, 1 - Math.exp(-dt * 6)); camLook.lerp(tl, 1 - Math.exp(-dt * 8));
   } else if (S.phase === 'results') {
@@ -370,7 +379,7 @@ function updateCamera(dt) {
     const { fx, dist } = followTarget();
     if (S.phase === 'countdown') {
       S.camBlend = Math.min(1, S.camBlend + dt / 3.0); const e = S.camBlend * S.camBlend * (3 - 2 * S.camBlend);
-      tp.set(-4 + (fx - 0.4 + 4) * e, 3.4 - 0.0 * e, 10.5 - (10.5 - dist) * e); tl.set(1.5 + (fx + 1.8 - 1.5) * e, 1.2, 0);
+      tp.set(-2.5 + (fx - 0.4 + 2.5) * e, 2.6 + 0.9 * e, 7.2 - (7.2 - dist) * e); tl.set(1.5 + (fx + 1.8 - 1.5) * e, 1.2, 0);
       camPos.copy(tp); camLook.copy(tl);
     } else {
       tp.set(fx - 0.4, 3.5 + (dist - 9.4) * 0.15, dist); tl.set(fx + 1.8, 1.25, 0);
@@ -434,7 +443,7 @@ function tick(dt) {
   }
   if (S.phase !== 'replay') syncViews();
   updateDust(dt); dustM.visible = S.phase !== 'replay' || true;
-  env.update(S.time, dt);
+  env.update(S.time, dt); clouds.position.x = camLook.x * 0.9 + S.time * 0.4;
   env.spectators.update(S.time, S.phase === 'results' ? 0.8 : S.excite);
   // popups lifetimes
   for (let i = S.popups.length - 1; i >= 0; i--) { S.popups[i].t -= dt; if (S.popups[i].t <= 0) { S.popups[i].el.remove(); S.popups.splice(i, 1); } }
@@ -485,6 +494,8 @@ window.__game = {
   }),
   act,
   setState: (s) => {
+    if (s.auto !== undefined) S.auto = !!s.auto;
+    if (s.autoPeriod) AUTO.period = s.autoPeriod;
     if (s.mode && s.mode !== mode) setMode(s.mode);
     if (s.restart) resetRace();
     if (s.phase === 'race' && S.phase === 'countdown') { S.countdown = 0.001; }
