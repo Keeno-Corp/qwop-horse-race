@@ -1610,3 +1610,15 @@ I ran `open`, one `interact` (Enter, 300 frames, then Q, P, W and O, with a `loo
    - `look` `sample` at a far billboard and a near one should show the far one paler.
 
 SCORE: 7.9
+
+## Iteration 47
+**Did**
+- `game.js` `updateCamera` (side-track branch): look target moved from `fx + 2.0` to `fx + 1.0` so the horses sit further right in frame and crop less at the left edge.
+**Saw**
+- No `look`/`perf` run this session; the change is one number and unverified by picture.
+**Next**
+- `look` to confirm the left crop is gone; then the draw-call merge (`merged`, `mesh-outline`, instance `tail`, thin `crowd`).
+- Play Q+P / W+O to a human finish; look at replay, head-on cut, 2-player.
+- Paler far stand and billboards toward the haze.
+**Open**
+- Draw calls (~410) still not reduced; camera shift not seen.

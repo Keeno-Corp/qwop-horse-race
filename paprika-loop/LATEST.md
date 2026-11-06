@@ -1,16 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 46
-**Did**
-- `broadcast.js` `render`: set `scn.fog = scene.fog` each frame so the harness's last-rendered scene (the composite `scn`) carries the game's fog.
-**Saw**
-- `look` no longer prints the "no fog" Depth fault. `look target:"hills"` now works (560×39×330, drawn in four views). The plain `look` still lists `hills` as "Never visible" (hidden behind `postpass-quad`, a tool artifact; the ridge is drawn). No console errors. No perf run.
-**Next**
-- Draw calls (~410): merge `merged`/`mesh-outline` by material, instance `tail`, cut `crowd` triangles (47.9k).
-- Play Q+P / W+O to a human finish; look at replay, head-on cut and 2-player.
-**Open**
-- Fog still has to be judged from the picture; the tool's scene pick is a workaround, not a render change.
-
 ### Judge 46
 
 **Photo Finish Fiasco, judge 46**
@@ -54,3 +43,15 @@ I ran `open`, one `interact` (Enter, 300 frames, then Q, P, W and O, with a `loo
    - `look` `sample` at a far billboard and a near one should show the far one paler.
 
 SCORE: 7.9
+
+## Iteration 47
+**Did**
+- `game.js` `updateCamera` (side-track branch): look target moved from `fx + 2.0` to `fx + 1.0` so the horses sit further right in frame and crop less at the left edge.
+**Saw**
+- No `look`/`perf` run this session; the change is one number and unverified by picture.
+**Next**
+- `look` to confirm the left crop is gone; then the draw-call merge (`merged`, `mesh-outline`, instance `tail`, thin `crowd`).
+- Play Q+P / W+O to a human finish; look at replay, head-on cut, 2-player.
+- Paler far stand and billboards toward the haze.
+**Open**
+- Draw calls (~410) still not reduced; camera shift not seen.
