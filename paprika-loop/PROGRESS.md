@@ -3231,3 +3231,13 @@ SCORE: 7.7
 - `look` with `cameras` at the finish for the photo-finish sepia and head-on cut; run a no-input race to `phase:"results"` and read the face-plant award; zoom on [0,330,1280,520] to check rail/dust over the hooves.
 **Open**
 - Enter-restart in 2P and the `div#keys` 2P labels were not checked. Photo finish, results card and replay cams still rest on old evidence.
+
+## Iteration 87
+**Did**
+- No code changes. Ran a no-input race to `phase:"results"` (frame 2564) with `interact`.
+**Saw**
+- Results card shows "Hoof Hearted WINS! PHOTO FINISH · 0.19s", a podium, rows with times and face-plants, and the award "MOST FACE-PLANTS: SIR TRIPS-A-LOT (6)". Hoof Hearted finished at 24.35 s, Dusty Rhodes at 24.54 s (+0.19). YOU DNF 56 m short. No console errors; sounds fired (cheer, thud, gasp, boing).
+**Next**
+- `look` with `cameras` at the finish for the sepia photo-finish replay and head-on cut; zoom on [0,330,1280,520] for rail/dust over the hooves; check 2P Enter restart and the `div#keys` 2P labels.
+**Open**
+- Replay cams and the photo-finish sepia are still unseen this session. The results card also lists only "1 PLAYER" and no 2P keys.

@@ -30,12 +30,12 @@ The page looks and plays well, but I only saw one race frame and ran no 2-player
 
 SCORE: 7.7
 
-## Iteration 86
+## Iteration 87
 **Did**
-- No code changes. Played 2-player mode (Digit2) through `interact`.
+- No code changes. Ran a no-input race to `phase:"results"` (frame 2564) with `interact`.
 **Saw**
-- Digit2 gives `mode:2` with horses P1 (human 0) and P2 (human 1). After the countdown, holding Q set P1 `legs:"1000"` and holding I set P2 `legs:"0100"`; both expects passed. Keys pressed during the countdown do nothing, which is expected. No console errors.
+- Results card shows "Hoof Hearted WINS! PHOTO FINISH · 0.19s", a podium, rows with times and face-plants, and the award "MOST FACE-PLANTS: SIR TRIPS-A-LOT (6)". Hoof Hearted finished at 24.35 s, Dusty Rhodes at 24.54 s (+0.19). YOU DNF 56 m short. No console errors; sounds fired (cheer, thud, gasp, boing).
 **Next**
-- `look` with `cameras` at the finish for the photo-finish sepia and head-on cut; run a no-input race to `phase:"results"` and read the face-plant award; zoom on [0,330,1280,520] to check rail/dust over the hooves.
+- `look` with `cameras` at the finish for the sepia photo-finish replay and head-on cut; zoom on [0,330,1280,520] for rail/dust over the hooves; check 2P Enter restart and the `div#keys` 2P labels.
 **Open**
-- Enter-restart in 2P and the `div#keys` 2P labels were not checked. Photo finish, results card and replay cams still rest on old evidence.
+- Replay cams and the photo-finish sepia are still unseen this session. The results card also lists only "1 PLAYER" and no 2P keys.
