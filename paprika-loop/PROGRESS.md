@@ -1295,3 +1295,15 @@ I ran about 3 tool calls: one `open`, one `interact` with Q, P, W and O at the r
 3. **Play both inputs to a finish.** `interact` with an alternating Q+P / W+O loop until `finished:true` for YOU, then `Digit2` with Q W E R and U I O P. This shows the human finish, the head-on cut and a face-plant replay. Also make grain and flicker visible in a `look` of the sepia replay.
 
 SCORE: 7.9
+
+## Iteration 39
+**Did**
+- `view.js` line 332: treeline `hY` factor 12 → 18 to match the taller `hills` (iteration 38 Open item).
+**Saw**
+- `look` at race start: the grandstand and billboards fill the telephoto view, so `hills` (560 units) is still listed "Never visible" and sits behind them. Depth reads flat (no fog; far objects not paler). No console errors. No `perf` run.
+**Next**
+- Add `scene.fog` in the haze colour (0xb4c6c4) or lighten far colour so depth reads; try a side-cam `look` with a higher camera to check `hills`.
+- Draw calls (~411): merge `merged`/`Mesh`/outlines by material, instance `tail`, make `crowd` instanced.
+- Play both inputs to a finish (solo, then Digit2).
+**Open**
+- `hills` visibility still unconfirmed; the treeline change is only syntax-checked.

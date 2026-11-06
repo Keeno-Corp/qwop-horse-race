@@ -1,17 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 38
-**Did**
-- `view.js`: deleted the never-visible `ridge` mesh; raised far `hills` height (`far * 12` → `far * 18`) so they should rise above the grandstand.
-**Saw**
-- Only `node --check view.js`; no `look`/`perf` run this session.
-**Next**
-- `look` side cam to confirm `hills` now shows paler/bluer; trees use hills' old height formula (12) so they may sink into the taller hills; adjust.
-- Draw calls (~411): merge `merged`/`Mesh`/outlines, instance `tail`, crowd 47.9k tris.
-- Play Q W O P / 2-player to see a human finish.
-**Open**
-- Hills change unverified visually; treeline `hY` still uses factor 12.
-
 ### Judge 38
 
 I ran about 3 tool calls: one `open`, one `interact` with Q, P, W and O at the race start, and one `perf` with `costs`. I made no `look` of a side-cam sample, so the `hills` change was judged from the race `look` and the "Never visible" list.
@@ -41,3 +29,15 @@ I ran about 3 tool calls: one `open`, one `interact` with Q, P, W and O at the r
 3. **Play both inputs to a finish.** `interact` with an alternating Q+P / W+O loop until `finished:true` for YOU, then `Digit2` with Q W E R and U I O P. This shows the human finish, the head-on cut and a face-plant replay. Also make grain and flicker visible in a `look` of the sepia replay.
 
 SCORE: 7.9
+
+## Iteration 39
+**Did**
+- `view.js` line 332: treeline `hY` factor 12 → 18 to match the taller `hills` (iteration 38 Open item).
+**Saw**
+- `look` at race start: the grandstand and billboards fill the telephoto view, so `hills` (560 units) is still listed "Never visible" and sits behind them. Depth reads flat (no fog; far objects not paler). No console errors. No `perf` run.
+**Next**
+- Add `scene.fog` in the haze colour (0xb4c6c4) or lighten far colour so depth reads; try a side-cam `look` with a higher camera to check `hills`.
+- Draw calls (~411): merge `merged`/`Mesh`/outlines by material, instance `tail`, make `crowd` instanced.
+- Play both inputs to a finish (solo, then Digit2).
+**Open**
+- `hills` visibility still unconfirmed; the treeline change is only syntax-checked.

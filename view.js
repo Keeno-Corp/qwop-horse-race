@@ -329,7 +329,7 @@ export function buildEnvironment(scene, _tex, rng) {
   // treeline on the far hills
   const treeG = new THREE.SphereGeometry(1, 12, 8), trunkG = cyl(0.12, 0.18, 1, 5), tcols = [0x5f7a2e, 0x6f8a3a, 0x7a8a34, 0x9a7a2a, 0x4f6a2a];
   const trees = new THREE.InstancedMesh(treeG, toon(0xffffff), 90), tc = new THREE.Color(), tm4 = new THREE.Matrix4();
-  for (let i = 0; i < 90; i++) { const x = -110 + i * 3.6 + (rng() - 0.5) * 3, z = -60 - rng() * 24, s = 3 + rng() * 3, hY = Math.max(0, smooth(40, 120, -(z)) * 12 * (0.4 + 0.6 * noise2((x + 50) * 0.02, (z - 55 + 55) * 0.02))) - 0.1; tm4.compose(new THREE.Vector3(x, hY + s * 0.7, z), new THREE.Quaternion(), new THREE.Vector3(s, s * 0.9, s)); trees.setMatrixAt(i, tm4); trees.setColorAt(i, tc.set(tcols[i % 5])); }
+  for (let i = 0; i < 90; i++) { const x = -110 + i * 3.6 + (rng() - 0.5) * 3, z = -60 - rng() * 24, s = 3 + rng() * 3, hY = Math.max(0, smooth(40, 120, -(z)) * 18 * (0.4 + 0.6 * noise2((x + 50) * 0.02, (z - 55 + 55) * 0.02))) - 0.1; tm4.compose(new THREE.Vector3(x, hY + s * 0.7, z), new THREE.Quaternion(), new THREE.Vector3(s, s * 0.9, s)); trees.setMatrixAt(i, tm4); trees.setColorAt(i, tc.set(tcols[i % 5])); }
   scene.add(trees);
 
   // infield lake behind the gap between the stands
