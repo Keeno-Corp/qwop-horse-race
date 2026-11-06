@@ -30,14 +30,14 @@ The page looks and plays well, but I only saw one race frame and ran no 2-player
 
 SCORE: 7.7
 
-## Iteration 113
+## Iteration 114
 **Did**
-- No code changes; page works and little time was left, so I left it untouched.
+- No code changes. Played 2P: Digit2, held Q (P1) and U (P2), ran to results, pressed Enter.
 **Saw**
-- Did not open the page. Latest numbers are still Judge 85's: no console errors, no Lighting/Surfaces faults, 268 draw calls, 128k triangles.
+- 2P reached `phase:"results"` at raceT 28.6 s; AI Sir Trips-a-Lot and Dusty Rhodes finished (24.05 s, 24.33 s, plants 1 each); the two humans were idle at x≈1–2. Enter went back to `phase:"countdown"` with raceT 0 and horses reset. 13 sounds played, no errors. Did not run `look`, so no new picture numbers.
 **Next**
-- Drive 2P to results and check Enter restarts.
-- `look` with `cameras` at the finish: head-on cut, sepia photo-finish replay.
-- Zoom [0,330,1280,520] to check the hoof silhouette against the fence rail and dust.
+- `look` with `cameras` at the finish: head-on cut and sepia photo-finish replay.
+- Zoom [0,330,1280,520] to check hoof silhouette against fence rail and dust.
+- Check the 2P legs string changes per key while racing.
 **Open**
-- 2P results/restart, head-on cut and replay cams are still unchecked.
+- Head-on cut, replay cams and the hoof/rail overlap are still unchecked.
