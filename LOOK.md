@@ -1,25 +1,28 @@
-# Look: Photo Finish Fiasco (QWOP horse race)
-Board: refs/sheets/LOOK.png
+# Look: Photo Finish Fiasco, a 1970s TV horse-race broadcast
+Board: refs/sheets/LOOK.png (free, from tagged refs) · refs/sheets/LOOK-board.png (Gemini via OpenRouter, supplied by the person) · horse: refs/sheets/horse.png
 ## Palette
-sky #7bbaff · dirt #99653e / #855836 · horse chestnut #d38042 · hills #acd270 · blue cloth #3f6cdc · green #3fb04a · yellow #f2d03a · red #d93a2e · socks #ffffff · mane #2a1d1a · UI cream #fff6e0 on #3a2416   (refs/01.jpg style inspiration, sampled)
+tomato #d3432b · mustard #e5af2c · avocado #95a641 · burnt orange #d06322 · royal blue #305da2 · gold dirt #cc8930 · cream #f2e1ad · chocolate #4c2c21 · haze sky #d2dac0 → warm horizon #fbf1b6 · track shadow side #ac8053   (refs/sheets/LOOK-board.png, style, match: swatch strip sampled at y=727 and scene at (700,60), (300,560), (1000,300))
 ## Lighting
-Bright midday sun from upper left-behind, hard-ish shadows on dirt, light hemisphere fill, no fog.   (refs/01.jpg, style, inspiration)
+Low warm golden sun from the front-left, behind the stands' side, long soft-edged shadows stretching across the dirt, hemisphere fill (cool haze sky, warm dirt ground), light warm haze toward the horizon; sun glints on an infield lake.   (refs/sheets/LOOK-board.png, mood, match)
 ## Materials
-All flat-shaded matte (flatShading, roughness 1), no textures except subtle dirt vertex variation.   (refs/01.jpg, style)
+MeshToonMaterial with a 3-step gradient map (shadow / mid / light), no textures except canvas silks patterns and hand-painted-looking dirt bands; every character and prop gets a thick dark inverted-hull outline (chocolate #2b1810).   (refs/sheets/LOOK-board.png, style, match; builder's call: outline colour)
 ## Shape language
-Chunky faceted low-poly, horses ~2.2 m long, white socks, saddle cloth + bridle in lane colour, blocky spectators.   (refs/01.jpg)
+Chunky, rounded, cartoon: barrel body, long wobbly legs, oversized dark hooves, bobbly head with big round eyes, bristly mane, tufted tail. Architecture: flat concrete slabs, steel posts, striped scalloped awning, a big wide scoreboard.   (refs/sheets/horse.png, match; refs/sheets/LOOK-board.png)
 ## Camera
-Side-on chase camera, 45° fov, ~9 m off the track and 3 m high, following the player's horse; cinematic orbits for replays; photo-finish side camera at the line.   (builder's call)
+Broadcast side-tracking telephoto (narrow fov ~28-34°, 25-40 m off the rail, slow lateral pan following the lead pack), cuts to a head-on cam when a horse falls or near the line, replay cams: low rail cam for tangles, photo-finish side cam at the line. Never shows the sky above 40% of frame.   (refs/sheets/LOOK-board.png, layout, inspiration; study/STUDY.md: telephoto tracking pan from the stand side, head-on shot in the stretch, finish-line cam; study/02-horse-finish-line-1970s-photo.jpg, camera, inspiration)
+## Broadcast pass (full-screen)
+Scanlines, slight barrel curve with dark rounded corners, chromatic fringe at edges, warm faded grade (lifted blacks, desaturated ~15%), vignette, light noise. Replays: sepia, heavy film grain, vertical scratches, flicker, gate weave, "PHOTO FINISH" frame.   (refs/sheets/LOOK-board.png, style, match: CRT inset and sepia inset)
 ## UI and type
-Chunky rounded comic type (Impact/Arial Black), cream on brown with thick dark outlines; big centre popups; lane-coloured name chips top-left.   (builder's call, comedy tone)
+Display face Shrikhand (OFL, lib/fonts) for titles and big popups, Bungee for bugs, odds and numbers. Numbered distance poles and a striped finish gantry (study/02-horse-finish-line-1970s-photo.jpg). Cream #f2e1ad on chocolate #4c2c21 strips with mustard and tomato edge stripes, lower-third bottom-left, odds board top-left with silks swatches, LIVE bug + channel clock top-right, title card at start.   (builder's call: 70s broadcast graphics; study/STUDY.md)
 ## Sound mood
-Synthesised crowd cheer/gasp noise bursts, thuds, hoof ticks.   (builder's call)
+Synth crowd swell and gasp, thuds, hoof ticks, a bugle-ish start fanfare, tape-hiss under replays.   (builder's call)
 ## Assets
-style: low-poly · code · by design (ragdoll built from primitives)
+style: toon / cel-shaded · maxTris n/a · asked · sources: code (library/web had no usable grandstand, tote or camera tower in this style; `asset_search` hits were a pony, a TV, flags)
 ## Avoid
-Realism, dark UI, neon.
+Realism, neon, dark translucent rounded UI, cool blue haze, glossy PBR.
 ## Checks
-1. Sky at top-centre of the opening look near #7bbaff (±30).
-2. Four horses with distinct cloth colours visible in the opening look; dirt brown filling the lower half.
-3. HUD readable at 1280×800; popups centred.
-4. No `Lighting:` fault line.
+1. Opening look: dirt band in the lower half within 40/255 of #cc8930 / #b87a2c; warm golden haze (no pure blue anywhere).
+2. Four horses with distinct silks (stripes, diamonds, dots, chevrons) and dark outlines visible.
+3. Lower-third, odds board with silks, LIVE bug and clock bug visible during the race; title card at the start.
+4. Replay is sepia with grain and a PHOTO FINISH frame.
+5. CRT pass visible: scanlines and rounded dark corners, text still readable at 1280×800; no `Lighting:` fault line.

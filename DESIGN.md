@@ -19,3 +19,8 @@ Lane chips, progress bar, popups, results.
 - Tone: slapstick over competitive. Asked.
 ## Decision log
 2026-11-06 · tone · slapstick · person
+## Added by paprika-make (70s broadcast restyle)
+## UI
+Broadcast overlay: lower-third commentator strip, tote/odds board with silks, LIVE bug, channel clock bug, title card, sepia photo-finish replay. (LOOK.md)
+## Audio
+Crowd swell and gasp, thuds, start fanfare, tape hiss under replays.

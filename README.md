@@ -1,6 +1,6 @@
 # Photo Finish Fiasco (QWOP horse race)
 
-Riderless low-poly ragdoll horses, one key per leg. First nose across the line wins, most face-plants gets an award.
+A 1970s TV horse-race broadcast: riderless toon-shaded ragdoll horses, one key per leg, with a tote board, commentator lower-third, CRT/VHS pass and a sepia photo-finish replay. First nose across the line wins, most face-plants gets an award.
 
 Play: https://qwop-horse-race.pages.dev
 
