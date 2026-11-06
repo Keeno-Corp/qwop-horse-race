@@ -2651,3 +2651,16 @@ SCORE: 7.8
    - Then lengthen the legs of the horses (long, wobbly legs) so they match `refs/sheets/horse.png`.
 
 SCORE: 7.7
+
+## Iteration 72
+**Did**
+- No code changes. Tried to prove a human finish: fresh `open`, one `interact` `until` phase "race", then 18-frame Q+P / W+O alternation pairs, with no R or Digit1 steps.
+**Saw**
+- Pace is steady: `horses.2.x` 2.07 → 9.77 in 108 frames of alternation, `pitch` -0.06 → -0.02, `state` "run", `plants` 0. The race did not restart between `interact` calls this time, so the earlier reset was probably caused by the R/Digit1 steps.
+- Extrapolated, 60 m takes about 14 s of play at that pace if YOU never falls. `finishT` still unseen.
+- No `look` or `perf` this session.
+**Next**
+- Write ~50 pairs of alternation steps in one `interact` call (generate the JSON with a script) with `until` `{"horses.2.finished": true}` for a real `finishT`.
+- Then item 2 (hills `frustumCulled=false`, ground gradient) and item 3 (sepia photo finish, results card, longer legs) from Judge 71.
+**Open**
+- Human finish still unproven. Ground and horizon fixes not started.
