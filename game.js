@@ -204,7 +204,7 @@ const LINES = {
 };
 const COMM = { q: [], cur: 0, until: 0, lastLead: -1, leadT: -99, fillAt: 6, last: '' };
 const GV = { takes: 'take', wins: 'win', moves: 'move', eats: 'eat', kisses: 'kiss', does: 'do', flips: 'flip', goes: 'go', thinks: 'think', sits: 'sit', has: 'have', is: 'are' };
-const gram = (t) => t.replace(/\bYOU (takes|wins|moves|eats|kisses|does|flips|goes|thinks|sits|has|is)\b/g, (m, v) => 'YOU ' + GV[v]);
+const gram = (t) => t.replace(/\bYOU (takes|wins|moves|eats|kisses|does|flips|goes|thinks|sits|has|is)\b/gi, (m, v) => { const g = GV[v.toLowerCase()]; return 'YOU ' + (v === v.toUpperCase() ? g.toUpperCase() : g); });
 function say(text, pri = 1, hold = 3.6) {
   if (!text) return;
   if (S.time < COMM.until && pri <= COMM.pri) return;
@@ -243,7 +243,7 @@ function resetRace() {
   seed = 12345 + 7919 * (++S.seedRound);
   assignRoles();
   horses.forEach((h, i) => { h.reset(STAGGER[i], LANES[i]); h.guard = 99; h.assist = 1; h.stiff = 1; h.plants = 0; h.finished = false; h.finishT = null; h.speedBefore = 0; h.drive = 0; h.legT = [0, 0, 0, 0]; for (let k = 0; k < 4; k++) h.setHeld(k, false); });
-  Object.assign(S, { phase: 'countdown', countdown: 4.6, raceT: 0, finishT: null, firstFinish: null, order: [], pending: null, pair: null, lastReplayAt: -99, replay: null, tangles: 0, lastTangle: -99, focus: null, deadHeat: rng() < 0.35, excite: 0, results: null, resultsShown: false, camBlend: 0 });
+  Object.assign(S, { phase: 'countdown', countdown: 4.6, raceT: 0, finishT: null, firstFinish: null, order: [], pending: null, pair: null, lastReplayAt: -99, replay: null, tangles: 0, lastTangle: -99, focus: null, deadHeat: rng() < 0.9, excite: 0, results: null, resultsShown: false, camBlend: 0 });
   ringN = 0; for (const d of dust) d.life = 0;
   for (const p of S.popups) p.el.remove(); S.popups = [];
   $('results').style.display = 'none'; setReplayUi(false); $('count').textContent = '';
