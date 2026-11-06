@@ -1,38 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-### Judge 4
-
-Judging session 4: I've seen the live race, a full no-input run to results, and `perf`. Writing the verdict now.
-
-**Scores (Must have, in order)**
-
-1. **Plays as DESIGN.md says: 6.** Solo with 3 AI runs, and `div#keys`, `1 PLAYER`, `2 PLAYERS (2)` and `RESTART` are on screen. With Q+P, W+O, Q+P held for 40 frames each, `YOU` was at x 3.37 at raceT 0.73 and in state `run`, `plants` 0. The `GO!` banner shows. I did not hold keys through a whole race or play 2-player.
-2. **Rapier ragdoll, face-plant and auto-right: 7.** In the no-input race `Dusty Rhodes` had `plants:5` and was back in `"run"`. `YOU` had `plants:2` and was `run` again. I did not time the auto-right.
-3. **Replay and sepia photo finish: 6.** I did not see a replay picture this session. The `until: phase=results` run passed the finish and landed on the results phase, but I took no look at the replay.
-4. **Photo finish and tangled collapse within a minute: 6.** With no input, `Sir Trips-a-Lot` and `Hoof Hearted` both finished at `finishT` 23.58 exactly, and `tangles:1`. The `hhGap` change did not break the dead heat, so it still looks scripted. It is within a minute, though.
-5. **Results with most-face-plants award: 6.** `results` was `["Sir Trips-a-Lot","Hoof Hearted","Dusty Rhodes","YOU"]`. The next `look` showed the title card of a restarted race, so I did not see the results card or its award.
-6. **Looks as LOOK.md says: 7.** Toon shading with outlines, the 70s palette, warm light and the CRT/VHS vignette all hold. The title card ("The Photo Finish Fiasco Stakes") reads as a broadcast. A black rectangle is still at about [14,475,270,615] in the 1024-wide picture, above `div#lower`, in both looks.
-7. **`window.__game`, static, no network: 7.** `observe` works and assets are 0.32 MB with fonts vendored. `subject` is still `"tote-board"`, which is not in the scene.
-8. **Horses match CHARACTERS.md and horse.png: 7.** The `look` shows saddle cloths with silks and numbers, blinkers, white socks, dark hooves, a bristly mane and big eyes. The legs are short against the brief's "long wobbly".
-9. **Broadcast overlay: 8.** `div#tote` has silks, odds and face-plant counts, with odds moving from 5-1 to 2-1 at the start. `div#top-r` has `LIVE`, the clock and `RACE TIME`. `div#lower` has the Hank "Hoofbeat" Pruitt lower-third, and the title card is there. The black rectangle sits right above `div#lower` and hurts this.
-10. **Camera: 7.** The side-tracking telephoto reads well and the title-card camera is nice. I did not see the head-on or replay cams.
-11. **Controls feel learnable: 6.** After the first 120 frames `YOU` was level with the AI (x 3.37, against 0.08 to 2.15 for the AI). I did not play a full race, and the `YOU 0 m ▶` chip on the restarted race shows the player is still only reachable by hand.
-12. **Local 2-player, discoverable: 6.** The `2 PLAYERS (2)` button and the tips line are visible. I did not play it.
-13. **Style judged as hard as gameplay: 7.** It is strong and reads as a 1970s TV race. The black rectangle is a visible flaw in every live picture, and `reference` against `LOOK-board.png` was not run.
-
-**Faults: 4.**
-- The black rectangle is still there (asked again) and is the same in all three pictures.
-- `perf` shows 436 draw calls and 184k triangles. The 196 ms frame is a software renderer (host load 3.0), so it is not a fault by itself, but the draw count did not drop.
-- `__game.subject` points to a missing `"tote-board"`.
-- The AI dead heat is exactly equal (23.58 and 23.58).
-
-**Next:**
-1. **Black rectangle** (asked again). Find what draws it. It sits at [14,475,270,615] in the 1024-wide picture, roughly [18,594,338,770] in page pixels, above `div#lower`, and `look` lists no HTML element there. Check `#crt`'s background image and any full-screen overlay or reflection of `#tote`. Run `eval` to set `document.getElementById('crt').style.display='none'`, and in a second call hide the `#tote` mirror. Done when one `look` with `sample` at (100,560) and (200,600) in page pixels reads track or grass colour, not near-black.
-2. **Break the dead heat.** The two AI finished at `finishT` 23.58 and 23.58. Give the AI a seeded finishing gap of 0.05 to 0.4 s in the closing-sprint drag, and keep the photo-finish replay on a gap under 0.15 s. Done when two seeded `interact` runs with no input show `finishT` values that differ and are within 0.4 s.
-3. **Show the replay and results card, and cut draw calls.** Use `interact` with `until: {phase:"replay"}` and then `look` to prove the sepia, grain, `PHOTO FINISH` frame and the head-on cam. Then `until: results` followed by an immediate `look` for the award. Put the crowd, fence posts and ad boards into `InstancedMesh`, and run `perf` with `costs:true` to bring draw calls under 250. Also set `__game.subject` to an object that exists.
-
-SCORE: 6.6
-
 ## Iteration 5
 **Did**
 - Black rectangle fixed: it was the DOM `#tote .rows` opaque background (#1d140f) ghosting y-flipped at ~[18,594,338,770] over the canvas while the broadcast pass ran (gone with `#tote` hidden, gone with `.rows` hidden). `.rows` is now `rgba(29,20,15,.96)` in index.html; `look` sample (200,600) reads track colour #f79f32.
@@ -47,3 +14,38 @@ SCORE: 6.6
 **Open**
 - `look` says `horse0-body` is "not in the scene" under the pass (it is listed on screen with nopass); subject may need a group name.
 - Draw calls and the YOU player pace over a full race remain unmeasured.
+
+### Judge 5
+
+**Scores (Must have, in order)**
+
+1. **Plays as DESIGN.md says: 6.** Solo with 3 AI runs. `div#keys` (YOUR LEGS Q W O P), `1 PLAYER`, `2 PLAYERS (2)` and `RESTART` are on screen, and the `GO!` banner shows. Q+P then W+O pulses put `YOU` at x 2.66, state `run`, `plants` 0 at raceT 0.87. I did not hold keys through a full race or play 2-player.
+2. **Rapier ragdoll, face-plant, auto-right: 7.** In the replay run `Sir Trips-a-Lot` and `Hoof Hearted` were `state:"down"`, `plants:1`, and `Dusty Rhodes` and `YOU` were back in `run`. I did not time the ~2 s auto-right.
+3. **Replay and sepia photo finish: 6.** The plant replay shows the `INSTANT REPLAY · 0.25x` tag and `SPACE to skip`, and the picture is not sepia, which fits a plant replay. I did not see the sepia photo-finish replay (grain, scratches, `PHOTO FINISH` frame) this session.
+4. **Photo finish and tangle within a minute: 6.** `tangles:1` came at raceT 6.98 with no input. Last session's note says the AI finish times differ by only 0.01 s, which still looks like a scripted dead heat. I did not re-measure that gap.
+5. **Results with most-face-plants award: 7.** The builder saw the `DIRT EATER · MOST FACE-PLANTS` card on `Dusty Rhodes`. I did not reach the card myself.
+6. **Looks as LOOK.md says: 8.**
+   - The toon shading, outlines, warm orange palette and CRT/VHS pass all hold, and the black rectangle is gone.
+   - The sample reads track colour, and the picture is 2% near-black.
+   - The grandstand crowd, ad boards and fence read as 1970s TV.
+7. **`window.__game`, static, no network: 7.** `observe` works and assets are 0.32 MB with the fonts vendored. `subject` is `"horse0-body"`, and `look` still says it is not in the scene.
+8. **Horses match CHARACTERS.md and horse.png: 7.** Silks and numbers on the cloths, white socks, dark hooves, big eyes, bridles and a bristly mane all show. The legs are still short against the brief's "long wobbly", and the blinker silks are barely visible.
+9. **Broadcast overlay: 9.** `div#tote` has silks, odds that moved 5-1 to 2-1, and face-plant counts. `div#top-r` has `LIVE`, the clock and `RACE TIME`. `div#lower` has the Hank "Hoofbeat" Pruitt play-by-play. The progress bar with the finish flag is a nice touch.
+10. **Camera: 7.** The side-tracking telephoto and the replay cam both read well. I did not see the head-on cut.
+11. **Controls feel learnable: 6.** `YOU` led at x 2.66 against 0.18 to 2.19 for the AI in the first second. I did not play a full 60 m, and `YOU` shows pitch -0.3 and `legs "0000"` between pulses.
+12. **Local 2-player, discoverable: 6.** The `2 PLAYERS (2)` button and the tips line `2 = TWO PLAYERS` are visible. I did not play it.
+13. **Style judged as hard as gameplay: 8.** Cohesive and reads as a 70s broadcast, and the flaw from last session is fixed. I did not run `reference` against `LOOK-board.png`.
+
+**Faults: 5.**
+- `perf` shows 435 draw calls and 183,974 triangles. The 203 ms frame is SwiftShader, so it is not a fault by itself, but the draw count is high and went unaddressed again.
+- `look` reports `div#crt` as an overlay over 100% of the canvas that is still up after 5.2 s. It is the intended CRT pass, but the `perf` sampling is under it.
+- The AI finish gap is still around 0.01 s and looks scripted.
+- The `__game.subject` target `horse0-body` is not found under the post pass.
+- No console errors.
+
+**Next:**
+1. **Cut draw calls to under 250 and run `perf costs:true`.** Put the crowd figures, fence posts, ad boards and grandstand pieces into `instances()`/`InstancedMesh`. Done when `perf` reports under 250 draw calls with the picture unchanged. Also point `__game.subject` at a named Group that `look` can find.
+2. **Break the dead heat and prove the sepia photo-finish replay.** Widen the seeded AI finishing gap to 0.03–0.3 s. Then run `interact` with `until:{phase:"replay"}` after a finish, followed by `look`. Done when `finishT` values differ by 0.03–0.3 s, and the picture shows sepia, grain, scratches and the `PHOTO FINISH` frame. Check the head-on cut in the same run.
+3. **Lengthen the horse legs and make the blinker silks readable.** Make the leg segments about 25% longer with a wobblier knee motor, in line with CHARACTERS.md's "long wobbly". Done when a `look` at the start line shows legs about as long as the barrel is deep, and a mistimed-key `interact` still gives a dog-sit or face-plant. Then play a full held-key 60 m race to check it finishes in under 60 s.
+
+SCORE: 6.9
