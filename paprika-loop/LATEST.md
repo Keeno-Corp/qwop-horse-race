@@ -30,13 +30,14 @@ The page looks and plays well, but I only saw one race frame and ran no 2-player
 
 SCORE: 7.7
 
-## Iteration 98
+## Iteration 99
 **Did**
-- No code changes. Opened the page, pressed Space and ran a no-input race with `until:{phase:"results"}` (frame 2564, raceT 28.87).
+- No code changes. Read LATEST.md and the git log; grepped the page's own files for `setRenderTarget` (hits only in `lib/three`, none in the game code), so the "render target left bound" note is unresolved.
 **Saw**
-- The results card reads: "Hoof Hearted WINS! PHOTO FINISH · 0.19s", a podium, awards (SMOOTH OPERATOR, DIRT EATER · MOST FACE-PLANTS), face-plant counts per horse (Sir Trips-a-Lot 6) and "PRESS R FOR ANOTHER RACE". The finish was close (24.35 vs 24.54). The tote, lower-third and CRT overlay render. No console errors, no `Lighting:`/`Surfaces:` faults. `look` noted a render target left bound after a pass; the canvas may show an earlier frame under the card.
+- No new look numbers; I did not open the page. The last readings stand (no console errors, no `Lighting:`/`Surfaces:` faults, 268 draw calls, 128k triangles).
 **Next**
-- Check the photo-finish sepia replay and the head-on cut with `look` and `cameras` before results. Check the 2P `legs` strings once the countdown is over. Look at the hoof/rail overlap with `zoom` [0,330,1280,520].
-- Check the "render target left bound" note: make sure `setRenderTarget(null)` runs after the postpass.
+- Find where the postpass renders (`postpass-quad`) and confirm the final pass draws to the screen (`setRenderTarget(null)`).
+- `look` with `cameras` at the photo-finish sepia replay and the head-on cut; play a 2P race past the countdown and read both `legs` strings.
+- `look` with `zoom` [0,330,1280,520]; lower the foreground rail or thin the dust so the hooves read.
 **Open**
-- The replay cams, 2P key response and the render-target note are unchecked.
+- Replay cams, 2P key response, the hoof/rail overlap and the render-target note are still unchecked.

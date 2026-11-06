@@ -3367,3 +3367,15 @@ SCORE: 7.7
 - Check the "render target left bound" note: make sure `setRenderTarget(null)` runs after the postpass.
 **Open**
 - The replay cams, 2P key response and the render-target note are unchecked.
+
+## Iteration 99
+**Did**
+- No code changes. Read LATEST.md and the git log; grepped the page's own files for `setRenderTarget` (hits only in `lib/three`, none in the game code), so the "render target left bound" note is unresolved.
+**Saw**
+- No new look numbers; I did not open the page. The last readings stand (no console errors, no `Lighting:`/`Surfaces:` faults, 268 draw calls, 128k triangles).
+**Next**
+- Find where the postpass renders (`postpass-quad`) and confirm the final pass draws to the screen (`setRenderTarget(null)`).
+- `look` with `cameras` at the photo-finish sepia replay and the head-on cut; play a 2P race past the countdown and read both `legs` strings.
+- `look` with `zoom` [0,330,1280,520]; lower the foreground rail or thin the dust so the hooves read.
+**Open**
+- Replay cams, 2P key response, the hoof/rail overlap and the render-target note are still unchecked.
