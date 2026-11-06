@@ -1,0 +1,29 @@
+{
+ "provider": "openrouter",
+ "model": "google/gemini-3.1-flash-image",
+ "prompt": "Character turnaround sheet, no text, no letters: one toon-shaded (cel-shaded, thick dark outlines, flat 2-3 tone shading) chunky stylised cartoon racehorse for a 1970s-TV-broadcast QWOP racing game, riderless, chunky barrel body, long wobbly legs with oversized dark hooves and white socks, big round expressive eyes, short bristly dark mane and a tufted tail, chestnut coat, wearing a bold mustard-yellow and tomato-red diamond-pattern racing-silk saddle cloth with a number disc (blank, no digits) and matching bridle and blinkers. Four views side by side on a plain warm cream background: front, side, back, three-quarter. Even flat lighting.",
+ "aspect_ratio": "16:9",
+ "usage": {
+  "prompt_tokens": 155,
+  "completion_tokens": 1120,
+  "total_tokens": 1275,
+  "cost": 0.0672775,
+  "is_byok": false,
+  "prompt_tokens_details": {
+   "cached_tokens": 0,
+   "cache_write_tokens": 0,
+   "audio_tokens": 0,
+   "video_tokens": 0
+  },
+  "cost_details": {
+   "upstream_inference_cost": 0.0672775,
+   "upstream_inference_prompt_cost": 7.75e-05,
+   "upstream_inference_completions_cost": 0.0672
+  },
+  "completion_tokens_details": {
+   "reasoning_tokens": 0,
+   "image_tokens": 1120,
+   "audio_tokens": 0
+  }
+ }
+}
