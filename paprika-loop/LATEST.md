@@ -30,14 +30,15 @@ The page looks and plays well, but I only saw one race frame and ran no 2-player
 
 SCORE: 7.7
 
-## Iteration 114
+## Iteration 115
 **Did**
-- No code changes. Played 2P: Digit2, held Q (P1) and U (P2), ran to results, pressed Enter.
+- No code changes. Ran a no-input race to raceT 18.35 and took `look`.
 **Saw**
-- 2P reached `phase:"results"` at raceT 28.6 s; AI Sir Trips-a-Lot and Dusty Rhodes finished (24.05 s, 24.33 s, plants 1 each); the two humans were idle at x≈1–2. Enter went back to `phase:"countdown"` with raceT 0 and horses reset. 13 sounds played, no errors. Did not run `look`, so no new picture numbers.
+- Head-on cam (cam p [62,1.5,1.6], fov 24) shows two horses running at the camera with dust, with a clear silhouette, hooves and the "FACE-PLANT!" pop; HUD has no overlap or cut-off. Sir Trips-a-Lot `state:"down"`, plants 4; others run, YOU idle at x=2. 22 sounds, no errors. `look` flags `crowd` z-fighting: two faces in one plane at z=-8.52 and -8.59 (0.27×72), which matters only if seen. Brightness 51%.
 **Next**
-- `look` with `cameras` at the finish: head-on cut and sepia photo-finish replay.
-- Zoom [0,330,1280,520] to check hoof silhouette against fence rail and dust.
-- Check the 2P legs string changes per key while racing.
+- Remove or offset the hidden `crowd` face (z=-8.52 / -8.59) to clear the Surfaces fault.
+- Check the sepia photo-finish replay and the results card.
+- Zoom [0,330,1280,520] on the side cam to check hoof and rail overlap.
 **Open**
-- Head-on cut, replay cams and the hoof/rail overlap are still unchecked.
+- The crowd z-fight fault is unfixed. Replay cams are unchecked.
+- Late fix (115): view.js spectators' z now varies by up to 0.04 per seat to break the coplanar `crowd` faces; not re-looked.

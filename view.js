@@ -407,7 +407,7 @@ export function buildEnvironment(scene, _tex, rng) {
       const y = 0.4 + r * 0.7, z = z0 - r * 1.1;
       const step = tm(box(len, y, 1.1 + 0.02 * r), r % 2 ? concrete : concrete2, [x0 + len / 2, y / 2, z], [0, 0, 0], [1, 1, 1], { outline: 0.7 }); g.add(step);
       g.add(tm(box(len - 0.4, 0.14, 0.3), toon(benchCols[r % 4]), [x0 + len / 2, y + 0.3, z + 0.32], [0, 0, 0], [1, 1, 1], { outline: 0.5, shadow: false }));
-      for (let k = 0; k < Math.floor(len / 0.95); k++) if (rng() < 0.92) spectators.push({ x: x0 + 0.7 + k * 0.95 + (rng() - 0.5) * 0.2, y: y + 0.36, z: z - 0.05, ph: rng() * 6.28, col: PEOPLE[Math.floor(rng() * 8)], skin: SKIN[Math.floor(rng() * 4)] });
+      for (let k = 0; k < Math.floor(len / 0.95); k++) if (rng() < 0.92) spectators.push({ x: x0 + 0.7 + k * 0.95 + (rng() - 0.5) * 0.2, y: y + 0.36, z: z - 0.05 + ((k * 7 + r * 3) % 11) * 0.004, ph: rng() * 6.28, col: PEOPLE[Math.floor(rng() * 8)], skin: SKIN[Math.floor(rng() * 4)] });
     }
     g.add(tm(box(len + 1.2, 0.25, rows * 1.1 + 2.4), slab, [x0 + len / 2, 0.05, z0 - rows * 0.55 + 0.5], [0, 0, 0], [1, 1, 1], { outline: 0.8 }));
     const H = rows * 0.7 + 1.6;
