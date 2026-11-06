@@ -223,7 +223,7 @@ function onPlant(h, kind) {
   sfx.play('thud', 0.8); sfx.play('gasp', 0.8, 0.03);
   emitDust(p.x, 0.1, p.z, 34, 3.5, 3.4, 1.4);
   S.excite = Math.min(1, S.excite + 0.5);
-  S.shake = 0.6; S.shakeAmp = Math.max(S.shakeAmp, 0.12);
+  S.shake = 0.6; S.shakeAmp = Math.max(S.shakeAmp, 0.3);
   const big = h.speedBefore > 1.6 || kind === 'CARTWHEEL!' || kind === 'BACKFLIP!';
   if (S.phase === 'race' && big && S.raceT > 3 && S.raceT - S.lastReplayAt > 11 && p.x < FINISH_X - 10 && !S.pending && (r.human >= 0 || rng() < 0.7)) {
     S.pending = { at: S.time + 0.9, horse: h.idx }; S.lastReplayAt = S.raceT;

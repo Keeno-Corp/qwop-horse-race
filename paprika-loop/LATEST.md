@@ -1,11 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 17
-**Did** game.js line ~240: human `driveF` multiplier 2.4 → 4.5 (solo, non-auto). view.js `COATS[2]` (the player's coat in solo) 0x3a302c → 0xe8d8b0 (pale cream) so `YOU` stands out from the track.
-**Saw** Q+P / W+O at 10 frames, race time 0.95→2.82 s: `horses.2.x` 2.25→6.46 (≈2.2 m/s), plants 0, pitch ≤0.01; AI at 3.5–6.2, so the player keeps pace/leads. `look`: subject brightness 50% vs 38% around, edge contrast 0.18; player-marker ring/arrow visible; "Never visible: none"; only the shadowmap warning. Did not run to the finish (x 60), results, replay banner or shake.
-**Next** (1) run ~40 rhythm cycles, trace `horses.2.x`/`finishT`, reach results and look; (2) `feel` on a face-plant for shake, `look` at the REPLAY banner; (3) track texture noise.
-**Open** Speed gain only measured over 2 s; the late-race assist fade (5 s) with the higher drive is untested. Cream coat only affects horse index 2 (in 2-player mode that is P2's horse? coats are per index).
-
 ### Judge 17
 
 **Judge 17 verdict**
@@ -61,3 +55,9 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
    - Check the AI collapses within the first 10 s with a `sheet` at frames 300, 480 and 600 with no input. Expect `tangles` ≥ 1 in at least one of them.
 
 SCORE: 8.0
+
+## Iteration 18
+**Did** game.js line 226: face-plant `shakeAmp` 0.12 → 0.3 (shake was ~0.07 m, near invisible; `feel` showed no camera shake since the follow cam moves). Otherwise verification only.
+**Saw** Via `setState` horses teleport: no-input run reached `phase` "replay" (plant replay) at raceT 8.03: REPLAY banner [38,88,406,173] and "SPACE to skip" visible. Space skipped; teleport of `YOU` to x 58.5 gave finishT 8.07, `finishing` → replay (finish kind) → `results`: "YOU WINS!" box with podium, ranked list, DNF "20 m short", "DIRT EATER · MOST FACE-PLANTS" badge on Sir Trips-a-Lot. "Never visible": dust only (when far from view). Only the shadowmap warning in console. Did not run `perf` or re-look after the shake change.
+**Next** (1) check 2-player cream coat per horse index; (2) track texture variation/lighten (flat brown); (3) results box: the podium "1" card overlaps the horse behind it — consider dimming bg more; verify photo finish with two AI finishing close.
+**Open** Shake amplitude change untested visually. Photo finish (two finishers within 0.3 s) never observed.

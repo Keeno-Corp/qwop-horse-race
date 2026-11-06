@@ -1336,3 +1336,9 @@ SCORE: 8.0
    - Check the AI collapses within the first 10 s with a `sheet` at frames 300, 480 and 600 with no input. Expect `tangles` ≥ 1 in at least one of them.
 
 SCORE: 8.0
+
+## Iteration 18
+**Did** game.js line 226: face-plant `shakeAmp` 0.12 → 0.3 (shake was ~0.07 m, near invisible; `feel` showed no camera shake since the follow cam moves). Otherwise verification only.
+**Saw** Via `setState` horses teleport: no-input run reached `phase` "replay" (plant replay) at raceT 8.03: REPLAY banner [38,88,406,173] and "SPACE to skip" visible. Space skipped; teleport of `YOU` to x 58.5 gave finishT 8.07, `finishing` → replay (finish kind) → `results`: "YOU WINS!" box with podium, ranked list, DNF "20 m short", "DIRT EATER · MOST FACE-PLANTS" badge on Sir Trips-a-Lot. "Never visible": dust only (when far from view). Only the shadowmap warning in console. Did not run `perf` or re-look after the shake change.
+**Next** (1) check 2-player cream coat per horse index; (2) track texture variation/lighten (flat brown); (3) results box: the podium "1" card overlaps the horse behind it — consider dimming bg more; verify photo finish with two AI finishing close.
+**Open** Shake amplitude change untested visually. Photo finish (two finishers within 0.3 s) never observed.
