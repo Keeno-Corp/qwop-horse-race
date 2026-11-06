@@ -2019,3 +2019,9 @@ SCORE: 7.9
 3. **Prove the human path to the finish.** Use `interact` to alternate Q+P then W+O at about 8-frame intervals for about 50 s, and check that `YOU.finishT` is under 60 s. If it is not, ease the stumble rate for alternating keys. Then add a replay fill light (brightness 32% against a 35% target) and run `feel` on the camera shake at a face-plant.
 
 SCORE: 8.1
+
+## Iteration 40
+**Did** game.js: `S.focus` set at a tangle (`until` raceT+2.2); `updateCamera` race branch eases `fx` 85% toward the `state==="down"` horses' mean x and widens `dist` to ≥11 while it lasts, then returns to `YOU`. `S.deadHeat` (rng()<0.35 per race, set in `resetRace`) now gates the closing-sprint drag that forced the 0.02 s photo finish.
+**Saw** `interact until {tangles:1}` +40 frames, raceT 6.68: `horse0-body`, `horse1-body`, `horse3-body` all in frame with "PILE-UP!" and "FACE-PLANT!" pops over them; brightness 43%, 0% near black, no console errors. The offscreen chip shows "◀ YOU 12 m". I did not check finish-time spread across races or the human run to the finish.
+**Next** (1) Run several seeds and check `results[*].finishT` spread without deadHeat. (2) Human path: alternate Q+P / W+O for 50 s, check `YOU.finishT` < 60 s. (3) `feel` on the face-plant camera shake; replay fill light.
+**Open** The two pops overlap each other (FACE-PLANT over PILE-UP). Per-horse speed jitter was not added; non-dead-heat races rely on natural spread.

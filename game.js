@@ -190,7 +190,7 @@ function resetRace() {
   seed = 12345 + 7919 * (++S.seedRound);
   assignRoles();
   horses.forEach((h, i) => { h.reset(STAGGER[i], LANES[i]); h.guard = 99; h.assist = 1; h.stiff = 1; h.plants = 0; h.finished = false; h.finishT = null; h.speedBefore = 0; h.drive = 0; h.legT = [0, 0, 0, 0]; for (let k = 0; k < 4; k++) h.setHeld(k, false); });
-  Object.assign(S, { phase: 'countdown', countdown: 3.2, raceT: 0, finishT: null, firstFinish: null, order: [], pending: null, pair: null, lastReplayAt: -99, replay: null, tangles: 0, lastTangle: -99, excite: 0, results: null, resultsShown: false, camBlend: 0 });
+  Object.assign(S, { phase: 'countdown', countdown: 3.2, raceT: 0, finishT: null, firstFinish: null, order: [], pending: null, pair: null, lastReplayAt: -99, replay: null, tangles: 0, lastTangle: -99, focus: null, deadHeat: rng() < 0.35, excite: 0, results: null, resultsShown: false, camBlend: 0 });
   ringN = 0; for (const d of dust) d.life = 0;
   for (const p of S.popups) p.el.remove(); S.popups = [];
   $('results').style.display = 'none'; setReplayUi(false); $('count').textContent = '';
@@ -275,7 +275,7 @@ function updateRace(dt) {
   if (S.phase === 'race' || S.phase === 'finishing') {
     horses.forEach((h, i) => { const r = roles[i]; if (r.ai) { if (h.finished) for (let k = 0; k < 4; k++) h.setHeld(k, false); else r.ai.update(h, dt, xs[i] - mean); } });
   }
-  if ((S.phase === 'race' || S.phase === 'finishing') && AI.leadX > 34) { // closing sprint: the best chaser is dragged level for a photo finish
+  if (S.deadHeat && (S.phase === 'race' || S.phase === 'finishing') && AI.leadX > 34) { // closing sprint: the best chaser is dragged level for a photo finish
     let ld = null; horses.forEach((h) => { if (!h.finished && (!ld || h.pos().x > ld.pos().x)) ld = h; });
     let ch = null; horses.forEach((h, i) => { if (roles[i].ai && h !== ld && !h.finished && xs[i] > 14 && (!ch || xs[i] > xs[ch.idx])) ch = h; });
     if (ch && ld) {
@@ -306,7 +306,7 @@ function updateRace(dt) {
         const pa = a.pos(), pb = b.pos();
         const forced = S.tangles === 0 && S.raceT > 9 && roles[i].ai && roles[i + 1].ai;
         if (pa.x > 6 && pa.x < FINISH_X - 14 && (roles[i].ai || roles[i + 1].ai) && (forced || (Math.abs(pa.x - pb.x) < 1.7 && rng() < 0.012))) {
-          S.tangles++; S.lastTangle = S.raceT;
+          S.tangles++; S.lastTangle = S.raceT; S.focus = { x: (pa.x + pb.x) / 2, until: S.raceT + 2.2 };
           if (forced) { const sx = pa.x - pb.x - 1.2, sz = pa.z - pb.z + 0.5; if (roles[i + 1].ai) for (const p of b.parts) { const t = p.body.translation(); p.body.setTranslation({ x: t.x + sx, y: t.y, z: t.z + sz }, true); } }
           const first = roles[i].ai ? a : b, other = first === a ? b : a;
           first.collapse('FACE-PLANT!'); onPlant(first, 'FACE-PLANT!');
@@ -401,7 +401,11 @@ function updateCamera(dt) {
     tp.set(FINISH_X - 4, 2.6, 12); tl.set(FINISH_X + 2, 1.2, 0);
     camPos.lerp(tp, 1 - Math.exp(-dt * 1.5)); camLook.lerp(tl, 1 - Math.exp(-dt * 2));
   } else {
-    const { fx, dist } = followTarget();
+    let { fx, dist } = followTarget();
+    if (S.focus && S.phase === 'race') {
+      const left = S.focus.until - S.raceT;
+      if (left > 0) { const w = Math.min(1, left / 0.5, (2.2 - left) / 0.5 + 0.2); const fh = horses.filter((h) => h.state === 'down'); const tx = fh.length ? fh.reduce((a, h) => a + h.pos().x, 0) / fh.length : S.focus.x; fx += (tx - fx) * 0.85 * w; dist = Math.max(dist, 11); } else S.focus = null;
+    }
     if (S.phase === 'countdown') {
       S.camBlend = Math.min(1, S.camBlend + dt / 3.0); const e = S.camBlend * S.camBlend * (3 - 2 * S.camBlend);
       tp.set(-2.5 + (fx - 0.4 + 2.5) * e, 2.6 + 0.9 * e, 7.2 - (7.2 - dist) * e); tl.set(1.5 + (fx + 1.8 - 1.5) * e, 1.2, 0);
