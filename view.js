@@ -316,10 +316,11 @@ export function buildEnvironment(scene, _tex, rng) {
     hp.setY(i, Math.max(far * 12, side * 9) * n - 0.1);
   }
   const hn = hg.toNonIndexed(); hn.computeVertexNormals();
-  const hc = [], g1 = new THREE.Color(0xa8ad4a), g2 = new THREE.Color(0x96a444), g3 = new THREE.Color(0x7d9040), cc = new THREE.Color(), p2 = hn.attributes.position;
+  const hc = [], g1 = new THREE.Color(0xa8ad4a), g2 = new THREE.Color(0x96a444), g3 = new THREE.Color(0x7d9040), cc = new THREE.Color(), haze = new THREE.Color(0xb4c6c4), p2 = hn.attributes.position;
   for (let i = 0; i < p2.count; i += 3) {
     const y = (p2.getY(i) + p2.getY(i + 1) + p2.getY(i + 2)) / 3, x = (p2.getX(i) + p2.getX(i + 1) + p2.getX(i + 2)) / 3 + 50;
     cc.copy(Math.floor(x / 7) % 2 ? g1 : g2).lerp(g3, Math.min(1, y / 11)).offsetHSL((rng() - 0.5) * 0.015, 0, (rng() - 0.5) * 0.03);
+    cc.lerp(haze, 0.6 * smooth(15, 110, 55 - p2.getZ(i)) + 0.15 * Math.min(1, y / 11));
     for (let k = 0; k < 3; k++) hc.push(cc.r, cc.g, cc.b);
   }
   hn.setAttribute('color', new THREE.Float32BufferAttribute(hc, 3));

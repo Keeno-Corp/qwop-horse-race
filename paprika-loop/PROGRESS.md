@@ -1020,3 +1020,15 @@ SCORE: 7.6
 - I would check the sprint to x 15 by raceT 7 in a longer pulse run.
 **Open**
 - Draw-call reduction not started. The softened grain is unchecked. Controls feel looks acceptable but was only checked with this one pulse pattern.
+
+## Iteration 32
+**Did**
+- `view.js` `hills`: vertex colours now lerp toward a pale blue-grey `haze` (0xb4c6c4) with distance (up to 0.6 beyond z -55, +0.15 with height), so the backdrop reads as distant haze rather than a flat green blob.
+**Saw**
+- Opening `look`: no console errors, title card up, hills at left paler and bluer than the foreground grass. `look` still lists `hills` as "Never visible" (560 units, in view). Not run: `perf`, finish replay (grain), 2-player.
+**Next**
+- Draw calls: merge `merged` (142), `Mesh` (56), `mesh-outline` (18) and instance `tail` (16); cut `crowd` triangles (48k). Then `perf` with `costs`, aiming under 250 calls.
+- Verify the finish replay's softened sepia grain with `look`, then play 2-player and the head-on cut.
+- Check the sprint to x 15 by raceT 7 in a longer pulse run.
+**Open**
+- Haze strength is unchecked in-race (only the title frame seen). Draw-call work not started.
