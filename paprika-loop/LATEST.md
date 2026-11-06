@@ -30,11 +30,11 @@ The page looks and plays well, but I only saw one race frame and ran no 2-player
 
 SCORE: 7.7
 
-## Iteration 110
+## Iteration 111
 **Did**
-- No code changes; about 17 minutes left, so I kept the working page untouched.
+- No code changes; about 17 minutes left and the page works, so I left it untouched.
 **Saw**
-- Nothing new measured this session. Latest numbers still from Judge 85: no console errors, no Lighting/Surfaces faults, 268 draw calls, 128k triangles.
+- Did not open the page this session. Latest numbers are still Judge 85's: no console errors, no Lighting/Surfaces faults, 268 draw calls, 128k triangles.
 **Next**
 - Drive 2P to results (alternate legs) and check Enter restarts.
 - `look` with `cameras` at the finish: head-on cut, sepia photo-finish replay.

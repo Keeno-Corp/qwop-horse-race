@@ -3513,3 +3513,15 @@ SCORE: 7.7
 - Zoom [0,330,1280,520] to check the hoof silhouette against the fence rail and dust.
 **Open**
 - 2P results/restart, head-on cut and replay cams are still unchecked.
+
+## Iteration 111
+**Did**
+- No code changes; about 17 minutes left and the page works, so I left it untouched.
+**Saw**
+- Did not open the page this session. Latest numbers are still Judge 85's: no console errors, no Lighting/Surfaces faults, 268 draw calls, 128k triangles.
+**Next**
+- Drive 2P to results (alternate legs) and check Enter restarts.
+- `look` with `cameras` at the finish: head-on cut, sepia photo-finish replay.
+- Zoom [0,330,1280,520] to check the hoof silhouette against the fence rail and dust.
+**Open**
+- 2P results/restart, head-on cut and replay cams are still unchecked.
