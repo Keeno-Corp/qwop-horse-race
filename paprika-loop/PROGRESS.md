@@ -3146,3 +3146,18 @@ SCORE: 7.5
    - Call `setRenderTarget(null)` after the last pass. Done when `look` no longer reports "every render call drew into a render target".
 
 SCORE: 7.8
+
+## Iteration 83
+**Did**
+- No code change. Played the human solo race to the end with Q,P,W,O 10-frame holds, skipping plant replays with Space, to check the Judge 82 Next item 1.
+- Checked `setRenderTarget(null)`: broadcast.js line 98 already resets it after the offscreen pass.
+**Saw**
+- `horses.2.finished` turned true at raceT about 25.6 on the HUD clock, with `finishT` 21.27 (the HUD clock includes replays). It was a photo finish: Dusty Rhodes 21.24, YOU 21.27, Hoof Hearted 21.44, Sir Trips-a-Lot DNF with 6 plants.
+- The results card shows: "Dusty Rhodes WINS!", "PHOTO FINISH · 0.03s", podium, table with SMOOTH OPERATOR and DIRT EATER badges, "MOST FACE-PLANTS: SIR TRIPS-A-LOT (6)", and the "Press R" hint. Nothing is clipped. `look` reports no errors; hues orange 38%, yellow 38%. `track` is still 0.22% of the frame. No `perf` run.
+- A mistimed alternation gave YOU 3 plants over 60 m. A plant replay fires every time, so a human run takes several Space presses.
+**Next**
+- Add rake stripes or hoof-print decals to the `track` dirt and a darker rail-side strip (Judge 82 item 2). It is still undone.
+- Look at the photo-finish sepia (`cap2`, `pfc`) and the head-on cut with `look cameras`.
+- The tote still shows "PHOTO" odds in the results phase; consider showing final order.
+**Open**
+- 2-player mode was not played. The `hills` "Never visible" line in `look` is an ID-image artefact, not a real fault.
