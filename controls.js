@@ -10,7 +10,7 @@ export function createControls(G) {
     const k = normKey(key);
     if (down) {
       if (k === 'Space') { if (S.phase === 'replay') G.endReplay(); return; }
-      if (k === 'Digit2') return setMode(G.mode === 2 ? 1 : 2);
+      if (k === 'Digit2') { if (G.mode !== 2) setMode(2); return; }
       if (k === 'Digit1') return setMode(1);
       if ((k === 'KeyR' && (G.mode === 1 || S.phase === 'results')) || k === 'Enter') return G.resetRace();
       held.add(k);
@@ -20,6 +20,7 @@ export function createControls(G) {
   addEventListener('keydown', (e) => { if (e.repeat) return; if (['Space', 'Enter'].includes(e.code)) e.preventDefault(); act({ key: e.code }); });
   addEventListener('keyup', (e) => act({ key: e.code, down: false }));
   addEventListener('blur', () => held.clear());
+  addEventListener('visibilitychange', () => { if (document.hidden) held.clear(); });
   $('b1').onclick = (e) => { setMode(1); e.target.blur(); }; $('b2').onclick = (e) => { setMode(2); e.target.blur(); }; $('br').onclick = (e) => { G.resetRace(); e.target.blur(); };
 
   // the keys panel, mode buttons and tips line (called from assignRoles after buildHud)
