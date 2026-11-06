@@ -323,8 +323,8 @@ export function buildEnvironment(scene, _tex, rng) {
   for (let i = 0; i < p2.count; i += 3) {
     const y = (p2.getY(i) + p2.getY(i + 1) + p2.getY(i + 2)) / 3, x = (p2.getX(i) + p2.getX(i + 1) + p2.getX(i + 2)) / 3 + 50;
     const wz = p2.getZ(i) - 55, stripe = Math.floor(x / 4) % 2, near = 1 - smooth(-20, 5, wz);
-    cc.copy(stripe ? g1 : g2).offsetHSL(0, 0, (stripe ? 0.05 : -0.05) * near).lerp(g3, Math.min(1, y / 11)).offsetHSL((rng() - 0.5) * 0.015, 0, (rng() - 0.5) * 0.03);
-    cc.lerp(hillC, smooth(1, 14, y) * 0.8).lerp(haze, 0.35 * smooth(10, 70, 55 - p2.getZ(i)) + 0.25 * smooth(8, 60, y));
+    cc.copy(stripe ? g1 : g2).offsetHSL(0, 0, (stripe ? 0.09 : -0.09) * near).lerp(g3, Math.min(1, y / 11)).offsetHSL((rng() - 0.5) * 0.015, 0, (rng() - 0.5) * 0.03);
+    cc.lerp(new THREE.Color(0x4f9a3c), 0.55 * smooth(-4, -16, wz)).lerp(new THREE.Color(0xc9a45a), 0.5 * (1 - smooth(-14, -4, wz)) * (1 - smooth(-4, 6, wz)) * 0).lerp(hillC, smooth(1, 14, y) * 0.8).lerp(haze, 0.35 * smooth(10, 70, 55 - p2.getZ(i)) + 0.25 * smooth(8, 60, y));
     for (let k = 0; k < 3; k++) hc.push(cc.r, cc.g, cc.b);
   }
   hn.setAttribute('color', new THREE.Float32BufferAttribute(hc, 3));
@@ -401,6 +401,7 @@ export function buildEnvironment(scene, _tex, rng) {
       g.add(tm(box(len - 0.4, 0.14, 0.3), toon(benchCols[r % 4]), [x0 + len / 2, y + 0.3, z + 0.32], [0, 0, 0], [1, 1, 1], { outline: 0.5, shadow: false }));
       for (let k = 0; k < Math.floor(len / 0.95); k++) if (rng() < 0.92) spectators.push({ x: x0 + 0.7 + k * 0.95 + (rng() - 0.5) * 0.2, y: y + 0.36, z: z - 0.05, ph: rng() * 6.28, col: PEOPLE[Math.floor(rng() * 8)], skin: SKIN[Math.floor(rng() * 4)] });
     }
+    g.add(tm(box(len + 1.2, 0.25, rows * 1.1 + 2.4), slab, [x0 + len / 2, 0.05, z0 - rows * 0.55 + 0.5], [0, 0, 0], [1, 1, 1], { outline: 0.8 }));
     const H = rows * 0.7 + 1.6;
     g.add(tm(box(len, H + 0.8, 0.5), concrete2, [x0 + len / 2, (H + 0.8) / 2, z0 - rows * 1.1 - 0.4], [0, 0, 0], [1, 1, 1], { outline: 0.8 }));
     // window slit band on the back wall + upper glass level

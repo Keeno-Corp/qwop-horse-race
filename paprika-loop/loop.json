@@ -673,6 +673,17 @@
       "score": 7.5,
       "judgeTurns": 9,
       "judgeTokens": 180094
+    },
+    {
+      "n": 62,
+      "turns": 11,
+      "tokens": 287876,
+      "costUsd": 0.2250722,
+      "minutes": 1.2,
+      "commit": "faa528e",
+      "score": 7.5,
+      "judgeTurns": 7,
+      "judgeTokens": 114684
     }
   ],
   "best": {
