@@ -30,14 +30,14 @@ The page looks and plays well, but I only saw one race frame and ran no 2-player
 
 SCORE: 7.7
 
-## Iteration 101
+## Iteration 102
 **Did**
-- No page changes. Read broadcast.js: the postpass renders the scene to `rt`, then calls `renderer.setRenderTarget(null)` before drawing the quad (broadcast.js:96-98). The "render target left bound" note is a false alarm.
+- No code changes. Played 2P: `Digit2`, Enter, waited to `phase:"race"` (frame 279), then held Q and U for 30 frames.
 **Saw**
-- I did not open the page. The last readings stand: no console errors, no `Lighting:`/`Surfaces:` faults, 268 draw calls, 128k triangles.
+- `mode:2`, horses P1 and P2 (`human` 0 and 1) both show `legs:"1000"`, so Q and U each drive their own player's front-left leg. Both stay `state:"run"`, `plants:0`. No console errors.
 **Next**
-- Play a 2P race past the countdown and read both `legs` strings.
 - `look` with `cameras` at the photo-finish sepia replay and head-on cut.
-- Zoom [0,330,1280,520] and lower the foreground rail or thin the dust so the hooves read.
+- Zoom [0,330,1280,520]; lower the foreground rail or thin the dust over the hooves.
+- Check restart with Enter after a 2P results card.
 **Open**
-- 2P key response, replay cams and hoof/rail overlap are still unchecked.
+- Replay cams, hoof/rail overlap and 2P restart after results are unchecked.

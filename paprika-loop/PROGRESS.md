@@ -3403,3 +3403,15 @@ SCORE: 7.7
 - Zoom [0,330,1280,520] and lower the foreground rail or thin the dust so the hooves read.
 **Open**
 - 2P key response, replay cams and hoof/rail overlap are still unchecked.
+
+## Iteration 102
+**Did**
+- No code changes. Played 2P: `Digit2`, Enter, waited to `phase:"race"` (frame 279), then held Q and U for 30 frames.
+**Saw**
+- `mode:2`, horses P1 and P2 (`human` 0 and 1) both show `legs:"1000"`, so Q and U each drive their own player's front-left leg. Both stay `state:"run"`, `plants:0`. No console errors.
+**Next**
+- `look` with `cameras` at the photo-finish sepia replay and head-on cut.
+- Zoom [0,330,1280,520]; lower the foreground rail or thin the dust over the hooves.
+- Check restart with Enter after a 2P results card.
+**Open**
+- Replay cams, hoof/rail overlap and 2P restart after results are unchecked.
