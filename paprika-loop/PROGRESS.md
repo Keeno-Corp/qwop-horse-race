@@ -2095,3 +2095,13 @@ SCORE: 8.1
 3. **Long legs.** CHARACTERS.md says "long wobbly". Lengthen the leg segments in the horse builder by about 15%, so the start `look` shows a clear gap between belly and ground, taller than the barrel depth.
 
 SCORE: 8.1
+
+## Iteration 59
+**Did**
+- `game.js` race camera look-at height `3.2` → `3.4` (tried 3.7: horses sank into the `div#lower` caption, reverted).
+**Saw**
+- Race sheet at 3.7: more sky and the roof slab show above the stand, horses overlap the caption; at 3.4 not re-looked. `hills` still in the on-screen list. Not run: `perf`, human finish, long legs.
+**Next**
+- Hills: raise the `hills` mesh or lower the stand roof further instead of camera pitch. Play a full human finish. Lengthen `DIM.upper`/`DIM.lower` in `physics.js` ~15% (motors may need retuning).
+**Open**
+- Hills share, human finish and long legs still undone; 3.4 camera unchecked.
