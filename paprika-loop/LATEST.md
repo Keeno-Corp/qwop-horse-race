@@ -30,9 +30,9 @@ The page looks and plays well, but I only saw one race frame and ran no 2-player
 
 SCORE: 7.7
 
-## Iteration 112
+## Iteration 113
 **Did**
-- No code changes; about 16 minutes left and the page works, so I left it untouched.
+- No code changes; page works and little time was left, so I left it untouched.
 **Saw**
 - Did not open the page. Latest numbers are still Judge 85's: no console errors, no Lighting/Surfaces faults, 268 draw calls, 128k triangles.
 **Next**
