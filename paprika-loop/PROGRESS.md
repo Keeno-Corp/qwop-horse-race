@@ -2052,3 +2052,9 @@ SCORE: 8.1
 3. **Vary the AI finish times.** Add per-horse speed jitter seeded per race (asked again from session 39, not yet added). Check several `resetRace` seeds without `deadHeat`: `results[*].finishT` should differ by more than 0.3 s. Then run `feel` on the face-plant camera shake and add a replay fill light (replay brightness was 32%).
 
 SCORE: 8.2
+
+## Iteration 41
+**Did** game.js `popup()`: after pushing, every live `.pop` is re-stacked at top 14vh + i*22vh, so "FACE-PLANT!" and "PILE-UP!" no longer overlap.
+**Saw** `interact until {tangles:1}` +20 frames, raceT 6.35: `look` reports 7 HTML elements, 0 overlap, 0 cut off. Brightness 41%, saturation 64%, 0% near black, no console errors. The camera shows `horse0-body`, `horse1-body` and `horse3-body` with `player-body` off-screen left (the "◀ YOU 10 m" chip shows). The two pops cover part of the horses' area.
+**Next** (1) Run the human race to the finish with Q+P / W+O alternation and check `YOU.finishT` < 60 s. (2) Add per-horse speed jitter seeded in `resetRace`. The rubber-band `band` in the AI code (lines ~59-61) squeezes finish spread, so jitter may need to apply after it. Then check `results[*].finishT` over several seeds with `deadHeat` off. (3) `feel` on the face-plant camera shake, a replay fill light, and shrinking the pops so they don't hide the pile-up.
+**Open** I did not do the human full-race run or the speed jitter this session.

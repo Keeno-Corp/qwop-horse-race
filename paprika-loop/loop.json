@@ -431,6 +431,17 @@
       "score": 8.1,
       "judgeTurns": 8,
       "judgeTokens": 152595
+    },
+    {
+      "n": 40,
+      "turns": 10,
+      "tokens": 295999,
+      "costUsd": 0.27924060000000006,
+      "minutes": 1.3,
+      "commit": "bada009",
+      "score": 8.2,
+      "judgeTurns": 8,
+      "judgeTokens": 155202
     }
   ],
   "best": {

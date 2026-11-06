@@ -206,8 +206,9 @@ function popup(text, sub = '', color = '#ffd27a', life = 1.7) {
   while (S.popups.length > 1) S.popups.shift().el.remove();
   const el = document.createElement('div'); el.className = 'pop'; el.style.color = color;
   el.style.setProperty('--r', rr(-6, 6).toFixed(1) + 'deg'); el.style.animation = `pop ${life}s ease-out forwards`;
-  el.style.top = (16 + S.popups.length * 16) + 'vh'; el.style.left = '50%';
+  el.style.left = '50%';
   el.innerHTML = text + (sub ? `<span>${sub}</span>` : ''); $('popups').appendChild(el); S.popups.push({ el, t: life });
+  S.popups.forEach((p, i) => { p.el.style.top = (14 + i * 22) + 'vh'; }); // re-stack so two pops never overlap
 }
 const COMMENT = {
   'FACE-PLANT!': ['{n} eats dirt!', '{n} kisses the track!', 'Nose-first for {n}!', '{n} has lost control of their face'],

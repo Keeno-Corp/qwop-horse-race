@@ -1,11 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 40
-**Did** game.js: `S.focus` set at a tangle (`until` raceT+2.2); `updateCamera` race branch eases `fx` 85% toward the `state==="down"` horses' mean x and widens `dist` to ≥11 while it lasts, then returns to `YOU`. `S.deadHeat` (rng()<0.35 per race, set in `resetRace`) now gates the closing-sprint drag that forced the 0.02 s photo finish.
-**Saw** `interact until {tangles:1}` +40 frames, raceT 6.68: `horse0-body`, `horse1-body`, `horse3-body` all in frame with "PILE-UP!" and "FACE-PLANT!" pops over them; brightness 43%, 0% near black, no console errors. The offscreen chip shows "◀ YOU 12 m". I did not check finish-time spread across races or the human run to the finish.
-**Next** (1) Run several seeds and check `results[*].finishT` spread without deadHeat. (2) Human path: alternate Q+P / W+O for 50 s, check `YOU.finishT` < 60 s. (3) `feel` on the face-plant camera shake; replay fill light.
-**Open** The two pops overlap each other (FACE-PLANT over PILE-UP). Per-horse speed jitter was not added; non-dead-heat races rely on natural spread.
-
 ### Judge 40
 
 **Verdict, session 40**
@@ -32,3 +26,9 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Vary the AI finish times.** Add per-horse speed jitter seeded per race (asked again from session 39, not yet added). Check several `resetRace` seeds without `deadHeat`: `results[*].finishT` should differ by more than 0.3 s. Then run `feel` on the face-plant camera shake and add a replay fill light (replay brightness was 32%).
 
 SCORE: 8.2
+
+## Iteration 41
+**Did** game.js `popup()`: after pushing, every live `.pop` is re-stacked at top 14vh + i*22vh, so "FACE-PLANT!" and "PILE-UP!" no longer overlap.
+**Saw** `interact until {tangles:1}` +20 frames, raceT 6.35: `look` reports 7 HTML elements, 0 overlap, 0 cut off. Brightness 41%, saturation 64%, 0% near black, no console errors. The camera shows `horse0-body`, `horse1-body` and `horse3-body` with `player-body` off-screen left (the "◀ YOU 10 m" chip shows). The two pops cover part of the horses' area.
+**Next** (1) Run the human race to the finish with Q+P / W+O alternation and check `YOU.finishT` < 60 s. (2) Add per-horse speed jitter seeded in `resetRace`. The rubber-band `band` in the AI code (lines ~59-61) squeezes finish spread, so jitter may need to apply after it. Then check `results[*].finishT` over several seeds with `deadHeat` off. (3) `feel` on the face-plant camera shake, a replay fill light, and shrinking the pops so they don't hide the pile-up.
+**Open** I did not do the human full-race run or the speed jitter this session.
