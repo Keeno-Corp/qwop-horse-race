@@ -733,3 +733,16 @@ SCORE: 7.5
 **Open**
 - Human finish, 2-player and the sepia photo-finish replay are still unproven.
 - Fog in race view is unverified.
+
+## Iteration 21
+**Did**
+- No code changes. Played the unproven controls with `interact`.
+**Saw**
+- Solo: alternating Q+P / W+O at 8 frames each took YOU from x 4.96 to 10.97 in 1.6 s of raceT, with `state:"run"` and `pitch` between -0.08 and 0.02. The AIs were at x 4.1 to 5.5 at raceT 2.5, so a human who alternates leads them. A full 60 m finish was not played.
+- 2-player: `Digit2` gives `mode:2` with horses P1 (human 0) and P2 (human 1); Q moved P1 and U moved P2 (`legs:"1000"` each). No console errors.
+**Next**
+- Play a full human finish with `until phase:"results"` and record `finishT`. Watch for the sepia PHOTO FINISH replay after a close finish.
+- Check fog in a race view with `look sample` on far hills.
+- Cut draw calls (411 last measured) by merging `merged` and `merged-outline` per material and instancing `tail`; name the horse parts.
+**Open**
+- The render-target warning is probably a harness artifact (`broadcast.js:97` already resets the target). `hills` is still "Never visible".

@@ -32,18 +32,15 @@ I ran a no-input race to the results screen, then restarted and watched the face
 
 SCORE: 7.5
 
-## Iteration 20
+## Iteration 21
 **Did**
-- No code changes. Read the code for the Judge's Next item 2: `broadcast.js` already calls `renderer.setRenderTarget(null)` before the final `postpass-quad` draw (line 97), so the render-target warning looks like a harness artifact of the two-pass render and not a bug.
-- `view.js:309` already sets `scene.fog` (0xf2dca0, 38, 240), and `game.js:37` only adds fog when the background is a Color, so fog is probably not applied twice. Not checked in a race view.
+- No code changes. Played the unproven controls with `interact`.
 **Saw**
-- `open` and `look` at the title card: no console errors, brightness 52%, orange 44% / yellow 38%. `hills` is still "Never visible"; `horse0` named parts 0 of 3.
-- Scripted human input did work: after the countdown (race starts at frame 260), alternating Q, P, W, O at 6 frames each moved YOU from x 1.42 to 4.3 in 1.48 s of raceT, with `pitch` -0.34 and `legs` bits changing. The AIs were at x 0.8 to 2.9. This is only a 1.5 s sample, not a 60 m finish.
-- `perf` was not run (draw calls were 411 last time).
+- Solo: alternating Q+P / W+O at 8 frames each took YOU from x 4.96 to 10.97 in 1.6 s of raceT, with `state:"run"` and `pitch` between -0.08 and 0.02. The AIs were at x 4.1 to 5.5 at raceT 2.5, so a human who alternates leads them. A full 60 m finish was not played.
+- 2-player: `Digit2` gives `mode:2` with horses P1 (human 0) and P2 (human 1); Q moved P1 and U moved P2 (`legs:"1000"` each). No console errors.
 **Next**
-- Run the alternating Q+P / W+O input with `interact until phase:"results"` and record YOU's `finishT`. Then test `Digit2` and the 2-player keys.
-- Look mid-race with `look` to confirm the fog tints far hills; sample far pixels with `look sample`.
-- Draw calls 411 to <250 (merge `merged` and `merged-outline` per material, instance `tail`); name the horse parts.
+- Play a full human finish with `until phase:"results"` and record `finishT`. Watch for the sepia PHOTO FINISH replay after a close finish.
+- Check fog in a race view with `look sample` on far hills.
+- Cut draw calls (411 last measured) by merging `merged` and `merged-outline` per material and instancing `tail`; name the horse parts.
 **Open**
-- Human finish, 2-player and the sepia photo-finish replay are still unproven.
-- Fog in race view is unverified.
+- The render-target warning is probably a harness artifact (`broadcast.js:97` already resets the target). `hills` is still "Never visible".
