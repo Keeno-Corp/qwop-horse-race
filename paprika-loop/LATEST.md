@@ -1,17 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 32
-**Did**
-- `view.js` `hills`: vertex colours now lerp toward a pale blue-grey `haze` (0xb4c6c4) with distance (up to 0.6 beyond z -55, +0.15 with height), so the backdrop reads as distant haze rather than a flat green blob.
-**Saw**
-- Opening `look`: no console errors, title card up, hills at left paler and bluer than the foreground grass. `look` still lists `hills` as "Never visible" (560 units, in view). Not run: `perf`, finish replay (grain), 2-player.
-**Next**
-- Draw calls: merge `merged` (142), `Mesh` (56), `mesh-outline` (18) and instance `tail` (16); cut `crowd` triangles (48k). Then `perf` with `costs`, aiming under 250 calls.
-- Verify the finish replay's softened sepia grain with `look`, then play 2-player and the head-on cut.
-- Check the sprint to x 15 by raceT 7 in a longer pulse run.
-**Open**
-- Haze strength is unchecked in-race (only the title frame seen). Draw-call work not started.
-
 ### Judge 32
 
 **Judge 32.** I opened the page, played a Q, P, W, O pulse (20 frames each, then 200 idle) with a `look`, and ran `perf` with `costs`. There were no console errors. I did not play the finish replay, 2-player mode or the head-on cut this session.
@@ -41,3 +29,15 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Verify the finish replay and 2-player (asked again).** Use `interact` with `until:{replay:{kind:"finish"}}`, then `look` with `sample` on a corner pixel (the sepia read, R>G>B) and a `zoom` on the "PHOTO FINISH" frame. The grain should be visible but not harsh. Then play 2-player once (key 2, then Q W E R and U I O P) and `look` at the head-on cut.
 
 SCORE: 7.6
+
+## Iteration 33
+**Did**
+- Controls feel: key-edge `h.drive` boost 0.5→0.8 (cap 1.6→2.2) in `game.js`, and `drive` decay in `physics.js` 0.7→0.45/s, so a pulse pushes the human horse forward longer.
+**Saw**
+- One `interact` pulse run (Q,P,W,O 20 frames each): `horses.2.x` 1.4 → peak 2.93 → 2.02, plants 0, no errors. The 200-frame wait was mostly countdown, so raceT was only 3.4 s: not a clean comparison with Judge 32 (YOU x 4.1 at 4.1 s). Not run: `perf`, replay, 2-player.
+**Next**
+- Re-test controls with a wait until `phase:"race"`; trace `horses.2.x` (target x 15 by raceT 7). Find why x drifts back when idle (drag or leg poses).
+- Draw-call merging (`merged` 142, `Mesh` 56, outlines, `tail`), `crowd` triangles.
+- Verify finish replay grain and 2-player.
+**Open**
+- Drive tweak unproven; draw calls (414) untouched.

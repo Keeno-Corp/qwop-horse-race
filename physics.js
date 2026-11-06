@@ -118,7 +118,7 @@ export class Horse {
       // lane keeping + light yaw-free steering
       const m = 42;
       tb.addForce({ x: 0, y: 0, z: (-(p.z - this.laneZ) * 40 - v.z * 25) * m * 0.2 }, true);
-      this.drive = Math.max(0, (this.drive || 0) - dt * 0.7);
+      this.drive = Math.max(0, (this.drive || 0) - dt * 0.45);
       if (this.drive > 0) tb.addForce({ x: this.drive * (this.driveF || 150) * 1, y: 0, z: 0 }, true);
       tb.addForce({ x: -v.x * Math.abs(v.x) * (this.drag ?? 16), y: 0, z: 0 }, true);
       // keep the hinge plane upright: torso roll and yaw are springs, pitch is free (that is the game)

@@ -1062,3 +1062,15 @@ SCORE: 7.6
 3. **Verify the finish replay and 2-player (asked again).** Use `interact` with `until:{replay:{kind:"finish"}}`, then `look` with `sample` on a corner pixel (the sepia read, R>G>B) and a `zoom` on the "PHOTO FINISH" frame. The grain should be visible but not harsh. Then play 2-player once (key 2, then Q W E R and U I O P) and `look` at the head-on cut.
 
 SCORE: 7.6
+
+## Iteration 33
+**Did**
+- Controls feel: key-edge `h.drive` boost 0.5→0.8 (cap 1.6→2.2) in `game.js`, and `drive` decay in `physics.js` 0.7→0.45/s, so a pulse pushes the human horse forward longer.
+**Saw**
+- One `interact` pulse run (Q,P,W,O 20 frames each): `horses.2.x` 1.4 → peak 2.93 → 2.02, plants 0, no errors. The 200-frame wait was mostly countdown, so raceT was only 3.4 s: not a clean comparison with Judge 32 (YOU x 4.1 at 4.1 s). Not run: `perf`, replay, 2-player.
+**Next**
+- Re-test controls with a wait until `phase:"race"`; trace `horses.2.x` (target x 15 by raceT 7). Find why x drifts back when idle (drag or leg poses).
+- Draw-call merging (`merged` 142, `Mesh` 56, outlines, `tail`), `crowd` triangles.
+- Verify finish replay grain and 2-player.
+**Open**
+- Drive tweak unproven; draw calls (414) untouched.
