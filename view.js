@@ -313,7 +313,7 @@ export function buildEnvironment(scene, _tex, rng) {
   for (let i = 0; i < hp.count; i++) {
     const x = hp.getX(i) + 50, z = hp.getZ(i) - 55;
     const far = smooth(40, 120, -z), side = smooth(150, 230, Math.abs(x - 50)), n = 0.4 + 0.6 * noise2(x * 0.02, z * 0.02) + 0.2 * noise2(x * 0.07, z * 0.07);
-    hp.setY(i, Math.max(far * 12, side * 9) * n - 0.1);
+    hp.setY(i, Math.max(far * 18, side * 9) * n - 0.1);
   }
   const hn = hg.toNonIndexed(); hn.computeVertexNormals();
   const hc = [], g1 = new THREE.Color(0xa8ad4a), g2 = new THREE.Color(0x96a444), g3 = new THREE.Color(0x7d9040), cc = new THREE.Color(), haze = new THREE.Color(0xb4c6c4), p2 = hn.attributes.position;
@@ -325,14 +325,6 @@ export function buildEnvironment(scene, _tex, rng) {
   }
   hn.setAttribute('color', new THREE.Float32BufferAttribute(hc, 3));
   const hills = new THREE.Mesh(hn, new THREE.MeshToonMaterial({ vertexColors: true, gradientMap: ramp })); hills.position.set(50, 0, -55); hills.receiveShadow = true; hills.name = 'hills'; scene.add(hills);
-
-  // farther, paler blue ridge for depth
-  {
-    const rg = new THREE.PlaneGeometry(700, 40, 70, 1).rotateX(-Math.PI / 2), rp = rg.attributes.position;
-    for (let i = 0; i < rp.count; i++) { const x = rp.getX(i); rp.setY(i, rp.getZ(i) < 0 ? 22 + 14 * noise2(x * 0.012, 3.3) + 6 * noise2(x * 0.04, 9.1) : -0.5); }
-    rg.computeVertexNormals();
-    const ridge = new THREE.Mesh(rg, new THREE.MeshBasicMaterial({ color: 0xa9bec6, fog: true })); ridge.position.set(50, 0, -185); ridge.name = 'ridge'; scene.add(ridge);
-  }
 
   // treeline on the far hills
   const treeG = new THREE.SphereGeometry(1, 12, 8), trunkG = cyl(0.12, 0.18, 1, 5), tcols = [0x5f7a2e, 0x6f8a3a, 0x7a8a34, 0x9a7a2a, 0x4f6a2a];

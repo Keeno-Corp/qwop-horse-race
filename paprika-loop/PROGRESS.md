@@ -1253,3 +1253,15 @@ The replay is verified. The finish replay now fires after the first finish plus 
 3. **Play both inputs.** `interact` with Q W O P and then `Digit2` with Q W E R and U I O P, and let YOU run so a human finish and the head-on cut show. Make sure the face-plant replay on a big plant also fires, and add grain and flicker that are visible in a `look` of the sepia replay.
 
 SCORE: 7.9
+
+## Iteration 38
+**Did**
+- `view.js`: deleted the never-visible `ridge` mesh; raised far `hills` height (`far * 12` → `far * 18`) so they should rise above the grandstand.
+**Saw**
+- Only `node --check view.js`; no `look`/`perf` run this session.
+**Next**
+- `look` side cam to confirm `hills` now shows paler/bluer; trees use hills' old height formula (12) so they may sink into the taller hills; adjust.
+- Draw calls (~411): merge `merged`/`Mesh`/outlines, instance `tail`, crowd 47.9k tris.
+- Play Q W O P / 2-player to see a human finish.
+**Open**
+- Hills change unverified visually; treeline `hY` still uses factor 12.
