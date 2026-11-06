@@ -1,0 +1,210 @@
+{
+  "v": 1,
+  "keypoints": [
+    {
+      "id": "replay-cams-plant",
+      "title": "replay-cams-plant",
+      "state": {},
+      "actions": [
+        {
+          "until": {
+            "replay.kind": "plant"
+          },
+          "max": 1500
+        },
+        {
+          "wait": 1,
+          "draw": true
+        }
+      ],
+      "frames": 0,
+      "expect": [
+        {
+          "path": "phase",
+          "op": "==",
+          "value": "replay"
+        },
+        {
+          "path": "replay.kind",
+          "op": "==",
+          "value": "plant"
+        },
+        {
+          "path": "cam.p.1",
+          "op": ">=",
+          "value": 0
+        },
+        {
+          "path": "cam.p.1",
+          "op": "<=",
+          "value": 1.2
+        },
+        {
+          "path": "cam.p.2",
+          "op": ">=",
+          "value": 5
+        },
+        {
+          "path": "cam.p.2",
+          "op": "<=",
+          "value": 9.5
+        }
+      ]
+    },
+    {
+      "id": "replay-cams-skip",
+      "title": "replay-cams-skip",
+      "state": {},
+      "actions": [
+        {
+          "until": {
+            "replay.kind": "plant"
+          },
+          "max": 1500
+        },
+        {
+          "wait": 60
+        },
+        {
+          "key": "Space"
+        },
+        {
+          "wait": 60
+        }
+      ],
+      "frames": 0,
+      "expect": [
+        {
+          "path": "phase",
+          "op": "==",
+          "value": "race"
+        },
+        {
+          "path": "raceT",
+          "op": ">=",
+          "value": 7.7
+        },
+        {
+          "path": "raceT",
+          "op": "<=",
+          "value": 9
+        },
+        {
+          "path": "replay",
+          "op": "exists"
+        }
+      ]
+    },
+    {
+      "id": "replay-cams-headon",
+      "title": "replay-cams-headon",
+      "state": {},
+      "actions": [
+        {
+          "until": {
+            "cam.p.2": [
+              1.4,
+              1.8
+            ],
+            "phase": "race"
+          },
+          "max": 1500
+        },
+        {
+          "wait": 2
+        },
+        {
+          "until": {
+            "raceT": [
+              10,
+              99
+            ]
+          },
+          "max": 1500
+        },
+        {
+          "until": {
+            "cam.p.2": [
+              1.4,
+              1.8
+            ],
+            "phase": "race"
+          },
+          "max": 1500
+        },
+        {
+          "wait": 3,
+          "draw": true
+        }
+      ],
+      "frames": 0,
+      "expect": [
+        {
+          "path": "phase",
+          "op": "==",
+          "value": "race"
+        },
+        {
+          "path": "cam.p.2",
+          "op": ">=",
+          "value": 1.4
+        },
+        {
+          "path": "cam.p.2",
+          "op": "<=",
+          "value": 1.8
+        },
+        {
+          "path": "cam.fov",
+          "op": ">=",
+          "value": 23.5
+        },
+        {
+          "path": "cam.fov",
+          "op": "<=",
+          "value": 27
+        },
+        {
+          "path": "raceT",
+          "op": ">=",
+          "value": 15
+        },
+        {
+          "path": "raceT",
+          "op": "<=",
+          "value": 18
+        }
+      ]
+    },
+    {
+      "id": "replay-cams-finish",
+      "title": "replay-cams-finish",
+      "state": {},
+      "actions": [
+        {
+          "until": {
+            "replay.kind": "finish"
+          },
+          "max": 3000
+        },
+        {
+          "wait": 20
+        },
+        {
+          "key": "Space"
+        },
+        {
+          "wait": 5
+        }
+      ],
+      "frames": 0,
+      "expect": [
+        {
+          "path": "phase",
+          "op": "==",
+          "value": "results"
+        }
+      ]
+    }
+  ]
+}

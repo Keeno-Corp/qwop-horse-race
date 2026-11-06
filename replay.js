@@ -25,7 +25,7 @@ export function createReplay(G) {
   function subjectAt(idx, hi) {
     const i0 = Math.floor(idx), base = (i0 % RING) * FRAME, c = new THREE.Vector3(), m = base + hi * NP * 7;
     let n = 0;
-    for (let h = 0; h < horses.length; h++) { const a = base + h * NP * 7; if (h === hi || Math.abs(ring[a] - ring[m]) < 5) { c.x += ring[a]; c.y += ring[a + 1]; c.z += ring[a + 2]; n++; } }
+    for (let h = 0; h < horses.length; h++) { const a = base + h * NP * 7; if (h === hi || (Math.abs(ring[a] - ring[m]) < 4 && Math.abs(ring[a + 2] - ring[m + 2]) < 4)) { c.x += ring[a]; c.y += ring[a + 1]; c.z += ring[a + 2]; n++; } }
     return c.multiplyScalar(1 / n);
   }
 
@@ -35,7 +35,7 @@ export function createReplay(G) {
     $('replay').style.display = on ? 'block' : 'none'; $('pf').style.display = on && kind === 'finish' ? 'block' : 'none';
     $('rtag').textContent = kind === 'finish' ? 'REPLAY 0.25x' : 'INSTANT REPLAY · 0.25x';
     if (on && kind === 'finish') { const g = S.pfGap ?? 9; $('pfc').textContent = 'WINNER: ' + (S.pfWinner || '?') + (g < 1 ? ' · BY ' + g.toFixed(2) + ' SEC' : ' · OFFICIAL') + ' · HOLD ALL TICKETS'; }
-    if (on) { bc.U.uGlitch.value = 1; }
+    if (on) { bc.U.uGlitch.value = kind === 'finish' ? 1 : 0.35; }
   }
   function startFinishReplay() {
     const { roles } = G;
@@ -54,7 +54,7 @@ export function createReplay(G) {
     const hi = S.pending.horse; S.pending = null;
     const end = ringN - 1, start = Math.max(Math.max(0, ringN - RING + 2), end - 75);
     const pr = S.pair && S.pair.includes(hi) ? S.pair : null;
-    S.replay = { kind: 'plant', start, end, pos: start, subject: hi, pair: pr, snap: true, back: S.phase };
+    S.replay = { kind: 'plant', start, end, pos: start, subject: hi, pair: pr, snap: true, back: S.phase }; applyFrame(start);
     S.prevPhase = S.phase; S.phase = 'replay'; for (const p of S.popups) p.el.remove(); S.popups = []; setReplayUi(true, 'plant');
   }
   function endReplay() {
@@ -70,8 +70,8 @@ export function createReplay(G) {
   // sepia/glitch blending of the broadcast pass (once per tick)
   function blendReplayShader(dt) {
     const rk = S.phase === 'replay' && S.replay ? S.replay.kind : null;
-    bc.U.uReplay.value += ((rk === 'finish' ? 1 : 0) - bc.U.uReplay.value) * Math.min(1, dt * 14);
-    bc.U.uGlitch.value = Math.max(rk === 'plant' ? 0.12 : 0, bc.U.uGlitch.value - dt * 2.2);
+    bc.U.uReplay.value += ((rk === 'finish' ? 1 : rk === 'plant' ? 0.3 : 0) - bc.U.uReplay.value) * Math.min(1, dt * 14);
+    bc.U.uGlitch.value = Math.max(rk === 'plant' ? 0.06 : 0, bc.U.uGlitch.value - dt * 2.2);
   }
 
   return { NP, FRAME, RING, ring, get ringN() { return ringN; }, set ringN(v) { ringN = v; }, record, applyFrame, subjectAt, setReplayUi, startFinishReplay, startPlantReplay, endReplay, advanceReplay, blendReplayShader };

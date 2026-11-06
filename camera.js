@@ -24,17 +24,16 @@ export function createCamera(G) {
   function cutTo(kind, dur, x) { CUT.kind = kind; CUT.until = S.time + dur; CUT.x = x; CUT.snap = true; bc.U.uGlitch.value = 0.8; }
   function updateCamera(dt) {
     const { horses } = G;
+    if (S.phase === 'replay' && CUT.kind) CUT.until += dt;   // a cut interrupted by a replay resumes after it
     let fov = (S.phase === 'race' || S.phase === 'finishing' || S.phase === 'countdown') ? 30 : 36, snap = false;
     if (S.phase === 'replay') {
       const rp = S.replay;
       if (rp.kind === 'finish') {
         const prog = (rp.pos - rp.start) / Math.max(1, rp.end - rp.start);
         tp.set(FINISH_X + 4 - prog * 1.5, 1.3 + prog * 0.3, 10); tl.set(FINISH_X - 0.5 - prog * 0.5, 1.0, 0); fov = 34 - prog * 4;
-      } else { // low rail cam orbiting the pile-up
-        const prog = (rp.pos - rp.start) / Math.max(1, rp.end - rp.start), s = G.subjectAt(rp.pos, rp.subject), a = 0.35 + prog * 1.1;
-        let cx = s.x, cz = s.z, d = 8;
-        if (rp.pair) { const s2 = G.subjectAt(rp.pos, rp.pair[0] === rp.subject ? rp.pair[1] : rp.pair[0]); cx = (s.x + s2.x) / 2; cz = (s.z + s2.z) / 2; d = 9 + Math.abs(s.x - s2.x) * 0.5; }
-        tp.set(cx - 1.5 + Math.sin(a) * d * 0.45, 1.8 + prog * 1.2, cz + Math.max(d, 10.5)); tl.set(cx, 1.0, cz); fov = 34;
+      } else { // low rail cam: near the rail (z ~7), low, slow dolly; frames the subject and only partners actually near it
+        const prog = (rp.pos - rp.start) / Math.max(1, rp.end - rp.start), s = G.subjectAt(rp.pos, rp.subject);
+        tp.set(s.x - 2.2 + prog * 1.6, 0.85 + prog * 0.3, s.z + 7); tl.set(s.x, 0.9, s.z); fov = 42;
       }
       if (rp.snap) { rp.snap = false; snap = true; }
       if (snap) { camPos.copy(tp); camLook.copy(tl); } else { camPos.lerp(tp, 1 - Math.exp(-dt * 6)); camLook.lerp(tl, 1 - Math.exp(-dt * 8)); }
@@ -47,7 +46,7 @@ export function createCamera(G) {
         const left = S.focus.until - S.raceT;
         if (left > 0) { const w = Math.min(1, left / 0.5, (2.2 - left) / 0.5 + 0.2); const fh = horses.filter((h) => h.state === 'down'); const tx = fh.length ? fh.reduce((a, h) => a + h.pos().x, 0) / fh.length : S.focus.x; fx += (tx - fx) * 0.85 * w; dist = Math.max(dist, 18); if (!S.focus.cut) { S.focus.cut = true; cutTo('head', 1.7, S.focus.x); } } else S.focus = null;
       }
-      if (S.phase !== 'countdown' && !S.stretchCut && leader > FINISH_X - 21 && leader < FINISH_X - 10) { S.stretchCut = true; cutTo('head', 2.0, leader); }
+      if (S.phase !== 'countdown' && !S.stretchCut && leader > FINISH_X - 21 && leader < FINISH_X - 8) { S.stretchCut = true; cutTo('head', 2.0, leader); }
       if (CUT.kind && S.time > CUT.until) { CUT.kind = null; CUT.snap = true; bc.U.uGlitch.value = 0.7; snap = true; }
       if (CUT.kind === 'head' && (S.phase === 'race' || S.phase === 'finishing')) {
         if (CUT.snap) { CUT.px = CUT.x + 23; CUT.snap = false; snap = true; }
