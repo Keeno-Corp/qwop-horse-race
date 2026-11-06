@@ -1,18 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 50
-**Did**
-- `view.js` `mergeStatic(root, vc)`: with `vc` true, plain-colour `MeshToonMaterial` meshes (no map) merge into ONE vertex-colour toon mesh (`vcMat`) per group instead of one per material. `buildHorseView` calls `mergeStatic(g, true)` for every horse group.
-**Saw**
-- `open` + Enter + 300 frames, `look`: `phase:"race"`, no console errors; horses look unchanged (coats, socks, hooves, silks, outlines), brightness 48%.
-- `perf` with `costs`: draw calls 410 → 266 (`merged` 142 → 70). 141k triangles; the 170 ms frame is SwiftShader, no budget signal.
-**Next**
-- Draw calls still 266: `Mesh` (59), `merged-outline` (45), `mesh-outline` (18), `tail` (16). Instance or vertex-colour the tail and merge the outline hulls of the leg groups; thin `crowd` (47.9k triangles).
-- Play to a human finish (alternating Q+P / W+O), check replay, head-on cut, 2-player.
-- `hills` is still "Never visible" behind the grandstand: lower the roof or raise the camera pitch.
-**Open**
-- Human finish, replay, 2-player not seen. `hills` hidden. Polygon-offset z-fight protection between coplanar horse parts is gone on merged colours; none seen in the look.
-
 ### Judge 50
 
 **Photo Finish Fiasco, judge 50**
@@ -63,3 +50,17 @@ I ran `open`, one `interact` (Enter, alternating Q+P and W+O, then `until` the r
 3. **Hills and sky behind the grandstand.** Lower the roof or raise the camera pitch so `hills` shows. A plain `look` should then not list `hills` under "Never visible". After that, check the finish replay: take a `look` with `sample` at two frames to show sepia, grain and the "PHOTO FINISH" frame.
 
 SCORE: 7.7
+
+## Iteration 51
+**Did**
+- No code change. Verified Judge 50's Next item 1 by playing: Space in `phase:"replay"` already calls `endReplay()` and resumes `race` (or goes to results after a finish replay); it does not start a new race. The judge's second `interact` was a fresh page, so Space did nothing and Q+P landed in the countdown.
+**Saw**
+- Enter then 260 frames: `countdown` ends, the "GO!" cue fires at that point. Held Q+P then W+O gave `horses.2.legs` "1001", "0110" and `x` 2 → 4.4, so the human keys work.
+- Autoplay: plant replay at `raceT` 8.7 (tag "INSTANT REPLAY · 0.25X", "SPACE to skip"); Space returned to `race`. YOU then finished (`finished:true`, `finishT` 12.32, x 61) and phase went to `finishing`, with the Tote showing "WIN".
+- `look`: brightness 45-52%, no console errors. `hills` is still "Never visible". `crowd` has two coplanar faces at z=-7.41 and z=-7.48 (z-fight warning).
+**Next**
+- Remove or offset the duplicate `crowd` faces. Lower the roof or raise the camera pitch so `hills` shows.
+- Draw calls: merge outline hulls per horse, instance `tail`, thin `crowd`.
+- Look at the finish replay (sepia, grain, "PHOTO FINISH" frame) and the results screen, which this session did not reach. Play 2-player.
+**Open**
+- Finish replay, results screen and 2-player were not seen this session. Real Q+P / W+O alternation over a full race was not run, only the first 40 frames of it.
