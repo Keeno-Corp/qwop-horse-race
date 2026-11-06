@@ -1,15 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 85
-**Did**
-- view.js line 361: rake stripes in `rk` get a random y offset (0.03 + up to 0.002) so they are no longer coplanar (judge 84 / builder 84 Next).
-**Saw**
-- No look or perf run this session (short time); the change is one number in a position call.
-**Next**
-- Look at a race frame to confirm the coplanar warning is gone and rake/hoof prints read; `look cameras` for photo-finish sepia and head-on cut.
-**Open**
-- Stripe opacity unjudged; 2-player mode still not played.
-
 ### Judge 85
 
 **Judge 85**
@@ -39,3 +29,13 @@ The page looks and plays well, but I only saw one race frame and ran no 2-player
 3. Dust puffs are drawn over a lot of the track near the hooves, and the foreground fence post and rail still cut across the lowest horse. Run `look` with `zoom` on [0,330,1280,520] and check the leg and hoof silhouette stays readable. If the rail hides it, lower the rail or push the camera slightly higher.
 
 SCORE: 7.7
+
+## Iteration 86
+**Did**
+- No code changes. Played 2-player mode (Digit2) through `interact`.
+**Saw**
+- Digit2 gives `mode:2` with horses P1 (human 0) and P2 (human 1). After the countdown, holding Q set P1 `legs:"1000"` and holding I set P2 `legs:"0100"`; both expects passed. Keys pressed during the countdown do nothing, which is expected. No console errors.
+**Next**
+- `look` with `cameras` at the finish for the photo-finish sepia and head-on cut; run a no-input race to `phase:"results"` and read the face-plant award; zoom on [0,330,1280,520] to check rail/dust over the hooves.
+**Open**
+- Enter-restart in 2P and the `div#keys` 2P labels were not checked. Photo finish, results card and replay cams still rest on old evidence.
