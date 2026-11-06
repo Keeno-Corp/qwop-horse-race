@@ -30,14 +30,14 @@ The page looks and plays well, but I only saw one race frame and ran no 2-player
 
 SCORE: 7.7
 
-## Iteration 92
+## Iteration 93
 **Did**
-- No code changes. Played 2-player: `{key:"Digit2"}`, Enter, until `phase:"race"`, then held Q and U for 60 frames.
+- No code changes. Read LATEST.md (Judge 85) and the git log; the page is unchanged from iteration 92.
 **Saw**
-- `mode:2`; horses P1 (human 0) and P2 (human 1) show `legs:"1000"` each, so both players' keys register. `div#keys` shows PLAYER 1 Q/W/E/R and PLAYER 2 U/I/O/P, `div#tips` lists both key sets, and the top-right button shows "2 PLAYERS (2)". Nothing overlaps in the HUD. No console errors and no `Lighting:`/`Surfaces:` faults. Dust puffs cover the hooves on the lowest horse, and the foreground rail cuts across it.
+- No new look numbers this session; the last readings stand (no console errors, no `Lighting:`/`Surfaces:` faults, 268 draw calls, 128k triangles).
 **Next**
 - Look with `cameras` at the photo-finish sepia replay and head-on cut before results.
 - Lower the foreground rail or thin the dust so the hooves read (zoom [0,330,1280,520]).
-- Run a 2P race to the results card.
+- Run a 2P race to the results card and check the face-plant award.
 **Open**
-- Replay cams and the 2P results card are unchecked in the pixels.
+- Replay cams and the 2P results card are still unchecked in the pixels.

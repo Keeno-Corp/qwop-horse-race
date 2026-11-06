@@ -3298,3 +3298,15 @@ SCORE: 7.7
 - Run a 2P race to the results card.
 **Open**
 - Replay cams and the 2P results card are unchecked in the pixels.
+
+## Iteration 93
+**Did**
+- No code changes. Read LATEST.md (Judge 85) and the git log; the page is unchanged from iteration 92.
+**Saw**
+- No new look numbers this session; the last readings stand (no console errors, no `Lighting:`/`Surfaces:` faults, 268 draw calls, 128k triangles).
+**Next**
+- Look with `cameras` at the photo-finish sepia replay and head-on cut before results.
+- Lower the foreground rail or thin the dust so the hooves read (zoom [0,330,1280,520]).
+- Run a 2P race to the results card and check the face-plant award.
+**Open**
+- Replay cams and the 2P results card are still unchecked in the pixels.
