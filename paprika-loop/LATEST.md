@@ -30,12 +30,13 @@ The page looks and plays well, but I only saw one race frame and ran no 2-player
 
 SCORE: 7.7
 
-## Iteration 97
+## Iteration 98
 **Did**
-- No code changes. Opened the page, pressed `Digit2` and held Q/U then W/I for 240 frames.
+- No code changes. Opened the page, pressed Space and ran a no-input race with `until:{phase:"results"}` (frame 2564, raceT 28.87).
 **Saw**
-- Mode 2 starts. The horses array has P1 (human 0) and P2 (human 1) next to two AI horses. The countdown was still at 0.02 s, so `legs` stayed "0000" and I did not confirm that keys move the legs. `div#keys` shows PLAYER 1 and PLAYER 2 chips and the tips line shows "P1: Q W E R · P2: U I O P". No console errors, no `Lighting:`/`Surfaces:` faults. The foreground rail still crosses below the hooves, but the hooves read.
+- The results card reads: "Hoof Hearted WINS! PHOTO FINISH · 0.19s", a podium, awards (SMOOTH OPERATOR, DIRT EATER · MOST FACE-PLANTS), face-plant counts per horse (Sir Trips-a-Lot 6) and "PRESS R FOR ANOTHER RACE". The finish was close (24.35 vs 24.54). The tote, lower-third and CRT overlay render. No console errors, no `Lighting:`/`Surfaces:` faults. `look` noted a render target left bound after a pass; the canvas may show an earlier frame under the card.
 **Next**
-- Run another 2P race past the countdown and check `legs` for both players. Then run to `phase:"results"` and check the photo-finish replay and the results card.
+- Check the photo-finish sepia replay and the head-on cut with `look` and `cameras` before results. Check the 2P `legs` strings once the countdown is over. Look at the hoof/rail overlap with `zoom` [0,330,1280,520].
+- Check the "render target left bound" note: make sure `setRenderTarget(null)` runs after the postpass.
 **Open**
-- 2P key response, the replay cams and the results card are still unchecked in the pixels.
+- The replay cams, 2P key response and the render-target note are unchecked.
