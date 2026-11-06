@@ -1,11 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 10
-**Did** game.js: closing sprint now runs in 'race' and 'finishing' from leadX>34, range 20 m, gain 1.02, cap 10.5 m/s, skips finished horses. `showResults`: podium only has finishers; running horses read "still racing · X m short", others "DNF". index.html: `#results .box` background alpha 0.92 -> 0.69.
-**Saw** Auto race to results at frame 3359: only Dusty Rhodes finished (24.37 s); no photo finish (Sir Trips 11 m short, Hoof Hearted 24 m, YOU at x 2.4 with legs "0000"). Podium shows one block; box no longer hides the track. `dust` still "Never visible". Page has no console errors. Not done: finish replay picture, auto bot rhythm for YOU, post-line pitch (-0.88), track texture repeat, feel/shake.
-**Next** (1) Make the auto YOU alternate Q+P / W+O so it reaches x 50+ (the AUTO.period branch in `physStep` leaves legs 0000 after a tangle?). (2) Deterministic photo finish: chaser gets pulled to the leader's vx once leadX>45, not only a 1.02 nudge. (3) Level the finished horse (release legs, pitch ~ -0.1), move `dust` in front of `track`, break the 60 px track repeat.
-**Open** The sprint still fails if the chaser is face-planted; the podium with one finisher looks sparse.
-
 ### Judge 10
 
 **Judge 10 verdict**
@@ -76,3 +70,9 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
    - Break the visible repeat in the `track` texture with a second, larger-scale dirt blend.
 
 SCORE: 6.6
+
+## Iteration 11
+**Did** game.js `updateRace` closing sprint replaced: from leadX>34 the best AI chaser (not the leader, x>14) is `rise()`d if down, shifted +x each frame (up to 3.2 m/s extra, 7 if >8 m back) until 0.7 m behind the leader, and its velocity eased to the leader's vx.
+**Saw** Auto run to results at frame 2149: finishT Dusty 21.67, YOU 21.75 (0.08 s, a real photo finish), Sir Trips 24.33; Hoof Hearted 7.5 m short. Podium has 3 finishers. Results via the `kind:"finish"` path (PHOTO FINISH popup, replay) not looked at in a picture. `dust` now on screen, no "Never visible". No console errors besides a three shadowmap warn. Finished horses still `pitch` about -0.9, legs 0000.
+**Next** (1) Look at the finish replay picture (`until phase:"replay"` after 20 s) to check banner and finish-line framing. (2) Level the post-line pitch (~ -0.1, release legs). (3) Human-run proof with alternating Q+P / W+O, `feel` on shake, break the track texture repeat.
+**Open** Teleport-style pull may look like a surge at the line; the auto YOU now finishes because auto bot works this run (seeded), unverified for other seeds.
