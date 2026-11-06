@@ -90,7 +90,7 @@ function assignRoles() {
   spec.forEach((s, i) => {
     const r = { color: COLORS[s.color], colorName: s.color, human: s.human ?? -1, name: s.name || NAMES_AI[s.ai], ai: s.human === undefined ? new AI(rr(0.93, 1.03)) : null };
     roles.push(r);
-    const groups = buildHorseView(r.color, 0, COATS[i]);
+    const groups = buildHorseView(r.color, 0, r.human === 0 ? 0xfbf7ee : r.human === 1 ? 0x2e2833 : COATS[i]);
     groups.forEach((g, k) => { g.name = (r.human === 0 ? 'player' : 'horse' + i) + (k === 0 ? '' : '-' + k); scene.add(g); });
     views.push(groups);
     horses[i].homeZ = LANES[i];

@@ -1,11 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 18
-**Did** game.js line 226: face-plant `shakeAmp` 0.12 → 0.3 (shake was ~0.07 m, near invisible; `feel` showed no camera shake since the follow cam moves). Otherwise verification only.
-**Saw** Via `setState` horses teleport: no-input run reached `phase` "replay" (plant replay) at raceT 8.03: REPLAY banner [38,88,406,173] and "SPACE to skip" visible. Space skipped; teleport of `YOU` to x 58.5 gave finishT 8.07, `finishing` → replay (finish kind) → `results`: "YOU WINS!" box with podium, ranked list, DNF "20 m short", "DIRT EATER · MOST FACE-PLANTS" badge on Sir Trips-a-Lot. "Never visible": dust only (when far from view). Only the shadowmap warning in console. Did not run `perf` or re-look after the shake change.
-**Next** (1) check 2-player cream coat per horse index; (2) track texture variation/lighten (flat brown); (3) results box: the podium "1" card overlaps the horse behind it — consider dimming bg more; verify photo finish with two AI finishing close.
-**Open** Shake amplitude change untested visually. Photo finish (two finishers within 0.3 s) never observed.
-
 ### Judge 18
 
 **Judge 18 verdict**
@@ -62,3 +56,9 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
    - Also dim the results box background so the podium "1" card no longer overlaps the horse behind it.
 
 SCORE: 8.2
+
+## Iteration 19
+**Did** game.js `assignRoles`: the human horses now get their own coats, not the slot coat. P1 `YOU` is near-white 0xfbf7ee and P2 is dark 0x2e2833. The AI horses keep `COATS[i]`. view.js `track`: faces get a lighter stripe every ~1.57 m along z, plus low-frequency noise lightness, to break the flat brown.
+**Saw** `look` at frame 0: no console errors and "Never visible" is dust only. `YOU` (white, `horse2`) separates clearly from the tan, grey and rust neighbours, with the blue ring. Subject brightness 48% against 30% around it. The track stripes are subtle. Did not run `perf`, 2-player mode, the shake sheet or a photo finish.
+**Next** (1) Check the 2-player coats (P2 dark) and the `player-marker-*` colours. (2) Look at the track from the start line with `zoom` to see whether the stripes or noise are enough. (3) Photo finish with two AI at x 58, and the dim behind the results box. Also take a `sheet` of consecutive frames after a face-plant for the `shakeAmp` 0.3 shake.
+**Open** The track change is untested at the start-line zoom. Shake, photo finish and 2P are still unverified.

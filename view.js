@@ -110,7 +110,7 @@ export function buildEnvironment(scene, tex, rng) {
   const tn = tg.toNonIndexed(); tn.computeVertexNormals();
   const tcols = []; const d1 = new THREE.Color(0x9a653d), d2 = new THREE.Color(0x805431);
   const tq = tn.attributes.position;
-  for (let i = 0; i < tq.count; i += 3) { cc.copy(d1).lerp(d2, rng()); for (let k = 0; k < 3; k++) tcols.push(cc.r, cc.g, cc.b); }
+  for (let i = 0; i < tq.count; i += 3) { cc.copy(d1).lerp(d2, rng()); { const z = tq.getZ(i), x = tq.getX(i); if (Math.abs(((z + 4.7) % 1.567)) < 0.14) cc.lerp(new THREE.Color(0xc79a6a), 0.35); cc.offsetHSL(0, 0, (noise2(x * 0.15, z * 0.9) - 0.5) * 0.08); } for (let k = 0; k < 3; k++) tcols.push(cc.r, cc.g, cc.b); }
   tn.setAttribute('color', new THREE.Float32BufferAttribute(tcols, 3));
   const track = new THREE.Mesh(tn, new THREE.MeshLambertMaterial({ vertexColors: true, flatShading: true }));
   track.position.set(45, 0.005, 0); track.receiveShadow = true; track.name = 'track'; scene.add(track);

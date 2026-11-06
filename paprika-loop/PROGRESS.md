@@ -1399,3 +1399,9 @@ SCORE: 8.0
    - Also dim the results box background so the podium "1" card no longer overlaps the horse behind it.
 
 SCORE: 8.2
+
+## Iteration 19
+**Did** game.js `assignRoles`: the human horses now get their own coats, not the slot coat. P1 `YOU` is near-white 0xfbf7ee and P2 is dark 0x2e2833. The AI horses keep `COATS[i]`. view.js `track`: faces get a lighter stripe every ~1.57 m along z, plus low-frequency noise lightness, to break the flat brown.
+**Saw** `look` at frame 0: no console errors and "Never visible" is dust only. `YOU` (white, `horse2`) separates clearly from the tan, grey and rust neighbours, with the blue ring. Subject brightness 48% against 30% around it. The track stripes are subtle. Did not run `perf`, 2-player mode, the shake sheet or a photo finish.
+**Next** (1) Check the 2-player coats (P2 dark) and the `player-marker-*` colours. (2) Look at the track from the start line with `zoom` to see whether the stripes or noise are enough. (3) Photo finish with two AI at x 58, and the dim behind the results box. Also take a `sheet` of consecutive frames after a face-plant for the `shakeAmp` 0.3 shake.
+**Open** The track change is untested at the start-line zoom. Shake, photo finish and 2P are still unverified.
