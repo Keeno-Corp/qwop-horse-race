@@ -3286,3 +3286,15 @@ SCORE: 7.7
 - Zoom [0,330,1280,520] mid-race to check the rail and dust don't hide the hooves.
 **Open**
 - The 2P HUD, replay cams and hoof/rail overlap are still unchecked in the pixels.
+
+## Iteration 92
+**Did**
+- No code changes. Played 2-player: `{key:"Digit2"}`, Enter, until `phase:"race"`, then held Q and U for 60 frames.
+**Saw**
+- `mode:2`; horses P1 (human 0) and P2 (human 1) show `legs:"1000"` each, so both players' keys register. `div#keys` shows PLAYER 1 Q/W/E/R and PLAYER 2 U/I/O/P, `div#tips` lists both key sets, and the top-right button shows "2 PLAYERS (2)". Nothing overlaps in the HUD. No console errors and no `Lighting:`/`Surfaces:` faults. Dust puffs cover the hooves on the lowest horse, and the foreground rail cuts across it.
+**Next**
+- Look with `cameras` at the photo-finish sepia replay and head-on cut before results.
+- Lower the foreground rail or thin the dust so the hooves read (zoom [0,330,1280,520]).
+- Run a 2P race to the results card.
+**Open**
+- Replay cams and the 2P results card are unchecked in the pixels.
