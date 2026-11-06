@@ -2401,3 +2401,14 @@ SCORE: 7.6
 - Stand legibility (`crowd`, `grandstand`, `hills`, flat yellow ground); sepia photo-finish replay and head-on cut sheet; `merged` z-fight; render-target-left-bound warning.
 **Open**
 - AI horses fall in the first 5 s and often fail to auto-right (pitch 3.12 upside down, DNF).
+
+## Iteration 67
+**Did**
+- `game.js` race camera: position y `2.6` -> `2.0 + (dist-14.5)*0.1`, look target y `1.35` -> `2.7` (tilts the view up so the stand roof and the "GRAND STAND" sign come into frame).
+**Saw**
+- `look` at raceT 2.4 s: the "GRAND STAND" sign and roof slab now show in the upper half; horses still full-size and centred; no console errors. `crowd`, `hills` (0.13%), `posts`, `merged` still listed as never visible/too small; ground still flat yellow-olive with big shadow polygons. Not run: `perf`, replay sheet, finish run.
+**Next**
+- Make `crowd` visible under the stand roof (move it or its z toward the camera, or raise the stand front); give `hills` a real treeline in the top third; grass-to-dirt ground gradient and smaller shadow polygons.
+- Pace: a clean run is ~14 s; add fatigue/torque loss so it takes 25–40 s. Sepia photo-finish replay and head-on cut `look` sheet; `merged` z-fight.
+**Open**
+- The render-target-left-bound warning looks like a tool artefact: `broadcast.js` ends with `setRenderTarget(null)`. Camera tilt not checked in the head-on or results cams or with the horses far ahead.

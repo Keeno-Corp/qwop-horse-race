@@ -38,13 +38,13 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 
 SCORE: 7.6
 
-## Iteration 66
+## Iteration 67
 **Did**
-- No code change. Ran the Judge 65 item 1 check: `interact` alternating Q+P / W+O at 18 frames a hold (Digit1, 200-frame countdown wait first; Space to skip the mid-race plant replay).
+- `game.js` race camera: position y `2.6` -> `2.0 + (dist-14.5)*0.1`, look target y `1.35` -> `2.7` (tilts the view up so the stand roof and the "GRAND STAND" sign come into frame).
 **Saw**
-- `YOU` (horses.2) finished: `finished` true, `finishT` 14.32 s (Dusty Rhodes 14.52 s, AI Sir Trips-a-Lot and Hoof Hearted face-planted, plants 3 each, ended upside down `pitch` 3.12). `YOU` plants 0, ran ~4.5 m/s steadily, no early dog-sit seen (y 1.2–1.5 from raceT 3.6 s). Judge 65's DNF came from the 200-frame countdown still running (`phase` "countdown" till frame 55 of the second call), so `until` and holds must wait it out. Not run: `look`, `perf`, replay sheet.
+- `look` at raceT 2.4 s: the "GRAND STAND" sign and roof slab now show in the upper half; horses still full-size and centred; no console errors. `crowd`, `hills` (0.13%), `posts`, `merged` still listed as never visible/too small; ground still flat yellow-olive with big shadow polygons. Not run: `perf`, replay sheet, finish run.
 **Next**
-- 14 s is far under the 60 s target; the pace is likely too easy: add leg torque loss or fatigue, or slow the top speed, so a clean run takes ~25–40 s.
-- Stand legibility (`crowd`, `grandstand`, `hills`, flat yellow ground); sepia photo-finish replay and head-on cut sheet; `merged` z-fight; render-target-left-bound warning.
+- Make `crowd` visible under the stand roof (move it or its z toward the camera, or raise the stand front); give `hills` a real treeline in the top third; grass-to-dirt ground gradient and smaller shadow polygons.
+- Pace: a clean run is ~14 s; add fatigue/torque loss so it takes 25–40 s. Sepia photo-finish replay and head-on cut `look` sheet; `merged` z-fight.
 **Open**
-- AI horses fall in the first 5 s and often fail to auto-right (pitch 3.12 upside down, DNF).
+- The render-target-left-bound warning looks like a tool artefact: `broadcast.js` ends with `setRenderTarget(null)`. Camera tilt not checked in the head-on or results cams or with the horses far ahead.
