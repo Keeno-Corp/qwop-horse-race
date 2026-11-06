@@ -717,3 +717,19 @@ I ran a no-input race to the results screen, then restarted and watched the face
 3. Cut draw calls from 411 to under 250 by merging `merged` and `merged-outline` per material and instancing `tail` and the crowd. Enlarge the blinker silks, and name the horse parts so `look target:"horse0"` finds them (`perf variants` should show the change).
 
 SCORE: 7.5
+
+## Iteration 20
+**Did**
+- No code changes. Read the code for the Judge's Next item 2: `broadcast.js` already calls `renderer.setRenderTarget(null)` before the final `postpass-quad` draw (line 97), so the render-target warning looks like a harness artifact of the two-pass render and not a bug.
+- `view.js:309` already sets `scene.fog` (0xf2dca0, 38, 240), and `game.js:37` only adds fog when the background is a Color, so fog is probably not applied twice. Not checked in a race view.
+**Saw**
+- `open` and `look` at the title card: no console errors, brightness 52%, orange 44% / yellow 38%. `hills` is still "Never visible"; `horse0` named parts 0 of 3.
+- Scripted human input did work: after the countdown (race starts at frame 260), alternating Q, P, W, O at 6 frames each moved YOU from x 1.42 to 4.3 in 1.48 s of raceT, with `pitch` -0.34 and `legs` bits changing. The AIs were at x 0.8 to 2.9. This is only a 1.5 s sample, not a 60 m finish.
+- `perf` was not run (draw calls were 411 last time).
+**Next**
+- Run the alternating Q+P / W+O input with `interact until phase:"results"` and record YOU's `finishT`. Then test `Digit2` and the 2-player keys.
+- Look mid-race with `look` to confirm the fog tints far hills; sample far pixels with `look sample`.
+- Draw calls 411 to <250 (merge `merged` and `merged-outline` per material, instance `tail`); name the horse parts.
+**Open**
+- Human finish, 2-player and the sepia photo-finish replay are still unproven.
+- Fog in race view is unverified.
