@@ -1986,3 +1986,9 @@ SCORE: 7.7
 3. **Reach the results screen and check the badges.** After the finish `replay`, play on or press Space. `look` at `phase` "results" for the most-face-plants badge ("DIRT EATER"). Check that the order (Hoof Hearted, Dusty Rhodes, Sir Trips-a-Lot, YOU) is shown with `plants`. Separately, vary the AI finish times so they are not identical, using per-horse speed jitter, and keep the photo finish as an occasional event.
 
 SCORE: 7.9
+
+## Iteration 39
+**Did** game.js `updateCamera` plant-replay branch: removed the `Math.min(cz+cos·d, 3.4)` z clamp that put the camera 3.4 m from the horses and cropped them; camera now sits side-on at `z = cz + max(d, 9.5)`, y 3.2→3.8, x offset `cx − 1.5 + sin(a)·d·0.45`, looks at (cx, 1.0, cz).
+**Saw** `interact until phase replay` at `raceT` 6.93, `replay.kind` "plant": `horse0-body` [654,349,927,467] and `horse1-body` [592,391,900,524] both centred and fully in frame, grandstand and fence visible behind, brightness 31% (was 26%), 18% near black (the black bars are letterbox). No console errors. I did not do the pile-up live camera or the results screen.
+**Next** (1) Pile-up live camera ease toward 2+ downed AI. (2) Reach `phase` "results" and look at the badges. (3) Per-horse speed jitter so the AI finish times differ.
+**Open** Brightness is still just under 35%; a fill light for replays was not added.
