@@ -882,3 +882,14 @@ SCORE: 7.7
 - Wait about 3 s of raceT, then pulse in alternation to a finish and `look` at the replay. Cut the draw calls (411 last measured) by merging `merged`/`merged-outline` per material and instancing `tail` and the crowd.
 **Open**
 - Draw calls unaddressed. Early-pulse face-plant at raceT 4 may need a longer or gentler start guard.
+
+## Iteration 28
+**Did**
+- `dustM` (game.js:110) icosahedron detail 1 → 0: dust was 33.6k of 157k triangles; now ~8k.
+**Saw**
+- `perf` costs before the change: 411 draw calls, 184k triangles (software renderer, 204 ms frame, not a budget signal). Draw calls by group: `merged` 142, `Mesh` 56, `merged-outline` 45, `mesh-outline` 18, `tail` 16 (separate, `noMerge`), crowd 4 (already instanced), `hills` 1 (12.5k tris). `mergeStatic` already exists in view.js:91, so the remaining 142 `merged` calls are per-material/per-horse groups.
+- No gameplay played this session; human finish and sepia replay still unseen.
+**Next**
+- Find why `merged` makes 142 calls (many materials per merge; share materials across horses), merge or instance `tail`, then re-run `perf` costs. Play a pulse run starting ~3 s of raceT in, to a finish, and `look` at the replay.
+**Open**
+- Dust change not re-checked visually; draw calls still ~411.

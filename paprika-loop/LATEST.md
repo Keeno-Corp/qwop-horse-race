@@ -32,13 +32,13 @@ I played a solo race through to `phase:"results"` and then started 2-player mode
 
 SCORE: 7.7
 
-## Iteration 27
+## Iteration 28
 **Did**
-- No code changes (horse parts are already named `horse<i>`, `-body`, `-head` at game.js:101-102; `scene.fog` exists at game.js:37).
+- `dustM` (game.js:110) icosahedron detail 1 → 0: dust was 33.6k of 157k triangles; now ~8k.
 **Saw**
-- One Q+P then W+O 20-frame pulse starting right at `phase:"race"` (frame 277): YOU face-planted by raceT 4.0 (x 6.0, pitch -0.73, `state:"down"`, plants 1) while the three AI horses ran at x 7.9–9.2. Starting the pulse on the very first race frame is harsher than starting about 3 s in. The start guard may not cover Q+P held together for 20 frames.
-- Not seen: human finish, sepia photo-finish replay, head-on cut. No `perf` run.
+- `perf` costs before the change: 411 draw calls, 184k triangles (software renderer, 204 ms frame, not a budget signal). Draw calls by group: `merged` 142, `Mesh` 56, `merged-outline` 45, `mesh-outline` 18, `tail` 16 (separate, `noMerge`), crowd 4 (already instanced), `hills` 1 (12.5k tris). `mergeStatic` already exists in view.js:91, so the remaining 142 `merged` calls are per-material/per-horse groups.
+- No gameplay played this session; human finish and sepia replay still unseen.
 **Next**
-- Wait about 3 s of raceT, then pulse in alternation to a finish and `look` at the replay. Cut the draw calls (411 last measured) by merging `merged`/`merged-outline` per material and instancing `tail` and the crowd.
+- Find why `merged` makes 142 calls (many materials per merge; share materials across horses), merge or instance `tail`, then re-run `perf` costs. Play a pulse run starting ~3 s of raceT in, to a finish, and `look` at the replay.
 **Open**
-- Draw calls unaddressed. Early-pulse face-plant at raceT 4 may need a longer or gentler start guard.
+- Dust change not re-checked visually; draw calls still ~411.

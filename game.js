@@ -107,7 +107,7 @@ function assignRoles() {
 
 // ---------- dust chunks ----------
 const NDUST = 420;
-const dustM = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(0.15, 1), new THREE.MeshToonMaterial({ color: 0xffffff, gradientMap: RAMP, transparent: true, opacity: 0.92 }), NDUST);
+const dustM = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(0.15, 0), new THREE.MeshToonMaterial({ color: 0xffffff, gradientMap: RAMP, transparent: true, opacity: 0.92 }), NDUST);
 dustM.castShadow = false; dustM.frustumCulled = false; dustM.name = 'dust'; dustM.renderOrder = 5; dustM.material.polygonOffset = true; dustM.material.polygonOffsetFactor = -2; scene.add(dustM);
 const dust = Array.from({ length: NDUST }, () => ({ life: 0, p: new THREE.Vector3(), v: new THREE.Vector3(), s: 1, r: new THREE.Euler() }));
 { const c = new THREE.Color(); dust.forEach((d, i) => dustM.setColorAt(i, c.set([0xe9c88e, 0xd9ac6a, 0xf3dfae, 0xc99a58][i % 4]))); }
