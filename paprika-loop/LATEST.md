@@ -1,47 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-### Judge 70
-
-**Judge 70: scores**
-
-1. **Plays as DESIGN.md says: 7.5.** I held Q+P then W+O at 18 frames a hold, starting at the "go" frame after the Digit1 countdown. `horses.2.x` went 2.08 → 13.74 in 144 frames, with pitch around -0.15, so a human does advance. I then ran a long alternation that reached x=43.6 at raceT 13 s before YOU's second face-plant (`state` "down", `pitch` -0.89). `horses.2.finished` stayed false, so no `finishT` is proven. That is a 15th session with no proven human finish.
-2. **Rapier ragdolls, face-plant and auto-right: 8.5.** The `horses` state moves through `run` and `down`. The tote's `plants` counters read 2–3 by 13 s. The replay cell shows a crumpled horse with its legs splayed.
-3. **Replay and photo-finish look: 7.5.** The "INSTANT REPLAY · 0.25X" tag, "SPACE to skip" and the `replay` state (`kind` "plant", `rate` 0.25) all work, and Space returned the page to `phase` "race". The plant replay is in colour with a visible CRT fringe. I did not see the sepia photo-finish frame this session.
-4. **Photo finish and tangled AI collapse within a minute, no input: 8.** Judge 69 saw PHOTO for horses 1 and 4 at 25.75 s. This session I only ran with input, so I did not re-check it.
-5. **Results with most face-plants award: 7.** The tote's "FACE-PLANTS n" counters and a "FACE-PLANT! YOU lost control of that face" pop are live. I did not reach the results card.
-6. **Looks as LOOK.md says: 8.** The toon shading, outlines, golden light and CRT pass hold. The "GRAND STAND" sign now reads in full, and the benches of crowd, the ad boards and the "10" and "20" boards read as a 70s broadcast. The `look` sample at (300, 560), (900, 600) and (600, 120) gave three different colours (#f99b31, #ab6d25, #d2432a). In the head-on picture the ground is still a flat orange slab with polygon shadows, and the `hills` treeline is "Never visible".
-7. **`__game` convention, static, no network: 9.** `__game` returns its keys and assets total 0.32 MB with vendored fonts. I saw no console errors.
-8. **Horses match CHARACTERS.md: 8.** The red diamonds, blue polka dots, orange "4" cloth with stripes, white socks, dark hooves, an eye and blinkers read. The hooves are still small.
-9. **Broadcast overlay: 9.** The `tote` shows silks and live odds (YOU went 1-2 → 10-1). The LIVE bug, the 3:58 and 3:59 PM channel-7 clock, the race-time readout, the progress bar and the Hank "Hoofbeat" Pruitt lower-third all show.
-10. **Camera: 8.5.** The side-tracking telephoto, the replay cam and the head-on cut (the race at 13 s, the horse in the lane with the tower at right) all showed.
-11. **Learnable controls: 6.5.** Alternating pairs moves YOU about 5 m/s, so a 60 m finish in under 60 s looks reachable. The long alternation still ended in a face-plant at x=43.6, which is what mistimed keys are meant to do. A clean finish is not shown.
-12. **Local 2-player, discoverable: 8.** The "2 PLAYERS (2)" button and the Q W E R | U I O P key panel show. I did not play it.
-13. **Style judged as hard as gameplay: 8.** The HUD, set and horses cohere as a 70s broadcast. The flat ground and bare horizon in the head-on cut are the weak part.
-
-**Faults: 6.5.**
-- `look` flags `crowd` with two faces in one plane (z = -7.41 and -7.48), which flicker. Judge 69's `crowd` entry had no such line.
-- `look-3` reports that the last frame drew only into a render target, so the canvas may be showing an earlier frame (a missing `setRenderTarget(null)` after a pass).
-- `hills`, `lake`, `posts`, `crowd`, `merged` and `basic-merged` are still "Never visible".
-- `perf` read 129 ms a frame on SwiftShader (266 draw calls, 126k triangles). The host load was 2.2 on 8 cores, so this is not a signal.
-- I saw no console errors.
-
-**Next:**
-1. **Prove a human finish (asked again, 15 sessions).**
-   - Run the 18-frame Q+P / W+O alternation in one `interact` with `until` `{"horses.2.finished": true}` and `max` 3600, including a Space step to skip any replay.
-   - Done when `horses.2.finishT` is under 60.
-   - If YOU falls over at about 40 m, add a damped torso-pitch spring or a faster auto-right in `state` "down", so a steady alternation survives.
-2. **Fix the ground and horizon.**
-   - Give the `track` a dirt-to-grass gradient and grain, and soften the shadow polygons.
-   - Raise or recompute `hills` and add a treeline so it enters the frustum (compute `boundingSphere` or set `frustumCulled = false`). The same fix applies to `crowd`, `merged` and `lake`.
-   - Done when `look` at the head-on cut shows hills and trees in the top third, and `hills` leaves the "Never visible" list.
-3. **Fix the `crowd` z-fighting and the render-target line.**
-   - Move one of the two coplanar `crowd` faces about 0.01 away at z ≈ -7.41 and -7.48, or delete the hidden one.
-   - Make the last pass call `setRenderTarget(null)` and draw to the screen.
-   - Done when `look` shows neither the `Surfaces:` line nor the "Last frame" line.
-   - After that, `look` the sepia photo-finish frame and the results card with the most-face-plants award.
-
-SCORE: 7.8
-
 ## Iteration 71
 **Did**
 - `view.js` `stand()`: step boxes now depth `1.1 + 0.02*r` so adjacent rows' faces are no longer coplanar (the `crowd` z-fight line at z≈-7.41/-7.48).
@@ -52,3 +10,46 @@ SCORE: 7.8
 - Ground gradient/grain, hills treeline (`frustumCulled=false`), results card and sepia photo-finish look.
 **Open**
 - Human finish still unproven; z-fight fix unverified in `look`.
+
+### Judge 71
+
+**Judge 71: scores**
+
+1. **Plays as DESIGN.md says: 7.** In the first run I started a fresh race with the 18-frame Q+P / W+O alternation after `phase` "race". `horses.2.x` went 2.0 → 11.71 in 428 frames, with `pitch` between -0.19 and +0.03 and `plants` at 0, so the controls work. My second `interact` call, a long alternation meant to reach `finished`, did not run in that race. It opened on `countdown` 0.93 and `horses.2.x` 2.1, with "GRAND STAND" and Walt Dunmore's opening line showing. Something restarted the race between the two calls, or the first call's R and Digit1 steps did. I could not tell which, and it cost the finish proof. `horses.2.finishT` has still never been seen, in the 16th session with no proven human finish.
+2. **Rapier ragdolls, face-plant and auto-right: 8.** `horses` states and the tote's "FACE-PLANTS n" counters work. The horses show a visible lean (`pitch` -0.19). I saw no face-plant this session.
+3. **Replay and photo-finish look: 7.** The 0.25x replay and Space skip were confirmed in session 70. I have not looked at the sepia photo-finish frame, and this session did not either.
+4. **Photo finish and tangled AI collapse, no input: 7.5.** Session 69 saw PHOTO at 25.75 s. I did not re-run it.
+5. **Results with most face-plants award: 6.5.** Nobody has looked at the results card in several sessions.
+6. **Looks as LOOK.md says: 8.** The toon shading with outlines, golden light, CRT pass, "GRAND STAND" sign, `crowd` benches, "10" board and "GOLDEN HOOF OATS" ad boards read as a 70s broadcast. The `crowd` z-fighting `Surfaces:` line is gone from `look`. The ground is still a flat orange slab, and `hills` is "Never visible" although it is listed "in view". The horizon is a flat green band.
+7. **`__game` convention, static, no network: 9.** `__game` returns its keys. Assets total 0.32 MB. I saw no console errors.
+8. **Horses match CHARACTERS.md: 8.** Diamonds, blue polka dots, a stripes cloth and a numbered "4" cloth read. The white socks, dark hooves, eye and blinkers show. The legs are still stubby against the "long wobbly" brief.
+9. **Broadcast overlay: 9.** The tote with silks and live odds (YOU went 2-1 → 5-2), the LIVE bug, the 3:58 PM channel "7" clock, the progress bar and the lower-third with two commentators (Hank "Hoofbeat" Pruitt, Walt Dunmore) all show. The "GO!" and "1" countdown cards are big and fit the style.
+10. **Camera: 8.5.** The side-tracking telephoto held in both pictures. I did not cut to the head-on or replay cams this session.
+11. **Learnable controls: 6.5.** The first 7 s alternation moved YOU 9.7 m, about 1.4 m/s, with legs `"0000"` at the end of the run. That pace would give a 60 m finish in about 43 s only if the horse never falls, and nothing has shown that yet.
+12. **Local 2-player, discoverable: 8.** The "2 PLAYERS (2)" button and the key panel show. I did not play it.
+13. **Style judged as hard as gameplay: 8.** The picture coheres. The flat ground and bare horizon are the weak part.
+
+**Faults: 7.**
+- `look` has no `Surfaces:` fault line for `crowd` any more, so the z-fight fix worked.
+- `hills`, `lake`, `posts`, `crowd`, `merged` and `basic-merged` are still "Never visible".
+- `perf` read 90.9 ms a frame on SwiftShader (265 draw calls, 126k triangles, host load 2.5), so it is not a signal.
+- The `div#crt` overlay covers 100% of the canvas. That is intended.
+- I saw no console errors.
+
+**Next:**
+1. **Prove a human finish (asked again, 16 sessions).**
+   - Open a fresh page. Do not press R or Digit1 inside the steps, because the race restarted under my second `interact` call.
+   - Run one `interact` with `until` `{"phase": "race"}` first. Then run the alternation as repeated 18-frame Q+P / W+O pairs and `until` `{"horses.2.finished": true}` with `max` 3600, with a Space step to skip any replay.
+   - Done when `horses.2.finishT` is under 60.
+   - If YOU falls near 40 m, add a damped torso-pitch spring or a faster auto-right in `state` "down".
+   - Find out what restarts the race between two `interact` calls, if anything does. A race that resets on its own would explain several sessions without a finish.
+2. **Fix the ground and horizon.**
+   - Give `track` a dirt-to-grass gradient with grain, and soften the shadow polygons.
+   - Set `frustumCulled = false` on `hills` and add a treeline, with the same change for `crowd`, `merged`, `lake` and `posts`.
+   - Done when `look` lists `hills` among the objects on screen and the horizon shows hills and trees.
+3. **Look at the untouched Must-haves: the sepia photo-finish frame and the results card.**
+   - With a `look` `sheet` of two moments, one with `state` set near the finish line for the photo-finish replay and one at the results.
+   - Done when the sheet shows the sepia grain and the "PHOTO FINISH" frame, and a "most face-plants" award line on the results card.
+   - Then lengthen the legs of the horses (long, wobbly legs) so they match `refs/sheets/horse.png`.
+
+SCORE: 7.7
