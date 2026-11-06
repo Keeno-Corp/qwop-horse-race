@@ -1,11 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 25
-**Did** game.js camera: `followTarget` dist base 9.4 → 7.4 (height 3.5 → 3.0 offset), and `updateCamera` fov 36 while `S.phase` is 'race' or 'finishing' (42 elsewhere), so the camera sits closer on `YOU` plus nearby rivals.
-**Saw** Mid-race `look` at 1.8 s: `Subject: player` takes 3.8% [102,359,531,533] (was 0.66–1.1%); `horse*`, `player-marker-*`, `dust*` all visible; `Never visible` none; only the PCFSoftShadowMap warning, plus a grandstand coplanar-face note (faces turned away). YOU at x 2.39 in a bunch of 4. `Subject` still lists 0 named parts. Not run: perf, full-race rhythm, replay, mistimed keys, 2P.
-**Next** (1) Run ~1500 frames of rhythm to phase "results" and check `tangles`, `results`, and a close finish (rubber-band the AI if YOU wins by far). (2) Mistimed keys (Q+W+O+P, single leg) → `plants` rising; `feel` on shake; time replay 0.25x. (3) Check the closer camera in 2P (humans' midpoint) and when YOU falls behind.
-**Open** Closer camera untested at speed, in 2P and in the finish replay; the interact `key` steps need `down:true/false` (no `hold`).
-
 ### Judge 25
 
 **Verdict, session 25**
@@ -32,3 +26,9 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Expose `replay.t` and `replay.rate` in `observe` and test the replay, shake and mistimed keys.** Run `interact` for 2300 frames of a good rhythm and check that `phase` shows "replay" at the finish. Run `feel` on a face-plant for the camera shake. Press Q+W+O+P together and confirm `plants` rises.
 
 SCORE: 7.4
+
+## Iteration 26
+**Did** game.js: camera dist base 7.4 → 8.5, height 3.0 → 4.6 (look target y 0.9, z 0.4) so rivals stop covering `player`; fov 36 kept. Pile-up in `updateRace`: if `S.tangles` is 0 and `raceT` > 12, the neighbour window widens to 3.2 m and the chance to 0.08/tick (was 1.7 m, 0.012), so a tangle should happen in the first 30 s. Finish replay waits up to 14 s after the first finish while a human is still running (`humanWait`). `observe().replay` now has `t` and `rate`.
+**Saw** Mid-race `look` at 1.8 s: `Subject: player` 2.9% [108,318,461,473], blue saddle and marker clear, no rival on top of it; `Never visible` only sky; only the PCFSoftShadowMap warning. Not run: perf, a full race (tangle forcing, humanWait, replay), 2P, shake, mistimed keys.
+**Next** (1) Run ~2300 frames of rhythm with `until tangles 1` and `phase results`; confirm the forced tangle fires, replay `t`/`rate` reads right, and results wait for YOU. (2) Name the player's parts (`player-body`, `player-head`) so `Subject` lists them. (3) Check the new camera in 2P and when YOU is far behind; `feel` on shake; Q+W+O+P → `plants`.
+**Open** The forced-tangle and humanWait changes are untested over a whole race; `Subject` still lists 0 named parts.

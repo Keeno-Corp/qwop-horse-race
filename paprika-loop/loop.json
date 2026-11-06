@@ -266,6 +266,17 @@
       "score": 7.9,
       "judgeTurns": 10,
       "judgeTokens": 220185
+    },
+    {
+      "n": 25,
+      "turns": 10,
+      "tokens": 238263,
+      "costUsd": 0.24734640000000002,
+      "minutes": 1.5,
+      "commit": "bf114ad",
+      "score": 7.4,
+      "judgeTurns": 9,
+      "judgeTokens": 177336
     }
   ],
   "best": {

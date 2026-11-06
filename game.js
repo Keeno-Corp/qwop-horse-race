@@ -302,7 +302,7 @@ function updateRace(dt) {
         const a = horses[i], b = horses[i + 1];
         if (a.state !== 'run' || b.state !== 'run' || a.guard > 0 || b.guard > 0) continue;
         const pa = a.pos(), pb = b.pos();
-        if (Math.abs(pa.x - pb.x) < 1.7 && pa.x > 6 && pa.x < FINISH_X - 14 && (roles[i].ai || roles[i + 1].ai) && rng() < 0.012) {
+        if (Math.abs(pa.x - pb.x) < (S.tangles === 0 && S.raceT > 12 ? 3.2 : 1.7) && pa.x > 6 && pa.x < FINISH_X - 14 && (roles[i].ai || roles[i + 1].ai) && rng() < (S.tangles === 0 && S.raceT > 12 ? 0.08 : 0.012)) {
           S.tangles++; S.lastTangle = S.raceT;
           const first = roles[i].ai ? a : b, other = first === a ? b : a;
           first.collapse('FACE-PLANT!'); onPlant(first, 'FACE-PLANT!');
@@ -316,7 +316,8 @@ function updateRace(dt) {
     }
     if (S.phase === 'finishing') {
       const since = S.raceT - S.firstFinish;
-      if (since > 6.5 || horses.every((h) => h.finished || h.state !== 'run' && since > 3.5)) startFinishReplay();
+      const humanWait = roles.some((r, i) => r.human >= 0 && !horses[i].finished && horses[i].state === 'run') && since < 14;
+      if ((since > 6.5 && !humanWait) || horses.every((h) => h.finished || h.state !== 'run' && since > 3.5)) startFinishReplay();
     } else if (S.raceT > 150) startFinishReplay();
   }
 }
@@ -372,7 +373,7 @@ function followTarget() {
   fx = Math.min(fx, FINISH_X + 2);
   const far = Math.min(Math.abs(leader - hx), 26);
   const asp = Math.min(1, camera.aspect / 1.5);
-  const dist = (7.4 + clamp(far * 0.3, 0, 10)) / Math.pow(asp, 0.7);
+  const dist = (8.5 + clamp(far * 0.3, 0, 10)) / Math.pow(asp, 0.7);
   return { fx, dist };
 }
 function updateCamera(dt) {
@@ -397,7 +398,7 @@ function updateCamera(dt) {
       tp.set(-2.5 + (fx - 0.4 + 2.5) * e, 2.6 + 0.9 * e, 7.2 - (7.2 - dist) * e); tl.set(1.5 + (fx + 1.8 - 1.5) * e, 1.2, 0);
       camPos.copy(tp); camLook.copy(tl);
     } else {
-      tp.set(fx - 0.4, 3.0 + (dist - 7.4) * 0.15, dist); tl.set(fx + 1.8, 1.25, 0);
+      tp.set(fx - 0.4, 4.6 + (dist - 8.5) * 0.15, dist); tl.set(fx + 1.8, 0.9, 0.4);
       camPos.lerp(tp, 1 - Math.exp(-dt * 3.5)); camLook.lerp(tl, 1 - Math.exp(-dt * 5));
     }
   }
@@ -531,7 +532,7 @@ window.__game = {
     keys: { solo: { KeyQ: 'front-left leg (hold)', KeyW: 'front-right leg', KeyO: 'back-left leg', KeyP: 'back-right leg', KeyR: 'restart', Digit2: 'two players', Digit1: 'solo', Space: 'skip replay' }, twoPlayer: { p1: 'Q W E R', p2: 'U I O P', Enter: 'restart' } },
   }),
   observe: () => ({
-    phase: S.phase, mode, raceT: r2(S.raceT), countdown: r2(Math.max(0, S.countdown)), replay: S.replay ? { kind: S.replay.kind, pos: r2(S.replay.pos), of: S.replay.end } : null,
+    phase: S.phase, mode, raceT: r2(S.raceT), countdown: r2(Math.max(0, S.countdown)), replay: S.replay ? { kind: S.replay.kind, pos: r2(S.replay.pos), t: r2(S.replay.pos - S.replay.start), of: S.replay.end, rate: S.replay.kind === 'finish' ? 0.6 : 0.25 } : null,
     pendingReplay: !!S.pending, tangles: S.tangles, results: S.results ? S.results.order.map((i) => roles[i].name) : null,
     horses: horses.map((h, i) => ({ name: roles[i].name, human: roles[i].human, x: r2(h.torso.body.translation().x), y: r2(h.torso.body.translation().y), z: r2(h.torso.body.translation().z), pitch: r2(h.pitch()), state: h.state, plants: h.plants, finished: h.finished, finishT: h.finishT && r2(h.finishT), legs: h.held.map((v) => (v ? 1 : 0)).join('') })),
   }),
