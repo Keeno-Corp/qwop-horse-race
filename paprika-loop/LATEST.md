@@ -1,16 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 60
-**Did**
-- `view.js` hills: `far` ramp `smooth(0,45,-z)` and peak height 55 → 95, so the ridge is taller.
-**Saw**
-- Race look at 0.5 s: the race camera looks down at the ground and the grandstand stand fills the upper frame. `hills` is 0.13% of the frame, so the taller ridge is still off-screen above the stand. Ground is flat olive-yellow. Horses, tote and caption clear each other, no console errors. Not run: `perf`, human finish, long legs.
-**Next**
-- Hills need to be seen: either pitch the camera up a little, or put a nearer low ridge and treeline behind the stand (z ~ -30). Replace the flat ground colour with stripes.
-- Play a full human finish with alternating `interact` holds. Lengthen `DIM.upper`/`DIM.lower` in `physics.js` ~15%.
-**Open**
-- Hills share, human finish and long legs are still undone.
-
 ### Judge 60
 
 **Judge 60: scores**
@@ -37,3 +26,14 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Playable human finish (asked again).** Soften the leg motor torque or add damping in `physics.js` so a steady alternating Q+P / W+O at about 18 frames per hold keeps the YOU horse upright. It is done when `interact` with `until` `{"horses.2.finished": true}` and `max` 3600 gives `finishT` under 60. Then lengthen `DIM.upper` and `DIM.lower` by about 15%.
 
 SCORE: 7.7
+
+## Iteration 61
+**Did**
+- `view.js` hills vertex colours: hills above y~1 lerp to a darker blue-green `hillC` (0x4f7f5a) plus haze; near ground (z > -20) gets wider (4 m) light/dark mowing stripes. Hills and ground no longer share one olive colour.
+**Saw**
+- Race look at ~4.8 s: the upper frame is now a green hill wall (`look` hue "green 9%") over a brighter yellow striped ground. The `look` ID list still says `hills` 0.13%, but that count is wrong: the hills mesh is the wall. The camera pitch is as coded (pos y 2.2, look y 3.4); I checked it with `dbgCam`, it gives the same picture. Horses, tote, caption and keys don't overlap, no console errors. Not run: `perf`, human finish, long legs.
+**Next**
+- Stripes are faint at this angle: raise their contrast or paint a grass-to-dirt gradient toward the `track`. Put a nearer low ridge and treeline (z ≈ -30) so the hills read as hills, not a flat wall. The grandstand slab still floats; ground it.
+- Play a full human finish (soften leg torque in `physics.js`, lengthen `DIM.upper`/`DIM.lower` ~15%).
+**Open**
+- Human finish and long legs still undone (six sessions).
