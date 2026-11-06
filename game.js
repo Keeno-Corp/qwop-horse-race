@@ -339,7 +339,7 @@ function startFinishReplay() {
 }
 function startPlantReplay() {
   const hi = S.pending.horse; S.pending = null;
-  const end = ringN - 1, start = Math.max(Math.max(0, ringN - RING + 2), end - 110);
+  const end = ringN - 1, start = Math.max(Math.max(0, ringN - RING + 2), end - 75);
   const pr = S.pair && S.pair.includes(hi) ? S.pair : null;
   S.replay = { kind: 'plant', start, end, pos: start, subject: hi, pair: pr, snap: true, back: S.phase };
   S.prevPhase = S.phase; S.phase = 'replay'; for (const p of S.popups) p.el.remove(); S.popups = []; setReplayUi(true);
@@ -392,7 +392,7 @@ function updateCamera(dt) {
       const prog = (rp.pos - rp.start) / Math.max(1, rp.end - rp.start), s = subjectAt(rp.pos, rp.subject), a = 0.35 + prog * 1.1;
       let cx = s.x, cz = s.z, d = 5.5;
       if (rp.pair) { const s2 = subjectAt(rp.pos, rp.pair[0] === rp.subject ? rp.pair[1] : rp.pair[0]); cx = (s.x + s2.x) / 2; cz = (s.z + s2.z) / 2; d = 6.5 + Math.abs(s.x - s2.x) * 0.5; }
-      tp.set(cx + Math.sin(a) * d, 1.3 + prog * 1.2, cz + Math.cos(a) * d); tl.set(cx, 0.8, cz); fov = 38;
+      tp.set(cx + Math.sin(a) * d, 2.0 + prog * 1.0, Math.min(cz + Math.cos(a) * d, 3.4)); tl.set(cx, 0.8, cz); fov = 38;
     }
     if (rp.snap) { rp.snap = false; camPos.copy(tp); camLook.copy(tl); } else { camPos.lerp(tp, 1 - Math.exp(-dt * 6)); camLook.lerp(tl, 1 - Math.exp(-dt * 8)); }
   } else if (S.phase === 'results') {

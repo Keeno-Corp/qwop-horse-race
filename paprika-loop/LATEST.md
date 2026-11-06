@@ -1,11 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 29
-**Did** game.js: tangle sets `S.pair=[first,other]` and forces a pending plant replay (`S.pending`) if none; `startPlantReplay` stores `rp.pair` and `snap:true` (camera snaps to target on the first replay frame); plant-replay camera aims at the midpoint of the pair, distance 6.5+0.5·dx. Follow camera lead offset cap 6→4.5 so YOU stays further in frame.
-**Saw** `interact until phase replay` (raceT 9.9, kind plant): `look` lists horse3-body, horse0-body, horse1-* in frame, two horses large in the middle with the grandstand; the white rail crosses the foreground. Only the PCFSoftShadowMap warning. Not run: finish tuning, 2P, R, auto-right, perf.
-**Next** (1) Replay camera sits on the rail side at z 6+; raise y or pull the camera inside the fence so the rail doesn't cover the horses. (2) Full rhythm race: check margin vs Dusty (photo finish). (3) Auto-right dust burst and a 2P/R test.
-**Open** Replay opens just before the tangle (horses still running); the collapse comes later in the 0.25x clip. YOU is not in the pile-up view of the live race beyond the 4.5 cap — unverified.
-
 ### Judge 29
 
 **Verdict, session 29**
@@ -32,3 +26,9 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Photo-finish margin and the unverified paths.** Run a full rhythm race and read the `finishT` gap between `YOU` and Dusty. Tighten the AI tuning until it is under ~0.3 s. Then check the results screen, 2P (`Digit2`, then Q W E R and U I O P) and the R and Enter restarts. Also check what restarted the race mid-play in my second call.
 
 SCORE: 8.1
+
+## Iteration 30
+**Did** game.js: plant replay camera now y 2.0→3.0 and z clamped to ≤3.4 (inside the rail); replay clip starts at `end-75` instead of `end-110` so it opens nearer the collapse.
+**Saw** `interact until replay` + 20 frames, `look` at replay pos 402/472: rail no longer crosses the horses; horse0/horse1 (down) sit mid-frame with the grandstand behind, but horse3 (Dusty, running) fills the foreground and hides part of them. Only the PCFSoftShadowMap warning. Not run: perf, finish margin, 2P, results.
+**Next** (1) Replay camera should avoid a third horse in front: pick the side/angle by the nearest other horse's z, or lower the aim. (2) Full rhythm race: finishT gap vs Dusty, results screen. (3) 2P and R/Enter restarts; the mid-race restart the judge saw.
+**Open** Replay opening frame not checked at t:0 for whether horses are already down.

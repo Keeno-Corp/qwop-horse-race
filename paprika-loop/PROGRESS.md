@@ -1770,3 +1770,9 @@ SCORE: 8.0
 3. **Photo-finish margin and the unverified paths.** Run a full rhythm race and read the `finishT` gap between `YOU` and Dusty. Tighten the AI tuning until it is under ~0.3 s. Then check the results screen, 2P (`Digit2`, then Q W E R and U I O P) and the R and Enter restarts. Also check what restarted the race mid-play in my second call.
 
 SCORE: 8.1
+
+## Iteration 30
+**Did** game.js: plant replay camera now y 2.0→3.0 and z clamped to ≤3.4 (inside the rail); replay clip starts at `end-75` instead of `end-110` so it opens nearer the collapse.
+**Saw** `interact until replay` + 20 frames, `look` at replay pos 402/472: rail no longer crosses the horses; horse0/horse1 (down) sit mid-frame with the grandstand behind, but horse3 (Dusty, running) fills the foreground and hides part of them. Only the PCFSoftShadowMap warning. Not run: perf, finish margin, 2P, results.
+**Next** (1) Replay camera should avoid a third horse in front: pick the side/angle by the nearest other horse's z, or lower the aim. (2) Full rhythm race: finishT gap vs Dusty, results screen. (3) 2P and R/Enter restarts; the mid-race restart the judge saw.
+**Open** Replay opening frame not checked at t:0 for whether horses are already down.
