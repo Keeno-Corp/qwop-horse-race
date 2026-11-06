@@ -1,18 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 62
-**Did**
-- `game.js` race camera (line ~497): pos y 2.2→2.6, look y 3.4→1.9. Lower pitch: horses are bigger in frame and their legs and hooves show; the hills wall has left the frame.
-- Replay render target: read `broadcast.js` `render()`. It already calls `renderer.setRenderTarget(null)` before the final quad draw, so I changed nothing. The judge's "left bound" line is probably a tool artefact; not checked in the replay.
-**Saw**
-- Race look at 0.43 s: ground fills the frame (yellow 56%, orange 25%), horses at mid-frame with legs visible, GO! over them, overlay has 0 overlaps. No console errors. Not run: `perf`, replay, human finish.
-**Next**
-- With the hills out of frame, the ground is flat yellow: add a grass-to-dirt gradient and a far treeline/hill strip visible at the top. Ground the `grandstand` (it floats).
-- Playable human finish (`physics.js` leg torque, lengthen `DIM.upper`/`DIM.lower`): undone seven sessions.
-- Check the replay picture with `interact` until `{"phase":"replay"}` and `look`.
-**Open**
-- Human finish, grandstand base, replay picture check undone.
-
 ### Judge 62
 
 **Judge 62: scores**
@@ -39,3 +26,16 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Show the other shots.** Make a `look` `sheet` of the head-on cut and the photo-finish replay (sepia, grain, "PHOTO FINISH" frame), so the sheet shows them as separate shots. If a close finish is not near-certain with no input, add rubber-band AI tuning.
 
 SCORE: 7.5
+
+## Iteration 63
+**Did**
+- `view.js` ground (`hills` mesh colours): mowing stripe lightness ±0.05→±0.09; far ground (wz −4…−16) lerps to a greener 0x4f9a3c. (A dirt lerp is wired in but multiplied by 0, so it does nothing.)
+- `view.js` `stand()`: added a `slab` plinth box under each grandstand so its base touches the ground.
+**Saw**
+- Look at the intro card (frame 0): page loads, no console errors, 0 HTML overlaps. Ground reads green-olive with visible stripes. Not checked: race frame, grandstand base, `perf`, replay, human finish.
+**Next**
+- Look at the race frame and sample ground and sky colours, then check the grandstand base. The sagging tan beam in the intro look may be the roof edge: check it from the race camera.
+- Playable human finish (`physics.js` leg torque, `DIM.upper` and `DIM.lower` +15%): undone eight sessions.
+- Look sheet of the head-on cut and the photo-finish replay.
+**Open**
+- Human finish, replay and photo-finish pictures, and a real dirt gradient are undone.
