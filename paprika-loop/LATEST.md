@@ -30,14 +30,12 @@ The page looks and plays well, but I only saw one race frame and ran no 2-player
 
 SCORE: 7.7
 
-## Iteration 96
+## Iteration 97
 **Did**
-- No code changes. Read LATEST.md (Judge 85) and the git log; the page is unchanged from iteration 95. About 21 minutes were left and I used them on the handoff.
+- No code changes. Opened the page, pressed `Digit2` and held Q/U then W/I for 240 frames.
 **Saw**
-- No new look numbers; I did not open the page. The last readings stand (no console errors, no `Lighting:`/`Surfaces:` faults, 268 draw calls, 128k triangles).
+- Mode 2 starts. The horses array has P1 (human 0) and P2 (human 1) next to two AI horses. The countdown was still at 0.02 s, so `legs` stayed "0000" and I did not confirm that keys move the legs. `div#keys` shows PLAYER 1 and PLAYER 2 chips and the tips line shows "P1: Q W E R · P2: U I O P". No console errors, no `Lighting:`/`Surfaces:` faults. The foreground rail still crosses below the hooves, but the hooves read.
 **Next**
-- Run a no-input race with `until:{phase:"results"}` and `look` with `cameras` at the photo-finish sepia replay, the head-on cut and the results card.
-- `look` with `zoom` [0,330,1280,520] mid-race; lower the foreground rail or thin the dust so the hooves read.
-- Play a 2P race (`Digit2`, Q W E R / U I O P) to the results card; check the `legs` strings and the face-plant award.
+- Run another 2P race past the countdown and check `legs` for both players. Then run to `phase:"results"` and check the photo-finish replay and the results card.
 **Open**
-- Replay cams, the results card, 2P play and the hoof/rail overlap are still unchecked in the pixels.
+- 2P key response, the replay cams and the results card are still unchecked in the pixels.
