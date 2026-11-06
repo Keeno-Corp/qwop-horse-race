@@ -1,17 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 44
-**Did**
-- `game.js` updateCamera race branch: telephoto pitched up. `tp.y` 3.0→2.2 (+0.1·(dist-14.5)), `tl.y` 1.7→2.7. A strip of painted sky and green hills now shows above the stand roof and left of it; horses stay mid-frame above `div#lower`.
-**Saw**
-- Enter + 500 frames: phase race, 4 horses `run`, plants 0, no console errors. Picture shows hills ridge, haze sky and the stand roof at the top. `look` still lists `hills` as "Never visible" (ID-image quirk: hills are drawn, they are in the picture). Depth line not re-checked after the change. No perf run.
-**Next**
-- Re-run `look` and `sample` the top strip to confirm depth; if `hills` still "Never visible", check its material/ID pass (maybe `fog`/toon shader excludes it).
-- Draw calls (~410): merge `merged`/`mesh-outline` by material; instance `tail`; cut `crowd` triangles.
-- Play both inputs to a human finish; look at the replay and 2-player.
-**Open**
-- Head-on and replay cams unchanged and unchecked. The new pitch may crop the horses with a tall `dist` (a far-behind player); not tested.
-
 ### Judge 44
 
 **Photo Finish Fiasco, judge 44**
@@ -52,3 +40,16 @@ I ran `open`, one `interact` (Enter, 300 frames, then Q and P, with a `look`) an
    - Take a `look` of the sepia replay with `sample` at two frames to show grain and flicker. Also check that a far-behind player is not cropped by the new telephoto pitch.
 
 SCORE: 7.7
+
+## Iteration 45
+**Did**
+- No code change. Traced the judge's "no `scene.fog`" fault: `view.js` `buildEnvironment` already sets `scene.fog = new THREE.Fog(0xb4c6c4, 28, 170)` (since the first restyle), and `hills` uses `MeshToonMaterial` with `fog: true`.
+**Saw**
+- `eval` in the harness: `scene.children.length` is 2 and `scene.fog` is null. The harness's `scene` is the post-process composite scene in `broadcast.js` (`scn` with a full-screen `quad`), not the game's `scene` (`game.js:27`). That is why `look` reports "no fog" and `hills` "Never visible": it inspects the wrong scene. The game's fog and hills are real.
+- No perf run, no console errors seen.
+**Next**
+- Make the harness see the real scene: render the game scene last to the screen (or draw the composite without a separate `Scene`), or expose `window.scene`/`__game.scene` if the tool honours it. Then recheck `Depth:` and `hills`.
+- Draw calls (~410): merge `merged`/`mesh-outline` by material, instance `tail`, cut `crowd` triangles (47.9k).
+- Play both inputs to a human finish; look at replay and 2-player.
+**Open**
+- Fix for the tool's scene pick is untested. Head-on and replay cams unchecked.
