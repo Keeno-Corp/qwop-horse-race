@@ -52,7 +52,7 @@ let mode = 1;
 
 // ---------- AI ----------
 class AI {
-  constructor(skill) { this.skill = skill; this.phase = rr(0, 1); this.base = rr(0.62, 0.72) / skill; this.t = 0; this.delay = rr(0.05, 0.5); this.next = rr(4, 8); this.m = null; this.wob = rr(0, 6); this.chaos = rr(0.85, 1.25); }
+  constructor(skill) { this.skill = skill; this.phase = rr(0, 1); this.base = rr(0.57, 0.65) / skill; this.t = 0; this.delay = rr(0.05, 0.5); this.next = rr(7, 12); this.m = null; this.wob = rr(0, 6); this.chaos = rr(0.85, 1.25); }
   update(h, dt, lead) {
     this.t += dt; this.wob += dt;
     if (this.t < this.delay) { for (let i = 0; i < 4; i++) h.setHeld(i, false); return; }
@@ -64,7 +64,7 @@ class AI {
     if (!this.m && this.next <= 0 && h.state === 'run' && h.guard <= 0) {
       const r = rng(), kinds = r < 0.25 ? 'freeze' : r < 0.45 ? 'limp' : r < 0.6 ? 'stall' : r < 0.85 ? 'weave' : 'mash';
       this.m = { kind: kinds, t: kinds === 'freeze' ? rr(0.5, 0.9) : kinds === 'stall' ? rr(0.5, 0.9) : rr(1, 2), leg: Math.floor(rng() * 4), dir: rng() < 0.5 ? -1 : 1 };
-      this.next = rr(3.5, 7.5);
+      this.next = rr(7, 12);
     }
     if (this.m) {
       const m = this.m; m.t -= dt;
@@ -235,7 +235,7 @@ function physStep() {
     const r = roles[h.idx];
     if (r.human >= 0 && (S.phase === 'race' || S.phase === 'finishing') && !h.finished) {
       const set = KEYS[mode][r.human]; const ph = Math.floor(S.raceT / AUTO.period) % 2; for (let i = 0; i < 4; i++) { const d = S.auto ? ((i === 0 || i === 3) === (ph === 0)) : held.has(set[i]); if (d && !h.held[i]) h.drive = Math.min(1.2, (h.drive || 0) + 0.2); h.setHeld(i, d); }
-      if (S.phase === 'race') { const others = horses.filter((o, j) => roles[j].ai).map((o) => o.pos().x); const avg = others.reduce((a, b) => a + b, 0) / Math.max(1, others.length); h.driveF = Math.max(0, 30 + clamp(avg - h.pos().x - 4, 0, 30) * 6 - clamp(h.pos().x - avg - 0.3, 0, 20) * 14); }
+      if (S.phase === 'race') { const others = horses.filter((o, j) => roles[j].ai).map((o) => o.pos().x); const avg = others.reduce((a, b) => a + b, 0) / Math.max(1, others.length); h.driveF = (S.auto ? 0.5 : 1) * Math.max(0, 30 + clamp(avg - h.pos().x - 4, 0, 30) * 6 - clamp(h.pos().x - avg - 0.3, 0, 20) * 14); }
     } else if (r.human >= 0) for (let i = 0; i < 4; i++) h.setHeld(i, false);
     if (h.finished || S.phase === 'results') h.guard = 99;
     const ev = h.step(DT);
@@ -315,7 +315,7 @@ function startFinishReplay() {
   const gap = order[1] && order[1].finished ? order[1].finishT - w.finishT : 9;
   S.results = { order: order.map((h) => h.idx), gap };
   popup(gap < 1.0 ? 'PHOTO FINISH!' : 'WINNER!', roles[w.idx].name + (gap < 0.5 ? ' by a nose (' + gap.toFixed(2) + 's)!' : ' takes it!'), '#ffd27a', 2.4);
-  const end = ringN - 1, start = Math.max(Math.max(0, ringN - RING + 2), (S.firstFinishFrame || end) - 54);
+  const start = Math.max(Math.max(0, ringN - RING + 2), (S.firstFinishFrame || ringN - 1) - 54), end = Math.min(ringN - 1, start + 260);
   S.replay = { kind: 'finish', start, end, pos: start, subject: w.idx };
   S.phase = 'replay'; setReplayUi(true); S.flash = 1; sfx.play('cheer', 0.8);
 }
@@ -434,7 +434,7 @@ function tick(dt) {
     record();
     if (S.pending && S.time >= S.pending.at && S.phase === 'race') startPlantReplay();
   } else if (S.phase === 'replay') {
-    const rp = S.replay; rp.pos += 0.25 * dt * 60;
+    const rp = S.replay; rp.pos += (rp.kind === 'finish' ? 0.6 : 0.25) * dt * 60;
     if (rp.pos >= rp.end) endReplay(); else applyFrame(rp.pos);
   } else if (S.phase === 'results') {
     for (const h of horses) { for (let i = 0; i < 4; i++) h.setHeld(i, false); }

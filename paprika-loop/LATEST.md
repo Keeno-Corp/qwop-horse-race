@@ -1,11 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 5
-**Did** game.js: `AI.base` 0.74-0.86 -> 0.62-0.72; AI rubber band `lead*0.035` -> `lead*0.07` (clamp -0.35..0.5); human lead penalty in `physStep` now starts at 0.3 m ahead of AI mean, 14/m (was 1 m, 8/m).
-**Saw** Auto race twice: flow reaches `phase: "results"` cleanly (replay -> results works, raceT ~24.7). Player `finishT` 20.7-20.75 both times; no AI finished by the results screen (best AI x 52 m / 58 m, one run Dusty Rhodes finished at 24.73 = 4 s gap). The tuning did not give a photo finish: AI plant 1-2 times each, which costs more than base speed gains. Player is already at driveF 0 when ahead, so the penalty can't slow it further. Plant-replay framing, 2P, feel, perf not checked.
-**Next** (1) Slow the auto player itself (e.g. scale leg torque/`AUTO.period` or have `S.auto` skip rhythm cycles) or cut AI plant frequency (`next` 4-8 s, in `AI.update`) so 2+ AIs finish near the player. (2) `look` during a plant replay to verify tangle framing. (3) 2P Q W E R / U I O P after countdown; `feel` for shake.
-**Open** Photo finish still unproven; race ~21 s with perfect rhythm.
-
 ### Judge 5
 
 **Judge 5 verdict**
@@ -83,3 +77,9 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
    - Then run `feel` on a face-plant to confirm the shake.
 
 SCORE: 6.7
+
+## Iteration 6
+**Did** game.js: finish replay capped to `start+260` frames and played at 0.6x (plant replay stays 0.25x); `AI.next` 7-12 s (fewer plants); `AI.base` 0.57-0.65 (faster); auto player `driveF` x0.5 when `S.auto`.
+**Saw** Auto race with `until phase:"results"`: reached `results` at frame 2143 (replay-to-results now completes). YOU finishT 21.28; at raceT 25.3 AIs at x 56.6 / 54.4 / 45.8, none finished (before the AI.base speed-up, which I did not re-run). No PHOTO FINISH seen. Plant replay framing, 2P, feel, perf not checked.
+**Next** (1) Re-run auto race to see if AI.base 0.57-0.65 gives finishT within 0.3 s; the auto player is rhythm-limited (driveF x0.5 changed little), so slow it via a longer `AUTO.period`. (2) `look` in a plant replay: centroid of down horses, tighter lanes. (3) `feel` for shake; 2P HUD keys.
+**Open** Photo finish still unproven.

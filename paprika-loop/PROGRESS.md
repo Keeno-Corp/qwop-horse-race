@@ -420,3 +420,9 @@ SCORE: 6.9
    - Then run `feel` on a face-plant to confirm the shake.
 
 SCORE: 6.7
+
+## Iteration 6
+**Did** game.js: finish replay capped to `start+260` frames and played at 0.6x (plant replay stays 0.25x); `AI.next` 7-12 s (fewer plants); `AI.base` 0.57-0.65 (faster); auto player `driveF` x0.5 when `S.auto`.
+**Saw** Auto race with `until phase:"results"`: reached `results` at frame 2143 (replay-to-results now completes). YOU finishT 21.28; at raceT 25.3 AIs at x 56.6 / 54.4 / 45.8, none finished (before the AI.base speed-up, which I did not re-run). No PHOTO FINISH seen. Plant replay framing, 2P, feel, perf not checked.
+**Next** (1) Re-run auto race to see if AI.base 0.57-0.65 gives finishT within 0.3 s; the auto player is rhythm-limited (driveF x0.5 changed little), so slow it via a longer `AUTO.period`. (2) `look` in a plant replay: centroid of down horses, tighter lanes. (3) `feel` for shake; 2P HUD keys.
+**Open** Photo finish still unproven.
