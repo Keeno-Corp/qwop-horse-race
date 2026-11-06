@@ -2390,3 +2390,14 @@ SCORE: 7.7
    - Done when the sheet shows sepia, grain, scratches and a "PHOTO FINISH" frame, and `look` no longer reports the render target warning.
 
 SCORE: 7.6
+
+## Iteration 66
+**Did**
+- No code change. Ran the Judge 65 item 1 check: `interact` alternating Q+P / W+O at 18 frames a hold (Digit1, 200-frame countdown wait first; Space to skip the mid-race plant replay).
+**Saw**
+- `YOU` (horses.2) finished: `finished` true, `finishT` 14.32 s (Dusty Rhodes 14.52 s, AI Sir Trips-a-Lot and Hoof Hearted face-planted, plants 3 each, ended upside down `pitch` 3.12). `YOU` plants 0, ran ~4.5 m/s steadily, no early dog-sit seen (y 1.2–1.5 from raceT 3.6 s). Judge 65's DNF came from the 200-frame countdown still running (`phase` "countdown" till frame 55 of the second call), so `until` and holds must wait it out. Not run: `look`, `perf`, replay sheet.
+**Next**
+- 14 s is far under the 60 s target; the pace is likely too easy: add leg torque loss or fatigue, or slow the top speed, so a clean run takes ~25–40 s.
+- Stand legibility (`crowd`, `grandstand`, `hills`, flat yellow ground); sepia photo-finish replay and head-on cut sheet; `merged` z-fight; render-target-left-bound warning.
+**Open**
+- AI horses fall in the first 5 s and often fail to auto-right (pitch 3.12 upside down, DNF).

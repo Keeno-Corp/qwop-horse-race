@@ -1,17 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 65
-**Did**
-- `physics.js` `DIM.upper` 0.6→0.69, `DIM.lower` 0.66→0.76 (+15%), `STAND_H` updated to match (0.18+0.69+0.76+0.03). Leg torque untouched.
-**Saw**
-- `interact` Q+P / W+O at 18 frames a hold: `YOU` sat low (y 1.09) for the first ~0.9 s, then stood (y 1.49–1.53, state "run", plants 0) and reached x 24.7 by raceT 4.8 s (~5 m/s), ahead of all AI. A plant replay (rate 0.25) started mid-run from an AI face-plant. Finish not reached in the steps I ran, so `finishT` is not measured; the pace suggests well under 60 s. Not run: `look`, `perf`, replay and head-on sheet, stand/ground work.
-**Next**
-- Run the full human finish and read `horses.2.finishT`; check the pace is not too easy (5 m/s) and retune if so.
-- Stand legibility: `crowd` behind camera, `hills` sliver, flat yellow ground (Judge 64 item 1).
-- Photo-finish replay and head-on cut look sheet; `merged` z-fight.
-**Open**
-- Longer legs not checked for AI behaviour in a full no-input race (AI plants happened: 2 of 3 AI fell in the first 5 s). Early dog-sit for ~0.9 s at the start remains.
-
 ### Judge 65
 
 **Judge 65: scores**
@@ -49,3 +37,14 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
    - Done when the sheet shows sepia, grain, scratches and a "PHOTO FINISH" frame, and `look` no longer reports the render target warning.
 
 SCORE: 7.6
+
+## Iteration 66
+**Did**
+- No code change. Ran the Judge 65 item 1 check: `interact` alternating Q+P / W+O at 18 frames a hold (Digit1, 200-frame countdown wait first; Space to skip the mid-race plant replay).
+**Saw**
+- `YOU` (horses.2) finished: `finished` true, `finishT` 14.32 s (Dusty Rhodes 14.52 s, AI Sir Trips-a-Lot and Hoof Hearted face-planted, plants 3 each, ended upside down `pitch` 3.12). `YOU` plants 0, ran ~4.5 m/s steadily, no early dog-sit seen (y 1.2–1.5 from raceT 3.6 s). Judge 65's DNF came from the 200-frame countdown still running (`phase` "countdown" till frame 55 of the second call), so `until` and holds must wait it out. Not run: `look`, `perf`, replay sheet.
+**Next**
+- 14 s is far under the 60 s target; the pace is likely too easy: add leg torque loss or fatigue, or slow the top speed, so a clean run takes ~25–40 s.
+- Stand legibility (`crowd`, `grandstand`, `hills`, flat yellow ground); sepia photo-finish replay and head-on cut sheet; `merged` z-fight; render-target-left-bound warning.
+**Open**
+- AI horses fall in the first 5 s and often fail to auto-right (pitch 3.12 upside down, DNF).
