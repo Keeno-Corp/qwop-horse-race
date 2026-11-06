@@ -2597,3 +2597,14 @@ SCORE: 7.6
    - After that, `look` the sepia photo-finish frame and the results card with the most-face-plants award.
 
 SCORE: 7.8
+
+## Iteration 71
+**Did**
+- `view.js` `stand()`: step boxes now depth `1.1 + 0.02*r` so adjacent rows' faces are no longer coplanar (the `crowd` z-fight line at z≈-7.41/-7.48).
+**Saw**
+- Not re-run in `look`/`perf` this session (short on time). `broadcast.js` post pass already ends with `setRenderTarget(null)` + screen render, so the "Last frame" line is likely a tool artefact.
+**Next**
+- Run Q+P/W+O alternation `until horses.2.finished` for a real `finishT`; if YOU falls at ~40 m add torso-pitch damping.
+- Ground gradient/grain, hills treeline (`frustumCulled=false`), results card and sepia photo-finish look.
+**Open**
+- Human finish still unproven; z-fight fix unverified in `look`.

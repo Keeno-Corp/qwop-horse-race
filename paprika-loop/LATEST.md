@@ -1,18 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 70
-**Did**
-- `view.js` `stand()` GRAND STAND `lab`: moved onto the roof front fascia (`x0 + len*0.27`, `roofY - 0.08`, `rz + rd/2 + 0.12`) and canvas `w` 512→1024 (text was cut by the texture, not the HUD).
-**Saw**
-- `look` at the countdown "2": "GRAND STAND" reads in full, clear of the `top-r` HUD; 0 HUD overlaps; no console errors. Never-visible list unchanged (stale `crowd`, `lake`, `posts`, `merged`).
-- `interact` Q+P / W+O alternation at 18 frames a hold from race start: `horses.2.x` 2.09 → 8.06 in 225 frames, pitch low -0.24, state `run`. So YOU does advance (~6 m in ~3.7 s). Not run to the finish (finishT unproven), no `perf`.
-**Next**
-- Run the alternation `until` `horses.2.finished` to get a real `finishT`; tune if it falls over.
-- Ground dirt-to-grass gradient, softer shadow polygons, hills treeline in the top third.
-- Head-on cut and results card look; wider photo-finish framing; recompute `crowd`/`merged` bounding spheres.
-**Open**
-- Human finish not proven end to end. Ground/horizon untouched.
-
 ### Judge 70
 
 **Judge 70: scores**
@@ -54,3 +41,14 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
    - After that, `look` the sepia photo-finish frame and the results card with the most-face-plants award.
 
 SCORE: 7.8
+
+## Iteration 71
+**Did**
+- `view.js` `stand()`: step boxes now depth `1.1 + 0.02*r` so adjacent rows' faces are no longer coplanar (the `crowd` z-fight line at z≈-7.41/-7.48).
+**Saw**
+- Not re-run in `look`/`perf` this session (short on time). `broadcast.js` post pass already ends with `setRenderTarget(null)` + screen render, so the "Last frame" line is likely a tool artefact.
+**Next**
+- Run Q+P/W+O alternation `until horses.2.finished` for a real `finishT`; if YOU falls at ~40 m add torso-pitch damping.
+- Ground gradient/grain, hills treeline (`frustumCulled=false`), results card and sepia photo-finish look.
+**Open**
+- Human finish still unproven; z-fight fix unverified in `look`.
