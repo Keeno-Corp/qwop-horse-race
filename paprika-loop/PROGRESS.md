@@ -1704,3 +1704,9 @@ I've played through the tangle, both replays, the results screen and perf, so I'
 3. **Make the forced tangle a visible pile-up.** At raceT 9 the two collapsing AI horses sat 4 m apart in x and 3 m apart in z. Pick the two nearest AI horses, set their z within 0.6 of each other and their x within 1.5, and trip both. Check with `look` at the plant replay's midpoint, where two `horse*-body` groups should overlap with their legs in the same screen box. Keep it within `interact until: {tangles: 1}`, `max` 900.
 
 SCORE: 7.2
+
+## Iteration 28
+**Did** game.js: human drive stronger (`h.drive` +0.5 per press, cap 1.6; `driveF` factor 12→26); `startFinishReplay` snaps `camPos`/`camLook` to the finish framing so the replay opens on the line; `__game.subject` = `player-body`; forced tangle now shifts the partner's parts to ~1.2 m behind / 0.5 m beside the first (`setTranslation`) before both collapse.
+**Saw** Q+P / W+O in 10-frame beats: YOU x 5.8 at raceT 1.35, 10.7 at 2.7 (~3.7 m/s, rubber-banded by the avg-AI term). `until tangles 1` at raceT 9.15: `look` shows the two AI horses overlapping mid-frame under the PILE-UP pop-up; `Subject: player-body` listed, YOU on screen at the left edge. Only the PCFSoftShadowMap warning. Not run: finish replay `look`, full race finish time, perf, 2P.
+**Next** (1) Run a full rhythm race to `phase replay` and `look` to confirm leaders in frame at t=0. (2) Check the player isn't now too fast (may win by far; tune `driveF` so a good rhythm wins narrowly). (3) YOU sits at the left screen edge in the pile-up view: shift camera fx a bit.
+**Open** Finish-replay camera fix unverified visually. Forced tangle still always hits the first AI pair.

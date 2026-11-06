@@ -236,8 +236,8 @@ function physStep() {
   for (const h of horses) {
     const r = roles[h.idx];
     if (r.human >= 0 && (S.phase === 'race' || S.phase === 'finishing') && !h.finished) {
-      const set = KEYS[mode][r.human]; const ph = Math.floor(S.raceT / AUTO.period) % 2; for (let i = 0; i < 4; i++) { const d = S.auto ? ((i === 0 || i === 3) === (ph === 0)) : held.has(set[i]); if (d && !h.held[i]) h.drive = Math.min(1.2, (h.drive || 0) + 0.3); h.setHeld(i, d); }
-      if (S.phase === 'race') { const others = horses.filter((o, j) => roles[j].ai).map((o) => o.pos().x); const avg = others.reduce((a, b) => a + b, 0) / Math.max(1, others.length); h.driveF = (S.auto ? 0.5 : 12) * Math.max(0, 30 + clamp(avg - h.pos().x - 4, 0, 30) * 6 - clamp(h.pos().x - avg - 0.3, 0, 20) * 14); }
+      const set = KEYS[mode][r.human]; const ph = Math.floor(S.raceT / AUTO.period) % 2; for (let i = 0; i < 4; i++) { const d = S.auto ? ((i === 0 || i === 3) === (ph === 0)) : held.has(set[i]); if (d && !h.held[i]) h.drive = Math.min(1.6, (h.drive || 0) + 0.5); h.setHeld(i, d); }
+      if (S.phase === 'race') { const others = horses.filter((o, j) => roles[j].ai).map((o) => o.pos().x); const avg = others.reduce((a, b) => a + b, 0) / Math.max(1, others.length); h.driveF = (S.auto ? 0.5 : 26) * Math.max(0, 30 + clamp(avg - h.pos().x - 4, 0, 30) * 6 - clamp(h.pos().x - avg - 0.3, 0, 20) * 14); }
     } else if (r.human >= 0) for (let i = 0; i < 4; i++) h.setHeld(i, false);
     if (h.finished || S.phase === 'results') h.guard = 99;
     if (r.human >= 0 && !S.auto) h.assist = 1 + 4 * clamp(1 - S.raceT / 5, 0, 1) * (S.phase === 'race' ? 1 : 0);
@@ -305,6 +305,7 @@ function updateRace(dt) {
         const forced = S.tangles === 0 && S.raceT > 9 && roles[i].ai && roles[i + 1].ai;
         if (pa.x > 6 && pa.x < FINISH_X - 14 && (roles[i].ai || roles[i + 1].ai) && (forced || (Math.abs(pa.x - pb.x) < 1.7 && rng() < 0.012))) {
           S.tangles++; S.lastTangle = S.raceT;
+          if (forced) { const sx = pa.x - pb.x - 1.2, sz = pa.z - pb.z + 0.5; if (roles[i + 1].ai) for (const p of b.parts) { const t = p.body.translation(); p.body.setTranslation({ x: t.x + sx, y: t.y, z: t.z + sz }, true); } }
           const first = roles[i].ai ? a : b, other = first === a ? b : a;
           first.collapse('FACE-PLANT!'); onPlant(first, 'FACE-PLANT!');
           const dir = Math.sign(other.pos().z - first.pos().z) || 1;
@@ -333,6 +334,7 @@ function startFinishReplay() {
   const start = Math.max(Math.max(0, ringN - RING + 2), (S.firstFinishFrame || ringN - 1) - 24), end = Math.min(ringN - 1, start + 64);
   S.replay = { kind: 'finish', start, end, pos: start, subject: w.idx };
   S.phase = 'replay'; setReplayUi(true); S.flash = 1; sfx.play('cheer', 0.8);
+  camPos.set(FINISH_X + 3.4, 2.2, 11.5); camLook.set(FINISH_X - 0.2, 1.0, 0);
 }
 function startPlantReplay() {
   const hi = S.pending.horse; S.pending = null;
@@ -527,7 +529,7 @@ requestAnimationFrame(frame);
 // ---------- window.__game ----------
 const r2 = (v) => +v.toFixed(2);
 window.__game = {
-  subject: 'player',
+  subject: 'player-body',
   describe: () => ({
     name: 'Photo Finish Fiasco', stack: 'three + rapier ragdoll', units: 'metres, x down the track (finish at x=60), y up, z across lanes',
     keys: { solo: { KeyQ: 'front-left leg (hold)', KeyW: 'front-right leg', KeyO: 'back-left leg', KeyP: 'back-right leg', KeyR: 'restart', Digit2: 'two players', Digit1: 'solo', Space: 'skip replay' }, twoPlayer: { p1: 'Q W E R', p2: 'U I O P', Enter: 'restart' } },
