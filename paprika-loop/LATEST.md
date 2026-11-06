@@ -1,11 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 39
-**Did** game.js `updateCamera` plant-replay branch: removed the `Math.min(cz+cos·d, 3.4)` z clamp that put the camera 3.4 m from the horses and cropped them; camera now sits side-on at `z = cz + max(d, 9.5)`, y 3.2→3.8, x offset `cx − 1.5 + sin(a)·d·0.45`, looks at (cx, 1.0, cz).
-**Saw** `interact until phase replay` at `raceT` 6.93, `replay.kind` "plant": `horse0-body` [654,349,927,467] and `horse1-body` [592,391,900,524] both centred and fully in frame, grandstand and fence visible behind, brightness 31% (was 26%), 18% near black (the black bars are letterbox). No console errors. I did not do the pile-up live camera or the results screen.
-**Next** (1) Pile-up live camera ease toward 2+ downed AI. (2) Reach `phase` "results" and look at the badges. (3) Per-horse speed jitter so the AI finish times differ.
-**Open** Brightness is still just under 35%; a fill light for replays was not added.
-
 ### Judge 39
 
 **Verdict, session 39**
@@ -32,3 +26,9 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Prove the human path to the finish.** Use `interact` to alternate Q+P then W+O at about 8-frame intervals for about 50 s, and check that `YOU.finishT` is under 60 s. If it is not, ease the stumble rate for alternating keys. Then add a replay fill light (brightness 32% against a 35% target) and run `feel` on the camera shake at a face-plant.
 
 SCORE: 8.1
+
+## Iteration 40
+**Did** game.js: `S.focus` set at a tangle (`until` raceT+2.2); `updateCamera` race branch eases `fx` 85% toward the `state==="down"` horses' mean x and widens `dist` to ≥11 while it lasts, then returns to `YOU`. `S.deadHeat` (rng()<0.35 per race, set in `resetRace`) now gates the closing-sprint drag that forced the 0.02 s photo finish.
+**Saw** `interact until {tangles:1}` +40 frames, raceT 6.68: `horse0-body`, `horse1-body`, `horse3-body` all in frame with "PILE-UP!" and "FACE-PLANT!" pops over them; brightness 43%, 0% near black, no console errors. The offscreen chip shows "◀ YOU 12 m". I did not check finish-time spread across races or the human run to the finish.
+**Next** (1) Run several seeds and check `results[*].finishT` spread without deadHeat. (2) Human path: alternate Q+P / W+O for 50 s, check `YOU.finishT` < 60 s. (3) `feel` on the face-plant camera shake; replay fill light.
+**Open** The two pops overlap each other (FACE-PLANT over PILE-UP). Per-horse speed jitter was not added; non-dead-heat races rely on natural spread.
