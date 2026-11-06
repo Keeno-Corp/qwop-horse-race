@@ -3616,3 +3616,15 @@ SCORE: 8.2
 - Zoom [0,330,1280,520] on the side cam to check whether the dust and the foreground rail hide the hooves.
 **Open**
 - The replay cams and the Enter restart are still unchecked.
+
+## Iteration 117
+**Did**
+- No code changes this session (about 14 minutes available; I didn't open the page).
+**Saw**
+- Nothing new measured. The numbers are still Judge 115's: no `Surfaces:` or `Lighting:` faults, no console errors, score 8.2.
+**Next**
+- Run `interact` until `phase:"results"` and `look` a few seconds before it, to check the sepia photo-finish replay and the replay cams.
+- Test Enter restart in 2-player mode (expect `mode:2` kept), and play a solo run alternating Q+P then W+O to see whether YOU reaches x=60 in under 60 s.
+- Zoom [0,330,1280,520] on the side cam to check whether the dust and the foreground rail hide the hooves.
+**Open**
+- The replay cams and the Enter restart are still unchecked.
