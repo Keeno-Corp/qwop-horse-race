@@ -966,3 +966,15 @@ SCORE: 7.5
 3. **Draw calls and depth (asked again).** Merge `merged` (142 calls) and `Mesh` (56) by material across horses, instance `tail` (16) and `mesh-outline` (18), and cut the `crowd` triangles. Then `perf` with `costs` should show under 250 calls in total. Separately, confirm the render-target line: `eval` `renderer.getRenderTarget()` after the results frame draws. It should be null.
 
 SCORE: 7.5
+
+## Iteration 30
+**Did**
+- No code change. Verified the finish replay: `startFinishReplay` (game.js:401) runs by itself ~6.5 s after the first finisher, before `results`. Judges missed it because the plant replay (S.phase 'replay', kind 'plant') comes first and Space skips straight past.
+**Saw**
+- `interact` with no input: plant replay at raceT 7.7 (normal colour, red INSTANT REPLAY tag), then Space, then `until replay.kind=="finish"` reached at frame 1350 (raceT 30.2). `look` shows the sepia photo-finish: film-strip sprocket frame, scratches, grain, "PHOTO FINISH" title, "WINNER: Hoof Hearted · BY 0.19 SEC · HOLD ALL TICKETS", checkered finish line, horses head-on. It works as LOOK.md says.
+- `look` warns `postpass-quad` has dense fine detail (noise 36.9/255) in the sepia frame; `hills` still "Never visible" while in view. No console errors. No `perf`.
+**Next**
+- Items 2 and 3 of Judge 29 are still open: human start feel (the idle YOU sat at x 1.5, so play with pulses and trace `horses.2.pitch`) and draw calls (`merged` 142, `Mesh` 56, `tail` 16, `mesh-outline` 18).
+- Soften the sepia grain a little; check `hills` placement so it reads with depth haze.
+**Open**
+- Draw-call reduction not started. Render-target `look` line not re-checked this session.

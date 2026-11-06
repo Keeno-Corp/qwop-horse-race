@@ -1,17 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 29
-**Did**
-- game.js:307 human `h.assist` (pitch-hold torque scale) now `3 + 7*clamp(1 - raceT/7, 0, 1)` (was 2.5 + 2.5 over 5 s): stronger, longer start stabilising.
-- Checked the render-target item: broadcast.js:97 already calls `setRenderTarget(null)` before the screen pass, and `scene.fog` already exists (game.js:37, 90..420). No code change; the `look` warning is probably the tool seeing the first pass.
-**Saw**
-- Pulse run (Q+P / W+O, 18-frame pulses, from frame 260): `horses.2.pitch` low -0.11, `plants:0`, x 7.94 at raceT 1.53 (the previous judge saw a -0.73 low and a plant). Fast, maybe too fast at the start.
-- No `look`, no `perf`, no finish/replay played this session.
-**Next**
-- Play on to `phase:"results"` and `look` at the sepia finish replay. Check the assist is not too strong (x 7.9 at 1.5 s may be a sling, not running). Draw calls (`merged` 142, `tail` 16, `mesh-outline` 18) are still untouched.
-**Open**
-- Draw-call reduction not started; the "every render call drew into a render target" `look` line is unconfirmed.
-
 ### Judge 29
 
 **Judge 29.** I played the opening, a Q/P/W/O pulse run, the plant replay, Space to skip, and the race to `phase:"results"` (frame 1671). I ran `perf` once with `costs`. There were no console errors. I did not see the sepia finish replay: I skipped past it with Space, and the results card shows "PHOTO FINISH · 0.19s". The 2-player mode and the head-on cut were not played.
@@ -42,3 +30,15 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Draw calls and depth (asked again).** Merge `merged` (142 calls) and `Mesh` (56) by material across horses, instance `tail` (16) and `mesh-outline` (18), and cut the `crowd` triangles. Then `perf` with `costs` should show under 250 calls in total. Separately, confirm the render-target line: `eval` `renderer.getRenderTarget()` after the results frame draws. It should be null.
 
 SCORE: 7.5
+
+## Iteration 30
+**Did**
+- No code change. Verified the finish replay: `startFinishReplay` (game.js:401) runs by itself ~6.5 s after the first finisher, before `results`. Judges missed it because the plant replay (S.phase 'replay', kind 'plant') comes first and Space skips straight past.
+**Saw**
+- `interact` with no input: plant replay at raceT 7.7 (normal colour, red INSTANT REPLAY tag), then Space, then `until replay.kind=="finish"` reached at frame 1350 (raceT 30.2). `look` shows the sepia photo-finish: film-strip sprocket frame, scratches, grain, "PHOTO FINISH" title, "WINNER: Hoof Hearted · BY 0.19 SEC · HOLD ALL TICKETS", checkered finish line, horses head-on. It works as LOOK.md says.
+- `look` warns `postpass-quad` has dense fine detail (noise 36.9/255) in the sepia frame; `hills` still "Never visible" while in view. No console errors. No `perf`.
+**Next**
+- Items 2 and 3 of Judge 29 are still open: human start feel (the idle YOU sat at x 1.5, so play with pulses and trace `horses.2.pitch`) and draw calls (`merged` 142, `Mesh` 56, `tail` 16, `mesh-outline` 18).
+- Soften the sepia grain a little; check `hills` placement so it reads with depth haze.
+**Open**
+- Draw-call reduction not started. Render-target `look` line not re-checked this session.

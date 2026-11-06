@@ -64,7 +64,7 @@ void main(){
   c *= mix(0.7, 1.0, vg) * mix(1.0, 0.8, film * (1.0 - vg));
   // grain
   float g1 = h21(gl_FragCoord.xy / uDpr + vec2(fract(uTime * 7.3) * 91.0, fract(uTime * 3.1) * 53.0)) - 0.5;
-  c += g1 * (0.045 + 0.1 * film);
+  c += g1 * (0.035 + 0.065 * film);
   // scratches + dust on film
   if (film > 0.01) {
     float s0 = floor(uTime * 14.0);
