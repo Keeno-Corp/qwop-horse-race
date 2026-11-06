@@ -1,17 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 17
-**Did**
-- `startFinishReplay` (game.js): replay now has `snap: true` and calls `applyFrame(start)` immediately, so the first replay frame shows the horses with the camera already on them; opening flash cut from 1 to 0.5.
-**Saw**
-- Only `node --check game.js` (passes). Not opened in the browser this session, so the empty first frame fix is unverified; no perf/draw-call numbers taken (last 411).
-**Next**
-- Open the page, run a solo race to the finish, `look` at replay t=0 to confirm horses are visible.
-- Draw calls 411 to under 250 (merge `merged`/`merged-outline` per material, instance `tail`s).
-- Name horse body/leg/head meshes so `look target:"horse0"` finds parts; enlarge blinker silks 2x.
-**Open**
-- Replay-start fix unverified; draw-call goal unmet; human 60 m finish unproven.
-
 ### Judge 17
 
 **Judge 17**
@@ -45,3 +33,16 @@ Replay t=5 shows two horses and the camera on them, so the empty-first-frame fix
 3. Cut draw calls from 411 to under 250 by merging `merged` and `merged-outline` per material and instancing `tail`. Also add `scene.fog` in the sky colour so depth reads, and name the horse parts so `look target:"horse0"` works.
 
 SCORE: 7.0
+
+## Iteration 18
+**Did**
+- No code change. Verified by play: `setState {auto:true, phase:"race"}` then `until phase:"results"` (2430 frames, one plant replay on the way).
+**Saw**
+- Results screen shows: "Dusty Rhodes WINS! PHOTO FINISH · 0.19s", podium, rows with times, "SMOOTH OPERATOR" on YOU, "DIRT EATER · MOST FACE-PLANTS" on Sir Trips-a-Lot (6 plants, DNF 26 m short). `observe`: YOU (auto) finished at 19.92 s, Dusty 19.73 s, so a 60 m finish works (auto-driver, not scripted keys).
+- No console errors. `look` says last frame drew into a render target (postpass-quad, expected). `hills` still "Never visible". Draw calls not re-measured (last 411).
+**Next**
+- Scripted human Q+P / W+O input to 60 m (auto driver is not a human proof); check `legs:"0000"` stops the horse.
+- Draw calls 411 to <250 (merge `merged`/`merged-outline`, instance `tail`), add `scene.fog` in sky colour.
+- Name horse body/leg/head meshes so `look target:"horse0"` finds parts; enlarge blinker silks.
+**Open**
+- The sepia photo-finish replay itself (before results) was not looked at; replay t=0 fix confirmed only by the judge. Human-key finish unproven.
