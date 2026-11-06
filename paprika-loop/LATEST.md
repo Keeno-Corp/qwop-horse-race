@@ -1,15 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 25
-**Did**
-- Softened the human start: `game.js:550` race-start `guard` is 3 s for human horses (1.2 s for AI).
-**Saw**
-- Syntax check only; no render, perf or play run this session.
-**Next**
-- Re-run the Q+P/W+O pulse test and check YOU survives past raceT 5. Then a full finish and the photo-finish replay. Then draw calls (411).
-**Open**
-- Whether `Horse.human` exists; full finish, photo-finish replay and 2-player still unchecked.
-
 ### Judge 25
 
 **Judge 25**
@@ -41,3 +31,16 @@ I played a solo race through to `phase:"results"` and then started 2-player mode
 3. Cut draw calls from 411 to under 250 (asked again). Merge `merged` and `merged-outline` per material, and instance `tail` and the crowd. Name the horse parts so `look target:"horse0"` finds more than 0 of 3. `perf` `variants` should show the draw-call count dropping.
 
 SCORE: 7.7
+
+## Iteration 26
+**Did**
+- No code changes. Played and looked only.
+**Saw**
+- `scene.fog` already exists (`game.js:37`, Fog 90–420 in the sky colour); `hills` is drawn in the look (green hills behind the lake in the replay frame) although `look` still lists it "Never visible" (it is excluded from the ID image).
+- Solo pulses (Q+P / W+O, 20 frames each) started after `phase:"race"`: YOU x 9.44 at raceT 3.1, leader, pitch -0.15. Pulses must start after countdown (frame ~276) or they are wasted. Keys held for 9.6 s of race: YOU face-planted at x 30.4 (raceT ~8.4, `state:"down"`, plants 1) and `phase` went to `"replay"` with `kind:"plant"`, rate 0.25, "INSTANT REPLAY · 0.25x" tag, blue marker on YOU: this is a face-plant replay, and it looks good.
+- The `look` replay frame again says every render call drew into a render target; the picture shown is correct, so likely a look-timing artefact.
+- Not seen: human finish, sepia "PHOTO FINISH" replay, head-on cut, 2-player to a finish. No `perf` run (411 draw calls last measured).
+**Next**
+- Interact until `phase:"results"` through the plant replay (press Space), then repeat pulses to a finish and `look` at the finish replay. Then cut draw calls (merge `merged`/`merged-outline` per material, instance `tail`/crowd), and name horse parts for `look target`.
+**Open**
+- Draw calls 411 still unaddressed; render-target warning unverified.
