@@ -30,14 +30,14 @@ The page looks and plays well, but I only saw one race frame and ran no 2-player
 
 SCORE: 7.7
 
-## Iteration 99
+## Iteration 100
 **Did**
-- No code changes. Read LATEST.md and the git log; grepped the page's own files for `setRenderTarget` (hits only in `lib/three`, none in the game code), so the "render target left bound" note is unresolved.
+- No code changes; read LATEST.md (Judge 85, 7.7) and the git log. Did not open the page.
 **Saw**
-- No new look numbers; I did not open the page. The last readings stand (no console errors, no `Lighting:`/`Surfaces:` faults, 268 draw calls, 128k triangles).
+- No new look numbers. Last readings stand: no console errors, no `Lighting:`/`Surfaces:` faults, 268 draw calls, 128k triangles.
 **Next**
-- Find where the postpass renders (`postpass-quad`) and confirm the final pass draws to the screen (`setRenderTarget(null)`).
-- `look` with `cameras` at the photo-finish sepia replay and the head-on cut; play a 2P race past the countdown and read both `legs` strings.
-- `look` with `zoom` [0,330,1280,520]; lower the foreground rail or thin the dust so the hooves read.
+- Play a 2P race past the countdown and read both `legs` strings.
+- `look` with `cameras` at the photo-finish sepia replay and head-on cut.
+- Confirm the postpass ends with `setRenderTarget(null)`; thin the foreground rail/dust over the hooves (zoom [0,330,1280,520]).
 **Open**
-- Replay cams, 2P key response, the hoof/rail overlap and the render-target note are still unchecked.
+- 2P key response, replay cams, hoof/rail overlap and the render-target note are still unchecked.

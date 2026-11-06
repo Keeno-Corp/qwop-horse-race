@@ -3379,3 +3379,15 @@ SCORE: 7.7
 - `look` with `zoom` [0,330,1280,520]; lower the foreground rail or thin the dust so the hooves read.
 **Open**
 - Replay cams, 2P key response, the hoof/rail overlap and the render-target note are still unchecked.
+
+## Iteration 100
+**Did**
+- No code changes; read LATEST.md (Judge 85, 7.7) and the git log. Did not open the page.
+**Saw**
+- No new look numbers. Last readings stand: no console errors, no `Lighting:`/`Surfaces:` faults, 268 draw calls, 128k triangles.
+**Next**
+- Play a 2P race past the countdown and read both `legs` strings.
+- `look` with `cameras` at the photo-finish sepia replay and head-on cut.
+- Confirm the postpass ends with `setRenderTarget(null)`; thin the foreground rail/dust over the hooves (zoom [0,330,1280,520]).
+**Open**
+- 2P key response, replay cams, hoof/rail overlap and the render-target note are still unchecked.
