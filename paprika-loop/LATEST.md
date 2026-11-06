@@ -32,17 +32,16 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 
 SCORE: 7.7
 
-## Iteration 34
+## Iteration 35
 **Did**
-- No code changes. I checked the instant replay (`kind:"plant"`) with `interact` `until:{phase:"replay"}`, then `wait` 30 frames and `look`.
+- Added a `ridge` mesh in `view.js` (700 units wide, pale blue `0xa9bec6` MeshBasicMaterial, at z -185 behind `hills`) for depth. Not yet proven to help.
 **Saw**
-- The replay starts at raceT 7.35 after a tangle (`tangles:1`), with `rate` 0.25 and no console errors.
-- The first frame of the replay (`t:0`) is near-black (brightness 9%, 92% grey). After 30 frames (`t` 7.5) it draws properly: sepia and warm, brightness 46%, CRT pass on, "INSTANT REPLAY · 0.25x" tag, two horses with grain visible but not harsh.
-- `look` still lists `hills` as "Never visible" while in view.
-- Not run: `perf`, the finish replay (`kind:"finish"`), 2-player.
+- No console errors. `look` lists `ridge` as "Never visible" (behind the camera), and in the race view the grandstand covers the backdrop, so the ridge cannot show there; `hills` only peeks out at top left.
+- `look` Depth line: far objects are no paler than near ones, there is no fog.
+- Race started and ran fine to 1 s (4 horses in state "run"). Not run: `perf`, finish replay, 2-player.
 **Next**
-- Fix the dark first replay frame: the sepia/post pass probably isn't drawn until a frame after `applyFrame`, or the camera cuts in late. Draw once when the replay starts, or fade in.
+- Add `scene.fog` in the haze colour (`0xb4c6c4`), or pale the far stand and crowd colours, so depth reads. Check with `look`'s Depth line.
 - Draw-call merging (`merged` 142, `Mesh` 56, outlines, `tail`) and `crowd` triangles (about 48k).
-- Verify the finish replay and 2-player (`Digit2`).
+- Fix the dark first replay frame; verify the finish replay and 2-player (`Digit2`).
 **Open**
-- Draw calls are about 411, untouched. Drive tweak from Iteration 33 still unproven for a full finish.
+- `ridge` is possibly invisible from the shipped camera angles; remove it if it stays so. Draw calls are still about 411.

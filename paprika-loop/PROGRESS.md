@@ -1121,3 +1121,17 @@ SCORE: 7.7
 - Verify the finish replay and 2-player (`Digit2`).
 **Open**
 - Draw calls are about 411, untouched. Drive tweak from Iteration 33 still unproven for a full finish.
+
+## Iteration 35
+**Did**
+- Added a `ridge` mesh in `view.js` (700 units wide, pale blue `0xa9bec6` MeshBasicMaterial, at z -185 behind `hills`) for depth. Not yet proven to help.
+**Saw**
+- No console errors. `look` lists `ridge` as "Never visible" (behind the camera), and in the race view the grandstand covers the backdrop, so the ridge cannot show there; `hills` only peeks out at top left.
+- `look` Depth line: far objects are no paler than near ones, there is no fog.
+- Race started and ran fine to 1 s (4 horses in state "run"). Not run: `perf`, finish replay, 2-player.
+**Next**
+- Add `scene.fog` in the haze colour (`0xb4c6c4`), or pale the far stand and crowd colours, so depth reads. Check with `look`'s Depth line.
+- Draw-call merging (`merged` 142, `Mesh` 56, outlines, `tail`) and `crowd` triangles (about 48k).
+- Fix the dark first replay frame; verify the finish replay and 2-player (`Digit2`).
+**Open**
+- `ridge` is possibly invisible from the shipped camera angles; remove it if it stays so. Draw calls are still about 411.
