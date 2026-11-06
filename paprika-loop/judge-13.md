@@ -1,57 +1,29 @@
-**Judge 13 verdict**
+**Scores (Must have, in order)**
 
-1. **Plays as DESIGN.md's Core loop and Controls say: 6.**
-   - The Q W O P rhythm moves `YOU` (`horses.2`) from x 1.4 to 1.81 in the 0.8 s after GO, with `plants` 0.
-   - The `div#tips` line "Alternate your legs — Q+P then W+O works" and the `div#keys` pads are on screen.
-   - My test only covered the first 0.8 s of the race, because the 200-frame wait mostly ran the countdown. A full solo run to the line is still unproven.
-2. **Real Rapier jointed ragdoll, face-plant and auto-right: 8.**
-   - I did not re-test this session. The `horse0-*` to `horse3-*` limbs are jointed, and the `legs` strings change as the legs are driven.
-3. **Replay (last ~4 s, 0.25x, REPLAY banner, Space skips): 8.**
-   - I did not re-look at the replay this session. I carry the score over from the last iteration's report.
-4. **Photo finish and tangled AI collapse within the first minute: 8.**
-   - Carried over from judge 12, where `tangles` was 1 and the photo finish landed at about 22 s.
-5. **Results with most face-plants award: 8.**
-   - Iteration 13 changed non-finishers to "DNF · n m short". I did not see the results screen this session.
-6. **Looks as LOOK.md says: 8.**
-   - The `grandstand` crowd, rail fence, `track` and `hills` read like refs/01.jpg, and `dust*` is now visible.
-   - The player is still small and blends in. It takes 0.83% of the frame, and subject contrast is edge 0.102 (subject brightness 29% against 38% around it).
-   - The `track` still shows a repeating brown panel pattern.
-7. **window.__game convention, index.html at root, static deploy: 9.**
-8. **Clip moments within the first minute, no input: 8.**
-   - Carried over from judge 12. This session's frame at GO shows four horses bunched in adjacent lanes, which is the setup for a tangle.
-9. **Controls feel learnable: 5.**
-   - The 10-frame alternation gave about +0.4 m in 0.8 s, which is about 0.5 m/s. The builder claims about 2 m/s.
-   - At that pace 60 m would take around two minutes, not under 60 s.
-   - No one has measured a full human run to 60 m.
-10. **Horses read as horses, match refs/01.jpg: 8.**
-    - Head, mane, tail, saddle and socks read in the start frame.
-    - `horse3-*` (the player, blue saddle) is hard to pick out among the others.
-11. **Juice: 8.**
-    - 5 sounds fired in the first 0.8 s (blip ×3, powerup, cheer). The "GO!" popup and chips are in place.
-    - Camera shake is still unmeasured by `feel`.
-12. **Local 2-player discoverable from the HUD: 8.**
-    - `div#top-r` shows "1 PLAYER", "2 PLAYERS (2)" and RESTART.
-13. **Static page, vendored lib, no network: 9.**
-    - 382 draw calls, 33.5k triangles, 0 MB of assets.
-    - The 69 ms frame is the SwiftShader software renderer at host load 1.9, so it is noise, not a fault.
+1. **Plays as DESIGN.md says: 7.** A no-input solo race runs from the countdown to `phase:"finishing"`. The `YOU` horse stayed at x 1.4 with `legs:"0000"` because I pressed no keys. `div#keys`, the `1 PLAYER` / `2 PLAYERS (2)` / `RESTART` buttons and `div#tips` are all present. I did not play a full 60 m by hand. My `until` phase name was wrong ("racing" versus the page's "race"), so that step reported "not met", though the race itself ran.
+2. **Rapier ragdoll, face-plant, auto-right: 7.** The `FACE-PLANT!` pop-up, `plants:5` on `Sir Trips-a-Lot` and the repeating thud, gasp, boing sound cycle all fit the collapse and auto-right. The picture shows the grey horse mid-collapse. I did not time the auto-right.
+3. **Replay and sepia photo finish: 4.** At `raceT` 22.07 s `Dusty Rhodes` had finished (`finishT` 21.7), `Hoof Hearted` was at x 56.3 and `Sir Trips-a-Lot` at x 32. I saw no replay, no sepia frame and no "PHOTO FINISH" frame. That is five sessions without seeing it.
+4. **Photo finish and tangle within a minute: 5.** `tangles:1` was recorded, but the finish is not close. Dusty Rhodes wins by about 3 m and `Sir Trips-a-Lot` is 28 m back. The stall watchdog did not change this.
+5. **Results with most face-plants award: 7.** I did not reach the results card this session. It was seen in judge 11 with the `DIRT EATER` tag, and the live per-horse `FACE-PLANTS` counts are in the `Tote`.
+6. **Looks as LOOK.md says: 8.** The picture is warm orange and yellow with flat cel horses, black outlines, the CRT grade, vignette and scanlines, and a bunting-striped grandstand with a sponsor board. I did not `sample` the 3-step shading.
+7. **`window.__game`, static, no network: 7.** `interact` state works, assets are 0.32 MB with fonts vendored, and there are no console errors. `look` still reports `horse0` with 0 of 3 parts found. The `postpass-quad` is now named, but the horse is still not measurable.
+8. **Horses match CHARACTERS.md and horse.png: 7.** The orange and grey horses show a saddle-cloth silk, a blinker, a mane, a tail and a dark muzzle. The blinker silks are still tiny. I did not check the socks or hooves closely.
+9. **Broadcast overlay: 9.** The `Tote` has silk chips and `WIN ODDS`. The `PLAY-BY-PLAY · WALT DUNMORE` lower-third carries a live line. The `LIVE` bug, `4:00 PM` clock, `RACE TIME`, progress bar, `YOU 56 m` off-screen indicator and the `FACE-PLANT!` banner are all there.
+10. **Camera: 6.** The telephoto side-track framing is strong. I saw no head-on cut or replay cam this session.
+11. **Controls feel learnable: 6.** A human 60 m finish is still unproven.
+12. **Local 2-player, discoverable: 6.** The `2 PLAYERS (2)` button and the footer `2 = TWO PLAYERS` are visible, but I did not play it.
+13. **Style judged as hard as gameplay: 8.** The overlay, `Tote`, key caps and CRT read as one 70s broadcast.
 
-**Faults: 8.**
-- "Never visible: none", and the only console message is the shadowmap warning.
-- The `div#tips` text overlaps the "GO!" popup region.
-- Item 9's unproven pace is the one open concern.
+**Faults: 5.**
+- `perf` shows 411 draw calls (`scene` pass 410) and 184k triangles, unchanged for the third session. The groups are `merged` 142 calls, `Mesh` 56, `merged-outline` 45, `mesh-outline` 18 and `tail` 16.
+- The 169 ms frame is a software renderer at host load 3.0, so it is noise.
+- `div#crt` covers 100% of the canvas.
+- `hills` is listed as never visible while in view, as in earlier sessions.
+- There are no console errors.
 
 **Next:**
-1. **Prove or tune the human run to 60 m (asked again).**
-   - Run `interact` with `state:{auto:false}`, after `{until:{phase:"race"}}`.
-   - Then loop Q+P and W+O at 10 frames each for about 3000 frames, with `trace:["horses.2.x"]`.
-   - It is done when `YOU` reaches x 60 with `finishT` under about 60.
-   - If it does not, raise `driveF` in `physStep`. The measured pace so far is about 0.5 m/s.
-2. **Make the player stand out (asked again).**
-   - Add a ring, an arrow or a name flag above `player-*`.
-   - `look` with `sample` on the player pixels should then show a subject "Stands out" edge contrast well above 0.102.
-   - Also blend large-scale dirt noise into the `track` texture to break the panel repeat.
-3. **Run `feel` on a face-plant to measure camera shake.**
-   - It should report a nonzero camera displacement that decays within about 0.5 s.
-   - Also add more `dust*` on hoof thuds. Only 6 are visible at the start.
+1. **Make the photo finish happen (asked again).** `Sir Trips-a-Lot` is again 28 m back when the leader finishes, so there is nothing close to photograph. Add rubber-banding in AI.update: pull the AI horses toward the leader's pace after x>25 and make them recover from plants faster. Optionally pick a target finish gap of 0.05–0.3 s between two AI horses. Done when `interact` with `until:{phase:"replay"}` (use the page's real phase names, which are `race`, `finishing` and `results`) and then `look` shows the sepia grain, scratches and "PHOTO FINISH" frame, and `observe` lists two horses with `finishT` within 0.3 s.
+2. **(asked again) Cut draw calls from 411 to under 250.** Merge the 142 `merged` calls and 45 `merged-outline` calls per horse by material. Merge the 18 `mesh-outline` and 56 `Mesh` calls with one sponsor atlas. Instance the 16 `tail` meshes. Done when `perf` with `costs:true` reports under 250.
+3. **Make `horse0` measurable and enlarge the blinker silks 2×.** Name the horse's body, leg and head meshes so they are not hidden from the ID image, and flag the post-pass quad so the ID image skips it. Done when `look target:"horse0"` lists its parts and the "0 of its 3 named parts" line is gone.
 
-SCORE: 7.7
+SCORE: 6.6

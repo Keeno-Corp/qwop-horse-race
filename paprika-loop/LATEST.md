@@ -1,34 +1,43 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 48
-**Did** game.js: finish-replay camera pulled back (`tp` FINISH_X+4.5, y 2.6, z 15, fov 34→31); hoof dust in the foot loop now fires at `f.y<0.2`, `|v.x|>1.5`, 3 chunks every 0.07 s; AI late catch-up past x 40 strengthened (`lead*0.1`, clamp ±0.4).
-**Saw** The judge's "results never appears" was a test error: `interact {action:'autoplay'}` does nothing (needs `act({type:'autoplay'})` or `setState({auto:true})`), so `YOU` sat at x 1.4 with legs "0000". With `setState({auto:true})` the race reaches `results` (raceT 24.9). `look` in the plant replay shows dust (`dust*` ×51 on screen, Never visible: none). Results `look` shows YOU WINS!, podium, "SMOOTH OPERATOR" and "DIRT EATER · MOST FACE-PLANTS" award, DNF rows. Winner gap 1.40 s (not under 1 s). Two AIs end 'down'/'run' upside-down at pitch -2.7 because the results phase sets `guard` 99 for all. No console errors. `perf` not run.
-**Next** (1) Photo-finish gap still 1.4 s: pull the second AI toward the player beyond x 45. (2) AIs flip 5–6 times each; check why `rise()` re-flips (hop height / guard 1.6). (3) Results phase should call `rise()` on 'down' horses so no one lies upside-down behind the panel.
-**Open** The interact tool's `{action:'autoplay'}` form doesn't work; use setState auto. One race tested per change.
+### Judge 115
 
-### Judge 48
+**Judge 115**
 
-**Verdict, session 48**
+I played one no-input solo race through to the results card and started a 2-player race. I didn't see the sepia photo-finish replay frames or the head-on cut. The black rectangle from the old Open list is gone. The page is strong.
 
-1. **Plays as DESIGN.md's Core loop and Controls say: 8.** `setState({auto:true})` ran the race to `phase` "results" at `raceT` 24.88. `YOU` finished at `finishT` 21.28, ahead of `Dusty Rhodes` at 22.68. The HUD shows the Q W O P key chips and the tips line. I did not test 2-player play or R.
-2. **Real Rapier jointed ragdoll, face-plant, auto-right: 6.** `Sir Trips-a-Lot` (`plants` 5) and `Hoof Hearted` (`plants` 6) end with `state` "down" and `pitch` -2.67 and -2.84. They are still on their backs at results, and the builder's notes say the results phase locks the auto-right. They flip 5–6 times each in 25 s, which is too many.
-3. **Replay: 8.** Carried from session 47 (`kind` "finish", `rate` 0.25, `REPLAY` banner). I did not run the replay this session.
-4. **Photo finish and tangled AI collapse: 6.** `tangles` is 1 and the AIs pile up. The finish gap is +1.40 s, so it is not a photo finish.
-5. **Results with most face-plants award: 9.** The results box shows "YOU WINS!", a podium, "SMOOTH OPERATOR" on `YOU` and "DIRT EATER · MOST FACE-PLANTS" on `Hoof Hearted`. The DNF rows read "22 m short" and "29 m short".
-6. **Looks as LOOK.md says: 8.** `track`, `grandstand` with blocky crowd, white rail, `finish-line` checker, `hills` and sky all show. Saturation is 60%, with 0% near black and 0% blown out. There were no `Lighting:` or `Surfaces:` fault lines. In the results look, the panel covers the horses and the `player-body` is only 0.27% of the picture.
-7. **window.__game convention, index.html at root: 9.** `observe` and `setState` both work.
-8. **Clip moments in the first minute: 7.** The pile-up happens with no input. The slow-motion replay exists, but the photo finish is not tight.
-9. **Controls feel learnable: 6.** Only autoplay was tested. `interact` with `{action:'autoplay'}` does nothing, which is a harness quirk. No human-rhythm run was done, so there is no new evidence.
-10. **Horses read as horses, match refs/01.jpg: 9.** Head, mane, saddle, socks and hooves show beside the `grandstand` and fence.
-11. **Juice: 8.** 43 sounds fired (blip, powerup, cheer, thud, gasp, boing). The popups and the results panel work. I did not run `feel` on the shake.
-12. **Local 2-player discoverable from the HUD: 8.** The "2 PLAYERS (2)" button sits in `div#top-r`. I did not play it.
-13. **Static page, vendored lib, no network: 9.** `perf` shows 377 draw calls, 33.5k triangles and 0 MB of assets. The 96 ms frame is SwiftShader and does not count.
+**Must have scores**
+1. Plays as DESIGN.md says: 8. A solo `phase:"results"` was reached at raceT 28.87. `Digit2` gave `mode:2` with horses `P1` and `P2`. Holding Q and U set `legs:"1000"` on both. `div#keys` shows PLAYER 1 Q W E R and PLAYER 2 U I O P. I didn't test Enter to restart.
+2. Rapier ragdoll with face-plant and auto-right: 8. `Sir Trips-a-Lot` took 6 `plants` and was still `state:"run"` afterwards, so it recovered. The `FACE-PLANT!` pop was seen in iteration 115.
+3. Replay and photo-finish sepia: 6. The results card says "PHOTO FINISH · 0.19s", but I didn't watch the sepia, grain or "PHOTO FINISH" frame replay, so this score is carried from earlier verdicts.
+4. Photo finish and tangled AI collapse in the first minute with no input: 9. `Hoof Hearted` finished at 24.35 s and `Dusty Rhodes` at 24.54 s, a 0.19 s gap. `Sir Trips-a-Lot` had 6 face-plants and `tangles:1`. This is one race, though; the builder's ~35% photo-finish rate was not re-measured.
+5. Results with most face-plants award: 9. `div#results` has a podium, the badges "DIRT EATER · MOST FACE-PLANTS" and "SMOOTH OPERATOR", and "MOST FACE-PLANTS: SIR TRIPS-A-LOT (6)". It also shows "DNF · 56 M SHORT" for `YOU` and "PRESS R FOR ANOTHER RACE · 1 / 2 = PLAYERS".
+6. Looks as LOOK.md says: 9. The 2-player look has toon 3-step shading with black outlines, a 70s orange, olive and mustard palette, and warm light. `postpass-quad` and `div#crt` give the CRT/VHS pass. The grandstand, `GOLDEN HOOF OATS` and `ZENITH` boards and the crowd read clearly. No `Surfaces:` fault was listed, so the `crowd` z-fight fix from iteration 115 holds. `crowd` is behind the camera in both looks, so I couldn't confirm it by pixels.
+7. `window.__game` convention, static deploy, no network: 9. The page opened in 0.2 s and fetched only the two fonts (0.32 MB).
+8. Horses match CHARACTERS.md and horse.png: 8. White socks, dark hooves, big googly eyes, blinkers, a bristly mane, and saddle cloths with a "4" number and silks all show. The tail tuft and bridle were not checked up close.
+9. Broadcast overlay: 9. `div#tote` has odds that moved between looks (`P1` 3-1, `P2` 2-1). `div#lower` carries live one-liners ("AND THEY'RE OFF!" and, at the finish, "THIS ONE IS GOING TO THE PHOTOGRAPHERS… TOO CLOSE TO CALL!"). `div#top-r` has the LIVE bug, the clock and the mode buttons. The top progress strip and the "GO!" card are there too.
+10. Camera: 7. The side-tracking telephoto reads well. At results the camera sits at `cam.p` [62.4, 1.6, 10.1] with `blend:1`. I didn't see the replay cams.
+11. Controls feel learnable: 7. The `YOUR LEGS` chips and the `div#tips` line help. The human `YOU` horse stayed at x≈2 with no input, as expected. I didn't play a full 60 m run.
+12. Local 2-player: 8. The `2 PLAYERS (2)` button works and the 2P HUD labels are clear. Both players' legs respond. Enter restart is still untested.
+13. Style judged as hard as gameplay: 9. It reads as a 1970s TV race, with cream and brown results card trim, a tote board and the CRT pass.
 
-**Faults: 7.** There were no console errors. `Never visible` lists `dust`, "in view, behind finish-line", while the builder saw dust in the plant replay. Two horses lie upside-down at results.
+**Faults: 8.** There were no console errors and no `Lighting:` or `Surfaces:` lines. `perf` gave 99 ms a frame on SwiftShader (no GPU), so it isn't a budget signal. It also reported 268 draw calls and 128k triangles. The `Never visible` list (`hills`, `lake`, `posts`, `crowd`, `merged`) is all behind-camera or out-of-view objects. In the 2-player look, `dust*` ×16 covers 5.8% of the frame near the hooves.
 
 **Next:**
-1. **Photo-finish gap (asked again).** The winner gap is still 1.40 s. Pull the nearest AI toward the leader from about x 40, with a stronger rubber-band that is skipped when the AI is face-planted. This should give a gap under 0.5 s in most seeds. Check: run `interact` with `setState({auto:true})` and `until {phase:'results'}`. The results row for 2nd should then read "(+0.4x)" or less.
-2. **Stop the AI flip loop and results-phase upside-down horses (asked again).** In `rise()`, check why the AIs re-flip 5–6 times; the cause may be the hop height or `guard` 1.6. Also call `rise()` on every horse in "down" state when `phase` becomes "results". Check: after `phase` "results", `observe` should show no horse with `|pitch|` > 1.2, and `plants` should be 3 or fewer for each AI.
-3. **Show the horses and the dust at the finish.** In the results `look`, the panel hides the horses. Move the panel to the side or lower it, or add a small win pose for the winner. Also check that `dust` is visible on the `track` in the normal race camera. Check: `look` after `interact` with `until {raceT:8}` should show dust puffs and have `Never visible` empty.
+1. Show the replay path. Run `interact` with `until:{phase:"results"}` and a `look` a few seconds before it, or `look` with `cameras`. Check the sepia, grain, scratches and gate weave and the "PHOTO FINISH" frame, plus the replay cams. Score 3 and score 10 rest on old evidence.
+2. Check the 2-player restart and the full 2-player flow. Use `interact` with Enter after the race and expect `phase` to return to the countdown with `mode:2` kept. Also play one solo run, alternating Q+P then W+O, to see whether `YOU` reaches x=60 in under 60 s (item 11).
+3. Zoom on the hooves in the side look at [0,330,1280,520]. Dust and the foreground rail still cut across the lowest horse. If the hooves are hidden, lower the rail or the dust opacity. In the 2-player look, one horse is also hidden behind another at the start.
 
-SCORE: 7.7
+SCORE: 8.2
+
+## Iteration 167
+**Did**
+- No code change; about 5 minutes were left, so the page was not opened.
+**Saw**
+- No new numbers. Last known state is Judge 115: score 8.2, no console errors, no `Lighting:` or `Surfaces:` faults.
+**Next**
+- `interact` with `until:{phase:"results"}` plus a `look` just before it, to check the sepia replay and replay cams.
+- 2-player Enter restart (expect countdown, `mode:2` kept), and a solo run alternating Q+P / W+O to see if YOU reaches x=60 under 60 s.
+- Zoom on the side cam for dust and the foreground rail over the hooves.
+**Open**
+- Replay cams, Enter restart and the solo playthrough are still unchecked.

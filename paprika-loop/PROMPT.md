@@ -33,3 +33,9 @@ Camera cuts, AI tuning, commentary lines, sound flavour, odds model.
 - Grandstand, tote, camera tower, crowd: built in code (asset_search/Poly Haven had nothing toon that fit).
 - In 2-player mode R is player 1's back-right leg, so restart is Enter or the RESTART button there.
 - Three.js and Rapier are vendored in lib/; fonts in lib/fonts (Shrikhand, Bungee, OFL).
+
+## Open from the restyle (fix early)
+- A black rectangle covers the lower-left of the screen above the commentator lower-third in every look picture; find what draws it (a HUD div, the replay inset, or the post pass) and remove it.
+- "YOU WINS!" / "YOU TAKES" grammar: the player's horse needs its own lines ("YOU WIN!").
+- The photo finish only happens in ~35% of races; make a close finish with the sepia photo-finish replay happen in nearly every no-input solo race within the first minute, without making it look scripted.
+- Re-run the critic and `reference` compare against refs/sheets/LOOK-board.png and refs/sheets/horse.png regularly; style is scored as hard as gameplay.

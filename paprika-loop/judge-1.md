@@ -1,70 +1,24 @@
-**1. Plays as DESIGN.md's Core loop and Controls say: 7.**
-- Solo Q W O P and the `#keys` HUD work. A 12-frame rhythm (Q, P, W, O, repeated) moved `horses.2.x` from 1.42 to 3.96 in 2.4 s, with `pitch` between -0.08 and 0.06.
-- I did not test R restart, the 2-player mode or the 60 m finish time.
-- Progress is slow next to the AI, which is at x≈7–9 m by 4.2 s.
+**Scores (Must have, in order)**
 
-**2. Real Rapier jointed ragdoll horses, face-plant and auto-right: 6.**
-- The legs are visibly jointed, and `legs` bits like "0110" track the keys.
-- All `plants` were 0 in the first 4 s, so I did not see a collapse or an auto-right.
-- The previous session logged a pile-up by 6.8 s.
+1. **Plays as DESIGN.md says: 4.** Solo with 3 AI, the Q/W/O/P key panel and the 1/2 mode buttons are on the page. But the camera tracks the idle player (`YOU`, x≈1–2 m) for the whole race. The finish at x=60 and the AI horses' progress are never on screen, so a no-input race shows a horse standing still. I did not press real keys this session (budget).
+2. **Rapier ragdoll horses, face-plant and auto-right: 7.** `Dusty Rhodes` reached `state:"down"`, `pitch:-1.97`, `plants:3`, then returned to `"run"` after about 3 s. The `FACE-PLANT!` pop fires. `YOU` pitched to -0.45 with no input and recovered.
+3. **Replay and sepia photo finish: 3.** After the finish (phase `finishing`) the camera stayed on the idle `YOU` horse, so I saw no replay, sepia, grain or "PHOTO FINISH" frame. This is the third session in a row that it has not been seen. The tote shows `WIN` for `Sir Trips-a-Lot` and `—` for `Hoof Hearted` although both have finishT 24.1 s, so the dead heat is not shown as one.
+4. **Photo finish and tangled AI collapse within a minute: 6.** The race ended at 24.1 s with a dead heat, `tangles:2` and plants 2, 2 and 3. It is not visible, because the camera never follows the pack.
+5. **Results with most face-plants award: 3.** Not reached. `YOU` never finished, and I did not see the results card.
+6. **Looks as LOOK.md says: 7.** The toon shading, outlines, warm 70s palette, CRT/VHS vignette and scanlines, and the `div#crt` overlay read well. The look says "no tone mapping" and flags z-fighting. The black rectangle lower-left, at about [14,475,268,615] in the 1024-wide picture, is still present in all four looks, above `div#lower`. The last Iteration said it was fixed, and it is not.
+7. **`window.__game` convention, static, no network: 7.** `observe` works and assets are 0.32 MB with fonts vendored. `__game.subject` names `player-body`, which is not in the scene. `perf` shows 453 draw calls and 184k triangles, which is heavy. The 408 ms frame is a software renderer, so it says nothing about a real GPU.
+8. **Horses match CHARACTERS.md and horse.png: 7.** Silks (diamonds, stripes, dots), blinkers, oversized hooves, round eyes, mane and tail read at a glance. The sample is the player's white horse with blue spots. Legs are short for the "long wobbly" brief.
+9. **Broadcast overlay: 8.** The `div#tote` odds board with silks and moving odds (`6-5`, `15-1`), the `LIVE` bug, the `3:58 PM` clock bug and the `Walt Dunmore` lower-third with live lines are all present. The title card was not checked. The black rectangle breaks the lower-left corner.
+10. **Camera: 3.** Only a side view locked on the player showed. The head-on cut and the leader or pack tracking were not seen.
+11. **Controls feel learnable: 4.** Not played with real keys (budget).
+12. **Local 2-player, discoverable: 6.** The `2 PLAYERS (2)` button and the tips line are on screen. Not played.
+13. **Style judged as hard as gameplay: 7.** The 70s broadcast reads, apart from the black rectangle. `reference` against `LOOK-board.png` was not run.
 
-**3. Replay (last ~4 s, 0.25x, REPLAY banner, Space skips): 4.**
-- I did not see one. The last session's unattended run showed results at 38 s with no replay.
-
-**4. Photo finish and tangled AI collapse within the first minute: 4.**
-- The tangle was seen last session at 6.8 s.
-- The photo finish is still absent. The last session found the AI finishers 2 m apart and results firing about 1.5 s after the winner.
-
-**5. Results with most face-plants award: 5.**
-- The results fired last session, but I did not check the award this time.
-
-**6. Looks as LOOK.md says: 8.**
-- Check 1 (sky at top-centre near #7bbaff): fail. The sample at (640, 40) was #c9dbe9, a pale haze, not within ±30 of #7bbaff.
-- Check 2 (four horses with distinct cloth colours, dirt filling the lower half): pass. Red, green, blue and yellow `horse*` and `player` cloths are distinct, and the dirt `track` fills the lower half.
-- Check 3 (HUD readable, popups centred): pass. The `#chips`, `#tips` and `#keys` text is readable, with no overlap.
-- Check 4 (no `Lighting:` fault line): pass.
-- The picture reads as bright low-poly, with a grandstand full of blocky crowd, rails and hills.
-- The opening camera is weak: the subject is 0.29% of the frame, with all four horses clumped behind the start line.
-- The chase-camera frames at 1.8 s and 4.2 s read much better.
-
-**7. window.__game convention, index.html at root, static deploy: 9.**
-- `observe` returns the state JSON, and `__game` keys and metadata are present.
-
-**8. Clip moments in the first minute with no input: 6.**
-- The AI collapse is reported by the last session, and I did not re-verify it.
-- The photo finish with a slow-motion replay has not been seen, so this is missing half of the item.
-- It will not make a stranger laugh in the first 10 s: I saw only a clean gallop at 4 s.
-
-**9. Controls feel learnable: 6.**
-- The tip "Q+P then W+O works" is shown, and the player does move.
-- The player is clearly slower than the AI (about 4 m against 7–9 m at 4.2 s), so a 60 s finish is unproven.
-
-**10. Horses read as horses, match refs/01.jpg: 8.**
-- The horses have head, neck, mane, tail, white socks and dark hooves.
-- The stands are covered and wooden, with a crowd.
-- The rails, dirt dust and hills are present.
-- I did not see the clouds.
-
-**11. Juice: 6.**
-- Sound events fire (blip, powerup, cheer) and the dust particles show.
-- I did not see popups or camera shake, and I did not run `feel`.
-
-**12. Local 2-player, discoverable from the HUD: 6.**
-- The `2 PLAYERS (2)` button is visible.
-- I did not play it.
-
-**13. Static page at root, vendored lib, no network: 9.**
-- `0 MB assets`, and the page loaded in 0.1 s.
-
-**Faults: 7.**
-- No console errors, and `Never visible` is only dust, at frame 0.
-- `perf` is 110 ms a frame at 383 draw calls on a software renderer, so the time is not a budget signal.
-- The draw calls are still worth cutting with instancing, because the crowd is made of many separate meshes.
-- Last session's PCFSoftShadowMap warning was not rechecked.
+**Faults: 3.** Faults: the black rectangle persists. The camera sits on a stationary player. Z-fighting and the `subject` name are both still open. `perf` is not a fault on this host (software renderer, host load 2.4), but 453 draw calls is worth reducing.
 
 **Next:**
-1. **Photo finish and replay (asked again).** Make the AI finish so two horses cross within about 0.1 s. Keep the race running until the others reach x=60 instead of firing results about 1.5 s after the winner. Then trigger the 0.25x side replay with the REPLAY banner. One `interact` with `until: {phase: "replay"}` and `look` should show the banner and the photo-finish camera.
-2. **Opening camera and sky (asked again, opening camera).** Start with a tighter camera, so that the four horses are about 3% or more of the frame. Fix sky check 1 by making the sky gradient reach #7bbaff at the zenith, or lower the fog or haze. `look` with `sample` at (640, 40) should read near #7bbaff.
-3. **Make the player competitive and the clip moments fast.** Tune the leg motors, or give the AI more variance, so a Q P W O rhythm tracks the AI. Then check that a face-plant shows within about 6 s unattended. Use `feel` on the face-plant for the shake, popup and gasp. Then run a 2-player `interact` with Q W E R and U I O P.
+1. **Camera follows the race.** Aim the broadcast tracking camera at the race leader or the pack's centroid, with the player as a fallback only when the human is competitive. The player horse should be framed only while it is near the pack. Switch to the head-on cut and to the photo-finish replay camera once the first horse passes x≈55. Check by `interact` wait 1500 frames, then `look` while `raceT` is about 20–25 s: the AI pack and the finish line should be on screen, then the sepia replay with the PHOTO FINISH frame (`look` with `sample` on the frame).
+2. **Remove the black rectangle** (asked again). The last fix targeted `#lower.flash .line` and it did not work. Check `look` `zoom` [0,500,500,800] with `sample` at (100,480) and (100,560): the sample should read the grass or track colour, not near-black. Look for what is drawn at roughly x 14–268, y 475–615 of the 1024-wide picture, using `look` `at` points there. Candidates are the `#crt` image, a `.pop` or `.line` element, or a `#lower::before` pseudo-element.
+3. **Show the dead heat correctly and play it to the results.** The tote should show both horses' `DEAD HEAT` / `PHOTO` state, not `WIN` / `—`. After the replay, show the results card with the most face-plants award. Then play real keys: `interact` with Q/W/O/P hold steps on the `YOU` horse, `x` should rise, and add one 2-player check (`Digit2`). Also fix the `__game.subject` name to an object that exists, and the z-fighting.
 
-SCORE: 6.5
+SCORE: 5.4

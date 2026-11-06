@@ -6,7 +6,7 @@ import * as THREE from 'three';
 export function createBroadcast(renderer) {
   const size = new THREE.Vector2();
   renderer.getDrawingBufferSize(size);
-  const rt = new THREE.WebGLRenderTarget(size.x, size.y, { samples: 4 });
+  const rt = new THREE.WebGLRenderTarget(size.x, size.y, { samples: 0 });
   const U = { tDiffuse: { value: rt.texture }, uRes: { value: size.clone() }, uTime: { value: 0 }, uReplay: { value: 0 }, uGlitch: { value: 0 }, uDpr: { value: renderer.getPixelRatio() }, uFlash: { value: 0 } };
   const mat = new THREE.ShaderMaterial({
     uniforms: U, depthTest: false, depthWrite: false,
@@ -64,7 +64,7 @@ void main(){
   c *= mix(0.7, 1.0, vg) * mix(1.0, 0.8, film * (1.0 - vg));
   // grain
   float g1 = h21(gl_FragCoord.xy / uDpr + vec2(fract(uTime * 7.3) * 91.0, fract(uTime * 3.1) * 53.0)) - 0.5;
-  c += g1 * (0.045 + 0.16 * film);
+  c += g1 * (0.035 + 0.065 * film);
   // scratches + dust on film
   if (film > 0.01) {
     float s0 = floor(uTime * 14.0);
@@ -83,15 +83,20 @@ void main(){
   gl_FragColor = vec4(c * mask, 1.0);
 }`,
   });
-  const quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), mat); quad.frustumCulled = false;
+  const quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), mat); quad.frustumCulled = false; quad.name = "postpass-quad"; quad.userData.noId = true;
   const scn = new THREE.Scene(); scn.add(quad); const cam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
   return {
     U,
     setSize() { renderer.getDrawingBufferSize(size); rt.setSize(size.x, size.y); U.uRes.value.copy(size); U.uDpr.value = renderer.getPixelRatio(); },
     render(scene, camera, t) {
       U.uTime.value = t;
+      if (scene.parent !== scn) scn.add(scene); // so tools that read the last-rendered scene still find the horses
+      scn.fog = scene.fog;
+      scene.visible = true;
       renderer.setRenderTarget(rt); renderer.clear(); renderer.render(scene, camera);
+      scene.visible = false;
       renderer.setRenderTarget(null); renderer.render(scn, cam);
+      scene.visible = true;
     },
   };
 }

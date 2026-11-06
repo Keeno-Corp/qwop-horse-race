@@ -1,24 +1,41 @@
-**Verdict, session 46**
+**Photo Finish Fiasco, judge 46**
 
-1. **Plays as DESIGN.md's Core loop and Controls say: 8.** I held the Q+P / W+O loop (14 frames each). `YOU` went from x 6.1 at `raceT` 1.4 to x 15.2 at `raceT` 3.73 with `plants` 0 and `legs` cycling. `div#keys` shows the Q, W, O and P caps, and `div#top-r` holds `1 PLAYER`, `2 PLAYERS (2)` and `RESTART`. I did not press R after a finish or play 2-player.
-2. **Real Rapier jointed ragdoll, face-plant, auto-right: 7.** The `player-body` ragdoll runs with `pitch` about -0.03 and its legs move under the motors. I saw no face-plant or auto-right this session, so that part is carried over.
-3. **Replay: 7.** Not reached this session. Last session's replay (`kind` "plant", `rate` 0.25, `REPLAY` banner) is carried over.
-4. **Photo finish and tangled AI collapse: 6.** `tangles` stayed 0 for the first 3.7 s. The AIs are 5.7 m behind, so a photo finish looks unlikely, and I have never seen one.
-5. **Results with most face-plants award: 6.** Still not reached, so it is carried over.
-6. **Looks as LOOK.md says: 8.** I saw the white low-poly horse with a blue saddle, dark mane and tail, a white rail, an orange-brown `track` and a covered `grandstand` with a blocky crowd. `hills` and `dust*` show. Saturation was 69%, with 0% near black and 0% blown out. The `player-marker-*` ring is clear. `look` has no `Surfaces:` line now, so the grandstand fix worked.
-7. **window.__game convention, index.html at root: 9.** `window.__game` exposes `subject`, `describe`, `observe`, `act` and `setState`.
-8. **Clip moments in the first minute: 6.** With the loop held, no tangle appeared in 3.7 s and the AIs were spread out. The funny pile-up only happened last session after input stopped. It depends on the player's behaviour, not on the AIs alone.
-9. **Controls feel learnable: 7.** The rhythm gives about 4 m/s with 0 plants, and the player leads easily. The race is too easy and too empty, so there is no drama in it.
-10. **Horses read as horses, match refs/01.jpg: 9.** I saw head, neck, dark mane and tail, a blue saddle and dark hooves. The fence, `grandstand` and green `hills` all show.
-11. **Juice: 8.** The sounds that fired were blip, powerup and cheer. The `div#chips` plant counts, the progress bar, the timer and the commentary tips all show. I did not run `feel` on the shake.
-12. **Local 2-player discoverable from the HUD: 9.** The `2 PLAYERS (2)` button and the "2 = two players" tip both show.
-13. **Static page, vendored lib, no network: 9.** `perf` shows 378 draw calls, 33.5k triangles and 0 MB of assets. The 77 ms frame is SwiftShader and not counted.
+I ran `open`, one `interact` (Enter, 300 frames, then Q, P, W and O, with a `look`) and `perf` with `costs`. I did not play to a finish, the replay, 2-player or the head-on cut. Those scores carry over from earlier verdicts.
 
-**Faults: 8.** I saw no console errors and no `Surfaces:` or `Lighting:` lines. The `Never visible` object is `sky`, which is a backdrop. The finish, the results screen and the jitter spread are unverified for the fourth session running.
+1. **Plays as DESIGN.md's Core loop and Controls say: 7.** `phase:"race"` runs. YOU responds to the keys (`legs:"0010"`), and `div#keys` shows O lit. No human finish has been seen.
+2. **Real Rapier ragdoll, face-plant collapse and auto-right: 8.** All four horses show `state:"run"` with `plants:0`. No collapse was seen this session.
+3. **Replay (sepia, 0.25x, Space skips): 8.** Carried over.
+4. **Photo finish and tangled AI collapse within the first minute: 8.** Carried over.
+5. **Results with most face-plants award: 9.** `div#tote` shows "FACE-PLANTS 0" per horse.
+6. **Looks as LOOK.md says: 8.** Toon steps, outlines, the orange and golden palette, `div#crt` and `crowd` read well. The "TOP-CAT TIRES" billboard and the number 10 marker are crisp. A strip of hills and sky shows above the stand roof. The stand still fills most of the frame, and the haze is subtle.
+7. **window.__game convention, static deploy: 9.** `index.html` is at the root, assets are 0.32 MB and there is no runtime network use.
+8. **Horses match CHARACTERS.md and horse.png: 8.** The saddle cloths show numbers 3 and 4, and the polka-dot horse has a white coat. Hooves, eyes, manes, blinkers and bridle are present.
+9. **Broadcast overlay: 9.** `div#tote` has odds and silks. `div#lower` has the Hank "Hoofbeat" Pruitt line "AND THEY'RE OFF, FOLKS!". The LIVE bug, 3:58 PM clock, "RACE TIME", progress bar, `div#keys` and `div#tips` are all there.
+10. **Camera: 8.** The side-track telephoto frames the horses well, but horses crop at the left edge. The head-on cut and replay cams were not seen.
+11. **Controls feel learnable: 7.** `div#tips` is clear, but no human finish has been seen.
+12. **Local 2-player: 7.** The "2 PLAYERS (2)" button is visible. It was not played.
+13. **Style judged as hard as gameplay: 8.** The 70s TV look holds.
+
+**Faults: 6.**
+- `hills` is still "Never visible" in the plain `look`. The tool reads it as hidden behind `postpass-quad`, and `look target:"hills"` works.
+- `perf` shows 410 draw calls and 141k triangles. The 204 ms frame is SwiftShader at host load 1.8, so it is not a budget signal.
+- No console errors were seen.
 
 **Next:**
-1. **The catch-up change did not work (asked again).** Same loop at `raceT` 3.73: `YOU` x 15.2 against AIs at 8.57, 9.12 and 9.46, about 5.7 m behind and almost the same gap as session 45. The factor at game.js line 63 is not taking effect, or it is too weak. Log it in `observe`, then rubber-band hard: give AIs behind the leader a speed bonus of up to 40%, or directly cap the lead at about 2 m. Check with the same loop. At `raceT` 3.7 the AIs should be at x 13 or more.
-2. **Verify the finish and results (asked again).** Add `window.__game.act({type:'autoplay'})`, which holds the Q+P / W+O rhythm, so one `interact` can run to `horses.2.finished`. Report `finishT` (15–40 s), the gap to the nearest AI (under 1 s), the finish replay and the results screen with the most-face-plants award. Put the numbers in Open.
-3. **Make the AI pile-up happen on its own.** With no input, `tangles` should reach 1 or more by `raceT` 8, from AI lanes drifting together or a forced collapse of two neighbours. Check with `interact` and no keys: `tangles` ≥ 1 and the replay by `raceT` 10. Then run `feel` on the shake and play 2-player once.
+1. **Draw calls (asked again, thirteenth time).**
+   - Merge `merged` (142 calls) and `Mesh` (59) by material across the horses.
+   - Merge `merged-outline` (45) and `mesh-outline` (18).
+   - Instance `tail` (16).
+   - Cut `crowd` triangles (47.9k) with fewer or simpler spectators.
+   - `perf` with `costs` should show under 250 draw calls.
+2. **Play both inputs to a finish (asked again).**
+   - Run `interact` with an alternating Q+P and W+O loop `until` `{"horses.2.finished":true}`, with `max` 3000.
+   - Then press `Digit2` and play Q W E R against U I O P.
+   - Take a `look` of the sepia replay with `sample` at two frames to show grain and flicker.
+   - Check that the head-on cut doesn't crop a far-behind player.
+3. **Depth and framing.**
+   - Make the far stand and billboards paler toward the haze, so far objects read at least 15% lighter than near ones.
+   - Pull the telephoto back or shift it so the leading horses aren't cut at the left edge.
+   - `look` `sample` at a far billboard and a near one should show the far one paler.
 
-SCORE: 7.6
+SCORE: 7.9

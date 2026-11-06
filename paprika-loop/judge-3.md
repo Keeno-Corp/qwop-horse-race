@@ -1,75 +1,28 @@
-**Judge 3 verdict**
+**Scores (Must have, in order)**
 
-1. **Plays as DESIGN.md's Core loop and Controls say: 7.**
-   - The Q P W O rhythm at 6 frames per key took `horses.2` ("YOU") to x=5.16 at raceT 2.17, level with Dusty Rhodes at 5.22 and ahead of the other two AI. The player keeps up now.
-   - A second run ended in a plant replay at raceT 6.9 with YOU at x=7.39. The stronger drive makes the player plant too, which suits the mistimed-keys goal.
-   - A third run of 10 s of the same rhythm also reached a replay by raceT 6.9. I never saw a 60 m finish, 2-player mode or R restart (the R in the first step may have restarted the race, but it was not checked).
+1. **Plays as DESIGN.md says: 6.** The solo race with 3 AI runs, and the `div#keys` panel, `1 PLAYER`, `2 PLAYERS (2)` and `RESTART` are on screen. I held Q, P, W and O in alternation for about 160 frames. `YOU` went from x 1.41 to 3.93 and then went `state:"down"` (`plants:1`, `pitch -0.33`). The AI were at x 10–12 by then. The player is still far behind and mostly off camera. I did not reach the results card or play 2-player.
+2. **Rapier ragdoll, face-plant and auto-right: 7.** The mistimed keys gave a real face-plant on `YOU` (`down`, `plants:1`). The earlier sessions saw `Dusty Rhodes` plant 5 times and horses return to `"run"`. I did not re-measure the auto-right time.
+3. **Replay and sepia photo finish: 7.** I did not see a replay this session. The `look` sheet never finished: the page ran 601 s and the harness closed it. The last session's evidence stands (sepia, sprocket frame, `PHOTO FINISH`, head-on cam). The head-on cam and the `REPLAY 0.25x` and `div#pfc` overlap fix are unverified in a picture.
+4. **Photo finish and tangled collapse within a minute: 7.** I did not run a no-input race to the finish. The last session had a dead heat with both leaders at `finishT` 24.1 exactly, which looks scripted.
+5. **Results with most-face-plants award: 5.** Not reached this session. It was seen only in an early session.
+6. **Looks as LOOK.md says: 7.** The toon shading with outlines, the 70s palette, the warm light and the CRT vignette all hold. Pictures read as a finished broadcast, except for the black rectangle.
+7. **`window.__game`, static, no network: 7.** `observe` works. Assets are 0.32 MB with fonts vendored. `perf` shows 429 draw calls and 184k triangles in `scene of 131 objects`. The 157 ms frame is a software renderer, so it is not a fault. `subject` is `"tote-board"` and `look` says it is not in the scene.
+8. **Horses match CHARACTERS.md and horse.png: 7.** The silks differ (`polka dots`, `stripes`, `chevrons`). The saddle-cloth numbers, blinkers, white socks, dark hooves and mane are right. The legs are shorter than the "long wobbly" brief.
+9. **Broadcast overlay: 8.** `div#tote` has silks, odds and face-plant counts. `div#top-r` has `LIVE`, the `3:58 PM` clock and `RACE TIME`. `div#lower` has the `PLAY-BY-PLAY · HANK "HOOFBEAT" PRUITT` lower-third. The black rectangle sits right above it and hurts this item.
+10. **Camera: 7.** The side-tracking telephoto on the pack reads well. The head-on and replay cams were not seen this session.
+11. **Controls feel learnable: 5.** Alternating Q+P then W+O gave a net 2.5 m in 2.7 s and then a face-plant. The AI cover about 10 m in that time. The player rarely keeps up, and the camera follows the leader pack, so the player is hard to follow.
+12. **Local 2-player, discoverable: 6.** The `2 PLAYERS (2)` button and the tips line are on screen. I did not play it.
+13. **Style judged as hard as gameplay: 7.** The look is strong and it reads as a 1970s TV race. The black rectangle is a visible flaw in every live picture. `reference` against `LOOK-board.png` was not run.
 
-2. **Real Rapier jointed ragdoll horses, face-plant and auto-right: 7.**
-   - By raceT 6.8, `horses.0` and `horses.1` were `state: "down"` with `plants: 1` and `tangles: 1`. The `dust*` particles and the PILE-UP and FACE-PLANT popups show.
-   - I did not see an auto-right or time it.
-
-3. **Replay (last ~4 s, 0.25x, REPLAY banner, Space skips): 7.**
-   - `phase: "replay"` with `kind: "plant"` shows the REPLAY banner and "SPACE to skip".
-   - The camera now follows the horse that planted. The `player` mesh fills 3.9% of the frame and the grandstand is behind it.
-   - The AI that planted are small at the right edge: `horse0-*` is 0.24% of the frame. This replay was never framed on a tangle of several horses.
-   - I did not see the finish replay.
-
-4. **Photo finish and tangled AI collapse within the first minute: 6.**
-   - The tangle is confirmed at raceT 6.8. Two AI are down and the third is partway down (pitch -0.75).
-   - I never reached a finish, so the photo-finish gap, the ~0.1 s target, is still unmeasured.
-
-5. **Results with most face-plants award: 4.**
-   - Not reached in this session.
-
-6. **Looks as LOOK.md says: 8.**
-   - Check 1 (sky near #7bbaff) now passes: (640,10) is #78b0ed. (640,40) is #9ac2ea and sits on the grandstand roof, not sky.
-   - The four coats (chestnut, grey, black, red-bay) plus cloths on `horse0`–`horse3` and `player` read clearly.
-   - `#chips`, `#tips` and `#keys` don't overlap. There is no `Lighting:` line.
-   - There are no clouds in frame. At the start `player` is only 0.8% of the frame.
-
-7. **window.__game convention, index.html at root, static deploy: 9.**
-   - `observe` returns the state JSON with keys and metadata. There are no network assets (0 MB).
-
-8. **Clip moments in the first minute with no input: 8.**
-   - With no input, FACE-PLANT and PILE-UP popups, dust and a visible tangle appear at 6.8 s. A stranger could laugh within about 10 s.
-   - The photo-finish half is still unproven.
-
-9. **Controls feel learnable: 6.**
-   - Rhythm input keeps pace and mistimed input plants the horse. A 60 m finish under 60 s was not demonstrated.
-   - The player may now be too strong or too fragile. It planted at about 7 m in the longer run.
-
-10. **Horses read as horses, match refs/01.jpg: 8.**
-   - Heads, manes, tails, socks, the covered grandstand with crowd, white rails, "10 m" signs and green hills match the reference. Clouds are still missing.
-
-11. **Juice: 7.**
-   - Sounds fired (cheer, thud, gasp, powerup) and the commentator popups show.
-   - I did not run `feel`, so camera shake is unverified.
-
-12. **Local 2-player, discoverable from the HUD: 6.**
-   - The `2 PLAYERS (2)` button is visible. I did not play it.
-
-13. **Static page at root, vendored lib, no network: 9.**
-   - `perf` gave 380 draw calls and 33k triangles, with 0 MB assets. A frame takes 95 ms on SwiftShader, which says nothing about a real GPU.
-
-**Faults: 7.**
-- There are no console errors. The only console line is a PCFSoftShadowMap warning.
-- `Never visible` read "dust (0 units, in view, behind track)" at the first look and "none" once the horses were running.
-- The replay look reported `grandstand` box faces sharing a plane (y = 0.00). It is minor.
-- The 380 draw calls are mostly crowd and `horse*` meshes.
+**Faults: 4.**
+- The black rectangle is still in the live picture at about [14,475,270,615] in the 1024-wide picture, directly above `div#lower`. The last builder called it a harness artifact. I see it in the harness picture too, so a real browser is unproven either way.
+- `look` with `sheet` at frames 1500–1750 on this software renderer hung for 601 s, so replays are hard to inspect.
+- `perf` is not a fault on this host (software renderer), but 429 draw calls is heavy.
+- `__game.subject` points at an object that is not found.
 
 **Next:**
-1. **Prove the full race and the results screen (asked again).**
-   - Add a time-based auto-play or a debug action, for example `__game.act`, so one `interact` run drives the player through all 60 m.
-   - Tune `driveF` so a steady rhythm finishes in about 40–55 s with a few plants.
-   - Check with `interact` `until: {phase: "results"}`. `observe` should show `finishT` on all four horses, a top-two gap of about 0.1 s, and the most-face-plants award on screen in `look`.
-2. **Frame the replays on the action.**
-   - For a `kind: "plant"` replay, aim the camera at the centroid of the planted horses or the tangle, not the player.
-   - For a finish replay, use a side view of the line.
-   - `interact` with `until: {phase: "replay"}` and `look` should show at least 2 `down` horses filling more than 3% of the frame.
-3. **Add the clouds and a closer opening camera.**
-   - Add low-poly clouds in `look`'s view, at sky (640,10) or higher, as in refs/01.jpg.
-   - Start the camera closer, so `player` takes more than 3% of the opening frame instead of 0.8%.
-   - Then run `feel` on a face-plant to confirm the camera shake, and play 2-player with Q W E R against U I O P to check it.
+1. **Black rectangle** (asked again). Treat it as real, since the page's own CSS is the only thing that can draw it. In `index.html` or the CSS, remove the `#tote` mirrored or reflected element, any `::after` or `-webkit-box-reflect`, and any `backdrop-filter` on `#tote`. Then check whether `#crt`'s background image tiles. Done when one `look` with `sample` at (100,520) and (100,580) reads track or grass colour (orange or green), not near-black. Test it by temporarily setting `#tote{display:none}` and `#crt{display:none}` in separate `look` calls.
+2. **Make the player relevant and the controls forgiving.** The camera should include `YOU` (frame the pack plus the player, or switch to the player when they lag). Add key-hold assist so Q+P then W+O gives steady forward motion. An `interact` with the alternating keys for 600 frames should end with `YOU` at x ≥ 25 and `plants` ≤ 1, after which one finish can be reached.
+3. **Replay verification and draw calls.** The finish replay must be inspectable without a 600 s hang: lower `sheet` cost by ending replays with a quicker `{state:{...}}` jump. Break the AI dead heat (a seeded `finishT` gap of 0.03–0.4 s). Cut draw calls (<250) by turning the crowd, fence and ad boards into `InstancedMesh`. Use `perf` with `costs:true` to show it.
 
-SCORE: 7.1
+SCORE: 6.5

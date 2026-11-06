@@ -15,10 +15,10 @@ export function createWorld(R) {
 }
 
 const DIM = {
-  torso: [0.78, 0.27, 0.36], upper: 0.5, lower: 0.55, neck: 0.72, head: 0.5,
+  torso: [0.78, 0.27, 0.36], upper: 0.69, lower: 0.76, neck: 0.72, head: 0.5,
   hipX: 0.56, hipY: -0.18, hipZ: 0.2,
 };
-export const STAND_H = 0.18 + 0.5 + 0.55 + 0.03; // torso centre height standing
+export const STAND_H = 0.18 + 0.69 + 0.76 + 0.03; // torso centre height standing
 
 export const T = { // pose targets (radians)
   hipRel: -0.22, hipHeld: 1.05, kneeRel: 0.0, kneeHeld: -1.9,
@@ -118,7 +118,7 @@ export class Horse {
       // lane keeping + light yaw-free steering
       const m = 42;
       tb.addForce({ x: 0, y: 0, z: (-(p.z - this.laneZ) * 40 - v.z * 25) * m * 0.2 }, true);
-      this.drive = Math.max(0, (this.drive || 0) - dt * 0.7);
+      this.drive = Math.max(0, (this.drive || 0) - dt * 0.45);
       if (this.drive > 0) tb.addForce({ x: this.drive * (this.driveF || 150) * 1, y: 0, z: 0 }, true);
       tb.addForce({ x: -v.x * Math.abs(v.x) * (this.drag ?? 16), y: 0, z: 0 }, true);
       // keep the hinge plane upright: torso roll and yaw are springs, pitch is free (that is the game)

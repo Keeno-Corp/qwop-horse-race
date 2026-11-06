@@ -37,7 +37,7 @@ window.__scene = scene; window.__cam = camera;
 
 // ---------- physics + horses ----------
 const world = createWorld(RAPIER);
-const LANES = [-1.5, -0.5, 0.5, 1.5], STAGGER = [0, 0.7, 1.4, 2.1];   // a visual stagger so the field reads as four horses, not one pile
+const LANES = [-1.65, -0.55, 0.55, 1.65], STAGGER = [0, 1.0, 2.0, 3.0];   // a visual stagger so the field reads as four horses, not one pile
 const horses = [0, 1, 2, 3].map((i) => new Horse(RAPIER, world, i, LANES[i], 0));
 const views = [];         // per horse: visual groups
 const roles = [];         // per horse: { name, color, human, ai }
@@ -57,6 +57,12 @@ class AI {
     if (px > 6 && px <= 22) { const g0 = (AI.aiLeadX || 0) - px; if (g0 > 1.5) band = 1 - clamp((g0 - 1.5) * 0.09, 0, 0.45); }
     if (px > 22) { if (this.m) this.m = null; this.next = 99; const gapL = (AI.aiLeadX || 0) - px; if (gapL > 0.5) band = 1 - clamp((gapL - 0.5) * (px > 38 ? 0.3 : 0.15), 0, px > 38 ? 0.78 : 0.7); }
     { const g1 = (AI.leadX || 0) - px; if (g1 > 1.5 && h.state === 'run' && !h.finished) { h.drive = 1; h.driveF = 40 * clamp(g1 - 1.5, 0, 14); } else h.driveF = 0; }
+    { // stall watchdog: a horse that has barely moved in 3 s while upright gets a firm shove
+      this.wx = this.wx ?? px; this.wt = (this.wt || 0) + dt;
+      if (this.wt > 3) { this.stuck = h.state === 'run' && !h.finished && px > 5 && px - this.wx < 0.8 ? 1.4 : 0; this.wx = px; this.wt = 0; }
+      if (this.stuck === 1.4 && h.rise) { this.stuck = 1.39; if (Math.abs(h.pitch()) > 0.9) h.rise(); }
+      if (this.stuck > 0) { this.stuck -= dt; h.drive = 1; h.driveF = Math.max(h.driveF || 0, 420); }
+    }
     if (this.t < this.delay) { for (let i = 0; i < 4; i++) h.setHeld(i, false); return; }
     const per = this.jit * band * this.base * (1 + 0.14 * Math.sin(this.wob * 1.7) + 0.08 * Math.sin(this.wob * 4.1)) * (1 + clamp(lead * 0.07, -0.35, 0.5)) * (1 - clamp(((AI.leadX || 0) - px - 1) * 0.06, 0, 0.4)) * (h.pos().x > 40 ? 1 - clamp(lead * 0.1, -0.4, 0.4) : 1);
     this.phase = (this.phase + dt / per) % 1;
@@ -92,7 +98,7 @@ function assignRoles() {
     roles.push(r);
     const groups = buildHorseView(r.color, 0, r.human === 0 ? 0xf2e1ad : r.human === 1 ? 0x6b3a22 : COATS[i], SILKS[s.color], i + 1);
     groups.forEach((g, k) => { g.name = (r.human === 0 ? 'player' : 'horse' + i) + (k === 0 ? '-body' : k === 1 ? '-head' : '-' + k); scene.add(g); });
-    views.push(groups);
+    groups[0].name = 'horse' + i;     views.push(groups);
     horses[i].homeZ = LANES[i];
   });
   buildHud();
@@ -100,7 +106,7 @@ function assignRoles() {
 
 // ---------- dust chunks ----------
 const NDUST = 420;
-const dustM = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(0.15, 1), new THREE.MeshToonMaterial({ color: 0xffffff, gradientMap: RAMP, transparent: true, opacity: 0.92 }), NDUST);
+const dustM = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(0.15, 0), new THREE.MeshToonMaterial({ color: 0xffffff, gradientMap: RAMP, transparent: true, opacity: 0.92 }), NDUST);
 dustM.castShadow = false; dustM.frustumCulled = false; dustM.name = 'dust'; dustM.renderOrder = 5; dustM.material.polygonOffset = true; dustM.material.polygonOffsetFactor = -2; scene.add(dustM);
 const dust = Array.from({ length: NDUST }, () => ({ life: 0, p: new THREE.Vector3(), v: new THREE.Vector3(), s: 1, r: new THREE.Euler() }));
 { const c = new THREE.Color(); dust.forEach((d, i) => dustM.setColorAt(i, c.set([0xe9c88e, 0xd9ac6a, 0xf3dfae, 0xc99a58][i % 4]))); }
@@ -204,7 +210,7 @@ const LINES = {
 };
 const COMM = { q: [], cur: 0, until: 0, lastLead: -1, leadT: -99, fillAt: 6, last: '' };
 const GV = { takes: 'take', wins: 'win', moves: 'move', eats: 'eat', kisses: 'kiss', does: 'do', flips: 'flip', goes: 'go', thinks: 'think', sits: 'sit', has: 'have', is: 'are' };
-const gram = (t) => t.replace(/\bYOU (takes|wins|moves|eats|kisses|does|flips|goes|thinks|sits|has|is)\b/g, (m, v) => 'YOU ' + GV[v]);
+const gram = (t) => t.replace(/\bYOU (takes|wins|moves|eats|kisses|does|flips|goes|thinks|sits|has|is)\b/gi, (m, v) => { const g = GV[v.toLowerCase()]; return 'YOU ' + (v === v.toUpperCase() ? g.toUpperCase() : g); });
 function say(text, pri = 1, hold = 3.6) {
   if (!text) return;
   if (S.time < COMM.until && pri <= COMM.pri) return;
@@ -228,7 +234,7 @@ function updateOdds(dt) {
     if (o.t <= 0) {
       o.t = 0.35; const v = o.shown, num = v >= 10 ? Math.round(v) : v >= 4 ? Math.round(v * 2) / 2 : Math.round(v * 2) / 2;
       let txt = v < 1 ? '1-2' : v < 1.25 ? '6-5' : v < 1.75 ? '3-2' : v < 2.25 ? '2-1' : v < 2.75 ? '5-2' : v < 3.5 ? '3-1' : v < 4.5 ? '4-1' : v < 5.5 ? '5-1' : v < 7 ? '6-1' : v < 8.5 ? '8-1' : v < 12 ? '10-1' : v < 17 ? '15-1' : v < 25 ? '20-1' : '30-1';
-      if (h.finished && S.order[0] === i) txt = 'WIN'; else if (h.finished) txt = '—';
+      if (h.finished && S.order[0] === i) txt = horses.some((o, j) => j !== i && o.finished && Math.abs(o.finishT - h.finishT) < 0.15) ? 'PHOTO' : 'WIN'; else if (h.finished) txt = Math.abs(h.finishT - horses[S.order[0]].finishT) < 0.15 ? 'PHOTO' : '—';
       if (txt !== o.text) { o.dir = v > (o.last || v) ? -1 : 1; o.last = v; o.text = txt; const el = $('od' + i); if (el) { el.textContent = txt; el.className = 'od ' + (o.dir > 0 ? 'up' : 'dn'); setTimeout(() => el && (el.className = 'od'), 700); } }
     }
   });
@@ -243,7 +249,7 @@ function resetRace() {
   seed = 12345 + 7919 * (++S.seedRound);
   assignRoles();
   horses.forEach((h, i) => { h.reset(STAGGER[i], LANES[i]); h.guard = 99; h.assist = 1; h.stiff = 1; h.plants = 0; h.finished = false; h.finishT = null; h.speedBefore = 0; h.drive = 0; h.legT = [0, 0, 0, 0]; for (let k = 0; k < 4; k++) h.setHeld(k, false); });
-  Object.assign(S, { phase: 'countdown', countdown: 4.6, raceT: 0, finishT: null, firstFinish: null, order: [], pending: null, pair: null, lastReplayAt: -99, replay: null, tangles: 0, lastTangle: -99, focus: null, deadHeat: rng() < 0.35, excite: 0, results: null, resultsShown: false, camBlend: 0 });
+  Object.assign(S, { phase: 'countdown', countdown: 4.6, raceT: 0, finishT: null, firstFinish: null, order: [], pending: null, pair: null, lastReplayAt: -99, replay: null, tangles: 0, lastTangle: -99, focus: null, deadHeat: true, hhGap: 0.5 + rng() * 2.8, excite: 0, results: null, resultsShown: false, camBlend: 0 });
   ringN = 0; for (const d of dust) d.life = 0;
   for (const p of S.popups) p.el.remove(); S.popups = [];
   $('results').style.display = 'none'; setReplayUi(false); $('count').textContent = '';
@@ -264,7 +270,7 @@ function popup(text, sub = '', color = '#ffd27a', life = 1.7) {
   S.popups.forEach((p, i) => { p.el.style.top = (22 + i * 20) + 'vh'; }); // re-stack so two pops never overlap
 }
 const COMMENT = {
-  'FACE-PLANT!': ['{n} eats dirt!', '{n} kisses the track!', 'Nose-first for {n}!', '{n} has lost control of their face'],
+  'FACE-PLANT!': ['{n} eats dirt!', '{n} kisses the track!', 'Nose-first for {n}!', '{n} lost control of that face'],
   'CARTWHEEL!': ['{n} is doing gymnastics!', '10/10 from the judges, {n}!'],
   'DOG SIT!': ['{n} is sitting like a dog!', '{n} thinks this is a picnic'],
   'SPLITS!': ['{n} does the splits!', 'Ouch! {n} is not a gymnast'],
@@ -293,11 +299,15 @@ function physStep() {
   for (const h of horses) {
     const r = roles[h.idx];
     if (r.human >= 0 && (S.phase === 'race' || S.phase === 'finishing') && !h.finished) {
-      const set = KEYS[mode][r.human]; const ph = Math.floor(S.raceT / AUTO.period) % 2; for (let i = 0; i < 4; i++) { const d = S.auto ? ((i === 0 || i === 3) === (ph === 0)) : held.has(set[i]); if (d && !h.held[i]) h.drive = Math.min(1.6, (h.drive || 0) + 0.5); h.setHeld(i, d); }
-      if (S.phase === 'race') { const others = horses.filter((o, j) => roles[j].ai).map((o) => o.pos().x); const avg = others.reduce((a, b) => a + b, 0) / Math.max(1, others.length); h.driveF = (S.auto ? 0.5 : 26) * Math.max(0, 30 + clamp(avg - h.pos().x - 4, 0, 30) * 6 - clamp(h.pos().x - avg - 0.3, 0, 20) * 14); }
+      const set = KEYS[mode][r.human]; const ph = Math.floor(S.raceT / AUTO.period) % 2; for (let i = 0; i < 4; i++) { const d = S.auto ? ((i === 0 || i === 3) === (ph === 0)) : held.has(set[i]); if (d && !h.held[i]) h.drive = Math.min(2.2, (h.drive || 0) + 0.8); h.setHeld(i, d); }
+      if (S.phase === 'race') { const others = horses.filter((o, j) => roles[j].ai).map((o) => o.pos().x); const avg = others.reduce((a, b) => a + b, 0) / Math.max(1, others.length); h.driveF = (S.auto ? 0.5 : 40) * Math.max(0, 30 + clamp(avg - h.pos().x - 4, 0, 30) * 6 - clamp(h.pos().x - avg - 0.3, 0, 20) * 14); }
     } else if (r.human >= 0) for (let i = 0; i < 4; i++) h.setHeld(i, false);
     if (h.finished || S.phase === 'results') h.guard = 99;
-    if (r.human >= 0 && !S.auto) h.assist = 2.5 + 2.5 * clamp(1 - S.raceT / 5, 0, 1) * (S.phase === "race" ? 1 : 0);
+    if (r.human >= 0 && S.phase === 'race' && !h.finished && h.state === 'run') { // human stall watchdog: a stuck upright or tipped horse is stood up and nudged
+      h.wd = (h.wd || 0) + DT; h.wdAny = h.wdAny || h.held.some((v) => v);
+      if (h.wd > 2.5) { const px = h.pos().x; if (h.wdAny && px > 3 && px - (h.wdX ?? -9) < 0.5) { if (Math.abs(h.pitch()) > 0.7 || h.pos().y < 0.8) h.rise(); h.drive = 1; h.driveF = Math.max(h.driveF || 0, 420); } h.wdX = px; h.wd = 0; h.wdAny = false; }
+    }
+    if (r.human >= 0 && !S.auto) h.assist = 3 + 7 * clamp(1 - S.raceT / 7, 0, 1) * (S.phase === "race" ? 1 : 0);
     const ev = h.step(DT);
     if (ev === 'rise') { const p = h.torso.body.translation(); emitDust(p.x, 0.05, p.z, 14, 2, 3, 1.1); sfx.play('boing', 0.5); }
     else if (ev) onPlant(h, ev);
@@ -330,12 +340,12 @@ function updateRace(dt) {
   if (S.phase === 'race' || S.phase === 'finishing') {
     horses.forEach((h, i) => { const r = roles[i]; if (r.ai) { if (h.finished) for (let k = 0; k < 4; k++) h.setHeld(k, false); else r.ai.update(h, dt, xs[i] - mean); } });
   }
-  if (S.deadHeat && (S.phase === 'race' || S.phase === 'finishing') && AI.leadX > 34) { // closing sprint: the best chaser is dragged level for a photo finish
-    let ld = null; horses.forEach((h) => { if (!h.finished && (!ld || h.pos().x > ld.pos().x)) ld = h; });
+  if (S.deadHeat && (S.phase === 'race' || S.phase === 'finishing') && AI.leadX > 25) { // closing sprint: the best chaser is dragged level for a photo finish
+    let ld = null; horses.forEach((h) => { if (!ld || h.pos().x > ld.pos().x) ld = h; });
     let ch = null; horses.forEach((h, i) => { if (roles[i].ai && h !== ld && !h.finished && xs[i] > 14 && (!ch || xs[i] > xs[ch.idx])) ch = h; });
     if (ch && ld) {
       if (ch.state !== 'run') { ch.rise(); ch.guard = 99; }
-      const gap = ld.pos().x - ch.pos().x, sh = Math.min(Math.max(0, gap - 0.7), (gap > 8 ? 7 : 3.2) * dt);
+      const gap = (ld.finished ? 60 : ld.pos().x) - ch.pos().x, sh = Math.min(Math.max(0, gap - (S.hhGap || 0.7)), (gap > 8 ? 7 : 3.2) * dt);
       if (sh > 0) for (const p of ch.parts) { const t = p.body.translation(); p.body.setTranslation({ x: t.x + sh, y: t.y, z: t.z }, true); }
       for (const p of ch.parts) { const v = p.body.linvel(), lv = ld.torso.body.linvel().x; if (v.x < lv) p.body.setLinvel({ x: v.x + (lv - v.x) * 0.1, y: v.y, z: v.z }, true); }
     }
@@ -347,7 +357,8 @@ function updateRace(dt) {
   if (S.phase === 'race' || S.phase === 'finishing') {
     S.raceT += dt;
     for (const h of horses) if (!h.finished && h.headTip().x >= FINISH_X) {
-      h.finished = true; h.finishT = S.raceT; S.order.push(h.idx);
+      h.finished = true; h.finishT = S.raceT - Math.min(dt, Math.max(0, (h.headTip().x - FINISH_X) / Math.max(3, h.torso.body.linvel().x))); S.order.push(h.idx);
+      if (S.deadHeat && S.order.length === 2) { const f = horses[S.order[0]].finishT, minGap = 0.03 + (((S.hhGap || 0.5) - 0.5) / 2.8) * 0.27; if (h.finishT - f < minGap) h.finishT = f + minGap; }
       if (S.firstFinish === null) {
         S.firstFinish = S.raceT; S.phase = 'finishing'; S.firstFinishFrame = ringN; S.pending = null;
         sfx.play('cheer', 1); sfx.play('powerup', 0.6, 0.1); S.excite = 1; S.flash = 1;
@@ -377,7 +388,7 @@ function updateRace(dt) {
     if (S.phase === 'finishing') {
       const since = S.raceT - S.firstFinish;
       const humanWait = roles.some((r, i) => r.human >= 0 && !horses[i].finished && horses[i].state === 'run') && since < 4;
-      if ((since > 6.5 && !humanWait) || horses.every((h) => h.finished || h.state !== 'run' && since > 3.5)) startFinishReplay();
+      if ((since > 4.5 && !humanWait) || horses.every((h) => h.finished || h.state !== 'run' && since > 3.5)) startFinishReplay();
     } else if (S.raceT > 150) startFinishReplay();
   }
 }
@@ -398,9 +409,9 @@ function startFinishReplay() {
   popup(gap < 1.0 ? 'PHOTO FINISH!' : 'WINNER!', roles[w.idx].name + (gap < 0.5 ? ' by a nose (' + gap.toFixed(2) + 's)!' : ' takes it!'), '#e5af2c', 2.4);
   say(gap < 0.5 ? line('tied') : line('win', roles[w.idx].name), 5, 5); S.pfGap = gap; S.pfWinner = roles[w.idx].name;
   const start = Math.max(Math.max(0, ringN - RING + 2), (S.firstFinishFrame || ringN - 1) - 24), end = Math.min(ringN - 1, start + 64);
-  S.replay = { kind: 'finish', start, end, pos: start, subject: w.idx };
-  S.phase = 'replay'; setReplayUi(true, 'finish'); S.flash = 1; sfx.play('cheer', 0.8);
-  camPos.set(FINISH_X + 8, 2.7, 12.5); camLook.set(FINISH_X - 0.6, 1.1, 0);
+  S.replay = { kind: 'finish', start, end, pos: start, subject: w.idx, snap: true }; applyFrame(start);
+  S.phase = 'replay'; setReplayUi(true, 'finish'); S.flash = 0.5; sfx.play('cheer', 0.8);
+  camPos.set(FINISH_X + 4, 1.3, 10); camLook.set(FINISH_X - 0.5, 1.0, 0);
 }
 function startPlantReplay() {
   const hi = S.pending.horse; S.pending = null;
@@ -426,7 +437,7 @@ function showResults() {
     return `<tr><td class="n">${k + 1}</td><td><i style="background:${hex(i)}"></i>${roles[i].name}${aw}</td><td>${t}</td><td class="n">${h.plants} face-plant${h.plants === 1 ? '' : 's'}</td></tr>`;
   }).join('');
   const photo = res.gap < 1.0 ? `PHOTO FINISH · ${res.gap.toFixed(2)}s` : 'RESULTS';
-  $('results').querySelector('.box').innerHTML = `<h1>${roles[ord[0]].name === 'YOU' ? 'YOU WIN!' : roles[ord[0]].name + ' WINS!'}<small>${photo}</small></h1><div class="pod">${pod}</div><table>${rows}</table><div class="hint">${mode === 1 ? 'Press R' : 'Press Enter'} for another race · 1 / 2 = players</div>`;
+  $('results').querySelector('.box').innerHTML = `<h1>${roles[ord[0]].name === 'YOU' ? 'YOU WIN!' : roles[ord[0]].name + ' WINS!'}<small>${photo}</small></h1><div class="pod">${pod}</div><table>${rows}</table>${maxP > 0 ? `<div class="hint" style="font-size:14px;color:var(--tomato);font-weight:bold">MOST FACE-PLANTS: ${roles[worst].name} (${maxP})</div>` : ''}<div class="hint">${mode === 1 ? 'Press R' : 'Press Enter'} for another race · 1 / 2 = players</div>`;
   $('results').style.display = 'flex'; S.resultsShown = true; for (const p of S.popups) p.el.remove(); S.popups = [];
 }
 
@@ -439,9 +450,11 @@ function followTarget() {
   const leader = Math.max(...horses.map((h) => h.pos().x));
   const gap = leader - hx, sm = clamp((gap - 8) / 22, 0, 1);
   // when the player falls far behind, the camera drifts to the lead pack so the race stays in frame
-  let fx = hx + Math.min(clamp(gap, -4, 60) * (0.3 + 0.55 * sm * sm * (3 - 2 * sm)), 4.5);
-  fx = Math.min(fx, FINISH_X + 2);
-  const far = Math.min(Math.abs(leader - hx), 26);
+  const sm2 = clamp((gap - 5) / 12, 0, 1), sm3 = sm2 * sm2 * (3 - 2 * sm2);
+  const mine = hx + Math.min(clamp(gap, -4, 60) * 0.3, 4.5);
+  let fx = mine + (leader - 3.5 - mine) * sm3;
+  fx = Math.min(fx, FINISH_X + 2, hx + 5.5 / Math.pow(Math.min(1, camera.aspect / 1.5), 0.7));   // the human's whole horse stays inside the frame
+  const far = Math.min(Math.abs(leader - hx), 26) * (1 - sm3 * 0.7);
   const asp = Math.min(1, camera.aspect / 1.5);
   const dist = (14.5 + clamp(far * 0.5, 0, 14)) / Math.pow(asp, 0.7);   // long telephoto from the infield, far off the rail
   return { fx, dist, leader };
@@ -455,7 +468,7 @@ function updateCamera(dt) {
     const rp = S.replay;
     if (rp.kind === 'finish') {
       const prog = (rp.pos - rp.start) / Math.max(1, rp.end - rp.start);
-      tp.set(FINISH_X + 8 - prog * 1.2, 2.7, 12.5); tl.set(FINISH_X - 0.6, 1.1, 0); fov = 24 - prog * 3;
+      tp.set(FINISH_X + 4 - prog * 1.5, 1.3 + prog * 0.3, 10); tl.set(FINISH_X - 0.5 - prog * 0.5, 1.0, 0); fov = 34 - prog * 4;
     } else { // low rail cam orbiting the pile-up
       const prog = (rp.pos - rp.start) / Math.max(1, rp.end - rp.start), s = subjectAt(rp.pos, rp.subject), a = 0.35 + prog * 1.1;
       let cx = s.x, cz = s.z, d = 8;
@@ -485,7 +498,7 @@ function updateCamera(dt) {
       tp.set(-6 + (fx - 0.4 + 6) * e, 3.4 + 0.4 * e, 17 - (17 - dist) * e); tl.set(1.5 + (fx + 1.8 - 1.5) * e, 1.2, 0);
       camPos.copy(tp); camLook.copy(tl);
     } else {
-      tp.set(fx - 0.4, 3.0 + (dist - 14.5) * 0.14, dist); tl.set(fx + 2.0, 1.7, 0.3);
+      tp.set(fx - 0.4, 2.0 + (dist - 14.5) * 0.1, dist); tl.set(fx + 1.0, 2.7, 0.3);
       if (snap) { camPos.copy(tp); camLook.copy(tl); } else { camPos.lerp(tp, 1 - Math.exp(-dt * 2.6)); camLook.lerp(tl, 1 - Math.exp(-dt * 4)); }
     }
   }
@@ -537,7 +550,7 @@ function tick(dt) {
     if (n !== S.lastCount && n <= 3) { S.lastCount = n; if (n > 0) { $('count').textContent = n; $('count').style.color = n === 1 ? '#ffd27a' : '#fff6e0'; sfx.play('blip', 0.7); } }
     if (S.countdown <= 0) {
       S.phase = 'race'; say(line('off'), 3, 4.5); $('count').textContent = 'GO!'; $('count').style.color = '#6fe36f'; S.goT = 0.9; sfx.play('powerup', 0.8); sfx.play('cheer', 0.6, 0.1);
-      horses.forEach((h) => { h.guard = 1.2; });
+      horses.forEach((h) => { h.guard = roles[h.idx].human >= 0 ? 3 : 1.2; });
     }
     updateRace(dt);
     if (S.phase === 'countdown') for (const h of horses) h.guard = 99;
@@ -630,12 +643,13 @@ requestAnimationFrame(frame);
 // ---------- window.__game ----------
 const r2 = (v) => +v.toFixed(2);
 window.__game = {
-  subject: 'player-body',
+  subject: 'horse0',
   describe: () => ({
     name: 'Photo Finish Fiasco', stack: 'three + rapier ragdoll', units: 'metres, x down the track (finish at x=60), y up, z across lanes',
     keys: { solo: { KeyQ: 'front-left leg (hold)', KeyW: 'front-right leg', KeyO: 'back-left leg', KeyP: 'back-right leg', KeyR: 'restart', Digit2: 'two players', Digit1: 'solo', Space: 'skip replay' }, twoPlayer: { p1: 'Q W E R', p2: 'U I O P', Enter: 'restart' } },
   }),
   observe: () => ({
+    cam: { p: camera.position.toArray().map(r2), look: camLook.toArray().map(r2), fov: r2(camera.fov), blend: r2(S.camBlend) },
     phase: S.phase, mode, raceT: r2(S.raceT), countdown: r2(Math.max(0, S.countdown)), replay: S.replay ? { kind: S.replay.kind, pos: r2(S.replay.pos), t: r2(S.replay.pos - S.replay.start), of: S.replay.end, rate: 0.25 } : null,
     pendingReplay: !!S.pending, tangles: S.tangles, results: S.results ? S.results.order.map((i) => roles[i].name) : null,
     horses: horses.map((h, i) => ({ name: roles[i].name, human: roles[i].human, x: r2(h.torso.body.translation().x), y: r2(h.torso.body.translation().y), z: r2(h.torso.body.translation().z), pitch: r2(h.pitch()), state: h.state, plants: h.plants, finished: h.finished, finishT: h.finishT && r2(h.finishT), legs: h.held.map((v) => (v ? 1 : 0)).join('') })),

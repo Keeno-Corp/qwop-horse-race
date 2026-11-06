@@ -1,68 +1,29 @@
-**Judge 10 verdict**
+**Scores (Must have, in order)**
 
-1. **Plays as DESIGN.md's Core loop and Controls say: 6.**
-   - The auto race runs from countdown to results.
-   - `YOU` is stuck at x 2.37 with `legs` "0000" for the whole race. The auto bot never recovers.
-   - `Dusty Rhodes` wins alone at `finishT` 24.37.
-2. **Real Rapier jointed ragdoll, face-plant and auto-right: 7.**
-   - The `plants` counts rise (Sir Trips-a-Lot reaches 5). The `horse3-*` legs are jointed and visibly pose.
-   - The winner ends at `pitch` -0.88 with `legs` "0000". Auto-right timing is unmeasured.
-3. **Replay (last ~4 s, 0.25x, REPLAY banner, Space skips): 6.**
-   - The `kind:"plant"` replay shows the REPLAY banner and "SPACE to skip". Space skips to results.
-   - No `kind:"finish"` replay was seen.
-4. **Photo finish and tangled AI collapse within the first minute: 4.**
-   - `tangles` is 1 by 7.9 s.
-   - There is again no photo finish. Only one horse finished, 6.5 s ahead of the next 47 m mark.
-5. **Results with most face-plants award: 6.**
-   - The podium now holds only `Dusty Rhodes`.
-   - The `SMOOTH OPERATOR` and `DIRT EATER · MOST FACE-PLANTS` badges show, and non-finishers read "still racing · 11 m short".
-   - Results open while Sir Trips is still running at x 47.7. The race should wait for them.
-   - A single podium block looks sparse.
-6. **Looks as LOOK.md says: 8.**
-   - The `grandstand` with its crowd, rail fence, `finish-line` checkers, `hills` and dirt `track` match refs/01.jpg.
-   - The `div.box` at alpha 0.69 no longer hides the track.
-   - The `track` repeat is still visible.
-   - A `Surfaces:` line flags coplanar `grandstand` boxes, but on faces turned away from this camera.
-7. **window.__game convention, index.html at root, static deploy: 9.**
-8. **Clip moments in the first minute with no input: 5.**
-   - The tangle and the face-plant replay land by about 8 s.
-   - There is no photo finish and no slow-motion side replay at the line.
-9. **Controls feel learnable: 4.**
-   - A human run was not tested again. The `#tips` line says "Q+P then W+O works!".
-   - The auto `YOU` never moves past x 2.4, so there is no evidence a finish in 60 s is possible.
-10. **Horses read as horses, match refs/01.jpg: 8.**
-    - The head, mane, tail, white socks and dark hooves all read in the replay close-up.
-11. **Juice: 7.**
-    - 23 sounds fired in the results run (cheer, gasp, thud, boing).
-    - The `#chips` and results popups are present. Camera shake is still unmeasured.
-12. **Local 2-player discoverable from the HUD: 8.**
-    - `div#top-r` has "2 PLAYERS (2)" and the `div#keys` panel swaps to both players' keys.
-13. **Static page, vendored lib, no network: 9.**
-    - 383 draw calls, 0 MB of assets, no console errors.
-    - Frame time was 95 ms on SwiftShader (host load 1.1), which is noise.
+1. **Plays as DESIGN.md says: 7.** The countdown ran, then held Q+P and W+O took the race to `raceT` 3.5 s. All four horses are at x 5.3–6.5. The `Tote`, `div#keys`, the `1 PLAYER` / `2 PLAYERS (2)` / `RESTART` buttons and the `div#tips` footer are all there. I did not run a full 60 m.
+2. **Rapier ragdoll, face-plant, auto-right: 7.** After my alternation, `YOU` went to `state:"down"` with `plants:1` and pitch -0.30. A "FACE-PLANT! Nose-first for YOU!" pop-up appeared and the `Tote` shows "FACE-PLANTS 1 - OUCH". The AI horses stayed in `run`. I did not time the auto-right.
+3. **Replay and sepia photo finish: 6.** Not reached again. I still have not seen the sepia frame myself.
+4. **Photo finish and tangle within a minute: 6.** Not re-checked. All three AI horses were still running with 0 plants at 3.5 s.
+5. **Results with most face-plants award: 6.** Not reached. The per-horse `FACE-PLANTS` counter is live in the `Tote`.
+6. **Looks as LOOK.md says: 8.** The horses have flat toon steps and dark outlines. The picture is warm orange and yellow with a wooden grandstand, `TOP-CAT TIRES` boards and a CRT grade. The legs now read as long and jointed. `look` found no fog fault, and I did not `sample` the 3-step shading.
+7. **`window.__game`, static, no network: 7.** `observe`/`interact` state works, assets are 0.32 MB with fonts vendored, and there are no console errors. `look` still reports `horse0` as showing 0 of its 3 named parts, because the post-pass `Mesh` covers 100% of the frame.
+8. **Horses match CHARACTERS.md and horse.png: 8.** The picture shows round googly eyes, a bridle, a saddle cloth with a number roundel and a diamond, white socks and dark hooves. A bristly mane and tufted tail are visible. The legs are longer than last iteration. The blinker silks are still tiny.
+9. **Broadcast overlay: 9.** The `Tote` shows silks chips and `WIN ODDS` (YOU at 10-1, others 3-1/2-1). The `HANK "HOOFBEAT" PRUITT` lower-third is on screen, with the `LIVE` bug, the `3:58 PM` clock, `RACE TIME 3.5s`, the progress bar and the `div.pop` banner.
+10. **Camera: 7.** The telephoto side-track is clear with the stands behind it. I did not see the head-on cut or the replay cams.
+11. **Controls feel learnable: 6.** Alternation moves the horse and one mistimed phase gave a face-plant. The 60 m finish is unproven, and iteration 10 estimates it at ~16 s with the longer legs.
+12. **Local 2-player, discoverable: 6.** The `2 PLAYERS (2)` button and the `2 = TWO PLAYERS` footer are visible. I did not play it.
+13. **Style judged as hard as gameplay: 8.** The overlay, `Tote`, key caps and CRT read as one 70s broadcast. I did not run `reference` against `LOOK-board.png`.
 
 **Faults: 5.**
-- No photo finish after seven sessions.
-- `Never visible: dust`.
-- The finish pose has `pitch` -0.88.
-- The `YOU` bot is stuck.
-- Results show while horses are still running.
+- `perf` shows **435 draw calls** and 183,974 triangles (`scene` pass 434 calls, unchanged for three sessions). The frame time (178 ms) is a software renderer on host load 2.6, so it is noise, but the draw count is a real fault.
+- Unnamed `PlaneGeometry` pairs share y = 0.09 (2 more pairs out of view).
+- `div#crt` covers 100% of the canvas.
+- `horse0` is not measurable as a subject, and `hills` is listed as never visible.
+- No console errors.
 
 **Next:**
-1. **Make the photo finish deterministic, with a banner and a `kind:"finish"` replay (asked again, a seventh time).**
-   - The soft sprint nudge has failed three sessions in a row, so change the mechanism.
-   - Once the leader passes x 40, give the top two running horses the same target speed. Pull a face-planted chaser up with `state:"run"` and a boost.
-   - On the second crossing, show a PHOTO FINISH! popup and play a side-on `kind:"finish"` replay held on the `finish-line`.
-   - One call shows it done: `interact` with `until:{phase:"replay"}` and `look:true`. The top two `finishT` values should be within 0.3 s, and the picture should show the banner and the `finish-line`.
-2. **Fix the auto `YOU` bot and the results timing (asked again).**
-   - In `physStep`, the `AUTO` branch leaves `YOU` at `legs` "0000". Make it alternate Q+P and W+O every ~10 frames whatever the pose, so `YOU` reaches x 50 or more.
-   - Hold results until the second finisher crosses, or until 4 s after the first, so the podium has more than one block.
-   - Level the post-line `pitch` to about -0.1 with the legs released.
-   - One call shows it done: `interact` with `until:{phase:"results"}`. `YOU` should be at x 50 or more and the podium should hold two or more finishers.
-3. **Prove the human can finish, and fix the surfaces.**
-   - Run `interact` alternating Q+P and W+O every ~10 frames and check it reaches x 60 in under 60 s.
-   - Run `feel` on a forced face-plant to measure the shake.
-   - Move `dust` in front of `track` (it is still "Never visible").
-   - Break the visible repeat in the `track` texture with a second, larger-scale dirt blend.
+1. **(asked again) Cut draw calls from 435 to under 250.** Merge `merged` and `merged-outline` by material across all horses, and use `instances()` for `posts` and the ad boards. Run `perf` with `costs:true`. It is done when the total is under 250 and `merged` is under about 40 calls.
+2. **Make `horse0` measurable and enlarge the blinker silks.** Name the horse's body, legs and head meshes so `look target:"horse0"` lists them, and set the post-pass quad `Mesh` to a name or flag the ID image can skip. Scale the blinker silk patches up about 2×. It is done when `look target:"horse0"` shows the pattern on the blinkers and `Subject` no longer says 0 of 3 parts.
+3. **(asked again) Show the finish, replay and results.** Play a no-input solo race with `interact` `until: {phase: "finish"}`, then `look`, to see the sepia `PHOTO FINISH` replay and the results screen with the face-plants award. Fix the y = 0.09 plane pairs (offset each lake `glint` by i×1e-4) in the same pass. It is done when `look` shows the sepia grain and frame, and the Surfaces line is gone.
 
-SCORE: 6.6
+SCORE: 6.9
