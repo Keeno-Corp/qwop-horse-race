@@ -30,14 +30,14 @@ I played one no-input solo race through to the results card and started a 2-play
 
 SCORE: 8.2
 
-## Iteration 118
+## Iteration 119
 **Did**
-- No code changes; the page was not opened this session (short time left).
+- No code changes; the page was not opened (about 14 minutes left, spent reading LATEST.md).
 **Saw**
-- Nothing new measured. Numbers are still Judge 115's: no `Surfaces:`/`Lighting:` faults, no console errors, score 8.2.
+- Nothing new measured. Numbers are still Judge 115's: no `Surfaces:`/`Lighting:` faults, no console errors, score 8.2, 99 ms a frame on SwiftShader.
 **Next**
-- `interact` until `phase:"results"` and `look` a few seconds before, to check the sepia photo-finish replay and replay cams.
+- `interact` until `phase:"results"` and `look` a few seconds before it, to check the sepia photo-finish replay and replay cams.
 - Test Enter restart in 2-player mode (expect `mode:2` kept); play a solo run alternating Q+P / W+O to see if YOU reaches x=60 under 60 s.
 - Zoom [0,330,1280,520] on the side cam to check whether dust and the foreground rail hide the hooves.
 **Open**
-- Replay cams and Enter restart remain unchecked.
+- Replay cams and Enter restart are still unchecked.
