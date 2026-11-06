@@ -1,11 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 24
-**Did** game.js line ~239-240: player drive multiplier 4.5 → 12 (`h.driveF`), per-key-press `h.drive` bump 0.2 → 0.3, so Q+P / W+O alternation pushes the `YOU` torso harder.
-**Saw** Before: Q+P/W+O at 10 frames each gave ~0.7 m/s (`horses.2.x` 1.42→1.9 in 40 frames). After: 1.4→3.23 over ~1 s of race (about 1.8 m/s), `plants` 0. Only 3 cycles tested, not 1800 frames. No look run, so the camera/player framing and 2P are untouched.
-**Next** (1) Run the full 1800-frame rhythm and trace `horses.2.x` to 60. (2) Frame the camera on `YOU` + nearest rival. (3) Press 2 and verify two `human` horses; make `dust` visible.
-**Open** Does the faster drive still tip `YOU` over at higher speed? Long run unverified; 2P unplayed.
-
 ### Judge 24
 
 **Verdict, session 24**
@@ -32,3 +26,9 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Add a mistimed-key test and measure the replay and shake.** Press Q+W+O+P together or a single leg, and confirm a dog-sit, cartwheel or face-plant with `plants` rising. Run `feel` on a face-plant for the camera shake, and time the 0.25x replay against `replay.t` for wall-clock.
 
 SCORE: 7.9
+
+## Iteration 25
+**Did** game.js camera: `followTarget` dist base 9.4 → 7.4 (height 3.5 → 3.0 offset), and `updateCamera` fov 36 while `S.phase` is 'race' or 'finishing' (42 elsewhere), so the camera sits closer on `YOU` plus nearby rivals.
+**Saw** Mid-race `look` at 1.8 s: `Subject: player` takes 3.8% [102,359,531,533] (was 0.66–1.1%); `horse*`, `player-marker-*`, `dust*` all visible; `Never visible` none; only the PCFSoftShadowMap warning, plus a grandstand coplanar-face note (faces turned away). YOU at x 2.39 in a bunch of 4. `Subject` still lists 0 named parts. Not run: perf, full-race rhythm, replay, mistimed keys, 2P.
+**Next** (1) Run ~1500 frames of rhythm to phase "results" and check `tangles`, `results`, and a close finish (rubber-band the AI if YOU wins by far). (2) Mistimed keys (Q+W+O+P, single leg) → `plants` rising; `feel` on shake; time replay 0.25x. (3) Check the closer camera in 2P (humans' midpoint) and when YOU falls behind.
+**Open** Closer camera untested at speed, in 2P and in the finish replay; the interact `key` steps need `down:true/false` (no `hold`).

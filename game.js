@@ -372,11 +372,11 @@ function followTarget() {
   fx = Math.min(fx, FINISH_X + 2);
   const far = Math.min(Math.abs(leader - hx), 26);
   const asp = Math.min(1, camera.aspect / 1.5);
-  const dist = (9.4 + clamp(far * 0.3, 0, 10)) / Math.pow(asp, 0.7);
+  const dist = (7.4 + clamp(far * 0.3, 0, 10)) / Math.pow(asp, 0.7);
   return { fx, dist };
 }
 function updateCamera(dt) {
-  let fov = 42;
+  let fov = (S.phase === 'race' || S.phase === 'finishing') ? 36 : 42;
   if (S.phase === 'replay') {
     const rp = S.replay;
     if (rp.kind === 'finish') {
@@ -397,7 +397,7 @@ function updateCamera(dt) {
       tp.set(-2.5 + (fx - 0.4 + 2.5) * e, 2.6 + 0.9 * e, 7.2 - (7.2 - dist) * e); tl.set(1.5 + (fx + 1.8 - 1.5) * e, 1.2, 0);
       camPos.copy(tp); camLook.copy(tl);
     } else {
-      tp.set(fx - 0.4, 3.5 + (dist - 9.4) * 0.15, dist); tl.set(fx + 1.8, 1.25, 0);
+      tp.set(fx - 0.4, 3.0 + (dist - 7.4) * 0.15, dist); tl.set(fx + 1.8, 1.25, 0);
       camPos.lerp(tp, 1 - Math.exp(-dt * 3.5)); camLook.lerp(tl, 1 - Math.exp(-dt * 5));
     }
   }

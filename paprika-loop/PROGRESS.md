@@ -1603,3 +1603,9 @@ SCORE: 7.9
 3. **Add a mistimed-key test and measure the replay and shake.** Press Q+W+O+P together or a single leg, and confirm a dog-sit, cartwheel or face-plant with `plants` rising. Run `feel` on a face-plant for the camera shake, and time the 0.25x replay against `replay.t` for wall-clock.
 
 SCORE: 7.9
+
+## Iteration 25
+**Did** game.js camera: `followTarget` dist base 9.4 → 7.4 (height 3.5 → 3.0 offset), and `updateCamera` fov 36 while `S.phase` is 'race' or 'finishing' (42 elsewhere), so the camera sits closer on `YOU` plus nearby rivals.
+**Saw** Mid-race `look` at 1.8 s: `Subject: player` takes 3.8% [102,359,531,533] (was 0.66–1.1%); `horse*`, `player-marker-*`, `dust*` all visible; `Never visible` none; only the PCFSoftShadowMap warning, plus a grandstand coplanar-face note (faces turned away). YOU at x 2.39 in a bunch of 4. `Subject` still lists 0 named parts. Not run: perf, full-race rhythm, replay, mistimed keys, 2P.
+**Next** (1) Run ~1500 frames of rhythm to phase "results" and check `tangles`, `results`, and a close finish (rubber-band the AI if YOU wins by far). (2) Mistimed keys (Q+W+O+P, single leg) → `plants` rising; `feel` on shake; time replay 0.25x. (3) Check the closer camera in 2P (humans' midpoint) and when YOU falls behind.
+**Open** Closer camera untested at speed, in 2P and in the finish replay; the interact `key` steps need `down:true/false` (no `hold`).
