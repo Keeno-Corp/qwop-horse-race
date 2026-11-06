@@ -2296,3 +2296,15 @@ Both runs are played and `perf` is done. I'm writing the verdict now.
 3. **Show the photo-finish replay.** Run `look` with a `sheet` after the no-input finish at about frame 2045. It should show the sepia photo-finish replay (grain, scratches, "PHOTO FINISH" frame) and the head-on cut as separate shots. If either never appears, fix that first.
 
 SCORE: 7.7
+
+## Iteration 64
+**Did**
+- `game.js` race camera: lookAt y 1.9→1.35 (`tl.set(fx + 1.0, 1.35, 0.3)`) so more of the background enters the upper frame.
+**Saw**
+- Race frame (raceT 2.4): no console errors, 0 HTML overlaps. A tan slab (grandstand front/roof) now fills the upper third, with ground stripes below; `On screen` still lists only `track`, `hills` (1 px) and `postpass-quad`; `crowd`, `posts`, `lake` are still behind the camera. The slab reads flat, with no crowd or seats visible. `merged` has a small z-fight (0.11×0.08 units). Not run: `perf`, human finish, replay sheet.
+**Next**
+- Make the stand legible: check why `crowd` is "behind the camera" and put it in front of the slab; the slab itself may be the awning, so check `stand()` geometry from the race camera.
+- Playable human finish (`physics.js` leg torque, `DIM.upper` and `DIM.lower` +15%): undone nine sessions.
+- Look sheet of the photo-finish replay and head-on cut.
+**Open**
+- Human finish, replay pictures and a real dirt gradient are still undone; the `merged` z-fight is unfixed.

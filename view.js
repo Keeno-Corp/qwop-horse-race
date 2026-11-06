@@ -126,7 +126,7 @@ export function mergeStatic(root, vc = false) {
   for (const b of buckets.values()) {
     if (b.mat && b.mat !== vcMat && !b.mat.polygonOffset) { b.mat.polygonOffset = true; b.mat.polygonOffsetFactor = -(bi++ % 4); b.mat.polygonOffsetUnits = -(bi % 4); }
     const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(cat(b.pos), 3)); g.setAttribute('normal', new THREE.BufferAttribute(cat(b.nor), 3)); g.setAttribute('uv', new THREE.BufferAttribute(cat(b.uv), 2)); if (b.mat === vcMat) g.setAttribute('color', new THREE.BufferAttribute(cat(b.col), 3));
-    const m = new THREE.Mesh(g, b.mat); m.castShadow = b.cast; m.receiveShadow = true; m.name = 'merged'; root.add(m);
+    const m = new THREE.Mesh(g, b.mat); m.castShadow = b.cast; m.receiveShadow = true; m.name = 'merged'; if (b.mat && !b.mat.polygonOffset) { b.mat.polygonOffset = true; b.mat.polygonOffsetFactor = -1; b.mat.polygonOffsetUnits = -1; } root.add(m);
   }
   if (hull.pos.length) {
     const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(hull.pos, 3)); g.setAttribute('onrm', new THREE.Float32BufferAttribute(hull.nrm, 3));

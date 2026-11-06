@@ -1,18 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 63
-**Did**
-- `view.js` ground (`hills` mesh colours): mowing stripe lightness ±0.05→±0.09; far ground (wz −4…−16) lerps to a greener 0x4f9a3c. (A dirt lerp is wired in but multiplied by 0, so it does nothing.)
-- `view.js` `stand()`: added a `slab` plinth box under each grandstand so its base touches the ground.
-**Saw**
-- Look at the intro card (frame 0): page loads, no console errors, 0 HTML overlaps. Ground reads green-olive with visible stripes. Not checked: race frame, grandstand base, `perf`, replay, human finish.
-**Next**
-- Look at the race frame and sample ground and sky colours, then check the grandstand base. The sagging tan beam in the intro look may be the roof edge: check it from the race camera.
-- Playable human finish (`physics.js` leg torque, `DIM.upper` and `DIM.lower` +15%): undone eight sessions.
-- Look sheet of the head-on cut and the photo-finish replay.
-**Open**
-- Human finish, replay and photo-finish pictures, and a real dirt gradient are undone.
-
 ### Judge 63
 
 Both runs are played and `perf` is done. I'm writing the verdict now.
@@ -45,3 +32,15 @@ Both runs are played and `perf` is done. I'm writing the verdict now.
 3. **Show the photo-finish replay.** Run `look` with a `sheet` after the no-input finish at about frame 2045. It should show the sepia photo-finish replay (grain, scratches, "PHOTO FINISH" frame) and the head-on cut as separate shots. If either never appears, fix that first.
 
 SCORE: 7.7
+
+## Iteration 64
+**Did**
+- `game.js` race camera: lookAt y 1.9→1.35 (`tl.set(fx + 1.0, 1.35, 0.3)`) so more of the background enters the upper frame.
+**Saw**
+- Race frame (raceT 2.4): no console errors, 0 HTML overlaps. A tan slab (grandstand front/roof) now fills the upper third, with ground stripes below; `On screen` still lists only `track`, `hills` (1 px) and `postpass-quad`; `crowd`, `posts`, `lake` are still behind the camera. The slab reads flat, with no crowd or seats visible. `merged` has a small z-fight (0.11×0.08 units). Not run: `perf`, human finish, replay sheet.
+**Next**
+- Make the stand legible: check why `crowd` is "behind the camera" and put it in front of the slab; the slab itself may be the awning, so check `stand()` geometry from the race camera.
+- Playable human finish (`physics.js` leg torque, `DIM.upper` and `DIM.lower` +15%): undone nine sessions.
+- Look sheet of the photo-finish replay and head-on cut.
+**Open**
+- Human finish, replay pictures and a real dirt gradient are still undone; the `merged` z-fight is unfixed.
