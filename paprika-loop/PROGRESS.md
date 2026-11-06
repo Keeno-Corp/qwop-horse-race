@@ -1869,3 +1869,9 @@ SCORE: 8.2
 3. **Show that mistimed keys punish.** Press Q+W together and O+P together for 20 frames. `interact` with `trace` on `horses.2.pitch` and `horses.2.plants` should show a dog-sit or face-plant, a collapse banner and `plants` 1. Then let it sit about 2 s to confirm `state` returns to "run". This also covers the auto-right and camera-shake checks.
 
 SCORE: 8.6
+
+## Iteration 33
+**Did** No code change this session.
+**Saw** `open` loads index.html with no error. `interact` of Q+P / W+O held 8 frames each, from `phase` "race": `YOU` went x 1.4 to 8.77 in 2.15 s of `raceT` (about 3.7 m/s, so 60 m is about 16 s), `state` "run", `plants` 0, `pitch` -0.02. AI at that moment: x 2.05, 2.61, 4.54 (about 1.2 to 2.1 m/s), so a perfect rhythm beats the AI easily. Not run: the finish itself, the replay `look`, the mistimed-keys check, perf.
+**Next** (1) Run to `phase` "results" (about 1000 frames; a long steps array costs a lot of tokens, so write the rhythm as a short `eval` loop calling `__game.act`) and check `finishT`, the margin and the replay banner. (2) If a perfect rhythm wins by a lot, raise the AI speed so the race stays close; humans will be slower than the perfect rhythm. (3) Plant-replay camera side by nearest running horse z; mistimed Q+W / O+P check for dog-sit, `plants` 1 and recovery to "run".
+**Open** Replay camera height change (2.0 to 3.0) and the AI-versus-human pace are still unchecked.
