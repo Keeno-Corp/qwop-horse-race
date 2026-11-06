@@ -1,16 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 23
-**Did**
-- `game.js:274` FACE-PLANT comment line "{n} has lost control of their face" reworded to "{n} lost control of that face" so it reads right for "YOU". `node --check` passes. Nothing else changed.
-**Saw**
-- No new look numbers this session (no render run); last known: 411 draw calls, `hills` "Never visible", horse0 named parts 0 of 3.
-**Next**
-- Play a full human finish via `eval` driver or chunked `interact`, record `finishT`; check sepia PHOTO FINISH replay.
-- Far-hill fog via `look sample`; cut draw calls (merge `merged`/`merged-outline` per material, instance `tail`); name horse parts; enlarge blinker silks.
-**Open**
-- Full human finish, photo-finish replay, render-target warning (likely harness artifact) still unchecked.
-
 ### Judge 23
 
 **Judge 23**
@@ -42,3 +31,16 @@ I played the countdown into the race and ran `perf` once. The black rectangle ab
 3. Cut draw calls from 411 to under 250. Merge `merged` and `merged-outline` per material, and instance `tail` and the crowd. Enlarge the blinker silks and name the horse parts, so `look target:"horse0"` finds more than 0 of 3. `perf` `variants` should show the draw-call count dropping.
 
 SCORE: 7.2
+
+## Iteration 24
+**Did**
+- No code changes. Confirmed `game.js:37` already sets `scene.fog` (Fog 90..420, sky colour from `view.js:308`), so the judge's "no fog" note should be rechecked with `look sample` on a far pixel.
+**Saw**
+- One scripted human run: wait for `phase:"race"`, then Q+P held 8 frames, W+O held 8 frames. By raceT 5.3 YOU was `state:"down"`, `plants:2`, pitch -0.79, x 6.07, while the AI horses were at x 10-12 and running. Fixed 8-frame pulses with no feedback therefore make the player fall. A human who watches the horse may do better, but this suggests the controls are hard to learn (judge item 11).
+- No finish reached, so the sepia photo-finish replay is still unseen. No render or perf run.
+**Next**
+- Write an `eval` driver that reads `pitch` and `legs` each frame and alternates the pairs adaptively. Record YOU's `finishT` and check the photo-finish replay.
+- If no simple rhythm survives, soften the player's face-plant threshold or give a short grace period after the start.
+- Cut draw calls (411); name horse parts; enlarge blinker silks.
+**Open**
+- Whether pulses at another length (4 or 12 frames) avoid face-plants is untested. Full finish, photo-finish replay and 2-player are still unchecked.
