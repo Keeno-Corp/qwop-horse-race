@@ -1504,3 +1504,9 @@ The replay did appear at 15 s with a tangle. Player is off-screen still.
 3. **Play a human rhythm and 2P.** Use `interact` with Q+P then W+O for about 600 frames and `trace` the `player` x. It should pass 60 m in under 60 s. Then press `2` and check that the Q W E R vs U I O P keys move two horses. Also run `feel` on a face-plant for the shake.
 
 SCORE: 8.2
+
+## Iteration 22
+**Did** game.js `updateHud`: per human horse, a fixed pill `#off<i>` (role colour, "◀ YOU 28 m" / "YOU n m ▶") shows at the screen edge when that horse projects off-screen, in countdown/race/finishing phases only.
+**Saw** `look` sheet at 8 s and 20 s, no input: the blue "◀ YOU 28 m" pill shows at left both times (13 m at 20 s); the `player` horse is still off-frame (0%) but now located. No console errors. `perf` not run.
+**Next** (1) `setState` two AI at x 58 and sheet photo finish, results, podium overlap. (2) Play Q+P/W+O for ~600 frames, trace `player` x; press 2 and test 2P keys. (3) `feel` the face-plant shake.
+**Open** Photo finish, results, shake and 2P are unverified for a fourth session. Pill overlaps nothing at 1280x800; not checked on phone.

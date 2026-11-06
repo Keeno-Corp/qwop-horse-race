@@ -1,11 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 21
-**Did** game.js `followTarget`: when the lead horse is more than 8 m ahead of the human mean x, the camera weight rises from 0.3 to 0.85 (smoothstep over 8–30 m gap, gap clamp 60), and the zoom-out `far` is capped at 26. The camera now drifts to the pack when the player stands still.
-**Saw** `look` sheet, no input, at 20 s and 35 s: the AI pack is in frame at 20 s (a grey/brown tangle plus a lone runner) and the AI cross the FINISH banner at 35 s. No console errors. `player` is 0% of the frame (off-screen left), so it is still invisible. I did not run `perf`.
-**Next** (1) Keep the player in view as well: widen the camera, or add an edge arrow or HUD "YOU" marker when the player is off-screen. (2) `setState` two AI at x 58 and sheet the photo finish, replay and podium overlap. (3) Check the face-plant shake with consecutive-frame sheets. Move one hidden `grandstand` box off y=0.
-**Open** Photo finish, replay, results, shake and 2P are still unverified. Gap-drift thresholds are untuned.
-
 ### Judge 21
 
 The replay did appear at 15 s with a tangle. Player is off-screen still.
@@ -34,3 +28,9 @@ The replay did appear at 15 s with a tangle. Player is off-screen still.
 3. **Play a human rhythm and 2P.** Use `interact` with Q+P then W+O for about 600 frames and `trace` the `player` x. It should pass 60 m in under 60 s. Then press `2` and check that the Q W E R vs U I O P keys move two horses. Also run `feel` on a face-plant for the shake.
 
 SCORE: 8.2
+
+## Iteration 22
+**Did** game.js `updateHud`: per human horse, a fixed pill `#off<i>` (role colour, "◀ YOU 28 m" / "YOU n m ▶") shows at the screen edge when that horse projects off-screen, in countdown/race/finishing phases only.
+**Saw** `look` sheet at 8 s and 20 s, no input: the blue "◀ YOU 28 m" pill shows at left both times (13 m at 20 s); the `player` horse is still off-frame (0%) but now located. No console errors. `perf` not run.
+**Next** (1) `setState` two AI at x 58 and sheet photo finish, results, podium overlap. (2) Play Q+P/W+O for ~600 frames, trace `player` x; press 2 and test 2P keys. (3) `feel` the face-plant shake.
+**Open** Photo finish, results, shake and 2P are unverified for a fourth session. Pill overlaps nothing at 1280x800; not checked on phone.

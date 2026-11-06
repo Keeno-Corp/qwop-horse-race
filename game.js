@@ -416,6 +416,14 @@ function updateHud() {
     $('mk' + i).style.left = (clamp(h.pos().x / FINISH_X, 0, 1) * 100) + '%';
   });
   $('timer').textContent = S.raceT.toFixed(1) + 's';
+  roles.forEach((r, i) => {
+    if (r.human < 0) return;
+    let el = document.getElementById('off' + i);
+    if (!el) { el = document.createElement('div'); el.id = 'off' + i; el.className = 'ui'; const c = r.color.toString(16).padStart(6, '0'); el.style.cssText = `position:fixed;top:46%;font:800 20px system-ui,sans-serif;color:#fff;background:#${c};padding:6px 12px;border-radius:18px;border:2px solid #fff;box-shadow:0 2px 8px #0008;display:none;z-index:6`; document.body.appendChild(el); }
+    const p = horses[i].pos(), v = new THREE.Vector3(p.x, 1, p.z || 0).project(camera), off = v.z > 1 || Math.abs(v.x) > 0.96;
+    const show = off && (S.phase === 'race' || S.phase === 'finishing' || S.phase === 'countdown');
+    if (show) { const left = v.z > 1 ? true : v.x < 0, d = Math.round(Math.abs(p.x - camLook.x)); el.textContent = (left ? '◀ ' : '') + 'YOU ' + d + ' m' + (left ? '' : ' ▶'); el.style.left = left ? '12px' : ''; el.style.right = left ? '' : '12px'; el.style.display = 'block'; } else el.style.display = 'none';
+  });
   KEYS[mode].forEach((set, pi) => set.forEach((c, li) => $(`cap-${pi}-${li}`)?.classList.toggle('dn', held.has(c))));
   const f = $('flash'); if (S.flash > 0) { S.flash = Math.max(0, S.flash - 0.06); f.style.opacity = (S.flash * 0.3).toFixed(2); } else if (f.style.opacity !== '0') f.style.opacity = 0;
 }
