@@ -1,34 +1,34 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-### Judge 37
-
-**Verdict, session 37**
-
-1. **Plays as DESIGN.md's Core loop and Controls say: 9.** After the countdown, `phase` went to "race". A Q+P then W+O rhythm took `YOU` (`horses.2`) to `x` 35 at `raceT` 9.1, with 0 `plants`. The `1 PLAYER`, `2 PLAYERS (2)` and `RESTART` buttons are in `div#top-r`.
-2. **Real Rapier jointed ragdoll, face-plant, auto-right: 8.** At `raceT` 9 the AI `Sir Trips-a-Lot` and `Hoof Hearted` both went `state` "down" with `plants` 1. I did not see either return to "run" this session.
-3. **Replay (last ~4 s, 0.25x, REPLAY banner, Space skips): 6.** `pendingReplay` was true and `tangles` was 1, but I did not reach `phase` "replay". The widened plant-replay camera (d 8, fov 42) is still unseen. The builder only ran `node --check`.
-4. **Photo finish and tangled AI collapse: 6.** The pop "PILE-UP! A tangle of legs!" and two AI plants happened by 9 s. No photo finish is possible while `YOU` leads by about 15 m.
-5. **Results with most face-plants award: 8.** I did not reach results this session. Iteration 36 recorded the badges.
-6. **Looks as LOOK.md says: 8.** The look shows the white rail, the stand with its blocky crowd, green `hills`, the dirt `track` and the dust chips. `player-body` shows 47% brightness against 33% around it, with a blue saddle and a `player-marker-*` ring. The only `Surfaces:` note is the hidden `grandstand` face plane.
-7. **window.__game convention, index.html at root: 9.** The state has `phase`, `raceT`, `horses`, `pendingReplay` and `tangles`.
-8. **Clip moments in the first minute: 7.** The AI tangle came at about 9 s, but the player camera shows only `YOU`, running alone. The face-plant and pile-up pops sit over empty track, so the viewer cannot see the pile-up itself.
-9. **Controls feel learnable: 5.** A plain rhythm held about 4 m/s. `YOU` led by 6 m at 3.2 s, 11 m at 6.4 s and 15 m at 9.1 s. The iteration 37 rubber-band did nothing visible: the AI `x` values were 10.9, 11.5 and 13.8 against `YOU` at 24.9. A rhythm player wins by a huge margin.
-10. **Horses read as horses, match refs/01.jpg: 9.** The look shows head, neck, mane, tail, white socks and dark hooves on a sunny low-poly scene.
-11. **Juice: 8.** The sounds thud, gasp and cheer all fired. The pops and `dust*` chips showed. I did not run `feel` for camera shake.
-12. **Local 2-player discoverable from the HUD: 9.** The `2 PLAYERS (2)` button is in `div#top-r`, and `div#tips` says "2 = two players".
-13. **Static page, vendored lib, no network: 9.** `perf` shows 378 draw calls, 33.5k triangles and 0 MB of assets. The 63.9 ms frame is SwiftShader, so it is not a fault.
-
-**Faults: 8.** I saw no console errors. The hidden `grandstand` face plane is a minor `Surfaces:` note. `sky` shows as "Never visible" though it is in view. Host load was 2.3, so the frame time is noise. The iteration 37 changes are still unverified, which is a risk.
-
-**Next:**
-1. **Make the rubber-band actually work (asked again).** In `AI.update`, `YOU` leads by 15 m at 9 s but the AI barely moves faster. Scale the AI speed with the lead, for example +6% per metre of lead and uncapped up to about 2× base, and apply it from x 0 rather than only x 6–22. Run the same Q+P / W+O rhythm to `phase` "results". Success is `YOU` finishing within about 1–3 s of the first AI `finishT`, with the AI `x` values within about 3 m of `YOU` at `raceT` 9.
-2. **Show the tangle and the replay (asked again).** After a plant, `interact` with `until {phase:"replay"}` and `look` with `sample` at the left and right edges. The replay should show the fallen horse and its neighbours fully in frame, at brightness above 35%. Also let the live camera pan toward a pile-up that happens near the player's lane. Then `interact` with `trace` on `horses.0.state` for about 150 frames to show "down" then "run" at about 2 s.
-3. **Reach the finish, results and replay.** With the pace fixed, play to `phase` "results" and `look` once at the finish `replay` (`kind` "finish", REPLAY banner, 0.25x side-on shot). Then `look` at the results screen for the "DIRT EATER" badge. This is the first time the photo finish and the finish replay are seen since session 36.
-
-SCORE: 7.7
-
 ## Iteration 38
 **Did** game.js `AI.update`: the trailing AI now gets a direct physics push (`h.drive = 1`, `h.driveF = 40 × (gap − 1.5)`, gap capped at 14 m) when it is more than 1.5 m behind the leader. The old cadence-only rubber-band had not moved the AI.
 **Saw** Q+P / W+O rhythm, solo: `YOU` x 12.9 at `raceT` 3.35 against AI at 6.7–8.7. At `raceT` 5.35 `YOU` was at 18.6 and the AI at 13.5–14.8, a 4 m lead where session 37 had 11–15 m. No plants, no console errors. I did not reach results, the plant replay or the finish replay.
 **Next** (1) Play on to `phase` "results" and check the margin to the first AI `finishT`. (2) `look` at a plant replay. (3) `trace` `horses.0.state` for down→run.
 **Open** The 40 per metre drive may be too strong or too weak for a faster player; the rhythm player is still about 4 m ahead.
+
+### Judge 38
+
+**Verdict, session 38**
+
+1. **Plays as DESIGN.md's Core loop and Controls say: 8.** `phase` went from countdown to "race". A Q+P then W+O rhythm took `YOU` to `x` 26.9 at `raceT` 6.95, with the AI at about 20. The 4–6 m lead fits iteration 38's rubber-band. The `1 PLAYER`, `2 PLAYERS (2)` and `RESTART` buttons are in `div#top-r`. My rhythm broke after the first face-plant, so I did not see a clean finish.
+2. **Real Rapier jointed ragdoll, face-plant, auto-right: 8.** At `raceT` 6.95, `Sir Trips-a-Lot` and `Hoof Hearted` went `state` "down" with `plants` 1. By `raceT` 28.97 `plants` had grown to 5, 3, 3 and 1 and the horses were back in "run". I did not run a `trace` of the down→run timing.
+3. **Replay (last ~4 s, 0.25x, REPLAY banner, Space skips): 6.** The finish replay is good: `replay.kind` "finish", the `REPLAY` tag, "SPACE to skip", and a side-on shot with the `finish-line` and both horses in frame. The plant replay (`kind` "plant", `rate` 0.25) is poorly framed. Brightness is 26% with 18% near black. `horse0-body` is cropped into the right corner [898, 404, 1279, 636], and most of the frame is empty `track`. The widened plant-replay camera is still not fixing this.
+4. **Photo finish and tangled AI collapse: 8.** The "PHOTO FINISH! Hoof Hearted by a nose (0.02s)" pop fired, with `finishT` 22.45 against 22.47. The "PILE-UP! A tangle of legs!" pop fired at `raceT` 6.95. The live camera still follows only `YOU`, so the tangle at about x 20 sits off-screen.
+5. **Results with most face-plants award: 7.** `results` was set to Hoof Hearted, Dusty Rhodes, Sir Trips-a-Lot, YOU, but `phase` was still "replay". I did not see the results panel or badges this session.
+6. **Looks as LOOK.md says: 8.** The finish look shows the covered `grandstand` with its blocky crowd, white rail, `finish-line` checker, `clouds`, green `hills` and the dirt `track`. The subject-versus-surroundings check holds, with 48% brightness against 34%. The only `Surfaces:` note is the hidden `grandstand` face plane.
+7. **window.__game convention, index.html at root: 9.** The state has `phase`, `raceT`, `horses`, `replay`, `results`, `pendingReplay` and `tangles`.
+8. **Clip moments in the first minute: 7.** The pile-up (7 s) and the photo finish (22 s) both happen with no extra input. But the pile-up is seen only through pops over empty track, and the plant replay is cropped. The photo finish replay does read well.
+9. **Controls feel learnable: 6.** The rhythm lead is now about 6 m at 7 s, down from 15 m. `YOU` then face-planted, `plants` 3, and finished last. Mistimed keys give plants, which is intended. I did not see a clean rhythm run reach the finish.
+10. **Horses read as horses, match refs/01.jpg: 9.** The look shows head, neck, mane, tail, white socks, dark hooves, saddle colours, the stand and fence.
+11. **Juice: 8.** Thud, gasp, boing, cheer and powerup all fired. The pops, `div#flash` and `dust*` chips showed. I did not run `feel` for camera shake.
+12. **Local 2-player discoverable from the HUD: 9.** The `2 PLAYERS (2)` button is in `div#top-r`, and `div#tips` says "2 = two players". I did not play 2-player this session.
+13. **Static page, vendored lib, no network: 9.** `perf` shows 378 draw calls, 33.5k triangles and 0 MB of assets. The 76.9 ms frame is SwiftShader, so it is not a fault.
+
+**Faults: 8.** I saw no console errors. The hidden `grandstand` face plane is a minor `Surfaces:` note. `sky` shows "Never visible" mid-race but is visible at the finish. The two-AI dead heat at 0.02 s looks engineered, and the other AI horses finished in lockstep. Host load was 2.1, so the frame time is noise.
+
+**Next:**
+1. **Fix the plant replay framing (asked again).** At `phase` "replay" with `replay.kind` "plant", the camera shows the fallen horse cropped into the bottom-right corner on an empty `track`, at 26% brightness. Aim the replay camera at the centroid of the down horses and their neighbours, from the side, about 8–10 m back and 3–4 m up. Raise the exposure or fill light. Check with `interact` `until {phase:"replay"}` and `look` with `sample` at [300, 400] and [640, 400]. Success is the fallen horse's `horse*-body` box centred and fully inside the frame, with brightness above 35%.
+2. **Show the pile-up live.** When two or more AI horses go "down" within a few metres of each other, ease the race camera, or add a picture-in-picture, toward the pile-up for about 1.5 s, then return to `YOU`. At `raceT` about 7 the `look` should show `horse0-*` and `horse1-*` in frame together, with the "PILE-UP!" pop over them rather than over empty track.
+3. **Reach the results screen and check the badges.** After the finish `replay`, play on or press Space. `look` at `phase` "results" for the most-face-plants badge ("DIRT EATER"). Check that the order (Hoof Hearted, Dusty Rhodes, Sir Trips-a-Lot, YOU) is shown with `plants`. Separately, vary the AI finish times so they are not identical, using per-horse speed jitter, and keep the photo finish as an occasional event.
+
+SCORE: 7.9
