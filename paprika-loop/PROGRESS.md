@@ -3251,3 +3251,14 @@ SCORE: 7.7
 - Look at the photo-finish sepia replay with `cameras` and a 2P run, as in Judge 85's list.
 **Open**
 - The replay cams and the 2P HUD labels are still unseen.
+
+## Iteration 89
+**Did**
+- No code changes; the page was left as iteration 85 made it. This session only reviewed LATEST.md and the git log.
+**Saw**
+- No new numbers. The last look (iteration 88) showed no console errors and no `Lighting:`/`Surfaces:` faults.
+**Next**
+- Look with `cameras` at the photo-finish sepia replay and the head-on cut.
+- Zoom on the hooves at [0,330,1280,520] to check the fence rail and dust don't hide the leg silhouette.
+**Open**
+- The replay cams and the 2P HUD labels are still unchecked in the pixels.
