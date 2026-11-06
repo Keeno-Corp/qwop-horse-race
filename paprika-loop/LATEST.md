@@ -1,34 +1,34 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-### Judge 31
-
-**Verdict, session 31**
-
-1. **Plays as DESIGN.md's Core loop and Controls say: 8.** A no-input run reached `phase:"results"` at `raceT` 30.4. The `1 PLAYER`, `2 PLAYERS (2)` and `RESTART` buttons work. `Digit2` gave `mode` 2 with `P1` and `P2` and a restart. My rhythm test was not a real one: `YOU` had `x` 2.4 and was DNF. A 60 m human finish is still unconfirmed.
-2. **Real Rapier jointed ragdoll, face-plant, auto-right: 8.** `plants` counters run (`Hoof Hearted` 2, `YOU` 1) and `legs` strings are driven per leg. The `YOU` row (`x` 2.37, `state` "run" at the end) suggests auto-right works. I did not watch it directly.
-3. **Replay (last ~4 s, 0.25x, REPLAY banner, Space skips): 7.** I did not watch a replay this session. The previous verdict saw the plant replay at `rate` 0.25. I did not look for a replay on the finish.
-4. **Photo finish and tangled AI collapse: 8.** The results show "PHOTO FINISH · 0.10s" with Dusty at 23.92 and Sir Trips-a-Lot at 24.02. `tangles` is 1. This is the first finish margin seen in any session.
-5. **Results with most face-plants award: 9.** The results box shows podium cards and four rows. The badges "SMOOTH OPERATOR" and "DIRT EATER · MOST FACE-PLANTS" show, with per-row face-plants and "DNF · 56 m short".
-6. **Looks as LOOK.md says: 8.** The `Lighting:` fault is gone. Only the hidden `grandstand` face-plane `Surfaces:` note remains, on faces turned away from view. Subject `player-body` takes 0.87% of the 2P frame and stands out at 54% brightness against 35% around it, with `player-marker-*` rings. The finished look has saddle cloths, rail, stand and crowd.
-7. **window.__game convention, index.html at root: 9.** `observe` returns `phase`, `mode`, `raceT`, `results` and `horses`.
-8. **Clip moments in the first minute: 9.** With no input there is a tangle and a 0.10 s photo finish by `raceT` 24.
-9. **Controls feel learnable: 6.** The player with no input reached `x` 2.4 in 30 s. My short 2P test gave `P1` `x` 2.69 at 1.15 s. A human finish of the 60 m race in under 60 s has never been shown.
-10. **Horses read as horses, match refs/01.jpg: 9.** Head, mane, tail, white socks, dark hooves, white rail and a blocky crowd in a covered stand all show in the 2P look.
-11. **Juice: 8.** 21 sounds fired (cheer, thud, gasp, boing, powerup). The `chips` counters and `finish-line` checker show. `dust` was "Never visible" in the results view but visible in the 2P look. I did not run `feel` for shake.
-12. **Local 2-player discoverable from the HUD: 9.** The `2 PLAYERS (2)` button works. The tips line "P1: Q W E R · P2: U I O P · Enter restarts" and the two `div#keys` key rows swap in. Both players move.
-13. **Static page, vendored lib, no network: 9.** `perf` shows 378 draw calls, 33.5k triangles and 0 MB of assets. The 78.6 ms frame is SwiftShader, so it is not a fault.
-
-**Faults: 8.** The only console line is the PCFSoftShadowMap warning. Builder's Open note: shadow softness after the wider frustum. The shadows in the 2P look read fine.
-
-**Next:**
-1. **Prove a human can finish (asked again).** `interact` with Q+P held ~8 frames, then W+O, repeated, and `until {phase:"results"}`. It should end with `YOU` `finished:true` and `finishT` under 60. If `x` stays near 2, make leg thrust stronger or forgiving enough that a Q+P / W+O alternation advances ~1 m a cycle. Check with `trace` on `horses.2.x`.
-2. **Replay camera side (asked again).** In the plant replay, pick the camera side by the nearest running horse's z so `horse3` does not cover the pile-up. A `look` at `replay.pos` ~460 should show `horse0-body` and `horse1-body` with none of them covered.
-3. **Cut the PCFSoftShadowMap warning and show the photo-finish replay.** Switch to `THREE.PCFShadowMap` to clear the console line. Then `look` right after a finish with a margin under 0.2 s and confirm the REPLAY banner and a side-on slow-motion shot of the finish line. I never saw a finish replay this session.
-
-SCORE: 8.2
-
 ## Iteration 32
 **Did** game.js: `renderer.shadowMap.type` is now `THREE.PCFShadowMap` (clears the PCFSoftShadowMap console warning); plant-replay camera height raised from 2.0 to 3.0 (+prog) so horse3 is less likely to cover the pile-up.
 **Saw** `node --check game.js` ok; `open` loads index.html with no error. Not run: look, perf, interact, rhythm finish, finish replay.
 **Next** (1) Prove a human finish: Q+P held ~8 frames then W+O, repeat, until phase results; check `YOU` finishT < 60, else strengthen leg thrust. (2) Pick replay camera side by nearest running horse z (still only a height change). (3) Look at the finish replay after a margin under 0.2 s.
 **Open** Replay camera fix is untested by look; shadow edges are harder with PCFShadowMap.
+
+### Judge 32
+
+**Verdict, session 32**
+
+1. **Plays as DESIGN.md's Core loop and Controls say: 9.** A Q+P then W+O rhythm moved `YOU` from `x` 1.86 to 8.38 in 1.7 s of `raceT`, with no plant and `state` "run". The countdown runs 3, 2, 1, then `phase` "race". The `1 PLAYER`, `2 PLAYERS (2)` and `RESTART` buttons are present.
+2. **Real Rapier jointed ragdoll, face-plant, auto-right: 8.** `legs` strings ("1001", "0110") show per-leg motors, and `plants` counters run. `player-body` stayed upright at `pitch` -0.01 under the rhythm. I did not watch a collapse or the auto-right this session.
+3. **Replay (last ~4 s, 0.25x, REPLAY banner, Space skips): 7.** I saw no replay this session. The builder's camera change (height 2.0 to 3.0) is still untested with `look`.
+4. **Photo finish and tangled AI collapse: 8.** Session 31 recorded a 0.10 s photo finish and `tangles` 1. I did not reach a finish this session.
+5. **Results with most face-plants award: 9.** Session 31 showed the "DIRT EATER · MOST FACE-PLANTS" badge and the "DNF · 56 m short" rows. Nothing changed in this area.
+6. **Looks as LOOK.md says: 8.** The `player-body` subject stands out at 49% brightness against 36% around it. It has a blue saddle cloth, a `player-marker-*` ring, flying `dust*` chips, rail, the "10" distance board, and the stand with its blocky crowd. The only `Surfaces:` note is a hidden `grandstand` face plane at y = 0.
+7. **window.__game convention, index.html at root: 9.** `observe` returns `phase`, `raceT`, `countdown` and `horses`, and `__game` loads from index.html.
+8. **Clip moments in the first minute: 9.** The `look` showed `horse3` close beside `YOU` in the starting pack, and session 31's no-input run had a tangle and a photo finish by `raceT` 24.
+9. **Controls feel learnable: 8.** A plain rhythm gave about 3.8 m/s, so 60 m takes roughly 16 s, well under 60. I did not run it to `phase` "results", so there is no `finishT` yet. The human pace may now be too fast against the AI, which was at `x` 1.8, 2.4 and 4.3 when `YOU` was at 8.4. I did not test mistimed keys for splits and dog-sits.
+10. **Horses read as horses, match refs/01.jpg: 9.** The player horse shows head, neck, mane, tail, white socks and dark hooves. The sunny low-poly hills, covered stand with crowd and white rail all show.
+11. **Juice: 8.** Sounds fired (blip, powerup, cheer), and the `dust*` chips and `chips` counters show. I did not run `feel` for camera shake.
+12. **Local 2-player discoverable from the HUD: 9.** The `2 PLAYERS (2)` button is in `div#top-r`. Session 31 confirmed both players move.
+13. **Static page, vendored lib, no network: 9.** `perf` shows 378 draw calls, 33.5k triangles and 0 MB of assets. The 82.9 ms frame is SwiftShader, so it is not a fault.
+
+**Faults: 9.** I saw no console errors. The PCFSoftShadowMap warning is gone with the move to `PCFShadowMap`. `dust` was "Never visible" at the start, but `dust*` ×32 showed in the race look. The only other note is the hidden `grandstand` `Surfaces:` face plane.
+
+**Next:**
+1. **Prove the finish and look at the finish replay (asked again).** `interact` the Q+P / W+O rhythm for about 1000 frames with `until {phase:"results"}`. It should end with `YOU` `finished:true`, `finishT` set and a margin shown. Then `look` right after the finish to confirm the REPLAY banner and a side-on shot at 0.25x. If `finishT` is under about 20 s, make the AI pace match so a rhythm player gets a close race.
+2. **Pick the plant-replay camera side by the nearest running horse's z (asked again).** Session 32 only raised the camera height. Trigger a plant with `state` on a middle lane, then `look` at the replay. The `horse0-body` and `horse1-body` pile-up should show with no other horse covering it.
+3. **Show that mistimed keys punish.** Press Q+W together and O+P together for 20 frames. `interact` with `trace` on `horses.2.pitch` and `horses.2.plants` should show a dog-sit or face-plant, a collapse banner and `plants` 1. Then let it sit about 2 s to confirm `state` returns to "run". This also covers the auto-right and camera-shake checks.
+
+SCORE: 8.6
