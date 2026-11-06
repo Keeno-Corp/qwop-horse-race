@@ -73,9 +73,9 @@ export function buildEnvironment(scene, tex, rng) {
   const env = { spectators: null, clouds: [], excite: 0 };
   // sky dome (vertex gradient)
   const sky = new THREE.SphereGeometry(500, 16, 10);
-  const cols = []; const top = new THREE.Color(0x4f9cf4), hor = new THREE.Color(0xbfe0ff), c = new THREE.Color();
+  const cols = []; const top = new THREE.Color(0x72b4ff), hor = new THREE.Color(0xa8d4ff), c = new THREE.Color();
   const pos = sky.attributes.position;
-  for (let i = 0; i < pos.count; i++) { const y = pos.getY(i) / 500; c.copy(hor).lerp(top, Math.pow(Math.max(0, y), 0.6)); cols.push(c.r, c.g, c.b); }
+  for (let i = 0; i < pos.count; i++) { const y = pos.getY(i) / 500; c.copy(hor).lerp(top, Math.pow(Math.max(0, y), 0.12)); cols.push(c.r, c.g, c.b); }
   sky.setAttribute('color', new THREE.Float32BufferAttribute(cols, 3));
   const skyM = new THREE.Mesh(sky, new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.BackSide, fog: false, depthWrite: false }));
   skyM.name = 'sky'; skyM.position.set(40, 0, 0); scene.add(skyM);

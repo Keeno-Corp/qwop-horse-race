@@ -50,7 +50,7 @@ class AI {
   update(h, dt, lead) {
     this.t += dt; this.wob += dt;
     if (this.t < this.delay) { for (let i = 0; i < 4; i++) h.setHeld(i, false); return; }
-    const per = this.base * (1 + 0.14 * Math.sin(this.wob * 1.7) + 0.08 * Math.sin(this.wob * 4.1)) * (1 + clamp(lead * 0.035, -0.3, 0.45));
+    const per = this.base * (1 + 0.14 * Math.sin(this.wob * 1.7) + 0.08 * Math.sin(this.wob * 4.1)) * (1 + clamp(lead * 0.035, -0.3, 0.45)) * (h.pos().x > 45 ? 1 - clamp(lead * 0.02, -0.15, 0.15) : 1);
     this.phase = (this.phase + dt / per) % 1;
     const off = [0, 0.5, 0.5, 0], duty = 0.58;
     const flags = off.map((o) => ((this.phase + o) % 1) < duty);
@@ -293,7 +293,7 @@ function updateRace(dt) {
     }
     if (S.phase === 'finishing') {
       const since = S.raceT - S.firstFinish;
-      if (S.order.length >= 2 || since > 1.5 || horses.every((h) => h.finished)) startFinishReplay();
+      if (S.order.length >= 2 || since > 4 || horses.every((h) => h.finished)) startFinishReplay();
     } else if (S.raceT > 150) startFinishReplay();
   }
 }
@@ -369,7 +369,7 @@ function updateCamera(dt) {
     const { fx, dist } = followTarget();
     if (S.phase === 'countdown') {
       S.camBlend = Math.min(1, S.camBlend + dt / 3.0); const e = S.camBlend * S.camBlend * (3 - 2 * S.camBlend);
-      tp.set(-9 + (fx - 0.4 + 9) * e, 6.5 - 3.0 * e, 17 - (17 - dist) * e); tl.set(4 + (fx + 1.8 - 4) * e, 1.25, 0);
+      tp.set(-4 + (fx - 0.4 + 4) * e, 3.4 - 0.0 * e, 10.5 - (10.5 - dist) * e); tl.set(1.5 + (fx + 1.8 - 1.5) * e, 1.2, 0);
       camPos.copy(tp); camLook.copy(tl);
     } else {
       tp.set(fx - 0.4, 3.5 + (dist - 9.4) * 0.15, dist); tl.set(fx + 1.8, 1.25, 0);
