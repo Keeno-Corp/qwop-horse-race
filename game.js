@@ -101,14 +101,14 @@ function assignRoles() {
 // ---------- dust chunks ----------
 const NDUST = 420;
 const dustM = new THREE.InstancedMesh(new THREE.BoxGeometry(0.11, 0.11, 0.11), new THREE.MeshLambertMaterial({ color: 0xffffff, flatShading: true }), NDUST);
-dustM.castShadow = false; dustM.frustumCulled = false; dustM.name = 'dust'; scene.add(dustM);
+dustM.castShadow = false; dustM.frustumCulled = false; dustM.name = 'dust'; dustM.renderOrder = 5; dustM.material.polygonOffset = true; dustM.material.polygonOffsetFactor = -2; scene.add(dustM);
 const dust = Array.from({ length: NDUST }, () => ({ life: 0, p: new THREE.Vector3(), v: new THREE.Vector3(), s: 1, r: new THREE.Euler() }));
 { const c = new THREE.Color(); dust.forEach((d, i) => dustM.setColorAt(i, c.set([0xc9a077, 0xb48a5e, 0xd8b88c, 0x9d7048][i % 4]))); }
 let dustHead = 0;
 function emitDust(x, y, z, n, speed = 2.5, up = 2.5, big = 1) {
   for (let k = 0; k < n; k++) {
     const d = dust[dustHead++ % NDUST];
-    d.life = rr(0.6, 1.3); d.p.set(x + rr(-0.15, 0.15), y + 0.05, z + rr(-0.15, 0.15));
+    d.life = rr(0.6, 1.3); d.p.set(x + rr(-0.15, 0.15), y + 0.18, z + rr(-0.15, 0.15));
     d.v.set(rr(-1, 1) * speed + 0.6, rr(0.3, 1) * up, rr(-1, 1) * speed * 0.7); d.s = rr(0.5, 1.4) * big; d.r.set(rr(0, 6), rr(0, 6), rr(0, 6));
   }
 }
@@ -118,7 +118,7 @@ function updateDust(dt) {
     const d = dust[i];
     if (d.life > 0) {
       d.life -= dt; d.v.y -= 9 * dt; d.p.addScaledVector(d.v, dt);
-      if (d.p.y < 0.06) { d.p.y = 0.06; d.v.y *= -0.25; d.v.x *= 0.6; d.v.z *= 0.6; }
+      if (d.p.y < 0.14) { d.p.y = 0.14; d.v.y *= -0.25; d.v.x *= 0.6; d.v.z *= 0.6; }
       d.r.x += dt * 5; d.r.z += dt * 4;
       const sc = d.s * Math.min(1, d.life * 2.5);
       _q.setFromEuler(d.r); _s.set(sc, sc, sc); _m.compose(d.p, _q, _s);
@@ -349,7 +349,7 @@ function showResults() {
   const hex = (i) => '#' + roles[i].color.toString(16).padStart(6, '0');
   const pod = [1, 0, 2].filter((k) => ord[k] !== undefined && horses[ord[k]].finished).map((k) => `<div class="p${k + 1}"><i style="background:${hex(ord[k])};width:16px;height:16px;border-radius:50%;border:2px solid #3a2416"></i><span>${roles[ord[k]].name}</span><b>${k + 1}</b></div>`).join('');
   const w = horses[ord[0]], rows = ord.map((i, k) => {
-    const h = horses[i], t = h.finished ? h.finishT.toFixed(2) + 's' + (k ? ' (+' + (h.finishT - w.finishT).toFixed(2) + ')' : '') : (h.state === 'run' ? 'still racing · ' : 'DNF · ') + Math.max(0, FINISH_X - h.headTip().x).toFixed(0) + ' m short';
+    const h = horses[i], t = h.finished ? h.finishT.toFixed(2) + 's' + (k ? ' (+' + (h.finishT - w.finishT).toFixed(2) + ')' : '') : 'DNF · ' + Math.max(0, FINISH_X - h.headTip().x).toFixed(0) + ' m short';
     const aw = (i === worst && maxP > 0 ? '<span class="award">DIRT EATER · MOST FACE-PLANTS</span>' : '') + (h.plants === minP && minP < maxP && h.finished ? '<span class="award g">SMOOTH OPERATOR</span>' : '');
     return `<tr><td class="n">${k + 1}</td><td><i style="background:${hex(i)}"></i>${roles[i].name}${aw}</td><td>${t}</td><td class="n">${h.plants} face-plant${h.plants === 1 ? '' : 's'}</td></tr>`;
   }).join('');
