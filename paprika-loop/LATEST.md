@@ -1,32 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-### Judge 56
-
-**Scores**
-
-1. **Plays as DESIGN.md says: 8.** `Digit1` starts the countdown, then `phase` goes `race` with `raceT` running. The `div#tips` line lists R restart, 2 for two players and Space to skip replays. I did not play a human finish. In this run YOU sat at x 2.03 with `legs` "0000", as expected with no input.
-2. **Real Rapier ragdolls, face-plant and auto-right: 8.** Each horse in the state has `state` "run", `plants` and `legs` bit strings. I did not trigger a face-plant or time the auto-right this session.
-3. **Replay and photo-finish look: 8.** Not re-viewed this session. The last verdict saw the sepia replay, the "PHOTO FINISH" title and film borders, and nothing in this session's change touches them.
-4. **Photo finish and tangled AI collapse within a minute, no input: 8, carried over.** The last verdict saw two races end in photo finishes. I did not run a no-input race this session.
-5. **Results with most face-plants award: 8.5, carried over.** The last verdict saw the DIRT EATER tag on `div#results`. I did not re-check it.
-6. **Looks as LOOK.md says: 7.5.** The picture shows toon steps with outlines (`mesh-outline`, `merged-outline`), an orange 49% / yellow 33% palette and warm light. The `div#crt` and `postpass-quad` give the CRT/VHS look. The camera now tilts up, so a green-yellow haze shows behind the `grandstand` instead of the stand filling the frame. But `hills` is still a 0.82% strip at y 408-415, and no ridge, treeline or clear sky shows.
-7. **`__game` convention, static, no network: 9.** `window.__game` returns its keys and units, assets are 0.32 MB, and the fonts are vendored. There were no console errors.
-8. **Horses match CHARACTERS.md: 8.** The blue-dot, grey and chestnut horses show white socks, dark hooves, big eyes, bridle and blinkers, a bristly mane and number saddle cloths. The saddle cloth with the "4" shows stripes, and the legs still read short against the "long wobbly" brief.
-9. **Broadcast overlay: 9.** `div#tote` has silks chips, odds (4-1/4-1/3-1/3-2) and face-plant counts. The overlay also has the LIVE bug, the "3:58 PM" clock, the "RACE TIME" box, the Hank "Hoofbeat" Pruitt `div#lower` and the `div#keys` cap labels.
-10. **Camera: 7.5.** The side-tracking telephoto at look target y 3.2 puts the horses low, level with the `div#lower` caption. The head-on live cut was not triggered, and I did not play a human finish.
-11. **Learnable controls: 7.** A human 60 m finish is still unplayed. The `div#keys` caps read Q FL, W FR, O BL, P BR, and the tip line says "ALTERNATE LEGS: Q+P THEN W+O".
-12. **Local 2-player, discoverable: 8.** The "2 PLAYERS (2)" button in `div#top-r` and the "2 = TWO PLAYERS" tip are visible. I did not re-press `Digit2` this session.
-13. **Style judged as hard as gameplay: 8.** The tote, the ad hoardings (ZENITH, TOP-CAT), the crowd on the stand and the CRT scanlines read as a 1970s TV race. The haze background is a bit flat.
-
-**Faults: 7.** There were no console errors. `perf` read 167 ms a frame on SwiftShader, which is no signal, and host load was 1.3 on 8 cores. Draw calls (267) and triangles (141k) are still heavy. `hills` is hidden behind the stand. The `div#crt` overlay is still reported as covering the canvas after 5 s, but it is the intended CRT pass.
-
-**Next:**
-1. The `hills` ridge is still a 0.82% strip behind the stand (asked again). Move the `grandstand` back, or lower its roof and shorten the `crowd` tiers, so the `hills` ridge and a treeline show on the horizon between the stand and the haze. `look` with `sample` at about [640, 120] should read sky or haze, and `hills` should list at over 3% of the frame.
-2. The horses sit low in the frame, level with the `div#lower` caption. Raise the follow-cam's look target y slightly, or move `div#lower` further left or down, so the horse legs and hooves clear the caption box. In the look at race start, the hooves should end above y 650.
-3. Play a human finish (asked again): `interact` with alternating Q+P / W+O holds and `until` `horses.2.finished`, and check it finishes in under 60 s. Then check the head-on cut fires during a live race.
-
-SCORE: 8.0
-
 ## Iteration 57
 **Did**
 - `index.html` `#lower` caption: bottom 44px → 30px, width min(56vw,700px) → min(44vw,560px), so horse hooves clear the caption box (Next item 2).
@@ -36,3 +9,32 @@ SCORE: 8.0
 - View the look to confirm hooves clear the caption; move `grandstand` back/shorten so `hills` shows (>3%); play a human finish (Q+P / W+O) until `horses.2.finished`.
 **Open**
 - Caption change unverified; hills and human-finish items still undone.
+
+### Judge 57
+
+The player's horse covered 11.6 m in about 3 s while alternating legs, so a 60 m finish in under 60 s looks reachable. I didn't play it to the end.
+
+**Scores**
+
+1. **Plays as DESIGN.md says: 8.** `Digit1` starts the countdown, then `phase` goes `race` with `raceT` running. The `div#tips` line lists R restart, 2 for two players and Space to skip replays. Alternating Q+P / W+O holds took YOU from x 2.03 to 13.64 in 176 frames with `state` "run" throughout. I didn't play the full finish.
+2. **Real Rapier ragdolls, face-plant and auto-right: 8.** Each horse in the state has `state`, `plants`, `pitch` and `legs`. YOU's pitch went to -0.2 and its y to 0.83 while running. I didn't trigger a face-plant or time the auto-right.
+3. **Replay and photo-finish look: 8, carried over.** I didn't re-view the replay this session, and the last session's change was CSS only.
+4. **Photo finish and tangled AI collapse within a minute, no input: 8, carried over.** I didn't run a no-input race to the end.
+5. **Results with most face-plants award: 8, carried over.** I didn't re-check the DIRT EATER tag on `div#results`.
+6. **Looks as LOOK.md says: 7.5.** The look shows toon steps with outlines (`mesh-outline`, `merged-outline`), orange 48% / yellow 34% hues, warm light and the `div#crt` / `postpass-quad` CRT pass. But `hills` is still a 0.82% strip at y 408-415, so the `grandstand` fills the background and no ridge, treeline or sky shows. The haze behind it is flat.
+7. **`__game` convention, static, no network: 9.** `window.__game` returns its keys and units, assets are 0.32 MB and the fonts are vendored. There were no console errors.
+8. **Horses match CHARACTERS.md: 8.** The blue-dot, grey and chestnut horses show white socks, dark hooves, big eyes, bridle and blinkers, a bristly mane and number saddle cloths. The legs still read short against the "long wobbly" brief.
+9. **Broadcast overlay: 9.** `div#tote` has silks chips, odds and face-plant counts. The overlay also has the LIVE bug, the 3:58 PM clock, the RACE TIME box, the Hank "Hoofbeat" Pruitt `div#lower` and the `div#keys` caps.
+10. **Camera: 7.5.** The side-tracking telephoto works, and the hooves now clear the narrower `div#lower`, which ends at x 597. The head-on cut and the replay cams were not triggered this session.
+11. **Learnable controls: 7.5.** The `div#keys` caps and the tip line "ALTERNATE LEGS: Q+P THEN W+O" show how to play. A 60 m finish in under 60 s is plausible from the 11.6 m in 3 s, but it is not shown.
+12. **Local 2-player, discoverable: 8.** The "2 PLAYERS (2)" button in `div#top-r` is visible. I didn't press `Digit2`.
+13. **Style judged as hard as gameplay: 8.** The tote, the ad hoardings (ZENITH, TOP-CAT), the crowd and the scanlines read as a 1970s TV race. The background is the weak part.
+
+**Faults: 7.5.** There were no console errors, and the `div#lower` change is confirmed. `perf` read 169 ms a frame on SwiftShader, which is no signal, with host load 2.3 on 8 cores. Draw calls (267) and triangles (141k) are heavy. `hills` is hidden behind the stand. The `div#crt` overlay is intentional.
+
+**Next:**
+1. The `hills` ridge is still a 0.82% strip behind the stand (asked again, third time). In `view.js`, move the `grandstand` back along z, or lower its roof and shorten the `crowd` tiers. Add a treeline and a lighter sky gradient above the ridge. `look` should then list `hills` at over 3% of the frame, with a sky or ridge colour at about [640, 120].
+2. Play a full human finish (asked again): `interact` with repeated Q+P / W+O holds of about 40 frames and `until` `{"horses.2.finished": true}` with `max` 3600. It is done when `finishT` is under 60 and the replay or results appear. Then check that the head-on cut fires during that race.
+3. Add a long-legs pass on the horses (CHARACTERS.md says "long wobbly"). Lengthen the leg segments about 15% in the horse builder so the legs read taller than the barrel. `look` at race start should show a visible gap between belly and ground.
+
+SCORE: 8.1
