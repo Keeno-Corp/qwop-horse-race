@@ -14,7 +14,7 @@ function mesh(geo, mat, p = [0, 0, 0], r = [0, 0, 0], s = [1, 1, 1]) {
 const cyl = (rt, rb, h, seg = 5) => new THREE.CylinderGeometry(rt, rb, h, seg);
 
 /** Visual groups for one horse, in the same order as Horse.parts: torso, neck, head, then upper/lower per leg. */
-export const COATS = [0xc9793c, 0x8e929a, 0x3a302c, 0xa8462a];
+export const COATS = [0xc9793c, 0x8e929a, 0xe8d8b0, 0xa8462a];
 export function buildHorseView(color, tint = 0, coat = BODY) {
   const body = lam(new THREE.Color(coat).offsetHSL(0, 0, tint)), sock = lam(SOCK), dark = lam(DARK), cloth = lam(color);
   const clothDark = lam(new THREE.Color(color).multiplyScalar(0.7));

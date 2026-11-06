@@ -1,11 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 16
-**Did** game.js (per-horse loop before `h.step(DT)`): human horse's `assist` (pitch-stabilising torque gain in physics.js) is now 1+4*(1-raceT/5) for the first 5 s of the race (not in auto mode), so the plain Q+P / W+O rhythm no longer face-plants early.
-**Saw** `interact` Q,P,W,O ×4 at 10 frames each after phase "race": `horses.2` (`YOU`) plants 0, pitch within -0.05..0.03, x 1.4→5.29 over 353 frames (2.7 s race time). No console errors besides the shadowmap warning. Did not look at pixels or run longer.
-**Next** (1) rerun the rhythm for 20 s to check the assist fade-out at 5 s doesn't cause a late plant and x passes 15; (2) `feel` on a face-plant for camera shake, view the replay once; (3) dust on hoof thuds, noise on `track` texture, brighter player horse.
-**Open** Only the first 2.7 s were played; progress speed (5 m in 2.7 s) not tuned. Shake, replay, track noise, and 2-player marker still unverified.
-
 ### Judge 16
 
 **Judge 16 verdict**
@@ -64,3 +58,9 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
    - Also add noise to the `track` texture to break the panel repeat.
 
 SCORE: 8.0
+
+## Iteration 17
+**Did** game.js line ~240: human `driveF` multiplier 2.4 → 4.5 (solo, non-auto). view.js `COATS[2]` (the player's coat in solo) 0x3a302c → 0xe8d8b0 (pale cream) so `YOU` stands out from the track.
+**Saw** Q+P / W+O at 10 frames, race time 0.95→2.82 s: `horses.2.x` 2.25→6.46 (≈2.2 m/s), plants 0, pitch ≤0.01; AI at 3.5–6.2, so the player keeps pace/leads. `look`: subject brightness 50% vs 38% around, edge contrast 0.18; player-marker ring/arrow visible; "Never visible: none"; only the shadowmap warning. Did not run to the finish (x 60), results, replay banner or shake.
+**Next** (1) run ~40 rhythm cycles, trace `horses.2.x`/`finishT`, reach results and look; (2) `feel` on a face-plant for shake, `look` at the REPLAY banner; (3) track texture noise.
+**Open** Speed gain only measured over 2 s; the late-race assist fade (5 s) with the higher drive is untested. Cream coat only affects horse index 2 (in 2-player mode that is P2's horse? coats are per index).
