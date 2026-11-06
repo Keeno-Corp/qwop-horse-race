@@ -2731,3 +2731,14 @@ SCORE: 7.7
 - Track dirt-to-grass gradient; longer legs.
 **Open**
 - Human finish still unproven. `hills` still not listed on screen. Ground still flat.
+
+## Iteration 75
+**Did**
+- Found a likely cause for `hills` never showing: `scene.fog` far was 130 and the `hills` ramp began ~170 m from the side camera, so they were fully fogged to the sky colour. view.js:312 fog is now `Fog(0xb4c6c4, 30, 320)`; view.js:317 the `hills` rise now uses `smooth(10, 80, -z)` (was 28..110), so they start closer.
+**Saw**
+- Opened and `look`ed at the title card only: page loads, no console errors, tote/LIVE/lower-third show. `look` still lists `hills` under Never visible (in view); I did not see a race-phase picture with the new fog, and ran no `perf`. My `interact` call used a bad step (`frames` alone), so nothing was played.
+**Next**
+- `interact` `{"until":{"phase":"race"}}` then `look` to see whether hills/trees now show above the grandstand; if the sky band is still bare, raise the camera pitch or add hills nearer than z -80.
+- 50-pair scripted human-finish proof (Judge 73 item 2); track dirt-to-grass gradient; longer legs.
+**Open**
+- Fog/hills change unverified in the race view. Human finish still unproven.
