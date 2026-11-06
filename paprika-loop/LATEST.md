@@ -27,8 +27,8 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 
 SCORE: 8.6
 
-## Iteration 33
-**Did** No code change this session.
-**Saw** `open` loads index.html with no error. `interact` of Q+P / W+O held 8 frames each, from `phase` "race": `YOU` went x 1.4 to 8.77 in 2.15 s of `raceT` (about 3.7 m/s, so 60 m is about 16 s), `state` "run", `plants` 0, `pitch` -0.02. AI at that moment: x 2.05, 2.61, 4.54 (about 1.2 to 2.1 m/s), so a perfect rhythm beats the AI easily. Not run: the finish itself, the replay `look`, the mistimed-keys check, perf.
-**Next** (1) Run to `phase` "results" (about 1000 frames; a long steps array costs a lot of tokens, so write the rhythm as a short `eval` loop calling `__game.act`) and check `finishT`, the margin and the replay banner. (2) If a perfect rhythm wins by a lot, raise the AI speed so the race stays close; humans will be slower than the perfect rhythm. (3) Plant-replay camera side by nearest running horse z; mistimed Q+W / O+P check for dog-sit, `plants` 1 and recovery to "run".
-**Open** Replay camera height change (2.0 to 3.0) and the AI-versus-human pace are still unchecked.
+## Iteration 34
+**Did** No code change. Ran `interact` with `state {phase:"race", auto:true}` then `until phase replay|results`, with `look`.
+**Saw** Auto-play ended in a plant replay at raceT 7.07: `tangles` 1, `horse0-body` and `horse1-body` both "down" (plants 1 each), `YOU` still "run" at x 16.6. The REPLAY banner and "SPACE to skip" show. The replay camera is low, side-on and close, and the grey and orange pile-up fills the frame with no other horse covering it, with `dust*` chips. No console errors. Only the hidden `grandstand` `Surfaces:` face plane remains. `look` says `player-body` is tiny in this replay frame, which is expected because the replay is framed on the pile-up.
+**Next** (1) Run to `phase` "results" and check `finishT`, the margin and the finish replay. (2) The mistimed Q+W / O+P check for dog-sit, `plants` 1 and recovery to "run". (3) If a rhythm player wins by a lot, raise the AI speed (`new AI(rr(0.93,1.03))` in game.js).
+**Open** The finish itself, mistimed-keys punishment and human-versus-AI pace are still unverified.
