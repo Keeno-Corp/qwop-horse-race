@@ -1,0 +1,476 @@
+{
+  "v": 1,
+  "keypoints": [
+    {
+      "id": "broadcast-presentation-commentary",
+      "title": "broadcast-presentation-commentary",
+      "state": {},
+      "actions": [
+        {
+          "until": {
+            "phase": "results"
+          },
+          "max": 3000
+        },
+        {
+          "wait": 2
+        }
+      ],
+      "frames": 0,
+      "expect": [
+        {
+          "path": "phase",
+          "op": "==",
+          "value": "results"
+        },
+        {
+          "path": "comm.distinct",
+          "op": ">=",
+          "value": 8
+        },
+        {
+          "path": "comm.distinct",
+          "op": "<=",
+          "value": 40
+        },
+        {
+          "path": "comm.repeats",
+          "op": "==",
+          "value": 0
+        },
+        {
+          "path": "comm.fastOverwrites",
+          "op": "==",
+          "value": 0
+        },
+        {
+          "path": "comm.stretchX",
+          "op": ">=",
+          "value": 44
+        },
+        {
+          "path": "comm.stretchX",
+          "op": "<=",
+          "value": 52
+        },
+        {
+          "path": "comm.finishNamesWinner",
+          "op": "==",
+          "value": true
+        },
+        {
+          "path": "horses.0.finishT",
+          "op": ">=",
+          "value": 22.5
+        },
+        {
+          "path": "horses.0.finishT",
+          "op": "<=",
+          "value": 23.5
+        }
+      ]
+    },
+    {
+      "id": "broadcast-presentation-sound",
+      "title": "broadcast-presentation-sound",
+      "state": {},
+      "actions": [
+        {
+          "until": {
+            "phase": "results"
+          },
+          "max": 3000
+        },
+        {
+          "wait": 2
+        }
+      ],
+      "frames": 0,
+      "expect": [
+        {
+          "path": "phase",
+          "op": "==",
+          "value": "results"
+        },
+        {
+          "path": "audio.crowdBase",
+          "op": ">=",
+          "value": 0.2
+        },
+        {
+          "path": "audio.crowdBase",
+          "op": "<=",
+          "value": 0.25
+        },
+        {
+          "path": "audio.crowdMax",
+          "op": ">=",
+          "value": 0.9
+        },
+        {
+          "path": "audio.crowdMax",
+          "op": "<=",
+          "value": 1
+        },
+        {
+          "path": "audio.hissOutside",
+          "op": "==",
+          "value": 0
+        },
+        {
+          "path": "audio.hoofOutside",
+          "op": "==",
+          "value": 0
+        },
+        {
+          "path": "audio.counts.hiss",
+          "op": ">=",
+          "value": 10
+        },
+        {
+          "path": "audio.counts.hiss",
+          "op": "<=",
+          "value": 200
+        },
+        {
+          "path": "audio.counts.hoof",
+          "op": ">=",
+          "value": 50
+        },
+        {
+          "path": "audio.counts.hoof",
+          "op": "<=",
+          "value": 600
+        },
+        {
+          "path": "audio.bugleCalls",
+          "op": ">=",
+          "value": 4
+        },
+        {
+          "path": "audio.bugleCalls",
+          "op": "<=",
+          "value": 8
+        },
+        {
+          "path": "audio.bellCalls",
+          "op": ">=",
+          "value": 3
+        },
+        {
+          "path": "audio.bellCalls",
+          "op": "<=",
+          "value": 6
+        },
+        {
+          "path": "audio.counts.crowd",
+          "op": ">=",
+          "value": 20
+        },
+        {
+          "path": "audio.counts.crowd",
+          "op": "<=",
+          "value": 80
+        },
+        {
+          "path": "audio.hoofVolMax",
+          "op": ">=",
+          "value": 0.1
+        },
+        {
+          "path": "audio.hoofVolMax",
+          "op": "<=",
+          "value": 0.65
+        }
+      ]
+    },
+    {
+      "id": "broadcast-presentation-results-solo",
+      "title": "broadcast-presentation-results-solo",
+      "state": {},
+      "actions": [
+        {
+          "until": {
+            "phase": "results"
+          },
+          "max": 3000
+        },
+        {
+          "wait": 40,
+          "draw": true
+        }
+      ],
+      "frames": 0,
+      "expect": [
+        {
+          "path": "phase",
+          "op": "==",
+          "value": "results"
+        },
+        {
+          "path": "hud.resultsShown",
+          "op": "==",
+          "value": true
+        },
+        {
+          "path": "hud.toteClipped",
+          "op": "==",
+          "value": 0
+        },
+        {
+          "path": "hud.smoothCount",
+          "op": ">=",
+          "value": 0
+        },
+        {
+          "path": "hud.smoothCount",
+          "op": "<=",
+          "value": 1
+        },
+        {
+          "path": "hud.hint",
+          "op": "==",
+          "value": "Press R for another race · 1 / 2 = players"
+        }
+      ]
+    },
+    {
+      "id": "broadcast-presentation-popups",
+      "title": "broadcast-presentation-popups",
+      "state": {},
+      "actions": [
+        {
+          "until": {
+            "hud.cut": "head",
+            "hud.pops.0.cut": true
+          },
+          "max": 900
+        },
+        {
+          "wait": 6,
+          "draw": true
+        }
+      ],
+      "frames": 0,
+      "expect": [
+        {
+          "path": "hud.cut",
+          "op": "==",
+          "value": "head"
+        },
+        {
+          "path": "hud.popOverlapCentre",
+          "op": "==",
+          "value": 0
+        },
+        {
+          "path": "hud.pops.0.cut",
+          "op": "==",
+          "value": true
+        },
+        {
+          "path": "hud.pops.0.overlapsCentre",
+          "op": "==",
+          "value": false
+        },
+        {
+          "path": "raceT",
+          "op": ">=",
+          "value": 5
+        },
+        {
+          "path": "raceT",
+          "op": "<=",
+          "value": 12
+        }
+      ]
+    },
+    {
+      "id": "broadcast-presentation-crowd",
+      "title": "broadcast-presentation-crowd",
+      "state": {},
+      "actions": [
+        {
+          "until": {
+            "phase": "results"
+          },
+          "max": 3000
+        },
+        {
+          "wait": 20,
+          "draw": true
+        }
+      ],
+      "frames": 0,
+      "expect": [
+        {
+          "path": "phase",
+          "op": "==",
+          "value": "results"
+        },
+        {
+          "path": "crowd.armsUpFrac",
+          "op": ">=",
+          "value": 0.9
+        },
+        {
+          "path": "crowd.armsUpFrac",
+          "op": "<=",
+          "value": 1
+        },
+        {
+          "path": "crowd.meanBodyH",
+          "op": ">=",
+          "value": 1.2
+        },
+        {
+          "path": "crowd.meanBodyH",
+          "op": "<=",
+          "value": 1.5
+        }
+      ]
+    },
+    {
+      "id": "broadcast-presentation-results-2p",
+      "title": "broadcast-presentation-results-2p",
+      "state": {},
+      "actions": [
+        {
+          "key": "Digit2",
+          "frames": 3
+        },
+        {
+          "wait": 60
+        },
+        {
+          "key": "KeyQ",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyR",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyU",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyP",
+          "down": true,
+          "frames": 21
+        },
+        {
+          "key": "KeyQ",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyR",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyU",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyP",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyW",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyE",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyI",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyO",
+          "down": true,
+          "frames": 21
+        },
+        {
+          "key": "KeyW",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyE",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyI",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyO",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "until": {
+            "phase": "results"
+          },
+          "max": 3500
+        },
+        {
+          "wait": 40,
+          "draw": true
+        }
+      ],
+      "frames": 0,
+      "expect": [
+        {
+          "path": "phase",
+          "op": "==",
+          "value": "results"
+        },
+        {
+          "path": "mode",
+          "op": "==",
+          "value": 2
+        },
+        {
+          "path": "hud.resultsShown",
+          "op": "==",
+          "value": true
+        },
+        {
+          "path": "hud.toteClipped",
+          "op": "==",
+          "value": 0
+        },
+        {
+          "path": "hud.smoothCount",
+          "op": ">=",
+          "value": 0
+        },
+        {
+          "path": "hud.smoothCount",
+          "op": "<=",
+          "value": 1
+        },
+        {
+          "path": "hud.hint",
+          "op": "==",
+          "value": "Press Enter for another race · 1 / 2 = players"
+        }
+      ]
+    }
+  ]
+}
