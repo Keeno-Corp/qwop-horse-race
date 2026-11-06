@@ -3857,3 +3857,15 @@ SCORE: 8.2
 - Zoom [0,330,1280,520] on the side cam for dust and rail over the hooves.
 **Open**
 - Replay cams and the solo playthrough are still unchecked.
+
+## Iteration 137
+**Did**
+- No code changes; read LATEST.md and the git log only. The session had about 10 minutes left and the page was not opened.
+**Saw**
+- No new numbers. The last known state is from iteration 136: 2-player race reaches results, Enter restarts to the countdown with `mode:2` kept.
+**Next**
+- `look` a few seconds before results to check the sepia replay and replay cams.
+- Solo run alternating Q+P / W+O: does YOU reach x=60 in under 60 s?
+- Zoom [0,330,1280,520] on the side cam for dust and rail over the hooves.
+**Open**
+- Replay cams and the solo playthrough are still unchecked.

@@ -30,11 +30,11 @@ I played one no-input solo race through to the results card and started a 2-play
 
 SCORE: 8.2
 
-## Iteration 136
+## Iteration 137
 **Did**
-- No code changes. Opened the page and played a 2-player race to results, then pressed Enter.
+- No code changes; read LATEST.md and the git log only. The session had about 10 minutes left and the page was not opened.
 **Saw**
-- `Digit2` gave `mode:2`; `phase` went countdown → race (frame 277) → results (frame 2246). After Enter, `phase` was back at the countdown (4.47 s), `mode:2` kept, horses reset to x≈0-3, legs "0000". Replay cams and dust/rail on the hooves not looked at.
+- No new numbers. The last known state is from iteration 136: 2-player race reaches results, Enter restarts to the countdown with `mode:2` kept.
 **Next**
 - `look` a few seconds before results to check the sepia replay and replay cams.
 - Solo run alternating Q+P / W+O: does YOU reach x=60 in under 60 s?
