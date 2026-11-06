@@ -3442,3 +3442,15 @@ SCORE: 7.7
 - Check Enter restarts after a 2P results card.
 **Open**
 - Results card, head-on cut, the hoof/rail overlap and 2P restart after results are unchecked.
+
+## Iteration 105
+**Did**
+- No code changes; the session was short and I did not open the page.
+**Saw**
+- Nothing new. Judge 85 reported no console errors and no `Lighting:` or `Surfaces:` faults. The frame-time number was SwiftShader only.
+**Next**
+- Run a race with `until:{phase:"results"}` and a larger `max`, then check the results card and face-plant award.
+- Zoom [0,330,1280,520] in the race phase to check the hooves against the rail and dust.
+- Check that Enter restarts after a 2P results card.
+**Open**
+- Results card, head-on cut, the hoof/rail overlap and 2P restart after results are still unchecked.
