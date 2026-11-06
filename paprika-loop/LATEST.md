@@ -1,34 +1,36 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-### Judge 26
-
-**Verdict, session 26**
-
-1. **Plays as DESIGN.md's Core loop and Controls say: 7.** The `1 PLAYER`, `2 PLAYERS (2)` and `RESTART` buttons, `div#tips` and `div#keys` show. I pressed Q, P, W, O, Q, P in 10-frame beats, and `YOU` reached only x 2.37 by raceT 29.8 s. `plants` was 1. The AI finished at 22 s. Enter restarted the race, but I did not test R, and I did not run 2P.
-2. **Real Rapier jointed ragdoll, face-plant, auto-right: 8.** `legs` bitmasks are live, for example "0110" and "1111". Sounds included thud, gasp and boing. I did not see auto-right.
-3. **Replay (~4 s, 0.25x, REPLAY banner, Space skips): 6.** The `REPLAY` tag, the "SPACE to skip" line and the `PHOTO FINISH!` pop-up show. But `replay.rate` reads 0.6, not 0.25, and `replay.t` stayed at 0 (`pos` 1865 of 2125). Also, the replay waited 36 s for a stalled human (`phase:"finishing"` from 22 s to 36 s), while the picture sat on the finish line. That is dead time.
-4. **Photo finish and tangled AI collapse: 5.** The photo finish holds: `Hoof Hearted` 22.07 s and `Dusty Rhodes` 22.10 s, "by a nose (0.03s)". `tangles` was 0 through about 36 s of race, and no AI had `plants` above 0. The forced pile-up from this iteration did not fire.
-5. **Results with most face-plants award: 6.** The `results` array is already ordered by the time of the replay. I did not reach the results screen and did not see the award badge.
-6. **Looks as LOOK.md says: 6.** The `grandstand`, crowd, rail, `hills`, `track` with the "50 m" sign, `finish-line` and horses match refs/01.jpg. But `Subject: player drew no pixel; 0 named parts`. `YOU` is off-screen at x 2 while the camera follows the leaders, and only the `div#off2` "◀ YOU 50 m" chip points to it. The player is the subject and is not on screen.
-7. **window.__game convention, index.html at root: 9.** `observe` has `phase`, `replay{kind,pos,t,of,rate}`, `results` and `horses`.
-8. **Clip moments in the first minute: 5.** The photo finish comes at 22 s. The tangle did not happen, so the 10-second laugh is missing.
-9. **Controls feel learnable: 5.** A 6-beat rhythm gave 2.4 m in 30 s. I did not reproduce a 60 m finish in under 60 s.
-10. **Horses read as horses, match refs/01.jpg: 9.** Head, mane, tail, saddle cloths, white socks and dark hooves read clearly in both looks.
-11. **Juice: 8.** Sounds fired (blip, powerup, cheer, thud, gasp, boing). The `div#flash`, `PHOTO FINISH!` pop-up, `div#chips` and finish banner show. Shake was not measured.
-12. **Local 2-player discoverable from the HUD: 7.** "2 = two players" in the tips and the `2 PLAYERS (2)` button. Not run.
-13. **Static page, vendored lib, no network: 9.** 382 draw calls, 33.6k triangles, 0 MB of assets. The 113 ms frame is SwiftShader (software renderer), not a real GPU.
-
-**Faults: 6.** The only console line is the PCFSoftShadowMap warning. `Never visible` is only `dust`. The forced tangle did not fire, `Subject` still lists 0 named parts, and `YOU` is not drawn while behind.
-
-**Next:**
-1. **Make the AI tangle fire.** In `updateRace`, the pile-up never produced `tangles` 1 by 36 s (`interact` with `until: {tangles: 1}, max: 1800` ran out). Skip the random chance. At raceT ≈ 8–10 s, pick two neighbouring AI horses, push both into the same lane (z within 0.8) and trip one (set its state to a face-plant). Check with `interact` `until: {tangles: 1}`, `max` 900. It should fire before raceT 15, and the replay should catch it as a "big face-plant".
-2. **Keep `YOU` in frame, and name its parts.** At x 2 behind the leaders at x 59 the camera shows only the AI, so `Subject: player` is empty. Make the camera follow the player (or frame the player and the leader) until the player has finished, and name `player-body` and `player-head` so `Subject` lists them. A `look` at 20 s with `YOU` trailing should show `Subject: player` at 2% or more.
-3. **Fix the replay and the stall.** Set the replay rate to 0.25 (it reads 0.6) and make `replay.t` count up. Cut `humanWait` to about 4 s, or end the finish early with DNF for a player who is far behind, so the replay starts about 3 s after the first finish. Check with `interact` `until: {phase: "replay"}`, which should hold by raceT ≈ 26 s, and then `observe`, where `replay.rate` is 0.25 and `replay.t` is above 0.
-
-SCORE: 6.9
-
 ## Iteration 27
 **Did** game.js: forced tangle in `updateRace` (first AI pair `horses[i],horses[i+1]` both AI, raceT > 9, `tangles` 0 → collapse both, no proximity/chance); `humanWait` cut 14 s → 4 s; finish replay is now ~64 frames (24 before first finish) at fixed rate 0.25, `observe().replay.rate` 0.25 and `t` counts up; `followTarget` caps the lead-pack pull at 6 m so `player` stays near frame; view groups named `player-body`, `player-head` (`horseN-body/-head`).
 **Saw** `interact until tangles 1`: fires at raceT 9.0 (frame 732), two AI `state:"down"`, `pendingReplay` true, sounds thud/gasp/cheer; only the PCFSoftShadowMap warning. Not run: `look` of the new camera with YOU trailing, full race to results, perf, 2P.
 **Next** (1) `look` at raceT ~20 with YOU trailing: `Subject: player` should list the new parts. (2) Run to `phase replay`/`results`; check replay length (~4 s) and the plant replay of the forced tangle. (3) 2P camera, `feel` on shake.
 **Open** Camera cap of 6 m may crop the leaders entirely when YOU is far behind; untested visually. Forced tangle always hits the first AI pair (red/green), predictable.
+
+### Judge 27
+
+I've played through the tangle, both replays, the results screen and perf, so I'm writing the verdict now.
+
+**Verdict, session 27**
+
+1. **Plays as DESIGN.md's Core loop and Controls say: 7.** The `1 PLAYER`, `2 PLAYERS (2)` and `RESTART` buttons, `div#tips`, `div#keys` and the `div#chips` face-plant counters all show. The race runs to a results screen. A Q P W O rhythm in 10-frame beats got `YOU` only to x 6.7 by raceT 30 s, and `YOU` finished as "DNF · 52 m short". I did not test R or 2P.
+2. **Real Rapier jointed ragdoll, face-plant, auto-right: 8.** `legs` bitmasks are live, and `state:"down"` and `plants` counters work (Sir Trips-a-Lot 2). The `horse0-body` and `horse0-head` parts are jointed. I did not see auto-right.
+3. **Replay (last ~4 s, 0.25x, REPLAY banner, Space skips): 6.** The plant replay is right: `replay.kind` "plant", `rate` 0.25, `t` counting up, `of` 592, with the banner and "SPACE to skip". The finish replay opens on an empty track. The `look` at `phase:"replay"` showed the "20 m" sign, the `PHOTO FINISH!` pop-up and no horses at all, while both leaders were at x ≈ 59. The replay camera does not frame the finish at its start.
+4. **Photo finish and tangled AI collapse: 6.** The forced collapse fires at raceT 9.0 and `tangles` is 1. But the two downed horses are Sir Trips-a-Lot (x 19.3, z 1.0) and Hoof Hearted (x 23.2, z −2.3). They are 4 m apart and 3 m across lanes, so there is no visible tangle of legs. The photo finish holds: Dusty Rhodes 23.45 s against Hoof Hearted 23.52 s, "by a nose (0.07s)".
+5. **Results with most face-plants award: 9.** The `results` box shows "Dusty Rhodes WINS! PHOTO FINISH · 0.07s", a podium, and badges (SMOOTH OPERATOR, DIRT EATER · MOST FACE-PLANTS). It also shows DNF distances and "Press R for another race".
+6. **Looks as LOOK.md says: 6.** The `grandstand` with its crowd, rail, `hills`, `track` and `finish-line` show, and the horses read as in refs/01.jpg. But `Subject: player-marker-0 … drew no pixel; 0 of 0 named parts`. `window.__game.subject` still names "player", which is not in the scene. The `YOU` horse is never on screen in the three looks.
+7. **window.__game convention, index.html at root: 9.** `observe` returns `phase`, `raceT`, `replay{kind,pos,t,of,rate}`, `results`, `horses` and `tangles`.
+8. **Clip moments in the first minute: 6.** The face-plant replay at 9–10 s plays at 0.25x and the photo finish comes at 23.5 s. The first one is two horses lying apart, not a tangle, and the finish replay opens on an empty track.
+9. **Controls feel learnable: 4.** `YOU` reached only x 6.7 in 30 s, and was 52 m short at the DNF. Finishing 60 m in under 60 s was not reproduced.
+10. **Horses read as horses, match refs/01.jpg: 9.** The first `look` shows head, mane, tail, red saddle cloth, white socks and dark hooves on a dirt track with a rail fence and a grandstand with a blocky crowd.
+11. **Juice: 8.** The sounds fired (blip, powerup, cheer, thud, gasp, boing), along with `div#flash`, the pop-ups, the camera and the results box. Shake was not measured with `feel`.
+12. **Local 2-player discoverable from the HUD: 7.** The `2 PLAYERS (2)` button and "2 = two players" are visible. 2P was not run.
+13. **Static page, vendored lib, no network: 9.** 383 draw calls, 33.6k triangles, 0 MB of assets. The 82 ms frame is SwiftShader (software renderer), so it is not a fault.
+
+**Faults: 6.** The only console line is the PCFSoftShadowMap warning. `Never visible` is `sky` during the replays. The `Subject` name is broken, the finish-replay camera is empty, and the player is never in frame.
+
+**Next:**
+1. **Make the player's race winnable (asked again, Controls feel learnable).** After 4 beats of Q P W O, `YOU` was at x 6.7 at raceT 30 s. Raise the motor torque and forward drive per leg-press, or add a gentle assist when opposite legs alternate, so a 10-frame alternating Q+P, W+O rhythm reaches x ≥ 60 by raceT ≈ 45 s. Check with `interact` of that rhythm repeated, `until: {phase: "finishing"}`, then `observe`, where `horses[2].finishT` should be under 60.
+2. **Fix the finish replay camera, and the `Subject` name.** At `phase:"replay"`, `kind:"finish"`, the camera shows the empty track at x ≈ 20 while the leaders are at x ≈ 59. Point the replay camera at the finish line with the first two finishers in frame from `t = 0`. Also set `window.__game.subject` to `player-body`, which exists. A `look` at the replay should list `horse*-body` near the `finish-line`, and a `look` mid-race should list `Subject: player-body`.
+3. **Make the forced tangle a visible pile-up.** At raceT 9 the two collapsing AI horses sat 4 m apart in x and 3 m apart in z. Pick the two nearest AI horses, set their z within 0.6 of each other and their x within 1.5, and trip both. Check with `look` at the plant replay's midpoint, where two `horse*-body` groups should overlap with their legs in the same screen box. Keep it within `interact until: {tangles: 1}`, `max` 900.
+
+SCORE: 7.2
