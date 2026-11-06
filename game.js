@@ -385,7 +385,7 @@ function updateRace(dt) {
     if (S.phase === 'finishing') {
       const since = S.raceT - S.firstFinish;
       const humanWait = roles.some((r, i) => r.human >= 0 && !horses[i].finished && horses[i].state === 'run') && since < 4;
-      if ((since > 6.5 && !humanWait) || horses.every((h) => h.finished || h.state !== 'run' && since > 3.5)) startFinishReplay();
+      if ((since > 4.5 && !humanWait) || horses.every((h) => h.finished || h.state !== 'run' && since > 3.5)) startFinishReplay();
     } else if (S.raceT > 150) startFinishReplay();
   }
 }

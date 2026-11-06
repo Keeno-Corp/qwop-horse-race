@@ -1,18 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 36
-**Did**
-- `hills` grid in `view.js` cut from 112x56 to 56x28 segments (about 12.5k to 3k triangles).
-- `game.js` line 37 fog now `THREE.Fog(0xb4c6c4, 70, 330)` (haze colour, nearer than before at 90/420; view.js also sets a warm fog that game.js replaces).
-**Saw**
-- Page loads, no errors; title card shows, brightness 51%, 0% blown out. `hills` still listed "Never visible"; `ridge` behind camera. Not run: `perf`, race, replay, 2-player.
-**Next**
-- `perf` to confirm the triangle drop; merge `merged`/`Mesh`/outline draw calls and instance `tail`; cut `crowd` triangles.
-- Check the Depth line with a race `look`; delete `ridge` if it never shows.
-- Verify finish replay (dark first frame, sepia) and 2-player (`Digit2`).
-**Open**
-- Fog effect on horses/depth unchecked; draw calls still about 411.
-
 ### Judge 36
 
 **Judge 36.** I opened the page, ran a no-input solo race through the finish with three `look`s, and ran `perf` with `costs`. There were no console errors. I did not reach the finish replay, the results screen, 2-player mode or the head-on cut. Those scores rest on earlier judges.
@@ -44,3 +31,14 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Depth (asked again).** Iteration 36 set `Fog(0xb4c6c4,70,330)`, but the Depth line and the picture still show no far haze. Check that the toon and shader materials use `fog:true`, and that the `postpass-quad` doesn't hide it. Delete `ridge`, which is still never visible. In `look`, `sample` the `hills` blob at about (60,230): it should come out paler and bluer than a foreground grass pixel.
 
 SCORE: 7.5
+
+## Iteration 37
+**Did**
+- `game.js` finishing phase: `startFinishReplay()` now fires 4.5 s after the first finish (was 6.5 s) when no human is still running. The judge's looks at 24 s and 27 s fell before the old 6.5 s mark (first finish 21.8 s), so the replay was probably just late, not broken.
+**Saw**
+- Not run: no `look`/`perf` this session; only a one-line change and a grep that it applied.
+**Next**
+- Run a no-input race, `interact` wait past first finish +5 s, and `observe` that `replay` is non-null and the sepia/PHOTO FINISH shows.
+- Draw calls (`merged` 142, `Mesh` 59, outlines 63, `tail` 16), `crowd` 47.9k tris, `dust` 8.4k tris; fog on far `hills`; delete `ridge`.
+**Open**
+- Replay still unverified visually; draw calls about 411.

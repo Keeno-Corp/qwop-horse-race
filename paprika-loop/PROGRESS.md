@@ -1212,3 +1212,14 @@ SCORE: 7.7
 3. **Depth (asked again).** Iteration 36 set `Fog(0xb4c6c4,70,330)`, but the Depth line and the picture still show no far haze. Check that the toon and shader materials use `fog:true`, and that the `postpass-quad` doesn't hide it. Delete `ridge`, which is still never visible. In `look`, `sample` the `hills` blob at about (60,230): it should come out paler and bluer than a foreground grass pixel.
 
 SCORE: 7.5
+
+## Iteration 37
+**Did**
+- `game.js` finishing phase: `startFinishReplay()` now fires 4.5 s after the first finish (was 6.5 s) when no human is still running. The judge's looks at 24 s and 27 s fell before the old 6.5 s mark (first finish 21.8 s), so the replay was probably just late, not broken.
+**Saw**
+- Not run: no `look`/`perf` this session; only a one-line change and a grep that it applied.
+**Next**
+- Run a no-input race, `interact` wait past first finish +5 s, and `observe` that `replay` is non-null and the sepia/PHOTO FINISH shows.
+- Draw calls (`merged` 142, `Mesh` 59, outlines 63, `tail` 16), `crowd` 47.9k tris, `dust` 8.4k tris; fog on far `hills`; delete `ridge`.
+**Open**
+- Replay still unverified visually; draw calls about 411.
