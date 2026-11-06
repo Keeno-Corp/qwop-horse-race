@@ -57,6 +57,12 @@ class AI {
     if (px > 6 && px <= 22) { const g0 = (AI.aiLeadX || 0) - px; if (g0 > 1.5) band = 1 - clamp((g0 - 1.5) * 0.09, 0, 0.45); }
     if (px > 22) { if (this.m) this.m = null; this.next = 99; const gapL = (AI.aiLeadX || 0) - px; if (gapL > 0.5) band = 1 - clamp((gapL - 0.5) * (px > 38 ? 0.3 : 0.15), 0, px > 38 ? 0.78 : 0.7); }
     { const g1 = (AI.leadX || 0) - px; if (g1 > 1.5 && h.state === 'run' && !h.finished) { h.drive = 1; h.driveF = 40 * clamp(g1 - 1.5, 0, 14); } else h.driveF = 0; }
+    { // stall watchdog: a horse that has barely moved in 3 s while upright gets a firm shove
+      this.wx = this.wx ?? px; this.wt = (this.wt || 0) + dt;
+      if (this.wt > 3) { this.stuck = h.state === 'run' && !h.finished && px > 5 && px - this.wx < 0.8 ? 1.4 : 0; this.wx = px; this.wt = 0; }
+      if (this.stuck === 1.4 && h.rise) { this.stuck = 1.39; if (Math.abs(h.pitch()) > 0.9) h.rise(); }
+      if (this.stuck > 0) { this.stuck -= dt; h.drive = 1; h.driveF = Math.max(h.driveF || 0, 420); }
+    }
     if (this.t < this.delay) { for (let i = 0; i < 4; i++) h.setHeld(i, false); return; }
     const per = this.jit * band * this.base * (1 + 0.14 * Math.sin(this.wob * 1.7) + 0.08 * Math.sin(this.wob * 4.1)) * (1 + clamp(lead * 0.07, -0.35, 0.5)) * (1 - clamp(((AI.leadX || 0) - px - 1) * 0.06, 0, 0.4)) * (h.pos().x > 40 ? 1 - clamp(lead * 0.1, -0.4, 0.4) : 1);
     this.phase = (this.phase + dt / per) % 1;

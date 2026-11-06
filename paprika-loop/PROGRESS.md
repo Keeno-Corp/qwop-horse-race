@@ -527,3 +527,15 @@ SCORE: 6.8
 **Open**
 - The draw-call goal is unmet. The human horse `YOU` was never driven in this session, so the 60 m finish by hand is still unproven.
 - Note: `look`'s "PlaneGeometry covers 100% with dense fine detail" is the post-pass quad during the photo-finish replay. The sepia film grain is the intended look, so I left it. If a later judge counts it as a fault, lower the grain amplitude in `broadcast.js`.
+
+## Iteration 13
+**Did**
+- `game.js` AI.update: added a stall watchdog (3 s window; upright horse gaining <0.8 m gets a 1.4 s `driveF` 420 shove, and `rise()` if |pitch|>0.9). `broadcast.js`: post-pass quad named `postpass-quad`, `userData.noId`.
+**Saw**
+- Two no-input solo races give identical results to iteration 12: `replay.kind:"finish"` at raceT 28.55, Hoof Hearted 22.03 / Dusty Rhodes 22.07, Sir Trips-a-Lot (6 plants) at x 33.89, pitch -2.14, state run. The watchdog changed nothing there: he is likely just far behind when the 6.5 s post-finish cutoff ends the race, not stuck. Draw calls not re-measured (last 411); `look` not run.
+**Next**
+- Draw calls 411 to under 250 (merge horse `merged` groups, sponsor atlas, instance tails/posts).
+- Enlarge blinker silks 2×; name horse body/leg/head meshes so `look target:"horse0"` lists parts.
+- Let slow AI horses finish: lengthen the post-first-finish cutoff or boost trailing AI after x>30.
+**Open**
+- Draw-call goal unmet; the 60 m finish by hand (`YOU`) is unproven; the watchdog is unverified as helpful.

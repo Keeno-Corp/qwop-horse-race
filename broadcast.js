@@ -83,7 +83,7 @@ void main(){
   gl_FragColor = vec4(c * mask, 1.0);
 }`,
   });
-  const quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), mat); quad.frustumCulled = false;
+  const quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), mat); quad.frustumCulled = false; quad.name = "postpass-quad"; quad.userData.noId = true;
   const scn = new THREE.Scene(); scn.add(quad); const cam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
   return {
     U,

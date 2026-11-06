@@ -33,18 +33,14 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 
 SCORE: 6.8
 
-## Iteration 12
+## Iteration 13
 **Did**
-- No code change. I checked the photo finish, the judge's top Next item, by playing a no-input solo race with `interact`.
+- `game.js` AI.update: added a stall watchdog (3 s window; upright horse gaining <0.8 m gets a 1.4 s `driveF` 420 shove, and `rise()` if |pitch|>0.9). `broadcast.js`: post-pass quad named `postpass-quad`, `userData.noId`.
 **Saw**
-- The race reached `replay.kind:"plant"` at raceT 7.6 (`tangles:1`). `look` showed the instant replay: three horses side by side, the "INSTANT REPLAY · 0.25x" tag and "SPACE to skip".
-- It then reached `replay.kind:"finish"`. `look` showed the sepia grain, scratches, film-strip border, "PHOTO FINISH" banner and the "WINNER: Hoof Hearted · BY 0.05 SEC · HOLD ALL TICKETS" strip. Two horses finished 0.04 s apart (22.03 and 22.07). So the photo finish exists and works; the `until: {phase:"finish"}` step in the earlier session missed it because the phase is named `replay`. Use `until: {"replay.kind":"finish"}`.
-- `Sir Trips-a-Lot` (6 face-plants) was still at x 33.9 at raceT 28.6, so one horse still doesn't finish.
-- `look` still reports the post-pass `Mesh` at 100%, so `horse0` shows 0 of 3 parts. `broadcast.js:95-97` already calls `setRenderTarget(null)`, so the "render target" warning was not seen this time. Draw calls were not re-measured (last 411).
+- Two no-input solo races give identical results to iteration 12: `replay.kind:"finish"` at raceT 28.55, Hoof Hearted 22.03 / Dusty Rhodes 22.07, Sir Trips-a-Lot (6 plants) at x 33.89, pitch -2.14, state run. The watchdog changed nothing there: he is likely just far behind when the 6.5 s post-finish cutoff ends the race, not stuck. Draw calls not re-measured (last 411); `look` not run.
 **Next**
-- Draw calls 411 to under 250: merge the horse `merged` groups per horse, one atlas for the 18 sponsor `labelPlane`s, instance the 16 `tail` meshes.
-- Name the horse parts and flag the post-pass quad so `look target:"horse0"` works. Enlarge the blinker silks 2×.
-- Let a fallen AI horse recover sooner (the 6-plant one stalls at x 34).
+- Draw calls 411 to under 250 (merge horse `merged` groups, sponsor atlas, instance tails/posts).
+- Enlarge blinker silks 2×; name horse body/leg/head meshes so `look target:"horse0"` lists parts.
+- Let slow AI horses finish: lengthen the post-first-finish cutoff or boost trailing AI after x>30.
 **Open**
-- The draw-call goal is unmet. The human horse `YOU` was never driven in this session, so the 60 m finish by hand is still unproven.
-- Note: `look`'s "PlaneGeometry covers 100% with dense fine detail" is the post-pass quad during the photo-finish replay. The sepia film grain is the intended look, so I left it. If a later judge counts it as a fault, lower the grain amplitude in `broadcast.js`.
+- Draw-call goal unmet; the 60 m finish by hand (`YOU`) is unproven; the watchdog is unverified as helpful.
