@@ -205,6 +205,70 @@
           "value": "results"
         }
       ]
+    },
+    {
+      "id": "replay-cams-plant2",
+      "title": "replay-cams-plant2",
+      "state": {},
+      "actions": [
+        {
+          "until": {
+            "replay.kind": "plant",
+            "raceT": [
+              15,
+              99
+            ]
+          },
+          "max": 2500
+        },
+        {
+          "wait": 1,
+          "draw": true
+        }
+      ],
+      "frames": 0,
+      "expect": [
+        {
+          "path": "phase",
+          "op": "==",
+          "value": "replay"
+        },
+        {
+          "path": "replay.kind",
+          "op": "==",
+          "value": "plant"
+        },
+        {
+          "path": "raceT",
+          "op": ">=",
+          "value": 19
+        },
+        {
+          "path": "raceT",
+          "op": "<=",
+          "value": 19.6
+        },
+        {
+          "path": "cam.p.1",
+          "op": ">=",
+          "value": 0
+        },
+        {
+          "path": "cam.p.1",
+          "op": "<=",
+          "value": 1.2
+        },
+        {
+          "path": "cam.p.2",
+          "op": ">=",
+          "value": 5
+        },
+        {
+          "path": "cam.p.2",
+          "op": "<=",
+          "value": 9.5
+        }
+      ]
     }
   ]
 }
