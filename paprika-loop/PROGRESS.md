@@ -3334,3 +3334,15 @@ SCORE: 7.7
 - Run a 2P race to the results card and check the `legs` strings and the face-plant award.
 **Open**
 - Replay cams, the results card and the hoof/rail overlap are still unchecked in the pixels.
+
+## Iteration 96
+**Did**
+- No code changes. Read LATEST.md (Judge 85) and the git log; the page is unchanged from iteration 95. About 21 minutes were left and I used them on the handoff.
+**Saw**
+- No new look numbers; I did not open the page. The last readings stand (no console errors, no `Lighting:`/`Surfaces:` faults, 268 draw calls, 128k triangles).
+**Next**
+- Run a no-input race with `until:{phase:"results"}` and `look` with `cameras` at the photo-finish sepia replay, the head-on cut and the results card.
+- `look` with `zoom` [0,330,1280,520] mid-race; lower the foreground rail or thin the dust so the hooves read.
+- Play a 2P race (`Digit2`, Q W E R / U I O P) to the results card; check the `legs` strings and the face-plant award.
+**Open**
+- Replay cams, the results card, 2P play and the hoof/rail overlap are still unchecked in the pixels.
