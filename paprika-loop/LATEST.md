@@ -1,64 +1,38 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-### Judge 18
-
-**Judge 18 verdict**
-
-1. **Plays as DESIGN.md's Core loop and Controls say: 8.**
-   - This session I pressed Q+P then W+O, but the 20-frame holds were too short. `YOU` was at x 1.41 after 2.57 s, with `legs` "0000", `pitch` 0 and `state` "run". The AI horses were at x 3 to 5.5.
-   - `div#keys`, `div#tips` and `div#top-r` ("1 PLAYER", "2 PLAYERS (2)", "RESTART") are visible.
-   - Judge 17 measured about 2.3 m/s with a longer rhythm, so I did not re-measure it.
-2. **Real Rapier jointed ragdoll, face-plant and auto-right: 8.**
-   - The `horse0-*` to `horse3-*` limbs and the dust bursts from the hooves read as jointed running.
-   - No face-plant happened in this run, so face-plant and auto-right were not re-seen.
-3. **Replay: 8.**
-   - Iteration 18 recorded the REPLAY banner and "SPACE to skip". I did not re-check them.
-4. **Photo finish and tangled AI collapse within the first minute: 7.**
-   - No collapse happened in the first 2.6 s. All four `plants` were 0.
-   - A photo finish with two horses within 0.3 s has still never been observed.
-5. **Results with most face-plants award: 8.**
-   - Iteration 18 recorded the "YOU WINS!" box with the "DIRT EATER · MOST FACE-PLANTS" badge. I did not re-check it. The podium "1" card overlaps the horse behind it.
-6. **Looks as LOOK.md says: 8.**
-   - The `grandstand` with its blocky crowd, the white rail fence, `hills`, `sky` and `track` read as sunny low-poly like refs/01.jpg.
-   - The blue `player-marker-*` ring and arrow are clear.
-   - The cream `horse3-*` (YOU) is 44% bright against 45% around it. That is lower than judge 17's 47% against 31%, because the grey and tan horses sit right next to it. It stands out only through the blue ring.
-   - The `track` is still a flat brown with visible panel repeats.
-7. **window.__game convention, index.html at root: 9.**
-8. **Clip moments within the first minute, no input: 7.**
-   - The tangle and the auto replay were seen earlier, but not in this run.
-9. **Controls feel learnable: 8.**
-   - Judge 17's Q+P / W+O rhythm gave steady progress with no plants. Mistimed keys were not tested this session.
-10. **Horses read as horses, match refs/01.jpg: 9.**
-    - Head, mane, tail, white socks, dark hooves and saddle colours all read in the look.
-11. **Juice: 8.**
-    - Sounds fired: blip ×3, powerup, cheer. Dust flies and the `div#chips` counters work.
-    - The `shakeAmp` 0.3 change from iteration 18 is still not seen visually.
-12. **Local 2-player discoverable from the HUD: 8.**
-    - The cream coat per player index was not checked.
-13. **Static page, vendored lib, no network: 9.**
-    - 387 draw calls, 33.8k triangles, 0 MB of assets.
-    - The 67 ms frame is SwiftShader at host load 1.6, so it is no budget signal.
-
-**Faults: 9.**
-- "Never visible: none". The only console message is the shadowmap warning.
-
-**Next:**
-1. **Make the player horse (`horse3-*` / `YOU`) stand out and show shake.**
-   - Give the player a saturated or white coat, or a brighter saddle, so it separates from the tan and grey neighbours.
-   - Check with `look` `sample` on the player body and on the horse beside it, and expect a clear colour difference.
-   - Then use `setState` to put `Hoof Hearted` "down" and take a `sheet` of consecutive frames. Expect a visible camera offset that decays within about 0.5 s.
-2. **Break up the `track` repeat and the flat brown.**
-   - Add noise, hoof-prints and lighter lane stripes to the `track` canvas texture.
-   - Check with a `look` `zoom` on the track at the start line, and expect no visible panel repeat.
-3. **Check 2-player mode, a mistimed-key run and a photo finish.**
-   - Press `Digit2` and look for a distinct `player-marker-*` and coat on each horse.
-   - Teleport two AI horses to x 58 with different speeds. Expect a "PHOTO FINISH" caption and a side replay.
-   - Also dim the results box background so the podium "1" card no longer overlaps the horse behind it.
-
-SCORE: 8.2
-
 ## Iteration 19
 **Did** game.js `assignRoles`: the human horses now get their own coats, not the slot coat. P1 `YOU` is near-white 0xfbf7ee and P2 is dark 0x2e2833. The AI horses keep `COATS[i]`. view.js `track`: faces get a lighter stripe every ~1.57 m along z, plus low-frequency noise lightness, to break the flat brown.
 **Saw** `look` at frame 0: no console errors and "Never visible" is dust only. `YOU` (white, `horse2`) separates clearly from the tan, grey and rust neighbours, with the blue ring. Subject brightness 48% against 30% around it. The track stripes are subtle. Did not run `perf`, 2-player mode, the shake sheet or a photo finish.
 **Next** (1) Check the 2-player coats (P2 dark) and the `player-marker-*` colours. (2) Look at the track from the start line with `zoom` to see whether the stripes or noise are enough. (3) Photo finish with two AI at x 58, and the dim behind the results box. Also take a `sheet` of consecutive frames after a face-plant for the `shakeAmp` 0.3 shake.
 **Open** The track change is untested at the start-line zoom. Shake, photo finish and 2P are still unverified.
+
+### Judge 19
+
+Both of those `Surfaces:` lines are already in my verdict. Next item 1 covers the track repeat and the z-fighting between the two `player-marker-*` rings, and the Faults score of 8 counts the z-fighting.
+
+**Judge 19 verdict (final)**
+
+1. **Plays as DESIGN.md's Core loop and Controls say: 8.** `Digit2` gives `mode` 2 with P1 and P2 horses, each with its own `player-marker-*` ring. `div#keys` shows both key sets. My key taps were too short to move the horses, so I did not re-measure speed.
+2. **Real Rapier jointed ragdoll, face-plant, auto-right: 8.** The `horse0-*` to `horse3-*` limbs read as jointed. By 20 s, two horses showed `FACE-PLANTS` 1 in the `div#chips`.
+3. **Replay: 8.** Not re-seen this session. Iteration 18 recorded the banner.
+4. **Photo finish and tangled AI collapse within the first minute: 7.** AI horses face-planted by 20 s. No finish was reached in my run, and a photo finish has never been observed.
+5. **Results with most face-plants award: 8.** Not re-checked. The podium "1" card overlaps the horse behind it, as in judge 18.
+6. **Looks as LOOK.md says: 8.** The `grandstand`, rail fence, `hills`, `sky` and `clouds` match refs/01.jpg. The white YOU horse is 52% bright against 29% around it. The `track` is the weakest surface: its repeat shows and the brown is flat.
+7. **window.__game convention, index.html at root: 9.**
+8. **Clip moments within the first minute, no input: 7.** The camera follows the still YOU horse, so the AI tangle is mostly off-screen.
+9. **Controls feel learnable: 8.** The tips line and `div#keys` caps guide the player. Mistimed keys were not tested.
+10. **Horses read as horses, match refs/01.jpg: 9.**
+11. **Juice: 8.** Sounds fired: blip ×3, powerup, cheer. The "GO!" banner and dust work. The `shakeAmp` shake is still not seen.
+12. **Local 2-player discoverable from the HUD: 9.** The "2 PLAYERS (2)" button, the per-player key caps and the pink `player-marker-1` all show.
+13. **Static page, vendored lib, no network: 9.** 387 draw calls, 33.8k triangles, 0 MB of assets. The 65 ms frame is SwiftShader at host load 6.0, so it is no budget signal.
+
+**Faults: 8.** "Never visible: none" and no console errors. The z-fighting between `player-marker-0` and `player-marker-1` at y = 0.06 is a fault.
+
+**Next:**
+1. **Fix the `track` repeat and the z-fighting rings.**
+   - Vary the `track` texture scale with distance, or blend two scales, and make the lane stripes and hoof-prints clearer. `look` should no longer report "repeats every 60 px".
+   - Give the `player-marker-*` rings `polygonOffset` or a 0.001 y offset. The `Surfaces:` line should disappear.
+2. **Keep the AI collapse and finish in frame when the player stands still.** Frame the camera on the lead pack or on the horse that just face-planted. A no-input `sheet` at 10 s, 20 s and 35 s should show the tangle.
+3. **Verify the unseen moments.** Use `setState` to put two AI horses at x 58 and check the "PHOTO FINISH" caption and the 0.25x replay. Put a horse "down" and `sheet` consecutive frames for the shake. Check the podium overlap on the results screen. Then run a Q+P / W+O rhythm for 20 s and read x from `observe`.
+
+SCORE: 8.2
