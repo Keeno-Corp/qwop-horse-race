@@ -1,17 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 11
-**Did**
-- view.js: new `mergeBasic(root)` merges plain-colour MeshBasicMaterial meshes by material (`basic-merged`). Used on `finish-line` (36 chequer cells to 2 calls) and on the lake `glint` quads (40 to 1 call, now y=0.075+i*1e-4, so the y=0.09 pairs should be gone).
-**Saw**
-- `perf` before: 435 calls (`merged` 142, `merged-outline` 45, unnamed `Mesh` 97, `tail` 16, `mesh-outline` 18). After: 411 calls, 184k triangles. Page loads, no errors reported. Frame time is SwiftShader noise. I did not run `look`, so the y=0.09 Surfaces line is unchecked.
-**Next**
-- Still 411. The remaining Mesh calls: 18 sponsor `labelPlane`s (one atlas texture would make 1 call), 18 `mesh-outline`, and the horses' `merged` (4 horses × ~13 animated groups × materials). Merge static horse parts (head+neck+body into one group) or instance the 16 `tail` meshes.
-- Name horse meshes so `look target:"horse0"` works; enlarge the blinker silks 2×.
-- Play a no-input solo race to `phase: finish` and look at the replay and results.
-**Open**
-- Draw-call goal (<250) not met. The finish, replay and results are still unseen.
-
 ### Judge 11
 
 **Scores (Must have, in order)**
@@ -44,3 +32,19 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Fix the render-target fault, then make `horse0` measurable.** Call `setRenderTarget(null)` at the end of the post pass so `look` stops reporting the stale canvas. Name the horse body, legs and head meshes and flag the post-pass quad `Mesh` so the ID image can skip it. Enlarge the blinker silks 2×. It is done when `look target:"horse0"` lists its parts and the "Last frame … render target" line is gone.
 
 SCORE: 6.8
+
+## Iteration 12
+**Did**
+- No code change. I checked the photo finish, the judge's top Next item, by playing a no-input solo race with `interact`.
+**Saw**
+- The race reached `replay.kind:"plant"` at raceT 7.6 (`tangles:1`). `look` showed the instant replay: three horses side by side, the "INSTANT REPLAY · 0.25x" tag and "SPACE to skip".
+- It then reached `replay.kind:"finish"`. `look` showed the sepia grain, scratches, film-strip border, "PHOTO FINISH" banner and the "WINNER: Hoof Hearted · BY 0.05 SEC · HOLD ALL TICKETS" strip. Two horses finished 0.04 s apart (22.03 and 22.07). So the photo finish exists and works; the `until: {phase:"finish"}` step in the earlier session missed it because the phase is named `replay`. Use `until: {"replay.kind":"finish"}`.
+- `Sir Trips-a-Lot` (6 face-plants) was still at x 33.9 at raceT 28.6, so one horse still doesn't finish.
+- `look` still reports the post-pass `Mesh` at 100%, so `horse0` shows 0 of 3 parts. `broadcast.js:95-97` already calls `setRenderTarget(null)`, so the "render target" warning was not seen this time. Draw calls were not re-measured (last 411).
+**Next**
+- Draw calls 411 to under 250: merge the horse `merged` groups per horse, one atlas for the 18 sponsor `labelPlane`s, instance the 16 `tail` meshes.
+- Name the horse parts and flag the post-pass quad so `look target:"horse0"` works. Enlarge the blinker silks 2×.
+- Let a fallen AI horse recover sooner (the 6-plant one stalls at x 34).
+**Open**
+- The draw-call goal is unmet. The human horse `YOU` was never driven in this session, so the 60 m finish by hand is still unproven.
+- Note: `look`'s "PlaneGeometry covers 100% with dense fine detail" is the post-pass quad during the photo-finish replay. The sepia film grain is the intended look, so I left it. If a later judge counts it as a fault, lower the grain amplitude in `broadcast.js`.
