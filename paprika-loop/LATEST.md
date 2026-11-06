@@ -1,37 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-### Judge 2
-
-**Scores (Must have, in order)**
-
-1. **Plays as DESIGN.md says: 6.** Solo with 3 AI runs start to finish with no input. The camera now follows the leader pack (`followTarget`), and the idle `YOU` shows as the `◀ YOU 19 M` tag. The key panel (`div#keys`), the `1 PLAYER` and `2 PLAYERS (2)` buttons and `RESTART` are all on screen. I pressed no real keys this session, and I did not play 2-player or the results card.
-2. **Rapier ragdoll horses, face-plant and auto-right: 7.** `Sir Trips-a-Lot` and `Hoof Hearted` went `state:"down"` and were back to `"run"` within the replay window. `Dusty Rhodes` ended at `pitch:3.12`, `plants:5`, a cartwheel-style collapse. The tangle count reached 2.
-3. **Replay and sepia photo finish: 8.** I saw both replays:
-   - The plant replay (`INSTANT REPLAY · 0.25x`) played at the start of the race, at about 7 s.
-   - The finish replay (`kind:"finish"`, rate 0.25) has the sprocket frame, the `PHOTO FINISH` title, a vertical scratch, the sepia grade and `div#flash`. `div#pfc` reads `WINNER: Sir Trips-a-Lot · BY 0.00 SEC · HOLD ALL TICKETS`.
-   - The first replay frame (`t:0`) is a nearly black picture (brightness 9%).
-   - `look` says the finish-replay frame was drawn into a render target and never to the screen, so the canvas still shows an earlier frame. The replay picture is identical to the live frame, so the replay camera and the live camera look the same.
-   - `div.tag "REPLAY 0.25x"` and `div#pfc` overlap in the lower left.
-4. **Photo finish and tangled AI collapse within a minute: 8.** With no input the race finished at 24.1 s with a dead heat at 0.00 s. There were 2 tangles and a collapse by `Dusty Rhodes`. It still reads slightly scripted, because both leaders have `finishT` 24.1 exactly. I only watched one run.
-5. **Results with most face-plants award: 5.** The last session saw the card (`DIRT EATER` and `SMOOTH OPERATOR` awards). I did not reach it this session.
-6. **Looks as LOOK.md says: 7.** Toon shading with outlines, the warm 70s palette, the sepia grade and the CRT vignette all hold. The black rectangle in the lower-left is a fault in the picture. It sits at about [14,475,268,615] in the 1024-wide picture, above `div#lower`, in the live race look (look-3). The MSAA change did not fix it.
-7. **`window.__game` convention, static, no network: 7.** `observe` works and assets are 0.32 MB with fonts vendored. `perf` shows 443 draw calls and 184k triangles. The 220 ms frame is a software renderer (host load 1.9), so it is not a fault, but 441 draw calls for the scene is heavy. `subject` is `"track"` and `look` still says it is not in the scene.
-8. **Horses match CHARACTERS.md and horse.png: 7.** The replay close-up shows the chunky barrel body, white socks, dark hooves, the round eye with blinker, bristly mane, tufted tail, and the saddle-cloth number with stripes. The legs are shorter than the "long wobbly" brief.
-9. **Broadcast overlay: 8.** `div#tote` has silks, odds and face-plant counts. `div#top-r` has the `LIVE` bug and the `3:59 PM` clock bug. `div#lower` has the `PLAY-BY-PLAY · HANK "HOOFBEAT" PRUITT` lower-third with one-liners. The title card was not seen this session. Both the black rectangle and the lower-left overlap hurt this part.
-10. **Camera: 7.** The side-tracking telephoto on the leader pack reads well, and the dust, ad boards and grandstand sit behind it. The replay cams were seen. I did not see the head-on cut.
-11. **Controls feel learnable: 5.** Last session real keys moved `YOU` from x 1.4 to 4.57. I did not play any real keys this session.
-12. **Local 2-player, discoverable: 6.** The `2 PLAYERS (2)` button and the tips line are on screen. I did not play it.
-13. **Style judged as hard as gameplay: 7.** The 70s broadcast and the replay frame both read well. The black rectangle and the dark first replay frame spoil it. `reference` against `LOOK-board.png` was not run.
-
-**Faults: 4.** The black rectangle is still there, even though the last Iteration said it was fixed. `YOU` sits idle at x≈1–2 m all race. The first replay frame is nearly black. `look` reports that the replay frame was drawn into a render target and not to the screen. `__game.subject` still names an object that is not found. The 441 draw calls are heavy, but `perf` is not a fault on this host.
-
-**Next:**
-1. **Remove the black rectangle** (asked again). Neither the MSAA change nor the earlier `#lower.flash .line` fix worked. Find the element at about x 14–268, y 475–615 with `look` `at` points at [100,520] and [100,580] in a look of their own, then check the `#crt` background image, `.pop`, `#lower::before` and any replay-inset div. One `look` with `sample` at (100,520) and (100,580) should read the track or grass colour, not near-black. In the live race picture they now read near-black.
-2. **Fix the replay render pass.** Make sure `setRenderTarget(null)` runs before the final draw so the replay frame reaches the screen. Start the replay on a lit frame, not black at `t:0`. Give the finish replay a different camera from the live one, such as a head-on or low line-of-finish camera. Move `div.tag "REPLAY 0.25x"` so it does not overlap `div#pfc`. A `look` at `replay.t` of about 30 should show the sepia frame from the new angle, with no overlap boxes.
-3. **Play with real keys and reach the results card.** Run `interact` with Q, P, W and O held in alternation through a full race, then `Digit2` for 2-player. Keep the idle `YOU` from dominating by showing the player in the pack, or by stopping the `YOU` tag from sitting over the grandstand. Also drop `__game.subject` or point it at a real named mesh. To cut draw calls, merge the crowd and fence into instanced meshes. A `perf` after that should show under 250 draw calls.
-
-SCORE: 6.5
-
 ## Iteration 3
 **Did**
 - Finish replay camera (`updateCamera`, kind `finish`, plus the start pose in the finish-replay setup in game.js): now a low head-on cam at (FINISH_X+7, 1.1, 3.2) looking back down the track, fov 30→26, instead of the live side view.
@@ -49,3 +17,34 @@ SCORE: 6.5
 - The black-rectangle cause is inferred only; check `look` sample at (100,520) in the next session after any tote edit.
 - The first plant-replay frame brightness was not re-measured.
 - Film grain in broadcast.js lowered 0.16→0.10 (look flagged the full-screen `PlaneGeometry` quad as noisy; grain is intended by LOOK.md).
+
+### Judge 3
+
+**Scores (Must have, in order)**
+
+1. **Plays as DESIGN.md says: 6.** The solo race with 3 AI runs, and the `div#keys` panel, `1 PLAYER`, `2 PLAYERS (2)` and `RESTART` are on screen. I held Q, P, W and O in alternation for about 160 frames. `YOU` went from x 1.41 to 3.93 and then went `state:"down"` (`plants:1`, `pitch -0.33`). The AI were at x 10–12 by then. The player is still far behind and mostly off camera. I did not reach the results card or play 2-player.
+2. **Rapier ragdoll, face-plant and auto-right: 7.** The mistimed keys gave a real face-plant on `YOU` (`down`, `plants:1`). The earlier sessions saw `Dusty Rhodes` plant 5 times and horses return to `"run"`. I did not re-measure the auto-right time.
+3. **Replay and sepia photo finish: 7.** I did not see a replay this session. The `look` sheet never finished: the page ran 601 s and the harness closed it. The last session's evidence stands (sepia, sprocket frame, `PHOTO FINISH`, head-on cam). The head-on cam and the `REPLAY 0.25x` and `div#pfc` overlap fix are unverified in a picture.
+4. **Photo finish and tangled collapse within a minute: 7.** I did not run a no-input race to the finish. The last session had a dead heat with both leaders at `finishT` 24.1 exactly, which looks scripted.
+5. **Results with most-face-plants award: 5.** Not reached this session. It was seen only in an early session.
+6. **Looks as LOOK.md says: 7.** The toon shading with outlines, the 70s palette, the warm light and the CRT vignette all hold. Pictures read as a finished broadcast, except for the black rectangle.
+7. **`window.__game`, static, no network: 7.** `observe` works. Assets are 0.32 MB with fonts vendored. `perf` shows 429 draw calls and 184k triangles in `scene of 131 objects`. The 157 ms frame is a software renderer, so it is not a fault. `subject` is `"tote-board"` and `look` says it is not in the scene.
+8. **Horses match CHARACTERS.md and horse.png: 7.** The silks differ (`polka dots`, `stripes`, `chevrons`). The saddle-cloth numbers, blinkers, white socks, dark hooves and mane are right. The legs are shorter than the "long wobbly" brief.
+9. **Broadcast overlay: 8.** `div#tote` has silks, odds and face-plant counts. `div#top-r` has `LIVE`, the `3:58 PM` clock and `RACE TIME`. `div#lower` has the `PLAY-BY-PLAY · HANK "HOOFBEAT" PRUITT` lower-third. The black rectangle sits right above it and hurts this item.
+10. **Camera: 7.** The side-tracking telephoto on the pack reads well. The head-on and replay cams were not seen this session.
+11. **Controls feel learnable: 5.** Alternating Q+P then W+O gave a net 2.5 m in 2.7 s and then a face-plant. The AI cover about 10 m in that time. The player rarely keeps up, and the camera follows the leader pack, so the player is hard to follow.
+12. **Local 2-player, discoverable: 6.** The `2 PLAYERS (2)` button and the tips line are on screen. I did not play it.
+13. **Style judged as hard as gameplay: 7.** The look is strong and it reads as a 1970s TV race. The black rectangle is a visible flaw in every live picture. `reference` against `LOOK-board.png` was not run.
+
+**Faults: 4.**
+- The black rectangle is still in the live picture at about [14,475,270,615] in the 1024-wide picture, directly above `div#lower`. The last builder called it a harness artifact. I see it in the harness picture too, so a real browser is unproven either way.
+- `look` with `sheet` at frames 1500–1750 on this software renderer hung for 601 s, so replays are hard to inspect.
+- `perf` is not a fault on this host (software renderer), but 429 draw calls is heavy.
+- `__game.subject` points at an object that is not found.
+
+**Next:**
+1. **Black rectangle** (asked again). Treat it as real, since the page's own CSS is the only thing that can draw it. In `index.html` or the CSS, remove the `#tote` mirrored or reflected element, any `::after` or `-webkit-box-reflect`, and any `backdrop-filter` on `#tote`. Then check whether `#crt`'s background image tiles. Done when one `look` with `sample` at (100,520) and (100,580) reads track or grass colour (orange or green), not near-black. Test it by temporarily setting `#tote{display:none}` and `#crt{display:none}` in separate `look` calls.
+2. **Make the player relevant and the controls forgiving.** The camera should include `YOU` (frame the pack plus the player, or switch to the player when they lag). Add key-hold assist so Q+P then W+O gives steady forward motion. An `interact` with the alternating keys for 600 frames should end with `YOU` at x ≥ 25 and `plants` ≤ 1, after which one finish can be reached.
+3. **Replay verification and draw calls.** The finish replay must be inspectable without a 600 s hang: lower `sheet` cost by ending replays with a quicker `{state:{...}}` jump. Break the AI dead heat (a seeded `finishT` gap of 0.03–0.4 s). Cut draw calls (<250) by turning the crowd, fence and ad boards into `InstancedMesh`. Use `perf` with `costs:true` to show it.
+
+SCORE: 6.5
