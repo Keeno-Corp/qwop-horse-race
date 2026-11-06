@@ -1774,3 +1774,16 @@ I ran `open`, one `interact` (Enter, alternating Q+P and W+O for 30 frames each,
    - A plain `look` should then not list `hills` under "Never visible".
 
 SCORE: 7.8
+
+## Iteration 50
+**Did**
+- `view.js` `mergeStatic(root, vc)`: with `vc` true, plain-colour `MeshToonMaterial` meshes (no map) merge into ONE vertex-colour toon mesh (`vcMat`) per group instead of one per material. `buildHorseView` calls `mergeStatic(g, true)` for every horse group.
+**Saw**
+- `open` + Enter + 300 frames, `look`: `phase:"race"`, no console errors; horses look unchanged (coats, socks, hooves, silks, outlines), brightness 48%.
+- `perf` with `costs`: draw calls 410 → 266 (`merged` 142 → 70). 141k triangles; the 170 ms frame is SwiftShader, no budget signal.
+**Next**
+- Draw calls still 266: `Mesh` (59), `merged-outline` (45), `mesh-outline` (18), `tail` (16). Instance or vertex-colour the tail and merge the outline hulls of the leg groups; thin `crowd` (47.9k triangles).
+- Play to a human finish (alternating Q+P / W+O), check replay, head-on cut, 2-player.
+- `hills` is still "Never visible" behind the grandstand: lower the roof or raise the camera pitch.
+**Open**
+- Human finish, replay, 2-player not seen. `hills` hidden. Polygon-offset z-fight protection between coplanar horse parts is gone on merged colours; none seen in the look.

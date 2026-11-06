@@ -88,7 +88,8 @@ export function addOutline(m, scale = 1, color = PAL.ink) {
 
 // ---------------------------------------------------------------- merging (keeps draw calls low)
 /** merge the toon meshes under `root` into one mesh per material plus one outline hull; basic-material meshes, instanced meshes and `userData.noMerge` subtrees stay. */
-export function mergeStatic(root) {
+const vcMat = new THREE.MeshToonMaterial({ color: 0xffffff, gradientMap: ramp, vertexColors: true });
+export function mergeStatic(root, vc = false) {
   root.updateMatrixWorld(true);
   const inv = new THREE.Matrix4().copy(root.matrixWorld).invert(), nm = new THREE.Matrix3(), tmp = new THREE.Vector3();
   const buckets = new Map(), hull = { pos: [], nrm: [] }, doomed = [];
@@ -113,7 +114,9 @@ export function mergeStatic(root) {
       tmp.fromBufferAttribute(N, i).applyMatrix3(nm).normalize(); nor.set([tmp.x, tmp.y, tmp.z], i * 3);
       if (UV) uv.set([UV.getX(i), UV.getY(i)], i * 2);
     }
-    const k = o.material.uuid; let b = buckets.get(k); if (!b) buckets.set(k, b = { mat: o.material, pos: [], nor: [], uv: [], cast: false });
+    const plain = vc && !o.material.map && o.material.isMeshToonMaterial && !o.material.transparent;
+    const k = plain ? 'vc' : o.material.uuid; let b = buckets.get(k); if (!b) buckets.set(k, b = { mat: plain ? vcMat : o.material, pos: [], nor: [], uv: [], col: [], cast: false });
+    if (plain) { const c = o.material.color, col = new Float32Array(n * 3); for (let i = 0; i < n; i++) col.set([c.r, c.g, c.b], i * 3); (b.col ||= []).push(col); }
     b.pos.push(pos); b.nor.push(nor); b.uv.push(uv); b.cast ||= o.castShadow;
     doomed.push(o);
   });
@@ -121,8 +124,8 @@ export function mergeStatic(root) {
   const cat = (arrs) => { const out = new Float32Array(arrs.reduce((a, b) => a + b.length, 0)); let o = 0; for (const a of arrs) { out.set(a, o); o += a.length; } return out; };
   let bi = 0;
   for (const b of buckets.values()) {
-    if (b.mat && !b.mat.polygonOffset) { b.mat.polygonOffset = true; b.mat.polygonOffsetFactor = -(bi++ % 4); b.mat.polygonOffsetUnits = -(bi % 4); }
-    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(cat(b.pos), 3)); g.setAttribute('normal', new THREE.BufferAttribute(cat(b.nor), 3)); g.setAttribute('uv', new THREE.BufferAttribute(cat(b.uv), 2));
+    if (b.mat && b.mat !== vcMat && !b.mat.polygonOffset) { b.mat.polygonOffset = true; b.mat.polygonOffsetFactor = -(bi++ % 4); b.mat.polygonOffsetUnits = -(bi % 4); }
+    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(cat(b.pos), 3)); g.setAttribute('normal', new THREE.BufferAttribute(cat(b.nor), 3)); g.setAttribute('uv', new THREE.BufferAttribute(cat(b.uv), 2)); if (b.mat === vcMat) g.setAttribute('color', new THREE.BufferAttribute(cat(b.col), 3));
     const m = new THREE.Mesh(g, b.mat); m.castShadow = b.cast; m.receiveShadow = true; m.name = 'merged'; root.add(m);
   }
   if (hull.pos.length) {
@@ -237,7 +240,7 @@ export function buildHorseView(color, tint = 0, coat = COATS[0], silk = SILKS.re
     l.add(tm(cyl(0.1, 0.155, 0.115, 9), hoof, [0.03, -0.218, 0], [0, 0, 0], [1.1, 1, 1], { smooth: true }));
     l.scale.y = 1.2; groups.push(l);
   }
-  for (const g of groups) mergeStatic(g);
+  for (const g of groups) mergeStatic(g, true);
   return groups;
 }
 /** wobble the tail a little (call each frame with game time) */

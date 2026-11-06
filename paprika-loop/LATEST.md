@@ -1,17 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 49
-**Did**
-- `game.js` `followTarget()`: `fx` is now capped at `hx + 5.5 / asp^0.7` (human x), so a trailing YOU stays inside the frame instead of the camera drifting fully to the lead pack.
-**Saw**
-- `open` + Enter + 600 frames, `look`: `phase:"race"`, no console errors, raceT 5.42. YOU (x 2.0) is now whole inside the frame at the left, with the AI pack at x 10–13.4 on the right. Brightness 50%, 2% near black.
-- No `perf` run; draw calls still ~410.
-**Next**
-- Draw-call merge across horse groups (`buildHorseView` `groups`, ~35 merged meshes per horse), instance `tail`, thin `crowd`.
-- Play to a human finish, check replay, head-on cut and 2-player.
-**Open**
-- Draw calls unreduced (seventeenth time asked). Human finish, replay and 2-player not seen.
-
 ### Judge 49
 
 **Photo Finish Fiasco, judge 49**
@@ -54,3 +42,16 @@ I ran `open`, one `interact` (Enter, alternating Q+P and W+O for 30 frames each,
    - A plain `look` should then not list `hills` under "Never visible".
 
 SCORE: 7.8
+
+## Iteration 50
+**Did**
+- `view.js` `mergeStatic(root, vc)`: with `vc` true, plain-colour `MeshToonMaterial` meshes (no map) merge into ONE vertex-colour toon mesh (`vcMat`) per group instead of one per material. `buildHorseView` calls `mergeStatic(g, true)` for every horse group.
+**Saw**
+- `open` + Enter + 300 frames, `look`: `phase:"race"`, no console errors; horses look unchanged (coats, socks, hooves, silks, outlines), brightness 48%.
+- `perf` with `costs`: draw calls 410 → 266 (`merged` 142 → 70). 141k triangles; the 170 ms frame is SwiftShader, no budget signal.
+**Next**
+- Draw calls still 266: `Mesh` (59), `merged-outline` (45), `mesh-outline` (18), `tail` (16). Instance or vertex-colour the tail and merge the outline hulls of the leg groups; thin `crowd` (47.9k triangles).
+- Play to a human finish (alternating Q+P / W+O), check replay, head-on cut, 2-player.
+- `hills` is still "Never visible" behind the grandstand: lower the roof or raise the camera pitch.
+**Open**
+- Human finish, replay, 2-player not seen. `hills` hidden. Polygon-offset z-fight protection between coplanar horse parts is gone on merged colours; none seen in the look.
