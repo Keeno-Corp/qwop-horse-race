@@ -318,7 +318,7 @@ function tick(dt) {
   } else if (S.phase === 'race' || S.phase === 'finishing') {
     if (S.goT > 0) { S.goT -= dt; if (S.goT <= 0) $('count').textContent = ''; }
     updateRace(dt);
-    G.record();
+    G.record(); G.shareRecord();
     if (S.pending && S.time >= S.pending.at && S.phase === 'race') G.startPlantReplay();
   } else if (S.phase === 'replay') {
     G.advanceReplay(dt);

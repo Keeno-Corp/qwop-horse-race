@@ -1,147 +1,289 @@
 // Made with paprika3d · https://paprika3d.com
-// Share team (d): slit-scan photo-finish print, the "official result" card (PNG), a rolling WebM recorder of the real rendered canvas,
-// and the inline share panel on the results graphic. Browser features are probed lazily so unsupported/failing APIs report honestly.
+// Share team (d): the photo-finish print, the "official result" card (PNG) and a deterministic highlight CLIP (WebM).
+// The clip is NOT a live recording: every tick of the race is snapshotted (poses), and after the race the finish crossing and the nearby face-plants
+// are re-rendered from those real poses at a fixed 30 fps, encoded with WebCodecs (explicit microsecond timestamps) and muxed into a self-contained
+// WebM. Its duration is read back from the muxed file, never from wall time, so a slow GPU only makes the export take longer.
 import { silksCanvas } from './view.js';
 
-const SEG_MS = 7000, STAGGER_MS = 3500, MIN_SEG_MS = 2500, KEEP = 3, CLIP_W = 640, CLIP_FPS = 30, MAX_COLS = 1400, STRIP_H = 360;
+const FPS = 30, STEP = 2, CLIP_W = 640, CLIP_H = 360, KEY_EVERY = 30, MAX_TICKS = 12000, MAX_COLS = 400, STRIP_H = 360, SLIT_W = 16;
 const TITLE = 'The Photo Finish Fiasco Stakes';
 const pad = (n) => String(n).padStart(2, '0');
 
+// ---------- minimal WebM (Matroska) muxer + reader: one VP8 video track, 8-byte sizes, clusters at keyframes, Cues, Duration ----------
+const cat = (parts) => { let n = 0; for (const p of parts) n += p.length; const o = new Uint8Array(n); let k = 0; for (const p of parts) { o.set(p, k); k += p.length; } return o; };
+const idB = (id) => { const a = []; while (id > 0) { a.unshift(id % 256); id = Math.floor(id / 256); } return Uint8Array.from(a); };
+const szB = (n) => { const b = new Uint8Array(8); b[0] = 1; let v = n; for (let i = 7; i >= 1; i--) { b[i] = v % 256; v = Math.floor(v / 256); } return b; };
+const el = (id, payload) => { const p = Array.isArray(payload) ? cat(payload) : payload; return cat([idB(id), szB(p.length), p]); };
+const uintEl = (id, v) => { const a = []; do { a.unshift(v % 256); v = Math.floor(v / 256); } while (v > 0); return el(id, Uint8Array.from(a)); };
+const strEl = (id, s) => el(id, Uint8Array.from([...s].map((c) => c.charCodeAt(0))));
+const f64El = (id, v) => { const b = new Uint8Array(8); new DataView(b.buffer).setFloat64(0, v); return el(id, b); };
+
+export function muxWebm(chunks, width, height) {   // chunks: [{ts (µs), key, data}] in presentation order
+  const frameUs = Math.round(1e6 / FPS), ms = (c) => Math.round(c.ts / 1000);
+  const durMs = ms(chunks[chunks.length - 1]) - ms(chunks[0]) + frameUs / 1000, t0 = ms(chunks[0]);
+  const ebml = el(0x1A45DFA3, [uintEl(0x4286, 1), uintEl(0x42F7, 1), uintEl(0x42F2, 4), uintEl(0x42F3, 8), strEl(0x4282, 'webm'), uintEl(0x4287, 4), uintEl(0x4285, 2)]);
+  const info = el(0x1549A966, [uintEl(0x2AD7B1, 1000000), strEl(0x4D80, 'paprika3d'), strEl(0x5741, 'paprika3d'), f64El(0x4489, durMs)]);
+  const tracks = el(0x1654AE6B, [el(0xAE, [uintEl(0xD7, 1), uintEl(0x73C5, 1), uintEl(0x83, 1), strEl(0x86, 'V_VP8'), el(0xE0, [uintEl(0xB0, width), uintEl(0xBA, height)])])]);
+  const clusters = [], cues = []; let cur = null, pos = info.length + tracks.length;
+  const flush = () => { if (!cur) return; const c = el(0x1F43B675, [uintEl(0xE7, cur.t), ...cur.blocks]); clusters.push(c); pos += c.length; cur = null; };
+  for (const ch of chunks) {
+    const t = ms(ch) - t0;
+    if (!cur || (ch.key && cur.blocks.length)) { flush(); cur = { t, blocks: [] }; if (ch.key) cues.push({ t, at: pos }); }
+    const rel = t - cur.t, hdr = Uint8Array.from([0x81, (rel >> 8) & 255, rel & 255, ch.key ? 0x80 : 0]);
+    cur.blocks.push(el(0xA3, cat([hdr, ch.data])));
+  }
+  flush();
+  const cueEl = el(0x1C53BB6B, cues.map((c) => el(0xBB, [uintEl(0xB3, c.t), el(0xB7, [uintEl(0xF7, 1), uintEl(0xF1, c.at)])])));
+  return cat([ebml, el(0x18538067, [info, tracks, ...clusters, cueEl])]);
+}
+export function readWebm(b) {   // what the file itself says: block count, first/last block time, header Duration
+  const out = { blocks: [], headerMs: null, scale: 1000000, keyframes: 0 };
+  const vint = (o, id) => { let len = 1, m = 0x80; while (len <= 8 && !(b[o] & m)) { len++; m >>= 1; } let v = id ? b[o] : b[o] & (m - 1); for (let i = 1; i < len; i++) v = v * 256 + b[o + i]; return { v, len }; };
+  const uint = (o, n) => { let v = 0; for (let i = 0; i < n; i++) v = v * 256 + b[o + i]; return v; };
+  const walk = (o, end, base) => {
+    let clusterT = 0;
+    while (o < end) {
+      const id = vint(o, true), sz = vint(o + id.len, false), d = o + id.len + sz.len, e = Math.min(end, d + sz.v);
+      if (id.v === 0x18538067 || id.v === 0x1549A966) walk(d, e, base);
+      else if (id.v === 0x1F43B675) clusterT = walkCluster(d, e);
+      else if (id.v === 0x4489) out.headerMs = sz.v === 8 ? new DataView(b.buffer, b.byteOffset + d, 8).getFloat64(0) : new DataView(b.buffer, b.byteOffset + d, 4).getFloat32(0);
+      else if (id.v === 0x2AD7B1) out.scale = uint(d, sz.v);
+      o = e;
+    }
+  };
+  const walkCluster = (o, end) => {
+    let t = 0;
+    while (o < end) {
+      const id = vint(o, true), sz = vint(o + id.len, false), d = o + id.len + sz.len, e = d + sz.v;
+      if (id.v === 0xE7) t = uint(d, sz.v);
+      else if (id.v === 0xA3) { const tn = vint(d, false), rel = (b[d + tn.len] << 8 | b[d + tn.len + 1]) << 16 >> 16, fl = b[d + tn.len + 2]; out.blocks.push(t + rel); if (fl & 0x80) out.keyframes++; }
+      o = e;
+    }
+    return t;
+  };
+  walk(0, b.length, 0);
+  const n = out.blocks.length, first = n ? out.blocks[0] : 0, last = n ? out.blocks[n - 1] : 0;
+  return { frames: n, keyframes: out.keyframes, firstMs: first, lastMs: last, durationS: n ? +((last - first + 1000 / FPS) / 1000).toFixed(3) : 0, headerDurationS: out.headerMs == null ? null : +(out.headerMs / 1000).toFixed(3) };
+}
+
 export function createShare(G) {
   const { S, $, horses, roles } = G;
-  const now = () => performance.now();
-  let fault = '';   // test seam (setState({shareFault})): 'norec' | 'noclip' | 'cliperr' | 'cardfail' to exercise the unsupported/error paths
+  let fault = '';   // test seam (setState({shareFault})): 'norec' (no encoder) | 'encerr' | 'noclip' | 'cliperr' | 'cardfail' exercise the unsupported/error paths
+  const urls = new Set(); let panel = null, built = null, token = 0, job = null, races = 0, stale = 0;
 
-  // ---------- clip recorder: two staggered MediaRecorders cut self-contained <=7 s WebM segments of a downscaled copy of the canvas ----------
-  const rec = { cv: null, ctx: null, stream: null, mime: null, slots: [], segs: [], events: [], lastDraw: 0, startedAt: 0, active: false, failed: null, plants: [] };
-  const pickMime = () => {
-    if (fault === 'norec' || typeof MediaRecorder === 'undefined' || typeof MediaRecorder.isTypeSupported !== 'function') return null;
-    return ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm'].find((m) => { try { return MediaRecorder.isTypeSupported(m); } catch { return false; } }) || null;
-  };
-  function recStart(src) {
-    if (rec.active || rec.failed) return;
-    rec.mime = pickMime();
-    if (!rec.mime || !src.captureStream) { rec.failed = !rec.mime ? 'This browser has no WebM recorder (MediaRecorder).' : 'This canvas cannot be captured.'; return; }
+  // ---------- pose snapshots: every race tick, bounded (12000 ticks = 200 s, more than the 150 s race limit) ----------
+  const NP = horses[0].parts.length, FRAME = 4 * NP * 7;
+  const store = { n: 0, poses: null, tip: null, down: null, t: null, finish: -1, falls: [], lastPlants: [0, 0, 0, 0], full: false };
+  function storeReset() { store.n = 0; store.finish = -1; store.falls = []; store.lastPlants = [0, 0, 0, 0]; store.full = false; if (!store.poses) { store.poses = new Float32Array(MAX_TICKS * FRAME); store.tip = new Float32Array(MAX_TICKS * 4); store.down = new Uint8Array(MAX_TICKS * 4); store.t = new Float32Array(MAX_TICKS); } }
+  function record() {   // once per game tick in race/finishing, right after replay.js records its own ring
+    if (store.full) return;
+    if (store.n >= MAX_TICKS) { store.full = true; return; }
+    const i = store.n; let k = i * FRAME;
+    horses.forEach((h, hi) => {
+      for (const p of h.parts) { const t = p.body.translation(), q = p.body.rotation(); const P = store.poses; P[k++] = t.x; P[k++] = t.y; P[k++] = t.z; P[k++] = q.x; P[k++] = q.y; P[k++] = q.z; P[k++] = q.w; }
+      store.tip[i * 4 + hi] = h.headTip().x; store.down[i * 4 + hi] = h.state === 'run' ? 0 : 1;
+      if (h.plants > store.lastPlants[hi]) { store.lastPlants[hi] = h.plants; store.falls.push({ tick: i, horse: hi }); }
+    });
+    store.t[i] = S.raceT;
+    if (store.finish < 0 && S.firstFinish !== null) store.finish = i;
+    store.n++;
+  }
+
+  // ---------- rendering a tick from stored poses (invisible: live transforms are restored before the next main render) ----------
+  const T = G.THREE, views = G.views;
+  const liveP = new Float32Array(FRAME), qa = new T.Quaternion();
+  function withPoses(tick, cam, rt, sunX, hidePole, fn) {
+    const r = G.renderer, prevRT = r.getRenderTarget(), near = G.env.finNear, nv = near && near.visible, sp = G.sun.position.clone(), st = G.sun.target.position.clone();
+    let k = 0; for (let hi = 0; hi < views.length; hi++) for (let pi = 0; pi < NP; pi++) { const g = views[hi][pi]; liveP[k++] = g.position.x; liveP[k++] = g.position.y; liveP[k++] = g.position.z; liveP[k++] = g.quaternion.x; liveP[k++] = g.quaternion.y; liveP[k++] = g.quaternion.z; liveP[k++] = g.quaternion.w; }
     try {
-      rec.cv = document.createElement('canvas'); rec.cv.width = CLIP_W; rec.cv.height = Math.max(2, Math.round(CLIP_W * src.height / src.width / 2) * 2);
-      rec.ctx = rec.cv.getContext('2d'); rec.ctx.drawImage(src, 0, 0, rec.cv.width, rec.cv.height);
-      rec.stream = rec.cv.captureStream(CLIP_FPS); rec.active = true; rec.startedAt = now();
-      openSlot(0); rec.slots[1] = null; rec.slot1At = rec.startedAt + STAGGER_MS;
-    } catch (e) { rec.failed = 'Recorder could not start: ' + (e && e.message || e); recStop(); }
-  }
-  function openSlot(i) {
-    const slot = { t0: now(), chunks: [], r: null };
-    try {
-      slot.r = new MediaRecorder(rec.stream, { mimeType: rec.mime, videoBitsPerSecond: 1_400_000 });
-      slot.r.ondataavailable = (e) => { if (e.data && e.data.size) slot.chunks.push(e.data); };
-      slot.r.onerror = (e) => { rec.failed = 'Recorder error: ' + ((e.error && e.error.message) || 'unknown'); };
-      slot.done = new Promise((res) => { slot.r.onstop = () => { slot.t1 = now(); res(closeSlot(slot)); }; });
-      slot.r.start(); rec.slots[i] = slot;
-    } catch (e) { rec.failed = 'Recorder could not start: ' + (e && e.message || e); rec.slots[i] = null; }
-  }
-  function scoreSeg(t0, t1) {
-    let s = 0; for (const ev of rec.events) if (ev.t >= t0 + 300 && ev.t <= t1 - 200) s += ev.w; return s;
-  }
-  function closeSlot(slot) {
-    const dur = slot.t1 - slot.t0;
-    if (dur < MIN_SEG_MS || !slot.chunks.length || rec.discard) return;
-    const blob = new Blob(slot.chunks, { type: rec.mime.split(';')[0] });
-    rec.segs.push({ blob, t0: slot.t0, t1: slot.t1, dur, score: scoreSeg(slot.t0, slot.t1) });
-    // bounded memory: keep the newest segment and the best-scoring others
-    if (rec.segs.length > KEEP) { const newest = rec.segs[rec.segs.length - 1]; const rest = rec.segs.slice(0, -1).sort((a, b) => b.score - a.score || b.t1 - a.t1); rec.segs = [...rest.slice(0, KEEP - 1), newest]; }
-  }
-  function recTick(src) {   // after each rendered frame
-    if (!rec.active) return;
-    const t = now();
-    if (t - rec.lastDraw >= 1000 / CLIP_FPS - 2) { rec.lastDraw = t; try { rec.ctx.drawImage(src, 0, 0, rec.cv.width, rec.cv.height); } catch { /* lost context: keep going */ } }
-    for (let i = 0; i < 2; i++) {
-      const s = rec.slots[i];
-      if (s && s.r && s.r.state === 'recording' && t - s.t0 >= SEG_MS) { const j = i; s.r.stop(); rec.slots[j] = null; openSlot(j); }
-      else if (!s && i === 1 && rec.slot1At && t >= rec.slot1At) { rec.slot1At = 0; openSlot(1); }
+      const P = store.poses; k = tick * FRAME;
+      for (let hi = 0; hi < views.length; hi++) for (let pi = 0; pi < NP; pi++) { const g = views[hi][pi]; g.position.set(P[k], P[k + 1], P[k + 2]); g.quaternion.set(P[k + 3], P[k + 4], P[k + 5], P[k + 6]); k += 7; }
+      if (near && hidePole) near.visible = false;
+      G.sun.position.set(sunX - 24, 13, -6); G.sun.target.position.set(sunX, 0, 0); G.sun.target.updateMatrixWorld(); G.scene.visible = true;
+      cam.updateMatrixWorld(); r.setRenderTarget(rt); r.clear(); r.render(G.scene, cam);
+      return fn(r);
+    } finally {
+      k = 0; for (let hi = 0; hi < views.length; hi++) for (let pi = 0; pi < NP; pi++) { const g = views[hi][pi]; g.position.set(liveP[k], liveP[k + 1], liveP[k + 2]); g.quaternion.set(liveP[k + 3], liveP[k + 4], liveP[k + 5], liveP[k + 6]); k += 7; }
+      if (near) near.visible = nv; G.sun.position.copy(sp); G.sun.target.position.copy(st); G.sun.target.updateMatrixWorld(); r.setRenderTarget(prevRT);
     }
   }
-  async function recFinish() {   // stop both slots, wait for their blobs, pick the best <=10 s segment
-    if (!rec.active) return;
-    const open = rec.slots.filter((s) => s && s.r && s.r.state === 'recording'); rec.slots = [null, null]; rec.active = false;
-    for (const s of open) { try { s.r.stop(); } catch { /* already stopped */ } }
-    await Promise.all(open.map((s) => s.done)).catch(() => {});
-    if (rec.stream) { rec.stream.getTracks().forEach((t) => t.stop()); rec.stream = null; }
-    for (const g of rec.segs) { g.score = scoreSeg(g.t0, g.t1); g.fin = rec.events.some((e) => e.kind === 'finish' && e.t >= g.t0 + 300 && e.t <= g.t1 - 200); }
-    // finish first (the clip must show the line when any segment caught it), then the most face-plants, then the newest
-    rec.segs.sort((a, b) => (b.fin - a.fin) || b.score - a.score || b.t1 - a.t1);
-    return rec.segs[0] || null;
-  }
-  function recStop() {
-    rec.discard = true;
-    for (const s of rec.slots) if (s && s.r && s.r.state === 'recording') { try { s.r.stop(); } catch { /* ok */ } }
-    rec.slots = [null, null]; rec.active = false; rec.slot1At = 0;
-    if (rec.stream) { rec.stream.getTracks().forEach((t) => t.stop()); rec.stream = null; }
-    rec.cv = rec.ctx = null; rec.segs = []; rec.events = [];
-    setTimeout(() => { rec.discard = false; }, 0);
-  }
+  const luma = (px) => { let t = 0, n = 0; for (let i = 0; i < px.length; i += 52) { t += px[i] + px[i + 1] + px[i + 2]; n += 3; } return t / n; };
+  const blank = (px) => luma(px) === 0;   // nothing was drawn (lost context, tab not rendering): never encode it
+  const torsoX = (tick, hi) => store.poses[tick * FRAME + hi * NP * 7];
+  const leaderTip = (tick) => Math.max(store.tip[tick * 4], store.tip[tick * 4 + 1], store.tip[tick * 4 + 2], store.tip[tick * 4 + 3]);
 
-  // ---------- slit-scan: one pixel column at the finish line per rendered frame ----------
+  // ---------- the photo-finish print: a slit-scan rendered from the stored poses, fixed camera on the line ----------
   const strip = { buf: {}, mark: -1 };
   function stripReset() { strip.buf = {}; strip.mark = -1; }
-  // True slit-scan: every frame the real scene is rendered by a fixed, normal-FOV camera standing side-on to the finish line (the near pole hidden),
-  // the single pixel column at the line is read back and appended to the print. Time runs left to right.
-  const RT_W = 640, RT_H = STRIP_H;
-  let slit = null;
-  function slitInit() {
-    const T = G.THREE, rt = new T.WebGLRenderTarget(RT_W, RT_H, { depthBuffer: true });
-    rt.texture.colorSpace = T.SRGBColorSpace;
-    const cam = new T.PerspectiveCamera(22, RT_W / RT_H, 1, 80);
-    cam.position.set(G.FINISH_X, 1.7, 17); cam.lookAt(G.FINISH_X, 1.6, 0); cam.updateMatrixWorld(); cam.updateProjectionMatrix();
-    slit = { rt, cam, px: new Uint8Array(RT_H * 4), img: new ImageData(1, RT_H) };
+  function stripPlan() {
+    const F = store.finish; if (F < 0) return [];
+    const a = Math.max(0, F - 45), b = Math.min(store.n - 1, F + 75), out = []; for (let t = a; t <= b; t++) out.push(t); return out;
   }
-  function slitDisposeAll() { if (slit) { slit.rt.dispose(); slit = null; } }
-  function sampleCol(buf) {
-    if (!slit) slitInit();
-    const r = G.renderer, { rt, cam, px, img } = slit, prevRT = r.getRenderTarget(), prevAuto = r.shadowMap.autoUpdate, near = G.env.finNear, nv = near && near.visible;
-    try {
-      r.shadowMap.autoUpdate = false; if (near) near.visible = false; G.scene.visible = true;
-      r.setRenderTarget(rt); r.clear(); r.render(G.scene, cam);
-      r.readRenderTargetPixels(rt, RT_W >> 1, 0, 1, RT_H, px);   // the centre column only
-    } finally { r.setRenderTarget(prevRT); r.shadowMap.autoUpdate = prevAuto; if (near) near.visible = nv; }
-    let any = 0; for (let i = 0; i < px.length; i += 16) any |= px[i] | px[i + 1] | px[i + 2];
-    if (!any) return;   // the readback came back blank (lost context, tab not drawing): never put an empty column in the print
-    if (!buf.cv) { buf.cv = document.createElement('canvas'); buf.cv.width = MAX_COLS; buf.cv.height = STRIP_H; buf.ctx = buf.cv.getContext('2d'); buf.n = 0; buf.act = []; buf.base = null; }
+  function slitUnit(j) {   // render one tick's finish-line slice
+    if (!j.slit) { const rt = new T.WebGLRenderTarget(SLIT_W, STRIP_H, { depthBuffer: true }); rt.texture.colorSpace = T.SRGBColorSpace; const cam = new T.PerspectiveCamera(22, SLIT_W / STRIP_H, 1, 80); cam.position.set(G.FINISH_X, 1.7, 17); cam.lookAt(G.FINISH_X, 1.6, 0); j.slit = { rt, cam, px: new Uint8Array(STRIP_H * 4), img: new ImageData(1, STRIP_H) }; }
+    const tick = j.stripTicks[j.si], { rt, cam, px, img } = j.slit;
+    withPoses(tick, cam, rt, G.FINISH_X, true, (r) => r.readRenderTargetPixels(rt, SLIT_W >> 1, 0, 1, STRIP_H, px));
+    if (blank(px)) return false;
+    const buf = strip.buf; if (!buf.cv) { buf.cv = document.createElement('canvas'); buf.cv.width = MAX_COLS; buf.cv.height = STRIP_H; buf.ctx = buf.cv.getContext('2d'); buf.n = 0; buf.act = []; buf.base = null; }
+    if (blank(px)) return false;
     const d = img.data; let act = 0;
-    for (let y = 0; y < RT_H; y++) { const o = (RT_H - 1 - y) * 4; d[y * 4] = px[o]; d[y * 4 + 1] = px[o + 1]; d[y * 4 + 2] = px[o + 2]; d[y * 4 + 3] = 255; }   // GL rows run bottom-up
+    for (let y = 0; y < STRIP_H; y++) { const o = (STRIP_H - 1 - y) * 4; d[y * 4] = px[o]; d[y * 4 + 1] = px[o + 1]; d[y * 4 + 2] = px[o + 2]; d[y * 4 + 3] = 255; }
     buf.ctx.putImageData(img, buf.n, 0);
-    // activity: distance from the empty-track column seen first, so the print can be cropped to the horses crossing
     if (buf.n < 4) buf.base = buf.base ? buf.base.map((v, i) => (v * buf.n + d[i]) / (buf.n + 1)) : Array.from(d);
     else for (let i = 0; i < d.length; i += 4) act += Math.abs(d[i] - buf.base[i]) + Math.abs(d[i + 1] - buf.base[i + 1]) + Math.abs(d[i + 2] - buf.base[i + 2]);
-    buf.act.push(act / (RT_H * 3)); buf.n++;
-  }
-  function stripCols() {
-    if (S.phase !== 'race' && S.phase !== 'finishing') return;
-    const lead = Math.max(...horses.map((h) => h.headTip().x));
-    if (lead < G.FINISH_X - 5 || (strip.buf.n || 0) >= MAX_COLS) return;
-    sampleCol(strip.buf);
-    if (strip.mark < 0 && S.firstFinish !== null) strip.mark = strip.buf.n - 1;
+    buf.act.push(act / (STRIP_H * 3)); if (tick === store.finish) strip.mark = buf.n; buf.n++; return true;
   }
 
-  // ---------- per-frame hook (called right after the renderer drew, while the canvas is still readable) ----------
-  let seenPlants = [0, 0, 0, 0], seenFinish = false, startedRace = false;
-  function frame(src) {
-    if (!src || !src.width) return;
-    if (S.phase === 'countdown') { seenPlants = horses.map((h) => h.plants); seenFinish = false; startedRace = false; return; }
-    if (!startedRace && (S.phase === 'race' || S.phase === 'finishing')) { startedRace = true; recStart(src); }
-    horses.forEach((h, i) => { if (h.plants > seenPlants[i]) { seenPlants[i] = h.plants; rec.events.push({ t: now(), w: roles[i].human >= 0 ? 3 : 2, kind: 'plant', horse: i }); } });
-    if (!seenFinish && S.firstFinish !== null) { seenFinish = true; rec.events.push({ t: now(), w: 100, kind: 'finish' }); }
-    if (S.phase === 'replay' && S.replay && S.replay.kind === 'finish' && !rec.finRep) { rec.finRep = true; rec.events.push({ t: now(), w: 60, kind: 'finish-replay' }); }
-    if (S.phase !== 'results') { recTick(src); stripCols(); }
+  // ---------- the clip plan: face-plant window(s) + finish window, in ticks, never longer than 10 s ----------
+  function clipPlan() {
+    const n = store.n, F = store.finish, secs = (s) => Math.round(s * 60), segs = [];
+    const clamp = (t) => Math.max(0, Math.min(n - 1, t));
+    if (F >= 0) {
+      const fin = [clamp(F - secs(2.5)), clamp(F + secs(1.75))];
+      // ALWAYS a distinct fall segment (camera on the fallen horse) when anyone fell, even if it overlaps the finish window in time:
+      // the fall nearest before the finish (a human's fall wins a tie within 1 s), else the nearest after it
+      const falls = store.falls.filter((f) => f.tick < F + secs(1.5)).sort((x, y) => (Math.abs(x.tick - F) - Math.abs(y.tick - F)));
+      if (falls.length) {
+        const before = falls.filter((f) => f.tick <= F), pool = before.length ? before : falls, near = pool[0];
+        const fall = pool.find((f) => roles[f.horse].human >= 0 && Math.abs(Math.abs(f.tick - F) - Math.abs(near.tick - F)) < secs(1)) || near;
+        segs.push({ kind: 'fall', a: clamp(fall.tick - secs(1)), b: clamp(fall.tick + secs(2)), horse: fall.horse, tick: fall.tick });
+      }
+      segs.push({ kind: 'finish', a: fin[0], b: fin[1] });
+      // too short (no fall, short race)? pad the finish window backwards to reach 6 s
+      const tot = () => segs.reduce((s, g) => s + (g.b - g.a), 0);
+      if (tot() < secs(6)) { const g = segs[segs.length - 1]; g.a = clamp(g.a - (secs(6) - tot())); }
+      if (tot() > secs(10)) { const g = segs[segs.length - 1]; g.a = Math.min(g.b - 1, g.a + (tot() - secs(10))); }
+    } else if (n > 0) {   // no finish (timeout): the last 7 s, honestly labelled
+      segs.push({ kind: 'noFinish', a: clamp(n - 1 - secs(7)), b: n - 1 });
+    }
+    const frames = [];
+    segs.forEach((g, si) => { for (let t = g.a; t <= g.b; t += STEP) frames.push({ tick: t, seg: si, kind: g.kind, horse: g.horse }); });
+    return { segs, frames };
   }
 
-  // ---------- reset on every restart ----------
-  const urls = new Set(); let panel = null, built = null, token = 0, statusT = 0;
+  // ---------- frame painter: toon render + broadcast graphics (channel bug, lower-third, scanlines, vignette) ----------
+  let fx = null;
+  function fxInit() {
+    const rt = new T.WebGLRenderTarget(CLIP_W, CLIP_H, { depthBuffer: true }); rt.texture.colorSpace = T.SRGBColorSpace;
+    const cam = new T.PerspectiveCamera(32, CLIP_W / CLIP_H, 0.5, 300), cv = document.createElement('canvas'); cv.width = CLIP_W; cv.height = CLIP_H;
+    const ctx = cv.getContext('2d', { willReadFrequently: false }), img = new ImageData(CLIP_W, CLIP_H), px = new Uint8Array(CLIP_W * CLIP_H * 4);
+    const sl = document.createElement('canvas'); sl.width = 1; sl.height = 3; { const c = sl.getContext('2d'); c.fillStyle = 'rgba(0,0,0,.14)'; c.fillRect(0, 0, 1, 1); }
+    fx = { rt, cam, cv, ctx, img, px, scan: ctx.createPattern(sl, 'repeat'), camX: 0 };
+  }
+  function clipUnit(j) {
+    if (!fx) fxInit();
+    const f = j.plan.frames[j.fi], first = j.fi === 0 || j.plan.frames[j.fi - 1].seg !== f.seg;
+    let cx = f.kind === 'fall' ? torsoX(f.tick, f.horse) : Math.min(leaderTip(f.tick) - 1, G.FINISH_X - 0.5);
+    if (first) fx.camX = cx; else fx.camX += (cx - fx.camX) * 0.22;
+    const { cam } = fx; cam.position.set(fx.camX + 3, 1.6, 11); cam.lookAt(fx.camX - 0.3, 1.0, 0);
+    withPoses(f.tick, cam, fx.rt, fx.camX, f.kind !== 'fall', (r) => r.readRenderTargetPixels(fx.rt, 0, 0, CLIP_W, CLIP_H, fx.px));
+    const lu = luma(fx.px); if (lu === 0) return false;
+    j.lumaMin = Math.min(j.lumaMin ?? 255, lu); if (lu < 6) j.dark = (j.dark || 0) + 1;
+    const { px, img, ctx } = fx, row = CLIP_W * 4;
+    for (let y = 0; y < CLIP_H; y++) img.data.set(px.subarray((CLIP_H - 1 - y) * row, (CLIP_H - y) * row), y * row);
+    ctx.putImageData(img, 0, 0);
+    overlay(ctx, f, j);
+    const ts = Math.round(j.fi * 1e6 / FPS);
+    const vf = new VideoFrame(fx.cv, { timestamp: ts, duration: Math.round(1e6 / FPS) });
+    try { j.enc.encode(vf, { keyFrame: j.fi % KEY_EVERY === 0 }); } finally { vf.close(); }
+    return true;
+  }
+  function overlay(c, f, j) {
+    const W = CLIP_W, H = CLIP_H, BU = 'Bungee, Impact, sans-serif';
+    c.save(); c.globalCompositeOperation = 'multiply'; c.fillStyle = 'rgba(255,226,176,.22)'; c.fillRect(0, 0, W, H); c.restore();   // warm faded grade
+    c.fillStyle = fx.scan; c.fillRect(0, 0, W, H);
+    const g = c.createRadialGradient(W / 2, H / 2, H * 0.45, W / 2, H / 2, H * 0.95); g.addColorStop(0, 'rgba(20,8,0,0)'); g.addColorStop(1, 'rgba(20,8,0,.45)'); c.fillStyle = g; c.fillRect(0, 0, W, H);
+    // channel bug + race clock
+    c.fillStyle = '#d3432b'; c.fillRect(W - 232, 10, 222, 26); c.strokeStyle = '#2b1810'; c.lineWidth = 3; c.strokeRect(W - 232, 10, 222, 26);
+    c.fillStyle = '#f2e1ad'; c.font = `15px ${BU}`; c.textAlign = 'center'; c.fillText('CH 7 · HIGHLIGHT REPLAY', W - 121, 29);
+    c.fillStyle = '#4c2c21'; c.fillRect(10, 10, 150, 26); c.strokeRect(10, 10, 150, 26); c.fillStyle = '#e5af2c'; c.fillText('RACE ' + store.t[f.tick].toFixed(1) + 'S', 85, 29);
+    // lower third
+    const sub = f.kind === 'fall' ? 'FACE-PLANT!' : f.kind === 'finish' ? 'PHOTO FINISH' : 'FINAL STRETCH', who = f.kind === 'fall' ? G.dn(roles[f.horse].name) : (j.d.winName || '');
+    c.fillStyle = '#e5af2c'; c.fillRect(14, H - 78, 150, 20); c.strokeRect(14, H - 78, 150, 20); c.fillStyle = '#4c2c21'; c.font = `12px ${BU}`; c.fillText(sub, 89, H - 63);
+    c.fillStyle = '#4c2c21'; c.fillRect(14, H - 58, 420, 38); c.strokeRect(14, H - 58, 420, 38); c.fillStyle = '#d3432b'; c.fillRect(14, H - 58, 8, 38);
+    c.textAlign = 'left'; c.fillStyle = '#f2e1ad'; c.font = `18px ${BU}`; c.fillText(who.slice(0, 26), 32, H - 32); c.textAlign = 'center';
+  }
+
+  // ---------- the job: strip columns first (the card can be made), then clip frames; a few ms of work per rendered frame ----------
+  const supported = () => fault !== 'norec' && typeof VideoEncoder === 'function' && typeof VideoFrame === 'function';
+  function startJob(d) {
+    const my = token; job = { d, token: my, stage: 'strip', stripTicks: stripPlan(), si: 0, plan: clipPlan(), fi: 0, chunks: [], enc: null, err: null, progress: 0, clip: null, flushing: false };
+    strip.buf = {}; strip.mark = -1;
+    if (!store.n) { job.stage = 'failed'; job.err = 'No race was recorded.'; }
+  }
+  function pump() {
+    const j = job; if (!j || j.token !== token || j.stage === 'done' || j.stage === 'failed') return;
+    const t0 = performance.now();
+    try {
+      if (j.stage === 'strip') {
+        while (j.si < j.stripTicks.length && (performance.now() - t0 < 14 || j.si % 3)) { if (slitUnit(j) === false) { blankRetry(j); break; } j.blank = 0; j.si++; }
+        j.progress = j.stripTicks.length ? j.si / j.stripTicks.length : 1;
+        if (j.si >= j.stripTicks.length) { if (j.slit) { j.slit.rt.dispose(); j.slit = null; } onStrip(); j.stage = 'clip'; if (!startEncoder(j)) return; }
+        return;
+      }
+      if (j.stage === 'clip') {
+        if (!j.plan.frames.length) throw new Error('Nothing to render.');
+        let n = 0;
+        while (j.fi < j.plan.frames.length && j.enc.encodeQueueSize < 6 && (n === 0 || performance.now() - t0 < 14)) { if (clipUnit(j) === false) { blankRetry(j); break; } j.blank = 0; j.fi++; n++; }
+        j.progress = j.fi / j.plan.frames.length; updateClipLabel();
+        if (j.fi >= j.plan.frames.length && !j.flushing) { j.flushing = true; j.enc.flush().then(() => finishClip(j)).catch((e) => failJob(j, 'Encoder failed: ' + (e && e.message || e))); }
+      }
+    } catch (e) { failJob(j, (j.stage === 'strip' ? 'Print failed: ' : 'Clip render failed: ') + (e && e.message || e)); }
+  }
+  function blankRetry(j) { j.blank = (j.blank || 0) + 1; if (j.blank > 900) failJob(j, 'Rendering kept coming back blank (the tab or GPU is not drawing), so the clip was not made. Try again after a restart.'); }
+  function startEncoder(j) {
+    if (!supported()) { failJob(j, 'This browser has no WebCodecs video encoder (VideoEncoder), so the clip cannot be made. The card still works.'); return false; }
+    try {
+      j.enc = new VideoEncoder({ output: (c) => { const data = new Uint8Array(c.byteLength); c.copyTo(data); j.chunks.push({ ts: c.timestamp, key: c.type === 'key', data }); }, error: (e) => failJob(j, 'Encoder failed: ' + (e && e.message || e)) });
+      j.enc.configure({ codec: 'vp8', width: CLIP_W, height: CLIP_H, bitrate: 1_600_000, framerate: FPS });
+      if (fault === 'encerr') throw new Error('encoder rejected the configuration (test fault)');
+    } catch (e) { failJob(j, 'Encoder could not start: ' + (e && e.message || e)); return false; }
+    return true;
+  }
+  function failJob(j, msg) {
+    if (j.token !== token || j.stage === 'failed') return;
+    j.stage = 'failed'; j.err = msg; try { j.enc && j.enc.state !== 'closed' && j.enc.close(); } catch { /* closed */ }
+    if (panel) { const c = panel.querySelector('.sh-clip'); c.textContent = 'CLIP: UNAVAILABLE'; panel.querySelectorAll('[data-a=clip],[data-a=share]').forEach((b) => { b.classList.add('off'); b.setAttribute('aria-disabled', 'true'); }); }
+    if (built) built.clipWhy = msg; say(msg, 'err');
+  }
+  function finishClip(j) {
+    if (j.token !== token) { stale++; return; }   // a flush that finished after a restart: dropped, never shown
+    if (j.stage === 'failed') return;
+    const chunks = j.chunks.sort((a, b) => a.ts - b.ts);
+    if (!chunks.length) return failJob(j, 'The encoder produced no frames.');
+    const bytes = muxWebm(chunks, CLIP_W, CLIP_H), info = readWebm(bytes), blob = new Blob([bytes], { type: 'video/webm' });
+    // where in the FILE's timeline the real events are (derived from the exported frames' source ticks, in file time)
+    const at = (i) => +(i / FPS).toFixed(3), fr = j.plan.frames;
+    const finSeg = j.plan.segs.findIndex((g) => g.kind === 'finish');   // the crossing counts only inside the FINISH segment (never a leader crossing during the fall segment)
+    let crossIdx = -1; for (let i = 1; i < fr.length; i++) if (fr[i].seg === finSeg && fr[i - 1].seg === finSeg && leaderTip(fr[i - 1].tick) < G.FINISH_X && leaderTip(fr[i].tick) >= G.FINISH_X) { crossIdx = i; break; }
+    // only falls the camera actually shows: the fall segment's target horse, inside that segment
+    const falls = [], fseg = j.plan.segs.findIndex((g) => g.kind === 'fall'); let downFrames = 0, segStart = null, segEnd = null;
+    if (fseg >= 0) { const g = j.plan.segs[fseg]; fr.forEach((x, i) => { if (x.seg !== fseg) return; if (segStart === null) segStart = at(i); segEnd = at(i + 1); if (store.down[x.tick * 4 + g.horse]) downFrames++; });
+      for (const f of store.falls) if (f.horse === g.horse && f.tick >= g.a && f.tick <= g.b) { const i = fr.findIndex((x) => x.seg === fseg && x.tick >= f.tick); if (i >= 0) falls.push({ horse: roles[f.horse].name, atS: at(i), tick: f.tick }); } }
+    j.clip = { blob, bytes: bytes.length, frames: info.frames, keyframes: info.keyframes, durationS: info.durationS, headerDurationS: info.headerDurationS, fps: FPS, width: CLIP_W, height: CLIP_H, finishAtS: crossIdx >= 0 ? at(crossIdx) : null, falls, planned: fr.length, segments: j.plan.segs.map((s) => s.kind), fallTarget: fseg >= 0 ? roles[j.plan.segs[fseg].horse].name : null, fallSegStartS: segStart, fallSegEndS: segEnd, downFrames, minLuma: +(j.lumaMin ?? 0).toFixed(1), darkFrames: j.dark || 0, gen: j.token, raceTMin: +Math.min(...fr.map((x) => store.t[x.tick])).toFixed(2), raceTMax: +Math.max(...fr.map((x) => store.t[x.tick])).toFixed(2) };
+    built.clip = j.clip; j.stage = 'done'; j.progress = 1; try { j.enc.close(); } catch { /* closed */ }
+    if (fx) { fx.rt.dispose(); fx = null; }
+    if (panel) {
+      const c = panel.querySelector('.sh-clip'), nf = falls.length;
+      c.textContent = `CLIP ${info.durationS.toFixed(1)}S · ${(bytes.length / 1048576).toFixed(1)}MB · ${crossIdx >= 0 ? 'FINISH' : 'NO FINISH'} + ${nf} FALL${nf === 1 ? '' : 'S'}`;
+      panel.querySelectorAll('[data-a=clip]').forEach((b) => { b.classList.remove('off'); b.removeAttribute('aria-disabled'); });
+      const sh = panel.querySelector('[data-a=share]'); if (typeof navigator.canShare === 'function' && typeof navigator.share === 'function') { sh.classList.remove('off'); sh.removeAttribute('aria-disabled'); }
+      say('Clip ready. Pick a button.');
+    }
+  }
+  function updateClipLabel() { const c = panel && panel.querySelector('.sh-clip'); if (c && job && job.stage === 'clip') c.textContent = `CLIP: RENDERING ${Math.floor(job.progress * 100)}%`; }
+
+  // ---------- per-frame hook (after the main render): pumps the job while the results are up ----------
+  function frame() { if (S.phase === 'results') pump(); }
   function reset() {
-    token++; recStop(); stripReset(); slitDisposeAll(); rec.failed = null; rec.finRep = false; startedRace = false; seenFinish = false; seenPlants = [0, 0, 0, 0]; rec.slot1At = 0;
+    token++; races++; storeReset(); stripReset();
+    if (job) { try { job.enc && job.enc.state !== 'closed' && job.enc.close(); } catch { /* closed */ } if (job.slit) job.slit.rt.dispose(); } job = null;
+    if (fx) { fx.rt.dispose(); fx = null; }
     for (const u of urls) URL.revokeObjectURL(u); urls.clear();
-    built = null; panel = null; clearTimeout(statusT); document.body.classList.remove('shared');
+    built = null; panel = null; document.body.classList.remove('shared');
   }
-  addEventListener('pagehide', () => { token++; recStop(); slitDisposeAll(); for (const u of urls) URL.revokeObjectURL(u); urls.clear(); });
+  addEventListener('pagehide', () => { token++; if (job && job.enc && job.enc.state !== 'closed') { try { job.enc.close(); } catch { /* closed */ } } for (const u of urls) URL.revokeObjectURL(u); urls.clear(); });
+  storeReset();
 
   // ---------- card ----------
   const hex = (n) => '#' + n.toString(16).padStart(6, '0');
@@ -213,47 +355,46 @@ export function createShare(G) {
     setTimeout(() => { URL.revokeObjectURL(u); urls.delete(u); }, 4000);
   }
   const canClip = () => fault !== 'noclip' && typeof ClipboardItem !== 'undefined' && !!(navigator.clipboard && navigator.clipboard.write);
+  const enable = (sel) => panel && panel.querySelectorAll(sel).forEach((b) => { b.classList.remove('off'); b.removeAttribute('aria-disabled'); });
+
+  function onStrip() {   // the print is developed: draw the card, show the strip, enable the card buttons
+    if (!built || !panel) return;
+    try {
+      built.card = drawCard(built.d);
+      const t = document.createElement('canvas'); t.width = 680; t.height = 117; paintStrip(t.getContext('2d'), 0, 0, 680, 117); panel.querySelector('.sh-th').src = t.toDataURL('image/png');
+      built.cardBlob = toBlob(built.card); built.cardBlob.catch(() => {}); enable('[data-a=card],[data-a=copy]'); say('Print ready. The clip is rendering…');
+    } catch (e) { built.card = null; say('Could not draw the card: ' + (e && e.message || e), 'err'); }
+  }
 
   function mount(box, d) {
-    reset2();
-    const my = ++token; const sc = document.createElement('div'); sc.className = 'share'; panel = sc;
-    sc.innerHTML = '<div class="sh-hd"><b>SHARE THE PRINT</b><span class="sh-clip">CLIP: …</span></div><img class="sh-th" alt="Photo-finish print">' +
-      '<div class="sh-btns"><button data-a="card">DOWNLOAD CARD</button><button data-a="copy">COPY CARD</button><button data-a="clip">DOWNLOAD CLIP</button><button data-a="share">SHARE CLIP</button></div><div class="sh-msg" role="status" aria-live="polite">Building your print…</div>';
+    token++; const sc = document.createElement('div'); sc.className = 'share'; panel = sc;
+    sc.innerHTML = '<div class="sh-hd"><b>SHARE THE PRINT</b><span class="sh-clip">CLIP: STARTING…</span></div><img class="sh-th" alt="Photo-finish print">' +
+      '<div class="sh-btns"><button data-a="card" class="off" aria-disabled="true">DOWNLOAD CARD</button><button data-a="copy" class="off" aria-disabled="true">COPY CARD</button><button data-a="clip" class="off" aria-disabled="true">DOWNLOAD CLIP</button><button data-a="share" class="off" aria-disabled="true">SHARE CLIP</button></div><div class="sh-msg" role="status" aria-live="polite">Developing the photo-finish print…</div>';
     box.appendChild(sc); document.body.classList.add('shared');
-    built = { card: null, cardBlob: null, clip: null, d };
-    try { built.card = drawCard(d); { const t = document.createElement('canvas'); t.width = 680; t.height = 117; paintStrip(t.getContext('2d'), 0, 0, 680, 117); sc.querySelector('.sh-th').src = t.toDataURL('image/png'); } built.cardBlob = toBlob(built.card); built.cardBlob.catch(() => {}); say('Print ready. Pick a button.'); }
-    catch (e) { built.card = null; say('Could not draw the card: ' + (e && e.message || e), 'err'); }
-    const clipEl = sc.querySelector('.sh-clip');
-    if (rec.failed) { clipEl.textContent = 'CLIP: UNAVAILABLE'; sc.querySelector('[data-a=clip]').classList.add('off'); sc.querySelector('[data-a=share]').classList.add('off'); }
-    recFinish().then((seg) => {
-      if (my !== token || !panel) return;
-      if (!seg) { clipEl.textContent = rec.failed ? 'CLIP: UNAVAILABLE' : 'CLIP: NONE RECORDED'; sc.querySelectorAll('[data-a=clip],[data-a=share]').forEach((b) => b.classList.add('off')); built.clipWhy = rec.failed || 'No clip was recorded for this race (it ended too quickly or the recorder produced nothing).'; return; }
-      built.clip = seg; const n = rec.events.filter((e) => e.kind === 'plant' && e.t >= seg.t0 && e.t <= seg.t1).length;
-      clipEl.textContent = `CLIP ${(seg.dur / 1000).toFixed(1)}S · ${(seg.blob.size / 1048576).toFixed(1)}MB · ${n} PLANT${n === 1 ? '' : 'S'}`;
-      if (typeof navigator.canShare !== 'function' || typeof navigator.share !== 'function') sc.querySelector('[data-a=share]').classList.add('off');
-    });
+    built = { card: null, cardBlob: null, clip: null, d, clipWhy: '' };
+    startJob(d);
     sc.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { e.stopPropagation(); act(b.dataset.a, b); } });
     sc.addEventListener('keydown', (e) => { if (e.code === 'Space' || e.code === 'Enter') e.stopPropagation(); });   // Space/Enter on a focused button activates it, not the game (R, 1, 2 still work)
     return sc;
   }
-  function reset2() { clearTimeout(statusT); }
 
-  async function act(a, btn) {
+  async function act(a) {
     if (!built) return say('Nothing to share yet.', 'err');
+    const wait = () => (job && job.stage === 'failed' ? (built.clipWhy || job.err) : `The clip is still rendering (${Math.floor((job ? job.progress : 0) * 100)}%). Try again when it says ready.`);
     try {
       if (a === 'card') {
-        if (!built.card) return say('No card to download: ' + (state.last ? state.last.msg : 'drawing failed'), 'err');
+        if (!built.card) return say(job && job.stage === 'strip' ? 'The print is still developing.' : 'No card to download: drawing failed.', 'err');
         download(await built.cardBlob, fname('png')); say('Card PNG downloaded.');
       } else if (a === 'copy') {
-        if (!built.card) return say('No card to copy.', 'err');
+        if (!built.card) return say(job && job.stage === 'strip' ? 'The print is still developing.' : 'No card to copy.', 'err');
         if (!canClip()) return say('Copy is not supported here (no image clipboard). Use DOWNLOAD CARD.', 'err');
         if (fault === 'cliperr') throw new Error('clipboard write rejected (test fault)');
         await navigator.clipboard.write([new ClipboardItem({ 'image/png': built.cardBlob })]); say('Card copied to the clipboard. Paste it anywhere.');
       } else if (a === 'clip') {
-        if (!built.clip) return say(built.clipWhy || 'Clip is still finishing. Try again in a second.', 'err');
-        download(built.clip.blob, fname('webm')); say(`Clip downloaded (${(built.clip.dur / 1000).toFixed(1)}s WebM).`);
+        if (!built.clip) return say(wait(), job && job.stage === 'failed' ? 'err' : 'warn');
+        download(built.clip.blob, fname('webm')); say(`Clip downloaded (${built.clip.durationS.toFixed(1)}s, ${built.clip.frames} frames, WebM).`);
       } else if (a === 'share') {
-        if (!built.clip) return say(built.clipWhy || 'Clip is still finishing. Try again in a second.', 'err');
+        if (!built.clip) return say(wait(), job && job.stage === 'failed' ? 'err' : 'warn');
         const file = new File([built.clip.blob], fname('webm'), { type: 'video/webm' });
         if (typeof navigator.share !== 'function' || typeof navigator.canShare !== 'function' || !navigator.canShare({ files: [file] })) return say('This browser cannot share video files. Use DOWNLOAD CLIP.', 'err');
         await navigator.share({ files: [file], title: TITLE, text: built.d.winName + ' ' + built.d.margin }); say('Shared.');
@@ -266,8 +407,12 @@ export function createShare(G) {
     }
   }
 
-  const stateOut = () => ({ fault, recorderFailed: rec.failed, mime: rec.mime, segments: rec.segs.length, events: rec.events.length, stripCols: strip.buf.n || 0, firstNoseCol: strip.mark, activeCols: (strip.buf.act || []).filter((a) => a > 14).length,
-    clip: built && built.clip ? { dur: +(built.clip.dur / 1000).toFixed(2), bytes: built.clip.blob.size, score: built.clip.score, hasFinish: !!built.clip.fin } : null, panel: !!panel, last: state.last, urls: urls.size, active: rec.active, history: state.history.slice(-8) });
+  const stateOut = () => ({
+    fault, stage: job ? job.stage : 'idle', progress: job ? +job.progress.toFixed(2) : 0, clipFailed: job && job.stage === 'failed' ? job.err : null,
+    races, stale, ticks: store.n, firstRaceT: store.n ? +store.t[0].toFixed(3) : null, lastRaceT: store.n ? +store.t[store.n - 1].toFixed(2) : null, tickSpanGap: store.n ? +(store.t[store.n - 1] - store.n / 60).toFixed(2) : null, finishTick: store.finish, falls: store.falls.map((f) => f.tick), stripCols: strip.buf.n || 0, firstNoseCol: strip.mark, activeCols: (strip.buf.act || []).filter((a) => a > 14).length,
+    clip: built && built.clip ? { frames: built.clip.frames, planned: built.clip.planned, keyframes: built.clip.keyframes, durationS: built.clip.durationS, headerDurationS: built.clip.headerDurationS, bytes: built.clip.bytes, finishAtS: built.clip.finishAtS, falls: built.clip.falls, segments: built.clip.segments, fallTarget: built.clip.fallTarget, fallSegStartS: built.clip.fallSegStartS, fallSegEndS: built.clip.fallSegEndS, downFrames: built.clip.downFrames, minLuma: built.clip.minLuma, darkFrames: built.clip.darkFrames, current: built.clip.gen === token, raceTMin: built.clip.raceTMin, raceTMax: built.clip.raceTMax } : null,
+    panel: !!panel, last: state.last, urls: urls.size, history: state.history.slice(-8),
+  });
 
-  return { shareFrame: frame, shareReset: reset, shareMount: mount, shareState: stateOut, shareAct: act, shareFault: (v) => { fault = v || ''; } };
+  return { shareFrame: frame, shareRecord: record, shareReset: reset, shareMount: mount, shareState: stateOut, shareAct: act, shareFault: (v) => { fault = v || ''; }, shareClipBlob: () => (built && built.clip ? built.clip.blob : null) };
 }
