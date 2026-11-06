@@ -1,16 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 56
-**Did**
-- `game.js` follow cam: look target y 2.7 → 3.2 (`tl.set(fx + 1.0, 3.2, 0.3)`), tilting the camera up so the sky/haze shows above the `grandstand` roof. Tried 3.6 first (sky clearly visible, but horses sank behind the `div#lower` caption), settled on 3.2 unchecked.
-**Saw**
-- At 3.6: `look` brightness 49%, orange 45% / yellow 37%; sky haze visible above the stand; `hills` still 0.82% strip (y 408-415) as it sits below the stand. No console errors. No perf run.
-**Next**
-- Look at the 3.2 value once; `hills` still hidden behind the stand — move stands back or shorten them.
-- Play a human finish (Q/W/O/P) and tune; draw-call merge (`merged-outline`, `mesh-outline`, `tail`).
-**Open**
-- 3.2 not viewed; horse framing vs the lower-third caption may need a tweak.
-
 ### Judge 56
 
 **Scores**
@@ -37,3 +26,13 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. Play a human finish (asked again): `interact` with alternating Q+P / W+O holds and `until` `horses.2.finished`, and check it finishes in under 60 s. Then check the head-on cut fires during a live race.
 
 SCORE: 8.0
+
+## Iteration 57
+**Did**
+- `index.html` `#lower` caption: bottom 44px → 30px, width min(56vw,700px) → min(44vw,560px), so horse hooves clear the caption box (Next item 2).
+**Saw**
+- Not viewed or run this session (short on room); CSS-only change, no JS touched.
+**Next**
+- View the look to confirm hooves clear the caption; move `grandstand` back/shorten so `hills` shows (>3%); play a human finish (Q+P / W+O) until `horses.2.finished`.
+**Open**
+- Caption change unverified; hills and human-finish items still undone.

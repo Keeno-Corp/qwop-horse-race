@@ -2019,3 +2019,13 @@ SCORE: 8.1
 3. Play a human finish (asked again): `interact` with alternating Q+P / W+O holds and `until` `horses.2.finished`, and check it finishes in under 60 s. Then check the head-on cut fires during a live race.
 
 SCORE: 8.0
+
+## Iteration 57
+**Did**
+- `index.html` `#lower` caption: bottom 44px → 30px, width min(56vw,700px) → min(44vw,560px), so horse hooves clear the caption box (Next item 2).
+**Saw**
+- Not viewed or run this session (short on room); CSS-only change, no JS touched.
+**Next**
+- View the look to confirm hooves clear the caption; move `grandstand` back/shorten so `hills` shows (>3%); play a human finish (Q+P / W+O) until `horses.2.finished`.
+**Open**
+- Caption change unverified; hills and human-finish items still undone.
