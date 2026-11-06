@@ -1,19 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 82
-**Did**
-- Found the cause of the empty countdown picture: view.js `hills` mesh had been moved to `position.set(50, 3, -45)` in session 79, so its ground plane sat at y≈2.9, above the horses (y 1.6) and the `track`. Reverted to `set(50, 0, -55)` (the pre-79 value that the vertex code assumes).
-- game.js `observe()` now returns `cam` {p, look, fov, blend} so the camera can be read.
-**Saw**
-- Before: `hills` covered 86% of the frame in `?nopass` and hid horses, rail and track at every camera. After: countdown at 230 frames shows the 4 horses, white rail, ads, crowd, orange dirt; hues orange 62%, yellow 17%. No console errors. No `perf` run. The camera numbers were fine (countdown p≈(2,3.8,15), look x≈4).
-- Earlier "hills never visible" was the same bug seen from the other side; `look` now still lists `hills` as "Never visible" only because it is in view with no ID pixel.
-**Next**
-- Re-check the race, replay and results look with the visible ground (session 79-81 judging was done with the covered ground, so check nothing else was tuned against it, e.g. the far hill height and fog).
-- Play the human to `horses.2.finished` and show the results card with "MOST FACE-PLANTS".
-- Render-target warning: call `setRenderTarget(null)` after the last pass.
-**Open**
-- Not checked this session: the replay camera, the render-target warning, a human finish.
-
 ### Judge 82
 
 **Judge 82: scores**
@@ -52,3 +38,18 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
    - Call `setRenderTarget(null)` after the last pass. Done when `look` no longer reports "every render call drew into a render target".
 
 SCORE: 7.8
+
+## Iteration 83
+**Did**
+- No code change. Played the human solo race to the end with Q,P,W,O 10-frame holds, skipping plant replays with Space, to check the Judge 82 Next item 1.
+- Checked `setRenderTarget(null)`: broadcast.js line 98 already resets it after the offscreen pass.
+**Saw**
+- `horses.2.finished` turned true at raceT about 25.6 on the HUD clock, with `finishT` 21.27 (the HUD clock includes replays). It was a photo finish: Dusty Rhodes 21.24, YOU 21.27, Hoof Hearted 21.44, Sir Trips-a-Lot DNF with 6 plants.
+- The results card shows: "Dusty Rhodes WINS!", "PHOTO FINISH · 0.03s", podium, table with SMOOTH OPERATOR and DIRT EATER badges, "MOST FACE-PLANTS: SIR TRIPS-A-LOT (6)", and the "Press R" hint. Nothing is clipped. `look` reports no errors; hues orange 38%, yellow 38%. `track` is still 0.22% of the frame. No `perf` run.
+- A mistimed alternation gave YOU 3 plants over 60 m. A plant replay fires every time, so a human run takes several Space presses.
+**Next**
+- Add rake stripes or hoof-print decals to the `track` dirt and a darker rail-side strip (Judge 82 item 2). It is still undone.
+- Look at the photo-finish sepia (`cap2`, `pfc`) and the head-on cut with `look cameras`.
+- The tote still shows "PHOTO" odds in the results phase; consider showing final order.
+**Open**
+- 2-player mode was not played. The `hills` "Never visible" line in `look` is an ID-image artefact, not a real fault.
