@@ -119,7 +119,9 @@ export function mergeStatic(root) {
   });
   for (const o of doomed) o.parent.remove(o);
   const cat = (arrs) => { const out = new Float32Array(arrs.reduce((a, b) => a + b.length, 0)); let o = 0; for (const a of arrs) { out.set(a, o); o += a.length; } return out; };
+  let bi = 0;
   for (const b of buckets.values()) {
+    if (b.mat && !b.mat.polygonOffset) { b.mat.polygonOffset = true; b.mat.polygonOffsetFactor = -(bi++ % 4); b.mat.polygonOffsetUnits = -(bi % 4); }
     const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(cat(b.pos), 3)); g.setAttribute('normal', new THREE.BufferAttribute(cat(b.nor), 3)); g.setAttribute('uv', new THREE.BufferAttribute(cat(b.uv), 2));
     const m = new THREE.Mesh(g, b.mat); m.castShadow = b.cast; m.receiveShadow = true; m.name = 'merged'; root.add(m);
   }

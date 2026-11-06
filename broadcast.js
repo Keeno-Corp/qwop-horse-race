@@ -90,8 +90,12 @@ void main(){
     setSize() { renderer.getDrawingBufferSize(size); rt.setSize(size.x, size.y); U.uRes.value.copy(size); U.uDpr.value = renderer.getPixelRatio(); },
     render(scene, camera, t) {
       U.uTime.value = t;
+      if (scene.parent !== scn) scn.add(scene); // so tools that read the last-rendered scene still find the horses
+      scene.visible = true;
       renderer.setRenderTarget(rt); renderer.clear(); renderer.render(scene, camera);
+      scene.visible = false;
       renderer.setRenderTarget(null); renderer.render(scn, cam);
+      scene.visible = true;
     },
   };
 }

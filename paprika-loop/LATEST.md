@@ -1,17 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 8
-**Did**
-- game.js (~line 95): each horse's first view group is renamed `horse<i>` (was `player-body`/`horse<i>-body`); `__game.subject` is now `'horse0'`.
-**Saw**
-- Page opens with no errors; the start `look` shows the title card, Tote, lower-third, key caps; brightness 52%. `look` still says subject "horse0" is not in the scene at the start (the title card hides the horses, or the name does not resolve). I ran no `perf` and no race.
-**Next**
-- Check with `look target:"horse0"` after the race starts; if still missing, name the group in a place `look` can find (not the renamed array element).
-- Prove the finish replay with `interact until phase=replay` (sepia, head-on cut), and fade in the first replay frame.
-- Cut draw calls (440) with `instances()`; test held Q W O P to x 60 under 60 s; lengthen legs ~25%.
-**Open**
-- Replay sepia, draw calls, legs and controls timing are still untested/unchanged. The subject fix is unconfirmed.
-
 ### Judge 8
 
 **Scores (Must have, in order)**
@@ -43,3 +31,17 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Lengthen the legs and enlarge the blinker silks.** Legs should be about 1.2× body depth, with bigger blinker patterns so the silks read in the race look. Done when `look target:"horse0"` shows long legs and the blinker pattern is legible at play distance.
 
 SCORE: 6.5
+
+## Iteration 9
+**Did**
+- broadcast.js `render()`: the real `scene` is now added as an invisible-during-final-pass child of the post-pass scene `scn` (`scene.visible` false only while `scn` draws), so tools reading the last-rendered scene find the horses. `look target:"horse0"` now works (size 2.51×1.13×1.05); the "horse0 not in scene" fault is fixed.
+**Saw**
+- Held alternation (Q+P / W+O, 18 frames each, after the countdown) took YOU from x 1.4 to 10.8 in 2.2 s (~3.2 m/s, so x 60 in ~20 s, well under 60 s), pitch about -0.2, no plant. Controls are fine.
+- Placing the horses at x≈53 and running gave `phase: replay`: the sepia PHOTO FINISH frame shows grain, gate weave, the REPLAY 0.25x tag and the `WINNER … BY 0.14 SEC` banner. It is not near-black. Race look: brightness 48%, no console errors.
+- `look` still reports z-fighting between "merged" meshes (x=0.80, y=1.35 planes), no fog/depth cue, and `div#crt` over 100%. I did not run `perf`; draw calls were ~441 last session and are unchanged.
+**Next**
+- Cut draw calls (<250) with `instances()` for crowd, posts, boards.
+- Fix the "merged" z-fighting (polygonOffset or move a plane) and add scene.fog in the sky colour.
+- Lengthen legs ~1.2× body depth and enlarge blinker silks.
+**Open**
+- Legs/blinker and draw calls untouched. `horse0` is the torso group only, so `look` says 0 of 3 named parts show.
