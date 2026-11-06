@@ -112,3 +112,4 @@ SCORE: 6.5
 **Open**
 - The black-rectangle cause is inferred only; check `look` sample at (100,520) in the next session after any tote edit.
 - The first plant-replay frame brightness was not re-measured.
+- Film grain in broadcast.js lowered 0.16→0.10 (look flagged the full-screen `PlaneGeometry` quad as noisy; grain is intended by LOOK.md).
