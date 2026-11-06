@@ -347,7 +347,7 @@ function updateRace(dt) {
   if (S.phase === 'race' || S.phase === 'finishing') {
     S.raceT += dt;
     for (const h of horses) if (!h.finished && h.headTip().x >= FINISH_X) {
-      h.finished = true; h.finishT = S.raceT; S.order.push(h.idx);
+      h.finished = true; h.finishT = S.raceT - Math.min(dt, Math.max(0, (h.headTip().x - FINISH_X) / Math.max(3, h.torso.body.linvel().x))); S.order.push(h.idx);
       if (S.firstFinish === null) {
         S.firstFinish = S.raceT; S.phase = 'finishing'; S.firstFinishFrame = ringN; S.pending = null;
         sfx.play('cheer', 1); sfx.play('powerup', 0.6, 0.1); S.excite = 1; S.flash = 1;
@@ -632,7 +632,7 @@ requestAnimationFrame(frame);
 // ---------- window.__game ----------
 const r2 = (v) => +v.toFixed(2);
 window.__game = {
-  subject: 'tote-board',
+  subject: 'horse0-body',
   describe: () => ({
     name: 'Photo Finish Fiasco', stack: 'three + rapier ragdoll', units: 'metres, x down the track (finish at x=60), y up, z across lanes',
     keys: { solo: { KeyQ: 'front-left leg (hold)', KeyW: 'front-right leg', KeyO: 'back-left leg', KeyP: 'back-right leg', KeyR: 'restart', Digit2: 'two players', Digit1: 'solo', Space: 'skip replay' }, twoPlayer: { p1: 'Q W E R', p2: 'U I O P', Enter: 'restart' } },

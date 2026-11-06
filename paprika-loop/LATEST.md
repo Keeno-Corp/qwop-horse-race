@@ -1,18 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 4
-**Did**
-- Dead heat no longer scripted: `S.hhGap` (seeded 0.2–1.3 m, set in the reset `Object.assign`) replaces the fixed 0.7 m in the closing-sprint drag in game.js, so AI finish gaps vary.
-- Player forgiveness: human `h.driveF` scale 26→40 in `physStep`.
-**Saw**
-- Alternating Q+P / W+O for ~48 frames after the countdown: YOU x 4.85 at raceT 1.7 (ahead of AIs at 1.3–3.3), state `run`, plants 0, no errors. Not played through to a finish.
-**Next**
-- Black rectangle (asked again, not done): test `#tote{display:none}` and `#crt{display:none}` in separate `look` calls with `sample` at (100,520),(100,580).
-- Play a full race (600+ frames) to check the player doesn't now run away, then the results card.
-- Cut draw calls (<250) with InstancedMesh for crowd, fence, ad boards; run `perf`.
-**Open**
-- Draw calls, the black rectangle and the replay checks were not touched this session. 40 may make the player too fast; unmeasured over a full race.
-
 ### Judge 4
 
 Judging session 4: I've seen the live race, a full no-input run to results, and `perf`. Writing the verdict now.
@@ -45,3 +32,18 @@ Judging session 4: I've seen the live race, a full no-input run to results, and 
 3. **Show the replay and results card, and cut draw calls.** Use `interact` with `until: {phase:"replay"}` and then `look` to prove the sepia, grain, `PHOTO FINISH` frame and the head-on cam. Then `until: results` followed by an immediate `look` for the award. Put the crowd, fence posts and ad boards into `InstancedMesh`, and run `perf` with `costs:true` to bring draw calls under 250. Also set `__game.subject` to an object that exists.
 
 SCORE: 6.6
+
+## Iteration 5
+**Did**
+- Black rectangle fixed: it was the DOM `#tote .rows` opaque background (#1d140f) ghosting y-flipped at ~[18,594,338,770] over the canvas while the broadcast pass ran (gone with `#tote` hidden, gone with `.rows` hidden). `.rows` is now `rgba(29,20,15,.96)` in index.html; `look` sample (200,600) reads track colour #f79f32.
+- game.js `updateRace`: `h.finishT` is interpolated from `headTip().x` past FINISH_X and torso speed, so AI finish times differ (24.54 vs 24.55) instead of sharing a frame.
+- `__game.subject` now `'horse0-body'` (was missing `tote-board`).
+**Saw**
+- No-input `until phase=results`: results card shows podium, table, "DIRT EATER · MOST FACE-PLANTS" award on Dusty Rhodes (5 plants), "PHOTO FINISH · 0.00s". `tangles:2`. No console errors. `perf` and draw calls (436) not run.
+**Next**
+- Dead heat still only 0.01 s apart in this seed; `hhGap` drag looks scripted; widen to 0.03-0.3 s if wanted.
+- Cut draw calls (<250) with InstancedMesh for crowd, fence posts, ad boards; run `perf`.
+- Play a full race with held keys; check replay sepia/head-on cam with `until: phase=replay` + `look`.
+**Open**
+- `look` says `horse0-body` is "not in the scene" under the pass (it is listed on screen with nopass); subject may need a group name.
+- Draw calls and the YOU player pace over a full race remain unmeasured.
