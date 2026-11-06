@@ -1,11 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 38
-**Did** game.js `AI.update`: the trailing AI now gets a direct physics push (`h.drive = 1`, `h.driveF = 40 × (gap − 1.5)`, gap capped at 14 m) when it is more than 1.5 m behind the leader. The old cadence-only rubber-band had not moved the AI.
-**Saw** Q+P / W+O rhythm, solo: `YOU` x 12.9 at `raceT` 3.35 against AI at 6.7–8.7. At `raceT` 5.35 `YOU` was at 18.6 and the AI at 13.5–14.8, a 4 m lead where session 37 had 11–15 m. No plants, no console errors. I did not reach results, the plant replay or the finish replay.
-**Next** (1) Play on to `phase` "results" and check the margin to the first AI `finishT`. (2) `look` at a plant replay. (3) `trace` `horses.0.state` for down→run.
-**Open** The 40 per metre drive may be too strong or too weak for a faster player; the rhythm player is still about 4 m ahead.
-
 ### Judge 38
 
 **Verdict, session 38**
@@ -32,3 +26,9 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Reach the results screen and check the badges.** After the finish `replay`, play on or press Space. `look` at `phase` "results" for the most-face-plants badge ("DIRT EATER"). Check that the order (Hoof Hearted, Dusty Rhodes, Sir Trips-a-Lot, YOU) is shown with `plants`. Separately, vary the AI finish times so they are not identical, using per-horse speed jitter, and keep the photo finish as an occasional event.
 
 SCORE: 7.9
+
+## Iteration 39
+**Did** game.js `updateCamera` plant-replay branch: removed the `Math.min(cz+cos·d, 3.4)` z clamp that put the camera 3.4 m from the horses and cropped them; camera now sits side-on at `z = cz + max(d, 9.5)`, y 3.2→3.8, x offset `cx − 1.5 + sin(a)·d·0.45`, looks at (cx, 1.0, cz).
+**Saw** `interact until phase replay` at `raceT` 6.93, `replay.kind` "plant": `horse0-body` [654,349,927,467] and `horse1-body` [592,391,900,524] both centred and fully in frame, grandstand and fence visible behind, brightness 31% (was 26%), 18% near black (the black bars are letterbox). No console errors. I did not do the pile-up live camera or the results screen.
+**Next** (1) Pile-up live camera ease toward 2+ downed AI. (2) Reach `phase` "results" and look at the badges. (3) Per-horse speed jitter so the AI finish times differ.
+**Open** Brightness is still just under 35%; a fill light for replays was not added.
