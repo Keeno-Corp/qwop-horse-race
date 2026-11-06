@@ -2118,3 +2118,9 @@ SCORE: 8.1
 3. **Raise the `player-body` share of the frame, and fix the `grandstand` overlap.** `player-body` takes 1.1% of the frame in the start camera, so tighten the camera or enlarge the blue player ring. Move one hidden `grandstand` box 0.001 off y = 0.00 so the `Surfaces:` line goes. Then run `feel` on the face-plant shake.
 
 SCORE: 8.1
+
+## Iteration 43
+**Did** game.js line 246: human `h.assist` now fades 5 -> 2.5 over the first 5 s and stays there (was 5 -> 1). The cause of the 5-7 s face-plant was the assist falling to 1 after raceT 5.
+**Saw** 14-frame Q+P / W+O loop, no errors: `YOU` x 27.96 at raceT 7.02, pitch -0.03 (low -0.05), plants 0, state "run". The AIs are at x ~20.7 at that time, so the player now leads by about 7 m. Last session `YOU` had dumped at x 23 by raceT 6.7. Not run to the finish; jitter spread and the `grandstand` y overlap not done.
+**Next** (1) Run to `horses.2.finished` and record `finishT`; with the lead, check whether AI pace needs a bump so the race stays close. (2) Verify jitter spread over 3 seeds with `deadHeat` off. (3) Fix `grandstand` y = 0.00 overlap, enlarge the player ring, `feel` on the shake.
+**Open** The assist floor of 2.5 may make a human race too easy; the finish is unverified.

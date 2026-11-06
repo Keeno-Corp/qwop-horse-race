@@ -1,11 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 42
-**Did** game.js `AI`: added per-horse `this.jit = rr(0.95, 1.05)` (seeded, set in the constructor, which assignRoles runs each reset), multiplied into the stride period `per` after `band`.
-**Saw** Human run with slow rhythm (Q+P held 14 frames, then W+O held 14): `YOU` x 12.5 at raceT 3.35 (about 4 m/s), pitch -0.03, plants 0, state "run", no console errors. At that pace the 60 m finish is about 15 s, well under 60 s. I did not run it all the way to the finish. The 8-frame rhythm that sprawled in session 41 is just too fast: 14-frame holds are safe. I did not measure the jitter's finish spread over several seeds with `deadHeat` off.
-**Next** (1) Run to `horses.2.finished` to record `finishT`, and check `results[*].finishT` spread over 3 seeds. (2) `feel` on the face-plant camera shake; add a replay fill light (replay brightness was 32%). (3) Fix the hidden `grandstand` boxes sharing y = 0.00 (`Surfaces:` line). Consider softening early torque so fast Q P W O taps (8 frames) don't sprawl the horse.
-**Open** Finish time and the jitter spread are unverified; items 3 of Judge 41 not started.
-
 ### Judge 42
 
 **Verdict, session 42**
@@ -32,3 +26,9 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Raise the `player-body` share of the frame, and fix the `grandstand` overlap.** `player-body` takes 1.1% of the frame in the start camera, so tighten the camera or enlarge the blue player ring. Move one hidden `grandstand` box 0.001 off y = 0.00 so the `Surfaces:` line goes. Then run `feel` on the face-plant shake.
 
 SCORE: 8.1
+
+## Iteration 43
+**Did** game.js line 246: human `h.assist` now fades 5 -> 2.5 over the first 5 s and stays there (was 5 -> 1). The cause of the 5-7 s face-plant was the assist falling to 1 after raceT 5.
+**Saw** 14-frame Q+P / W+O loop, no errors: `YOU` x 27.96 at raceT 7.02, pitch -0.03 (low -0.05), plants 0, state "run". The AIs are at x ~20.7 at that time, so the player now leads by about 7 m. Last session `YOU` had dumped at x 23 by raceT 6.7. Not run to the finish; jitter spread and the `grandstand` y overlap not done.
+**Next** (1) Run to `horses.2.finished` and record `finishT`; with the lead, check whether AI pace needs a bump so the race stays close. (2) Verify jitter spread over 3 seeds with `deadHeat` off. (3) Fix `grandstand` y = 0.00 overlap, enlarge the player ring, `feel` on the shake.
+**Open** The assist floor of 2.5 may make a human race too easy; the finish is unverified.

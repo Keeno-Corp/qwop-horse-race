@@ -243,7 +243,7 @@ function physStep() {
       if (S.phase === 'race') { const others = horses.filter((o, j) => roles[j].ai).map((o) => o.pos().x); const avg = others.reduce((a, b) => a + b, 0) / Math.max(1, others.length); h.driveF = (S.auto ? 0.5 : 26) * Math.max(0, 30 + clamp(avg - h.pos().x - 4, 0, 30) * 6 - clamp(h.pos().x - avg - 0.3, 0, 20) * 14); }
     } else if (r.human >= 0) for (let i = 0; i < 4; i++) h.setHeld(i, false);
     if (h.finished || S.phase === 'results') h.guard = 99;
-    if (r.human >= 0 && !S.auto) h.assist = 1 + 4 * clamp(1 - S.raceT / 5, 0, 1) * (S.phase === 'race' ? 1 : 0);
+    if (r.human >= 0 && !S.auto) h.assist = 2.5 + 2.5 * clamp(1 - S.raceT / 5, 0, 1) * (S.phase === "race" ? 1 : 0);
     const ev = h.step(DT);
     if (ev === 'rise') { const p = h.torso.body.translation(); emitDust(p.x, 0.05, p.z, 14, 2, 3, 1.1); sfx.play('boing', 0.5); }
     else if (ev) onPlant(h, ev);
