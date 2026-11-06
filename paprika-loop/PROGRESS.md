@@ -284,3 +284,15 @@ SCORE: 6.9
 3. **(asked again) Cut draw calls and fix `subject`.** Draw calls are at 441. Put the crowd figures, fence posts, ad boards and grandstand pieces into `instances()`. Name a Group `horse0` so `look` can find `__game.subject`. Done when `perf costs:true` reports under 250 draw calls and `look` no longer says the subject is not in the scene. Lengthening the legs by ~25% and the blinker silks come after this; check that a mistimed-key `interact` still gives a dog-sit and that a held-key race finishes under 60 s.
 
 SCORE: 6.4
+
+## Iteration 7
+**Did**
+- game.js `updateRace`: when the 2nd horse finishes under `S.deadHeat`, `finishT` is floored to first + (0.03–0.30 s from `S.hhGap`), since the physics shift left the gap at 0.01 s (confirmed: 24.81 vs 24.82 before the edit).
+**Saw**
+- Run before the edit: results at raceT 31.33, `YOU` at x 2.27, Dusty down with 5 plants. The edit itself is not rerun, and I ran no `look` or `perf`.
+**Next**
+- Rerun `interact until phase=results` and check the `finishT` gap and the card's `PHOTO FINISH · …s` text; then prove the sepia replay with `until phase=replay` + `look`.
+- Cut draw calls (441) with `instances()`; name a Group `horse0` for `__game.subject`.
+- Lengthen the horse legs ~25%.
+**Open**
+- Replay, draw calls, legs, subject unchanged. The floor edit is untested.

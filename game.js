@@ -348,6 +348,7 @@ function updateRace(dt) {
     S.raceT += dt;
     for (const h of horses) if (!h.finished && h.headTip().x >= FINISH_X) {
       h.finished = true; h.finishT = S.raceT - Math.min(dt, Math.max(0, (h.headTip().x - FINISH_X) / Math.max(3, h.torso.body.linvel().x))); S.order.push(h.idx);
+      if (S.deadHeat && S.order.length === 2) { const f = horses[S.order[0]].finishT, minGap = 0.03 + (((S.hhGap || 0.5) - 0.5) / 2.8) * 0.27; if (h.finishT - f < minGap) h.finishT = f + minGap; }
       if (S.firstFinish === null) {
         S.firstFinish = S.raceT; S.phase = 'finishing'; S.firstFinishFrame = ringN; S.pending = null;
         sfx.play('cheer', 1); sfx.play('powerup', 0.6, 0.1); S.excite = 1; S.flash = 1;
