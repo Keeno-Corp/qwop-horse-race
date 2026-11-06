@@ -405,8 +405,8 @@ function startFinishReplay() {
   popup(gap < 1.0 ? 'PHOTO FINISH!' : 'WINNER!', roles[w.idx].name + (gap < 0.5 ? ' by a nose (' + gap.toFixed(2) + 's)!' : ' takes it!'), '#e5af2c', 2.4);
   say(gap < 0.5 ? line('tied') : line('win', roles[w.idx].name), 5, 5); S.pfGap = gap; S.pfWinner = roles[w.idx].name;
   const start = Math.max(Math.max(0, ringN - RING + 2), (S.firstFinishFrame || ringN - 1) - 24), end = Math.min(ringN - 1, start + 64);
-  S.replay = { kind: 'finish', start, end, pos: start, subject: w.idx };
-  S.phase = 'replay'; setReplayUi(true, 'finish'); S.flash = 1; sfx.play('cheer', 0.8);
+  S.replay = { kind: 'finish', start, end, pos: start, subject: w.idx, snap: true }; applyFrame(start);
+  S.phase = 'replay'; setReplayUi(true, 'finish'); S.flash = 0.5; sfx.play('cheer', 0.8);
   camPos.set(FINISH_X + 7, 1.1, 3.2); camLook.set(FINISH_X - 2.5, 1.2, 0);
 }
 function startPlantReplay() {

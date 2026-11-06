@@ -6,14 +6,14 @@ The `postpass-quad` note is about the replay's film grain, which Must have item 
 
 SCORE: 7.2
 
-## Iteration 16
+## Iteration 17
 **Did**
-- No code changes; verified the finish replay with the 15 close finish.
+- `startFinishReplay` (game.js): replay now has `snap: true` and calls `applyFrame(start)` immediately, so the first replay frame shows the horses with the camera already on them; opening flash cut from 1 to 0.5.
 **Saw**
-- Solo no-input run: finishes Hoof Hearted 23.7 / Dusty Rhodes 23.9; replay `kind:"finish"` starts (rate 0.25, "PHOTO FINISH", "WINNER ... BY 0.19 SEC"). First frame (t=0) is an empty brown sepia frame with a flash; after 90 frames it shows two horses at the line, sepia, grain. No console errors. horse0 parts still unnamed (look reports 0 of 3 named parts). Draw calls not re-measured (last 411).
+- Only `node --check game.js` (passes). Not opened in the browser this session, so the empty first frame fix is unverified; no perf/draw-call numbers taken (last 411).
 **Next**
+- Open the page, run a solo race to the finish, `look` at replay t=0 to confirm horses are visible.
 - Draw calls 411 to under 250 (merge `merged`/`merged-outline` per material, instance `tail`s).
 - Name horse body/leg/head meshes so `look target:"horse0"` finds parts; enlarge blinker silks 2x.
-- Replay's first frame is empty: start the replay camera on the horses, or fade the flash in.
 **Open**
-- Draw-call goal unmet; human 60 m finish unproven; only one run checked.
+- Replay-start fix unverified; draw-call goal unmet; human 60 m finish unproven.
