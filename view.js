@@ -401,7 +401,7 @@ export function buildEnvironment(scene, _tex, rng) {
       for (let k = 0; k < Math.floor(len / 0.95); k++) if (rng() < 0.92) spectators.push({ x: x0 + 0.7 + k * 0.95 + (rng() - 0.5) * 0.2, y: y + 0.36, z: z - 0.05, ph: rng() * 6.28, col: PEOPLE[Math.floor(rng() * 8)], skin: SKIN[Math.floor(rng() * 4)] });
     }
     const H = rows * 0.7 + 1.6;
-    g.add(tm(box(len, H + 3.4, 0.5), concrete2, [x0 + len / 2, (H + 3.4) / 2, z0 - rows * 1.1 - 0.4], [0, 0, 0], [1, 1, 1], { outline: 0.8 }));
+    g.add(tm(box(len, H + 0.8, 0.5), concrete2, [x0 + len / 2, (H + 0.8) / 2, z0 - rows * 1.1 - 0.4], [0, 0, 0], [1, 1, 1], { outline: 0.8 }));
     // window slit band on the back wall + upper glass level
     for (let k = 0; k < Math.floor(len / 3); k++) g.add(tm(box(1.8, 0.8, 0.08), glass, [x0 + 1.8 + k * 3, H + 1.4, z0 - rows * 1.1 - 0.1], [0, 0, 0], [1, 1, 1], { outline: 0.6, shadow: false }));
     const roofY = rows * 0.7 + 2.5, rz = z0 - rows * 0.55 + 0.4, rd = rows * 1.1 + 3.2;
@@ -419,7 +419,7 @@ export function buildEnvironment(scene, _tex, rng) {
     const lab = labelPlane('GRAND STAND', 3.4, 0.7, { bg: '#4c2c21', fg: '#e5af2c', w: 512, stripe: '#d3432b' }); lab.position.set(x0 + len * 0.7, roofY + 1.15, rz - 0.07); g.add(lab);
     scene.add(g);
   }
-  stand(44, 32, 6, true); stand(2, 18, 4, false);
+  stand(44, 32, 4, true); stand(2, 18, 3, false);
   const sp = spectators, bodyG = new THREE.CylinderGeometry(0.17, 0.2, 0.5, 8), headG = new THREE.SphereGeometry(0.16, 10, 7), armG = new THREE.BoxGeometry(0.07, 0.34, 0.07), hatG = new THREE.ConeGeometry(0.17, 0.2, 7);
   const bodies = new THREE.InstancedMesh(bodyG, toon(0xffffff), sp.length), heads = new THREE.InstancedMesh(headG, toon(0xffffff), sp.length), arms = new THREE.InstancedMesh(armG, toon(0xffffff), sp.length * 2), hats = new THREE.InstancedMesh(hatG, toon(0xffffff), sp.length), col = new THREE.Color();
   sp.forEach((s, i) => { s.h = 0.85 + rng() * 0.3; s.hat = rng() < 0.3; s.wave = rng() < 0.5; bodies.setColorAt(i, col.set(s.col)); heads.setColorAt(i, col.set(s.skin)); arms.setColorAt(i * 2, col.set(s.skin)); arms.setColorAt(i * 2 + 1, col.set(s.skin)); hats.setColorAt(i, col.set([0xd3432b, 0xf2e1ad, 0x305da2, 0x4c2c21][i % 4])); });

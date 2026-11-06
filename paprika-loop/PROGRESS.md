@@ -2058,3 +2058,13 @@ The player's horse covered 11.6 m in about 3 s while alternating legs, so a 60 m
 3. Add a long-legs pass on the horses (CHARACTERS.md says "long wobbly"). Lengthen the leg segments about 15% in the horse builder so the legs read taller than the barrel. `look` at race start should show a visible gap between belly and ground.
 
 SCORE: 8.1
+
+## Iteration 58
+**Did**
+- `view.js` `stand()`: back wall `H + 3.4` → `H + 0.8`; calls now `stand(44, 32, 4, true); stand(2, 18, 3, false)` (was 6 and 4 rows), so the `grandstand` is lower.
+**Saw**
+- Race sheet at 120 frames: the stand is visibly shorter and a yellow haze with a dark ridge band shows behind it, but `hills` still reads as a thin strip; the horses and the `div#lower` caption are clear of each other. No console errors seen. Not run: `perf`, a human finish, the long-legs pass.
+**Next**
+- `hills` is hidden by camera pitch, not by the stand: raise the hills height, or add a sky gradient and a nearer ridge in `view.js`. Play a full human finish. Lengthen the horse legs about 15%.
+**Open**
+- Hills share unmeasured after the change; human finish and long legs undone.
