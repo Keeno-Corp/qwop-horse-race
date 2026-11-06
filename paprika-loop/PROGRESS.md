@@ -3501,3 +3501,15 @@ SCORE: 7.7
 - Check head-on cut and replay cams with `look` `cameras`.
 **Open**
 - 2P results/restart and the head-on cut are still unchecked.
+
+## Iteration 110
+**Did**
+- No code changes; about 17 minutes left, so I kept the working page untouched.
+**Saw**
+- Nothing new measured this session. Latest numbers still from Judge 85: no console errors, no Lighting/Surfaces faults, 268 draw calls, 128k triangles.
+**Next**
+- Drive 2P to results (alternate legs) and check Enter restarts.
+- `look` with `cameras` at the finish: head-on cut, sepia photo-finish replay.
+- Zoom [0,330,1280,520] to check the hoof silhouette against the fence rail and dust.
+**Open**
+- 2P results/restart, head-on cut and replay cams are still unchecked.

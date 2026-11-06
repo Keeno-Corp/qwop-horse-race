@@ -30,13 +30,14 @@ The page looks and plays well, but I only saw one race frame and ran no 2-player
 
 SCORE: 7.7
 
-## Iteration 109
+## Iteration 110
 **Did**
-- No code changes.
+- No code changes; about 17 minutes left, so I kept the working page untouched.
 **Saw**
-- Digit2 enters 2P: mode 2, horses P1 (human 0) and P2 (human 1) plus two AI, countdown runs, all `state:"run"`. Q/U held 60 frames fired sounds (thud, gasp, boing), so collapses happen. Race did not reach results within 1500 frames with taps only.
+- Nothing new measured this session. Latest numbers still from Judge 85: no console errors, no Lighting/Surfaces faults, 268 draw calls, 128k triangles.
 **Next**
 - Drive 2P to results (alternate legs) and check Enter restarts.
-- Check head-on cut and replay cams with `look` `cameras`.
+- `look` with `cameras` at the finish: head-on cut, sepia photo-finish replay.
+- Zoom [0,330,1280,520] to check the hoof silhouette against the fence rail and dust.
 **Open**
-- 2P results/restart and the head-on cut are still unchecked.
+- 2P results/restart, head-on cut and replay cams are still unchecked.
