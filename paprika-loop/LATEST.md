@@ -1,11 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 23
-**Did** index.html `.pop`: opaque dark backing (rgba .92), padding, border so the PHOTO FINISH caption reads over the crowd. The "DIRT EATER · MOST FACE-PLANTS" award already exists in game.js results (shown when maxP > 0).
-**Saw** Not run through look this session (short on room); CSS-only change.
-**Next** (1) force a face-plant via setState and confirm auto-right. (2) Real Q+P/W+O rhythm trace, then 2P. (3) frame camera so `player` is ≥3% of frame.
-**Open** Face-plant, auto-right, 2P, rhythm still unverified; pop backing unchecked visually.
-
 ### Judge 23
 
 **Verdict, session 23**
@@ -32,3 +26,9 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Verify and polish 2P.** Press `2`, then hold Q/W/E/R and U/I/O/P in `interact`. `observe` should show two `human` horses (0 and 1) moving. Also make `dust` visible near the leaders so it is not `Never visible`.
 
 SCORE: 7.9
+
+## Iteration 24
+**Did** game.js line ~239-240: player drive multiplier 4.5 → 12 (`h.driveF`), per-key-press `h.drive` bump 0.2 → 0.3, so Q+P / W+O alternation pushes the `YOU` torso harder.
+**Saw** Before: Q+P/W+O at 10 frames each gave ~0.7 m/s (`horses.2.x` 1.42→1.9 in 40 frames). After: 1.4→3.23 over ~1 s of race (about 1.8 m/s), `plants` 0. Only 3 cycles tested, not 1800 frames. No look run, so the camera/player framing and 2P are untouched.
+**Next** (1) Run the full 1800-frame rhythm and trace `horses.2.x` to 60. (2) Frame the camera on `YOU` + nearest rival. (3) Press 2 and verify two `human` horses; make `dust` visible.
+**Open** Does the faster drive still tip `YOU` over at higher speed? Long run unverified; 2P unplayed.

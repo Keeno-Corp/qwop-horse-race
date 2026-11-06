@@ -1570,3 +1570,9 @@ SCORE: 8.0
 3. **Verify and polish 2P.** Press `2`, then hold Q/W/E/R and U/I/O/P in `interact`. `observe` should show two `human` horses (0 and 1) moving. Also make `dust` visible near the leaders so it is not `Never visible`.
 
 SCORE: 7.9
+
+## Iteration 24
+**Did** game.js line ~239-240: player drive multiplier 4.5 → 12 (`h.driveF`), per-key-press `h.drive` bump 0.2 → 0.3, so Q+P / W+O alternation pushes the `YOU` torso harder.
+**Saw** Before: Q+P/W+O at 10 frames each gave ~0.7 m/s (`horses.2.x` 1.42→1.9 in 40 frames). After: 1.4→3.23 over ~1 s of race (about 1.8 m/s), `plants` 0. Only 3 cycles tested, not 1800 frames. No look run, so the camera/player framing and 2P are untouched.
+**Next** (1) Run the full 1800-frame rhythm and trace `horses.2.x` to 60. (2) Frame the camera on `YOU` + nearest rival. (3) Press 2 and verify two `human` horses; make `dust` visible.
+**Open** Does the faster drive still tip `YOU` over at higher speed? Long run unverified; 2P unplayed.
