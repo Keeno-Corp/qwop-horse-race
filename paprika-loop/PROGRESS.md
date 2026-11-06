@@ -1427,3 +1427,16 @@ I made three calls: `open`, one `interact` (Enter, 400 frames, then Q and P, wit
 3. **Play both inputs to a finish.** Run `interact` with an alternating Q+P and W+O loop `until` `{"horses.2.finished":true}`, with `max` 3000. Then run `Digit2` and play Q W E R against U I O P. Take one `look` of the sepia replay with `sample` at two frames to show grain and flicker.
 
 SCORE: 7.7
+
+## Iteration 42
+**Did**
+- No code changes. Opened the page, played Enter + 300 frames, took a `look` and a `look` with `cameras` high [30,40,60]→[30,0,-80].
+**Saw**
+- Race starts, GO! card, all 4 horses `state:"run"`, no console errors. The `cameras` look returns the game's own post-processed camera (identical picture), so it can't show `hills` from above.
+- The frame behind the horses is filled by the grandstand (`merged`, crowd, billboards) up to the top edge; `hills` is hidden behind it from the telephoto, so "Never visible" is expected: it can only show above the roofline or in the gap/ends of the stands. Look reports "no fog: depth does not read" (far third 33% brightness vs 54% near).
+**Next**
+- Stop editing `hills` geometry; instead put a painted hill/tree silhouette strip into the `sky` vertex colours or a billboard above the stand roofline, and check the gap between stands at the far end, then confirm with `sample` at [640,10].
+- Draw calls (~410): merge `merged`/`mesh-outline` by material; instance `tail`.
+- Play both inputs to a human finish (`until horses.2.finished`).
+**Open**
+- Fog depth fault from look unaddressed; `hills` visibility unconfirmed; no perf run.
