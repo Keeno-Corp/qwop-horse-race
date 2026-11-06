@@ -1,17 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 33
-**Did**
-- Controls feel: key-edge `h.drive` boost 0.5→0.8 (cap 1.6→2.2) in `game.js`, and `drive` decay in `physics.js` 0.7→0.45/s, so a pulse pushes the human horse forward longer.
-**Saw**
-- One `interact` pulse run (Q,P,W,O 20 frames each): `horses.2.x` 1.4 → peak 2.93 → 2.02, plants 0, no errors. The 200-frame wait was mostly countdown, so raceT was only 3.4 s: not a clean comparison with Judge 32 (YOU x 4.1 at 4.1 s). Not run: `perf`, replay, 2-player.
-**Next**
-- Re-test controls with a wait until `phase:"race"`; trace `horses.2.x` (target x 15 by raceT 7). Find why x drifts back when idle (drag or leg poses).
-- Draw-call merging (`merged` 142, `Mesh` 56, outlines, `tail`), `crowd` triangles.
-- Verify finish replay grain and 2-player.
-**Open**
-- Drive tweak unproven; draw calls (414) untouched.
-
 ### Judge 33
 
 **Judge 33.** I opened the page and played Q, P, W, O pulses twice (20 frames each) after waiting for `phase:"race"`, with a `look`, then ran `perf` with `costs`. There were no console errors. I did not play the finish replay, 2-player mode, the head-on cut or the results screen this session.
@@ -43,3 +31,18 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Give `hills` depth, and tune YOU so a clean alternating rhythm finishes.** For `hills`, add a second, farther and paler hill layer, or distance fog. Check with `look` and `sample` on the blob and a foreground grass pixel, where the blob should be paler and bluer. For YOU, run `interact` with Q+P then W+O in 12-frame alternations from `phase:"race"` and `trace` `horses.2.x`. A clean rhythm should reach x 60 in under 60 s with `plants` ≤1. If it face-plants by 5 s, soften the pitch collapse threshold for the human horse.
 
 SCORE: 7.7
+
+## Iteration 34
+**Did**
+- No code changes. I checked the instant replay (`kind:"plant"`) with `interact` `until:{phase:"replay"}`, then `wait` 30 frames and `look`.
+**Saw**
+- The replay starts at raceT 7.35 after a tangle (`tangles:1`), with `rate` 0.25 and no console errors.
+- The first frame of the replay (`t:0`) is near-black (brightness 9%, 92% grey). After 30 frames (`t` 7.5) it draws properly: sepia and warm, brightness 46%, CRT pass on, "INSTANT REPLAY · 0.25x" tag, two horses with grain visible but not harsh.
+- `look` still lists `hills` as "Never visible" while in view.
+- Not run: `perf`, the finish replay (`kind:"finish"`), 2-player.
+**Next**
+- Fix the dark first replay frame: the sepia/post pass probably isn't drawn until a frame after `applyFrame`, or the camera cuts in late. Draw once when the replay starts, or fade in.
+- Draw-call merging (`merged` 142, `Mesh` 56, outlines, `tail`) and `crowd` triangles (about 48k).
+- Verify the finish replay and 2-player (`Digit2`).
+**Open**
+- Draw calls are about 411, untouched. Drive tweak from Iteration 33 still unproven for a full finish.
