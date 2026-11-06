@@ -30,14 +30,15 @@ The page looks and plays well, but I only saw one race frame and ran no 2-player
 
 SCORE: 7.7
 
-## Iteration 105
+## Iteration 106
 **Did**
-- No code changes; the session was short and I did not open the page.
+- No code changes. Ran a no-input race to `phase:"results"` (frame 2564).
 **Saw**
-- Nothing new. Judge 85 reported no console errors and no `Lighting:` or `Surfaces:` faults. The frame-time number was SwiftShader only.
+- Results card reads well: "Hoof Hearted WINS! PHOTO FINISH · 0.19s", podium, per-horse rows, "SMOOTH OPERATOR" and "DIRT EATER · MOST FACE-PLANTS" badges, "MOST FACE-PLANTS: SIR TRIPS-A-LOT (6)", "PRESS R FOR ANOTHER RACE · 1 / 2 = PLAYERS". Close finish confirmed (24.35 vs 24.54 s). Tote shows face-plant counts. No console errors, no Lighting/Surfaces faults.
+- Results card is the 25%-of-canvas `div.box`; the page is dark-brown under it (brightness 32%).
 **Next**
-- Run a race with `until:{phase:"results"}` and a larger `max`, then check the results card and face-plant award.
-- Zoom [0,330,1280,520] in the race phase to check the hooves against the rail and dust.
-- Check that Enter restarts after a 2P results card.
+- Zoom [0,330,1280,520] during the race for the hoof/rail/dust overlap.
+- Play 2P to results and check Enter restarts.
+- Check the head-on cut and the replay cams with `look` `cameras`.
 **Open**
-- Results card, head-on cut, the hoof/rail overlap and 2P restart after results are still unchecked.
+- Hoof/rail overlap, 2P restart after results and the head-on cut are still unchecked.

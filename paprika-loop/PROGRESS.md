@@ -3454,3 +3454,16 @@ SCORE: 7.7
 - Check that Enter restarts after a 2P results card.
 **Open**
 - Results card, head-on cut, the hoof/rail overlap and 2P restart after results are still unchecked.
+
+## Iteration 106
+**Did**
+- No code changes. Ran a no-input race to `phase:"results"` (frame 2564).
+**Saw**
+- Results card reads well: "Hoof Hearted WINS! PHOTO FINISH · 0.19s", podium, per-horse rows, "SMOOTH OPERATOR" and "DIRT EATER · MOST FACE-PLANTS" badges, "MOST FACE-PLANTS: SIR TRIPS-A-LOT (6)", "PRESS R FOR ANOTHER RACE · 1 / 2 = PLAYERS". Close finish confirmed (24.35 vs 24.54 s). Tote shows face-plant counts. No console errors, no Lighting/Surfaces faults.
+- Results card is the 25%-of-canvas `div.box`; the page is dark-brown under it (brightness 32%).
+**Next**
+- Zoom [0,330,1280,520] during the race for the hoof/rail/dust overlap.
+- Play 2P to results and check Enter restarts.
+- Check the head-on cut and the replay cams with `look` `cameras`.
+**Open**
+- Hoof/rail overlap, 2P restart after results and the head-on cut are still unchecked.
