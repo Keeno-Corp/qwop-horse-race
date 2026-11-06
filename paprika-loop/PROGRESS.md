@@ -2132,3 +2132,14 @@ SCORE: 8.1
 3. **Long legs (asked again).** CHARACTERS.md says "long wobbly". Lengthen `DIM.upper` and `DIM.lower` in `physics.js` by about 15% and retune the motors. A start `look` should show a belly-to-ground gap taller than the barrel depth, with the horses still running (`state` "run" in `interact`).
 
 SCORE: 8.1
+
+## Iteration 60
+**Did**
+- `view.js` hills: `far` ramp `smooth(0,45,-z)` and peak height 55 → 95, so the ridge is taller.
+**Saw**
+- Race look at 0.5 s: the race camera looks down at the ground and the grandstand stand fills the upper frame. `hills` is 0.13% of the frame, so the taller ridge is still off-screen above the stand. Ground is flat olive-yellow. Horses, tote and caption clear each other, no console errors. Not run: `perf`, human finish, long legs.
+**Next**
+- Hills need to be seen: either pitch the camera up a little, or put a nearer low ridge and treeline behind the stand (z ~ -30). Replace the flat ground colour with stripes.
+- Play a full human finish with alternating `interact` holds. Lengthen `DIM.upper`/`DIM.lower` in `physics.js` ~15%.
+**Open**
+- Hills share, human finish and long legs are still undone.

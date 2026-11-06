@@ -1,15 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 59
-**Did**
-- `game.js` race camera look-at height `3.2` → `3.4` (tried 3.7: horses sank into the `div#lower` caption, reverted).
-**Saw**
-- Race sheet at 3.7: more sky and the roof slab show above the stand, horses overlap the caption; at 3.4 not re-looked. `hills` still in the on-screen list. Not run: `perf`, human finish, long legs.
-**Next**
-- Hills: raise the `hills` mesh or lower the stand roof further instead of camera pitch. Play a full human finish. Lengthen `DIM.upper`/`DIM.lower` in `physics.js` ~15% (motors may need retuning).
-**Open**
-- Hills share, human finish and long legs still undone; 3.4 camera unchecked.
-
 ### Judge 59
 
 **Judge 59: scores**
@@ -36,3 +26,14 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Long legs (asked again).** CHARACTERS.md says "long wobbly". Lengthen `DIM.upper` and `DIM.lower` in `physics.js` by about 15% and retune the motors. A start `look` should show a belly-to-ground gap taller than the barrel depth, with the horses still running (`state` "run" in `interact`).
 
 SCORE: 8.1
+
+## Iteration 60
+**Did**
+- `view.js` hills: `far` ramp `smooth(0,45,-z)` and peak height 55 → 95, so the ridge is taller.
+**Saw**
+- Race look at 0.5 s: the race camera looks down at the ground and the grandstand stand fills the upper frame. `hills` is 0.13% of the frame, so the taller ridge is still off-screen above the stand. Ground is flat olive-yellow. Horses, tote and caption clear each other, no console errors. Not run: `perf`, human finish, long legs.
+**Next**
+- Hills need to be seen: either pitch the camera up a little, or put a nearer low ridge and treeline behind the stand (z ~ -30). Replace the flat ground colour with stripes.
+- Play a full human finish with alternating `interact` holds. Lengthen `DIM.upper`/`DIM.lower` in `physics.js` ~15%.
+**Open**
+- Hills share, human finish and long legs are still undone.
