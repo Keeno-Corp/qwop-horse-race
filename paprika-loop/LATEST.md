@@ -1,11 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 30
-**Did** game.js: plant replay camera now y 2.0→3.0 and z clamped to ≤3.4 (inside the rail); replay clip starts at `end-75` instead of `end-110` so it opens nearer the collapse.
-**Saw** `interact until replay` + 20 frames, `look` at replay pos 402/472: rail no longer crosses the horses; horse0/horse1 (down) sit mid-frame with the grandstand behind, but horse3 (Dusty, running) fills the foreground and hides part of them. Only the PCFSoftShadowMap warning. Not run: perf, finish margin, 2P, results.
-**Next** (1) Replay camera should avoid a third horse in front: pick the side/angle by the nearest other horse's z, or lower the aim. (2) Full rhythm race: finishT gap vs Dusty, results screen. (3) 2P and R/Enter restarts; the mid-race restart the judge saw.
-**Open** Replay opening frame not checked at t:0 for whether horses are already down.
-
 ### Judge 30
 
 **Verdict, session 30**
@@ -32,3 +26,9 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Keep a running horse out of the replay foreground, then test 2P.** In the plant replay camera, pick the side by the nearest non-tangled horse's z so Dusty (`horse3`) is not in front. A `look` at `replay.pos` ~460 should show `horse0-body` and `horse1-body` uncovered. Then `interact` with `Digit2`, Q W E R and U I O P, and `Enter` and `R` restarts.
 
 SCORE: 7.9
+
+## Iteration 31
+**Did** game.js: widened `sun.shadow.camera` (left/right ±30, top 30, bottom -24) and moved `sun.target` to z 0, to clear the `Lighting:` fault (player-10 outside the shadow camera).
+**Saw** `look` at start: no `Lighting:` line; only the hidden grandstand face-plane `Surfaces:` note (out of view). Subject player-body 1.8%. Not run: perf, rhythm full race, results, 2P, replay.
+**Next** (1) Full rhythm race to `phase:"results"`, read `finishT` gap vs Dusty, look at results and the photo-finish replay. (2) Replay camera: pick side by nearest running horse's z so horse3 does not cover the pile-up. (3) Test 2P (Digit2, Q W E R / U I O P) and R/Enter restarts; trace the mid-race restart.
+**Open** Shadow resolution is a bit lower per unit now (2048 map over a bigger frustum); check softness if it looks blurry.

@@ -1803,3 +1803,9 @@ SCORE: 8.1
 3. **Keep a running horse out of the replay foreground, then test 2P.** In the plant replay camera, pick the side by the nearest non-tangled horse's z so Dusty (`horse3`) is not in front. A `look` at `replay.pos` ~460 should show `horse0-body` and `horse1-body` uncovered. Then `interact` with `Digit2`, Q W E R and U I O P, and `Enter` and `R` restarts.
 
 SCORE: 7.9
+
+## Iteration 31
+**Did** game.js: widened `sun.shadow.camera` (left/right ±30, top 30, bottom -24) and moved `sun.target` to z 0, to clear the `Lighting:` fault (player-10 outside the shadow camera).
+**Saw** `look` at start: no `Lighting:` line; only the hidden grandstand face-plane `Surfaces:` note (out of view). Subject player-body 1.8%. Not run: perf, rhythm full race, results, 2P, replay.
+**Next** (1) Full rhythm race to `phase:"results"`, read `finishT` gap vs Dusty, look at results and the photo-finish replay. (2) Replay camera: pick side by nearest running horse's z so horse3 does not cover the pile-up. (3) Test 2P (Digit2, Q W E R / U I O P) and R/Enter restarts; trace the mid-race restart.
+**Open** Shadow resolution is a bit lower per unit now (2048 map over a bigger frustum); check softness if it looks blurry.

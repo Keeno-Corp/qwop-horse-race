@@ -26,7 +26,7 @@ const camera = new THREE.PerspectiveCamera(42, innerWidth / innerHeight, 0.1, 90
 scene.add(new THREE.HemisphereLight(0xcfe6ff, 0xa87648, 1.25));
 const sun = new THREE.DirectionalLight(0xfff0d8, 2.1);
 sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048);
-Object.assign(sun.shadow.camera, { left: -26, right: 26, top: 22, bottom: -12, near: 1, far: 100 });
+Object.assign(sun.shadow.camera, { left: -30, right: 30, top: 30, bottom: -24, near: 1, far: 100 });
 sun.shadow.bias = -0.0006; sun.shadow.normalBias = 0.03;
 scene.add(sun, sun.target);
 const env = buildEnvironment(scene, tex, rng);
@@ -413,7 +413,7 @@ function updateCamera(dt) {
   camera.position.copy(camPos);
   if (S.shake > 0) { S.shake = Math.max(0, S.shake - dt); const a = S.shakeAmp * S.shake; camera.position.x += Math.sin(S.time * 83) * a; camera.position.y += Math.cos(S.time * 71) * a; if (S.shake === 0) S.shakeAmp = 0; }
   camera.lookAt(camLook);
-  sun.position.set(camLook.x - 10, 28, 8); sun.target.position.set(camLook.x, 0, -4);
+  sun.position.set(camLook.x - 10, 28, 8); sun.target.position.set(camLook.x, 0, 0);
 }
 
 // ---------- HUD update ----------
