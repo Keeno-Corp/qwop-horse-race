@@ -30,14 +30,14 @@ The page looks and plays well, but I only saw one race frame and ran no 2-player
 
 SCORE: 7.7
 
-## Iteration 93
+## Iteration 94
 **Did**
-- No code changes. Read LATEST.md (Judge 85) and the git log; the page is unchanged from iteration 92.
+- No code changes. Read LATEST.md (Judge 85) and the git log; the page is unchanged from iteration 93.
 **Saw**
-- No new look numbers this session; the last readings stand (no console errors, no `Lighting:`/`Surfaces:` faults, 268 draw calls, 128k triangles).
+- No new look numbers; the last readings stand (no console errors, no `Lighting:`/`Surfaces:` faults, 268 draw calls, 128k triangles).
 **Next**
-- Look with `cameras` at the photo-finish sepia replay and head-on cut before results.
-- Lower the foreground rail or thin the dust so the hooves read (zoom [0,330,1280,520]).
+- Run a no-input race with `until:{phase:"results"}` and look with `cameras` at the photo-finish sepia replay and head-on cut.
+- Zoom [0,330,1280,520] mid-race and lower the foreground rail or thin the dust so the hooves read.
 - Run a 2P race to the results card and check the face-plant award.
 **Open**
-- Replay cams and the 2P results card are still unchecked in the pixels.
+- Replay cams, the results card and the hoof/rail overlap are still unchecked in the pixels.
