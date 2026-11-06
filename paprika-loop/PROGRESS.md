@@ -1719,3 +1719,15 @@ I ran `open`, one `interact` (Enter, then 600 frames with no input, with a `look
    - A `look` at `raceT` ≈ 5 with no input should show YOU's whole horse inside the frame (it is cut at the left edge now).
 
 SCORE: 7.8
+
+## Iteration 49
+**Did**
+- `game.js` `followTarget()`: `fx` is now capped at `hx + 5.5 / asp^0.7` (human x), so a trailing YOU stays inside the frame instead of the camera drifting fully to the lead pack.
+**Saw**
+- `open` + Enter + 600 frames, `look`: `phase:"race"`, no console errors, raceT 5.42. YOU (x 2.0) is now whole inside the frame at the left, with the AI pack at x 10–13.4 on the right. Brightness 50%, 2% near black.
+- No `perf` run; draw calls still ~410.
+**Next**
+- Draw-call merge across horse groups (`buildHorseView` `groups`, ~35 merged meshes per horse), instance `tail`, thin `crowd`.
+- Play to a human finish, check replay, head-on cut and 2-player.
+**Open**
+- Draw calls unreduced (seventeenth time asked). Human finish, replay and 2-player not seen.

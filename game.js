@@ -449,7 +449,7 @@ function followTarget() {
   const sm2 = clamp((gap - 5) / 12, 0, 1), sm3 = sm2 * sm2 * (3 - 2 * sm2);
   const mine = hx + Math.min(clamp(gap, -4, 60) * 0.3, 4.5);
   let fx = mine + (leader - 3.5 - mine) * sm3;
-  fx = Math.min(fx, FINISH_X + 2);
+  fx = Math.min(fx, FINISH_X + 2, hx + 5.5 / Math.pow(Math.min(1, camera.aspect / 1.5), 0.7));   // the human's whole horse stays inside the frame
   const far = Math.min(Math.abs(leader - hx), 26) * (1 - sm3 * 0.7);
   const asp = Math.min(1, camera.aspect / 1.5);
   const dist = (14.5 + clamp(far * 0.5, 0, 14)) / Math.pow(asp, 0.7);   // long telephoto from the infield, far off the rail
