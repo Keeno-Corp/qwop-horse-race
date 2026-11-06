@@ -1,17 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 30
-**Did**
-- No code change. Verified the finish replay: `startFinishReplay` (game.js:401) runs by itself ~6.5 s after the first finisher, before `results`. Judges missed it because the plant replay (S.phase 'replay', kind 'plant') comes first and Space skips straight past.
-**Saw**
-- `interact` with no input: plant replay at raceT 7.7 (normal colour, red INSTANT REPLAY tag), then Space, then `until replay.kind=="finish"` reached at frame 1350 (raceT 30.2). `look` shows the sepia photo-finish: film-strip sprocket frame, scratches, grain, "PHOTO FINISH" title, "WINNER: Hoof Hearted · BY 0.19 SEC · HOLD ALL TICKETS", checkered finish line, horses head-on. It works as LOOK.md says.
-- `look` warns `postpass-quad` has dense fine detail (noise 36.9/255) in the sepia frame; `hills` still "Never visible" while in view. No console errors. No `perf`.
-**Next**
-- Items 2 and 3 of Judge 29 are still open: human start feel (the idle YOU sat at x 1.5, so play with pulses and trace `horses.2.pitch`) and draw calls (`merged` 142, `Mesh` 56, `tail` 16, `mesh-outline` 18).
-- Soften the sepia grain a little; check `hills` placement so it reads with depth haze.
-**Open**
-- Draw-call reduction not started. Render-target `look` line not re-checked this session.
-
 ### Judge 30
 
 **Judge 30.** I opened the page, ran a Q, P, W, O pulse (20 frames each, then 200 idle) with a `look`, and ran `perf` with `costs`. There were no console errors. I did not play the plant replay, the finish replay, 2-player mode or the head-on cut this session. The sepia finish replay is taken from Iteration 30's report, not from my own look.
@@ -41,3 +29,15 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Verify the finish replay and its softened grain.** `interact` with `until:{replay:{kind:"finish"}}`, then `look` with `sample` on a corner pixel (the sepia read, R>G>B) and a `zoom` on the "PHOTO FINISH" frame. The grain should be visible but under the ~37/255 noise `look` flagged last time. Then play 2-player once (key 2, then Q W E R and U I O P) and confirm the head-on cut with a `look` on the camera.
 
 SCORE: 7.6
+
+## Iteration 31
+**Did**
+- No code change. Re-ran Judge 30's item 1 (controls feel) with the same pulse pattern: Q+P 20 frames, W+O 20 frames, twice, then 200 idle frames.
+**Saw**
+- YOU (`horses.2`) reached x 8.53 at raceT 4.85 (peak 9.07), `plants:0` for all 567 frames, pitch low -0.53 and then -0.22. The AI were at x 11.2 to 11.9 at the same time, so YOU is about 3 m behind the pack. The earlier x 1.74 reading is not reproduced.
+- Not run this session: `look`, `perf`, the finish replay and 2-player.
+**Next**
+- Judge 30 items 2 and 3 are still open. Item 2 is draw calls (`merged` 142, `Mesh` 56, `mesh-outline` 18, `tail` 16) and the `hills` haze. Item 3 is a `look` check of the softened sepia grain on the finish replay, then 2-player and the head-on cut.
+- I would check the sprint to x 15 by raceT 7 in a longer pulse run.
+**Open**
+- Draw-call reduction not started. The softened grain is unchecked. Controls feel looks acceptable but was only checked with this one pulse pattern.

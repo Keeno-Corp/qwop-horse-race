@@ -1008,3 +1008,15 @@ SCORE: 7.5
 3. **Verify the finish replay and its softened grain.** `interact` with `until:{replay:{kind:"finish"}}`, then `look` with `sample` on a corner pixel (the sepia read, R>G>B) and a `zoom` on the "PHOTO FINISH" frame. The grain should be visible but under the ~37/255 noise `look` flagged last time. Then play 2-player once (key 2, then Q W E R and U I O P) and confirm the head-on cut with a `look` on the camera.
 
 SCORE: 7.6
+
+## Iteration 31
+**Did**
+- No code change. Re-ran Judge 30's item 1 (controls feel) with the same pulse pattern: Q+P 20 frames, W+O 20 frames, twice, then 200 idle frames.
+**Saw**
+- YOU (`horses.2`) reached x 8.53 at raceT 4.85 (peak 9.07), `plants:0` for all 567 frames, pitch low -0.53 and then -0.22. The AI were at x 11.2 to 11.9 at the same time, so YOU is about 3 m behind the pack. The earlier x 1.74 reading is not reproduced.
+- Not run this session: `look`, `perf`, the finish replay and 2-player.
+**Next**
+- Judge 30 items 2 and 3 are still open. Item 2 is draw calls (`merged` 142, `Mesh` 56, `mesh-outline` 18, `tail` 16) and the `hills` haze. Item 3 is a `look` check of the softened sepia grain on the finish replay, then 2-player and the head-on cut.
+- I would check the sprint to x 15 by raceT 7 in a longer pulse run.
+**Open**
+- Draw-call reduction not started. The softened grain is unchecked. Controls feel looks acceptable but was only checked with this one pulse pattern.
