@@ -180,7 +180,7 @@ function buildHud() {
     keys.appendChild(kp);
   });
   $('b1').classList.toggle('on', mode === 1); $('b2').classList.toggle('on', mode === 2);
-  $('tips').textContent = mode === 1 ? 'Alternate your legs — Q+P then W+O works! · R restart · 2 = two players · Space skips replays'
+  $('tips').textContent = mode === 1 ? 'Alternate legs: Q+P then W+O · R restart · 2 = two players'
     : 'P1: Q W E R · P2: U I O P · Enter restarts · 1 = solo · Space skips replays';
 }
 
@@ -355,7 +355,7 @@ function showResults() {
   }).join('');
   const photo = res.gap < 1.0 ? `PHOTO FINISH · ${res.gap.toFixed(2)}s` : 'RESULTS';
   $('results').querySelector('.box').innerHTML = `<h1>${roles[ord[0]].name} WINS! <small style="font-size:14px;color:#fff6e0">${photo}</small></h1><div class="pod">${pod}</div><table>${rows}</table><div class="hint">${mode === 1 ? 'Press R' : 'Press Enter'} for another race · 1 / 2 = players</div>`;
-  $('results').style.display = 'flex'; S.resultsShown = true;
+  $('results').style.display = 'flex'; S.resultsShown = true; for (const p of S.popups) p.el.remove(); S.popups = [];
 }
 
 // ---------- camera ----------

@@ -1,11 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 14
-**Did** game.js: added `player-marker-0/1` (bobbing cone arrow, depthTest off, plus ground ring) via `markers`/`updateMarkers()` called in `tick`; colours blue 0x3d9bff (P1, matches YOU chip) and pink (P2). Hidden in replay/results. No change to `driveF`.
-**Saw** Human run proven: eval-driven Q+P / W+O at 10 frames each, `horses.2` x = 3.57 @1.7 s, 22.4 @10 s, 45.6 @20 s (~2.3 m/s, plants 0), so 60 m ≈ 26 s; AI (`horses.0`) kept similar pace and passed at the end. Start-frame `look`: player marker 0.71% of frame visible, subject edge contrast 0.12 (was 0.10), `player-marker-*` visible; "Never visible: dust" only in the countdown frame (dust not emitted yet). Only console warning is the shadowmap one.
-**Next** (1) Run a full race to results to check finishT and results rows with the human finishing. (2) `feel` on a face-plant for camera shake; add dust on hoof thuds; break the `track` texture repeat with noise. (3) Re-look the marker at the GO frame (blue arrow vs blue saddle contrast) and in 2-player mode.
-**Open** Marker colour edit after the look was not re-viewed; shake via `feel` still unmeasured; no `dust` at countdown reports "Never visible" (harmless).
-
 ### Judge 14
 
 **Judge 14 verdict**
@@ -69,3 +63,9 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
    - Then `look` at the replay once to confirm the REPLAY banner and the 0.25x pace.
 
 SCORE: 7.8
+
+## Iteration 15
+**Did** index.html: `#count` (GO!/countdown) shrunk to clamp(80px,14vw,180px) and moved to the top (padding-top 8vh) so horses show at GO; `#tips` now a one-line dark pill (nowrap, bg #3a2416d0). game.js: tips text shortened; `showResults()` clears `S.popups` so PHOTO FINISH popup no longer sits behind the results box.
+**Saw** GO frame `look`: horses uncovered, tips on one line [434,679,845,701], subject edge contrast 0.13. Full human run via eval (Q+P / W+O each 10 frames, skipping a mid-race replay with `setState({phase:'replay-skip'})`): `YOU` finishT 20.22 s, plants 0, AI Dusty Rhodes 20.35 s (+0.13, PHOTO FINISH), two AI DNF at 35 m after face-plants; results box shows 4 rows with awards (SMOOTH OPERATOR, DIRT EATER · MOST FACE-PLANTS). Console: only the shadowmap warning. `dust` "Never visible" in look frames.
+**Next** (1) `feel` on a face-plant for camera shake; (2) dust on hoof thuds and noise on the `track` texture to break panel repeat; (3) look at the replay once (REPLAY banner, 0.25x) and 2-player mode with the marker.
+**Open** The post-popup-clear edit was syntax-checked only, not re-looked. Shake and track noise untouched.

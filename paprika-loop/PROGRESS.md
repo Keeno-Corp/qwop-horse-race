@@ -1139,3 +1139,9 @@ SCORE: 7.7
    - Then `look` at the replay once to confirm the REPLAY banner and the 0.25x pace.
 
 SCORE: 7.8
+
+## Iteration 15
+**Did** index.html: `#count` (GO!/countdown) shrunk to clamp(80px,14vw,180px) and moved to the top (padding-top 8vh) so horses show at GO; `#tips` now a one-line dark pill (nowrap, bg #3a2416d0). game.js: tips text shortened; `showResults()` clears `S.popups` so PHOTO FINISH popup no longer sits behind the results box.
+**Saw** GO frame `look`: horses uncovered, tips on one line [434,679,845,701], subject edge contrast 0.13. Full human run via eval (Q+P / W+O each 10 frames, skipping a mid-race replay with `setState({phase:'replay-skip'})`): `YOU` finishT 20.22 s, plants 0, AI Dusty Rhodes 20.35 s (+0.13, PHOTO FINISH), two AI DNF at 35 m after face-plants; results box shows 4 rows with awards (SMOOTH OPERATOR, DIRT EATER · MOST FACE-PLANTS). Console: only the shadowmap warning. `dust` "Never visible" in look frames.
+**Next** (1) `feel` on a face-plant for camera shake; (2) dust on hoof thuds and noise on the `track` texture to break panel repeat; (3) look at the replay once (REPLAY banner, 0.25x) and 2-player mode with the marker.
+**Open** The post-popup-clear edit was syntax-checked only, not re-looked. Shake and track noise untouched.
