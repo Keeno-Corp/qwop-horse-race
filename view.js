@@ -14,8 +14,9 @@ function mesh(geo, mat, p = [0, 0, 0], r = [0, 0, 0], s = [1, 1, 1]) {
 const cyl = (rt, rb, h, seg = 5) => new THREE.CylinderGeometry(rt, rb, h, seg);
 
 /** Visual groups for one horse, in the same order as Horse.parts: torso, neck, head, then upper/lower per leg. */
-export function buildHorseView(color, tint = 0) {
-  const body = lam(new THREE.Color(BODY).offsetHSL(0, 0, tint)), sock = lam(SOCK), dark = lam(DARK), cloth = lam(color);
+export const COATS = [0xc9793c, 0x8e929a, 0x3a302c, 0xa8462a];
+export function buildHorseView(color, tint = 0, coat = BODY) {
+  const body = lam(new THREE.Color(coat).offsetHSL(0, 0, tint)), sock = lam(SOCK), dark = lam(DARK), cloth = lam(color);
   const clothDark = lam(new THREE.Color(color).multiplyScalar(0.7));
   const eyeW = new THREE.MeshLambertMaterial({ color: 0xffffff }), eyeB = new THREE.MeshBasicMaterial({ color: 0x111111 });
   const groups = [];
@@ -73,7 +74,7 @@ export function buildEnvironment(scene, tex, rng) {
   const env = { spectators: null, clouds: [], excite: 0 };
   // sky dome (vertex gradient)
   const sky = new THREE.SphereGeometry(500, 16, 10);
-  const cols = []; const top = new THREE.Color(0x72b4ff), hor = new THREE.Color(0xa8d4ff), c = new THREE.Color();
+  const cols = []; const top = new THREE.Color(0x5aa6ff), hor = new THREE.Color(0x70b4ff), c = new THREE.Color();
   const pos = sky.attributes.position;
   for (let i = 0; i < pos.count; i++) { const y = pos.getY(i) / 500; c.copy(hor).lerp(top, Math.pow(Math.max(0, y), 0.12)); cols.push(c.r, c.g, c.b); }
   sky.setAttribute('color', new THREE.Float32BufferAttribute(cols, 3));

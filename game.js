@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import RAPIER from '@dimforge/rapier3d-compat';
 import { sfx, tex } from './fx.js';
 import { createWorld, Horse, DT, FINISH_X, STAND_H } from './physics.js';
-import { buildHorseView, buildEnvironment, COLORS } from './view.js';
+import { buildHorseView, buildEnvironment, COLORS, COATS } from './view.js';
 
 await RAPIER.init();
 
@@ -50,7 +50,7 @@ class AI {
   update(h, dt, lead) {
     this.t += dt; this.wob += dt;
     if (this.t < this.delay) { for (let i = 0; i < 4; i++) h.setHeld(i, false); return; }
-    const per = this.base * (1 + 0.14 * Math.sin(this.wob * 1.7) + 0.08 * Math.sin(this.wob * 4.1)) * (1 + clamp(lead * 0.035, -0.3, 0.45)) * (h.pos().x > 45 ? 1 - clamp(lead * 0.02, -0.15, 0.15) : 1);
+    const per = this.base * (1 + 0.14 * Math.sin(this.wob * 1.7) + 0.08 * Math.sin(this.wob * 4.1)) * (1 + clamp(lead * 0.035, -0.3, 0.45)) * (h.pos().x > 40 ? 1 - clamp(lead * 0.06, -0.3, 0.3) : 1);
     this.phase = (this.phase + dt / per) % 1;
     const off = [0, 0.5, 0.5, 0], duty = 0.58;
     const flags = off.map((o) => ((this.phase + o) % 1) < duty);
@@ -82,7 +82,7 @@ function assignRoles() {
   spec.forEach((s, i) => {
     const r = { color: COLORS[s.color], colorName: s.color, human: s.human ?? -1, name: s.name || NAMES_AI[s.ai], ai: s.human === undefined ? new AI(rr(0.93, 1.03)) : null };
     roles.push(r);
-    const groups = buildHorseView(r.color, (i - 1.5) * 0.012);
+    const groups = buildHorseView(r.color, 0, COATS[i]);
     groups.forEach((g, k) => { g.name = (r.human === 0 ? 'player' : 'horse' + i) + (k === 0 ? '' : '-' + k); scene.add(g); });
     views.push(groups);
     horses[i].homeZ = LANES[i];
@@ -177,7 +177,7 @@ function buildHud() {
 function resetRace() {
   seed = 12345 + 7919 * (++S.seedRound);
   assignRoles();
-  horses.forEach((h, i) => { h.reset(STAGGER[i], LANES[i]); h.guard = 99; h.assist = 1; h.stiff = 1; h.plants = 0; h.finished = false; h.finishT = null; h.speedBefore = 0; h.legT = [0, 0, 0, 0]; for (let k = 0; k < 4; k++) h.setHeld(k, false); });
+  horses.forEach((h, i) => { h.reset(STAGGER[i], LANES[i]); h.guard = 99; h.assist = 1; h.stiff = 1; h.plants = 0; h.finished = false; h.finishT = null; h.speedBefore = 0; h.drive = 0; h.legT = [0, 0, 0, 0]; for (let k = 0; k < 4; k++) h.setHeld(k, false); });
   Object.assign(S, { phase: 'countdown', countdown: 3.2, raceT: 0, finishT: null, firstFinish: null, order: [], pending: null, lastReplayAt: -99, replay: null, tangles: 0, lastTangle: -99, excite: 0, results: null, resultsShown: false, camBlend: 0 });
   ringN = 0; for (const d of dust) d.life = 0;
   for (const p of S.popups) p.el.remove(); S.popups = [];
@@ -225,7 +225,8 @@ function physStep() {
   for (const h of horses) {
     const r = roles[h.idx];
     if (r.human >= 0 && (S.phase === 'race' || S.phase === 'finishing') && !h.finished) {
-      const set = KEYS[mode][r.human]; for (let i = 0; i < 4; i++) h.setHeld(i, held.has(set[i]));
+      const set = KEYS[mode][r.human]; for (let i = 0; i < 4; i++) { const d = held.has(set[i]); if (d && !h.held[i]) h.drive = Math.min(1.2, (h.drive || 0) + 0.2); h.setHeld(i, d); }
+      if (S.phase === 'race') { const others = horses.filter((o, j) => roles[j].ai).map((o) => o.pos().x); const avg = others.reduce((a, b) => a + b, 0) / Math.max(1, others.length); h.driveF = 150 + clamp(avg - h.pos().x - 4, 0, 30) * 6; }
     } else if (r.human >= 0) for (let i = 0; i < 4; i++) h.setHeld(i, false);
     if (h.finished || S.phase === 'results') h.guard = 99;
     const ev = h.step(DT);
