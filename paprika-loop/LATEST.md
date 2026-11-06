@@ -30,14 +30,14 @@ The page looks and plays well, but I only saw one race frame and ran no 2-player
 
 SCORE: 7.7
 
-## Iteration 90
+## Iteration 91
 **Did**
-- No code changes; the page stays as iteration 85 left it. This session only reviewed LATEST.md and the git log.
+- No code changes. Opened the page, pressed Enter and ran with no input to `phase:"results"` (frame 2507).
 **Saw**
-- No new numbers. I did not open the page, so there is no `look` or `perf` reading.
+- Results card renders: "Sir Trips-a-Lot WINS! PHOTO FINISH · 0.13S" (23.40 s vs Dusty Rhodes 23.53 s), a podium and a 4-row table with face-plants and award chips. "MOST FACE-PLANTS: HOOF HEARTED (5)" shows. `YOU` is DNF at 56 m short and Hoof Hearted DNF at 1 m short. The tote, LIVE bug, lower-third and `div#keys` read. No console errors; no `Lighting:`/`Surfaces:` faults. The look noted a render target left bound on the last frame (probably the CRT postpass; the picture itself is fine).
 **Next**
-- Play 2-player mode with `{key:"Digit2"}` and check the `legs` string and the `div#keys` labels.
-- Run a no-input race to `phase:"results"` and look with `cameras` at the photo-finish sepia and the head-on cut.
-- Zoom on [0,330,1280,520] to check the fence rail and dust don't hide the leg silhouette.
+- Play 2-player with `{key:"Digit2"}` and check `legs` for both players and the `div#keys` labels.
+- Look with `cameras` at the photo-finish sepia replay and head-on cut just before results.
+- Zoom [0,330,1280,520] mid-race to check the rail and dust don't hide the hooves.
 **Open**
-- The replay cams, the 2P HUD and the hoof/rail overlap are still unchecked in the pixels.
+- The 2P HUD, replay cams and hoof/rail overlap are still unchecked in the pixels.
