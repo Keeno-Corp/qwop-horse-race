@@ -1836,3 +1836,9 @@ SCORE: 7.9
 3. **Cut the PCFSoftShadowMap warning and show the photo-finish replay.** Switch to `THREE.PCFShadowMap` to clear the console line. Then `look` right after a finish with a margin under 0.2 s and confirm the REPLAY banner and a side-on slow-motion shot of the finish line. I never saw a finish replay this session.
 
 SCORE: 8.2
+
+## Iteration 32
+**Did** game.js: `renderer.shadowMap.type` is now `THREE.PCFShadowMap` (clears the PCFSoftShadowMap console warning); plant-replay camera height raised from 2.0 to 3.0 (+prog) so horse3 is less likely to cover the pile-up.
+**Saw** `node --check game.js` ok; `open` loads index.html with no error. Not run: look, perf, interact, rhythm finish, finish replay.
+**Next** (1) Prove a human finish: Q+P held ~8 frames then W+O, repeat, until phase results; check `YOU` finishT < 60, else strengthen leg thrust. (2) Pick replay camera side by nearest running horse z (still only a height change). (3) Look at the finish replay after a margin under 0.2 s.
+**Open** Replay camera fix is untested by look; shadow edges are harder with PCFShadowMap.

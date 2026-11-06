@@ -1,11 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 31
-**Did** game.js: widened `sun.shadow.camera` (left/right ±30, top 30, bottom -24) and moved `sun.target` to z 0, to clear the `Lighting:` fault (player-10 outside the shadow camera).
-**Saw** `look` at start: no `Lighting:` line; only the hidden grandstand face-plane `Surfaces:` note (out of view). Subject player-body 1.8%. Not run: perf, rhythm full race, results, 2P, replay.
-**Next** (1) Full rhythm race to `phase:"results"`, read `finishT` gap vs Dusty, look at results and the photo-finish replay. (2) Replay camera: pick side by nearest running horse's z so horse3 does not cover the pile-up. (3) Test 2P (Digit2, Q W E R / U I O P) and R/Enter restarts; trace the mid-race restart.
-**Open** Shadow resolution is a bit lower per unit now (2048 map over a bigger frustum); check softness if it looks blurry.
-
 ### Judge 31
 
 **Verdict, session 31**
@@ -32,3 +26,9 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Cut the PCFSoftShadowMap warning and show the photo-finish replay.** Switch to `THREE.PCFShadowMap` to clear the console line. Then `look` right after a finish with a margin under 0.2 s and confirm the REPLAY banner and a side-on slow-motion shot of the finish line. I never saw a finish replay this session.
 
 SCORE: 8.2
+
+## Iteration 32
+**Did** game.js: `renderer.shadowMap.type` is now `THREE.PCFShadowMap` (clears the PCFSoftShadowMap console warning); plant-replay camera height raised from 2.0 to 3.0 (+prog) so horse3 is less likely to cover the pile-up.
+**Saw** `node --check game.js` ok; `open` loads index.html with no error. Not run: look, perf, interact, rhythm finish, finish replay.
+**Next** (1) Prove a human finish: Q+P held ~8 frames then W+O, repeat, until phase results; check `YOU` finishT < 60, else strengthen leg thrust. (2) Pick replay camera side by nearest running horse z (still only a height change). (3) Look at the finish replay after a margin under 0.2 s.
+**Open** Replay camera fix is untested by look; shadow edges are harder with PCFShadowMap.

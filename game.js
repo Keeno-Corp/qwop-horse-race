@@ -19,7 +19,7 @@ const $ = (id) => document.getElementById(id);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 renderer.setSize(innerWidth, innerHeight);
-renderer.toneMapping = THREE.NeutralToneMapping; renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.NeutralToneMapping; renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFShadowMap;
 document.body.prepend(renderer.domElement);
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(42, innerWidth / innerHeight, 0.1, 900);
@@ -392,7 +392,7 @@ function updateCamera(dt) {
       const prog = (rp.pos - rp.start) / Math.max(1, rp.end - rp.start), s = subjectAt(rp.pos, rp.subject), a = 0.35 + prog * 1.1;
       let cx = s.x, cz = s.z, d = 5.5;
       if (rp.pair) { const s2 = subjectAt(rp.pos, rp.pair[0] === rp.subject ? rp.pair[1] : rp.pair[0]); cx = (s.x + s2.x) / 2; cz = (s.z + s2.z) / 2; d = 6.5 + Math.abs(s.x - s2.x) * 0.5; }
-      tp.set(cx + Math.sin(a) * d, 2.0 + prog * 1.0, Math.min(cz + Math.cos(a) * d, 3.4)); tl.set(cx, 0.8, cz); fov = 38;
+      tp.set(cx + Math.sin(a) * d, 3.0 + prog * 1.0, Math.min(cz + Math.cos(a) * d, 3.4)); tl.set(cx, 0.8, cz); fov = 38;
     }
     if (rp.snap) { rp.snap = false; camPos.copy(tp); camLook.copy(tl); } else { camPos.lerp(tp, 1 - Math.exp(-dt * 6)); camLook.lerp(tl, 1 - Math.exp(-dt * 8)); }
   } else if (S.phase === 'results') {
