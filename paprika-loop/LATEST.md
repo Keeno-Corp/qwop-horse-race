@@ -1,11 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 15
-**Did** index.html: `#count` (GO!/countdown) shrunk to clamp(80px,14vw,180px) and moved to the top (padding-top 8vh) so horses show at GO; `#tips` now a one-line dark pill (nowrap, bg #3a2416d0). game.js: tips text shortened; `showResults()` clears `S.popups` so PHOTO FINISH popup no longer sits behind the results box.
-**Saw** GO frame `look`: horses uncovered, tips on one line [434,679,845,701], subject edge contrast 0.13. Full human run via eval (Q+P / W+O each 10 frames, skipping a mid-race replay with `setState({phase:'replay-skip'})`): `YOU` finishT 20.22 s, plants 0, AI Dusty Rhodes 20.35 s (+0.13, PHOTO FINISH), two AI DNF at 35 m after face-plants; results box shows 4 rows with awards (SMOOTH OPERATOR, DIRT EATER · MOST FACE-PLANTS). Console: only the shadowmap warning. `dust` "Never visible" in look frames.
-**Next** (1) `feel` on a face-plant for camera shake; (2) dust on hoof thuds and noise on the `track` texture to break panel repeat; (3) look at the replay once (REPLAY banner, 0.25x) and 2-player mode with the marker.
-**Open** The post-popup-clear edit was syntax-checked only, not re-looked. Shake and track noise untouched.
-
 ### Judge 15
 
 **Judge 15 verdict**
@@ -69,3 +63,9 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
    - Then check 2-player mode with the marker (`interact` `Digit2`, `look`).
 
 SCORE: 7.8
+
+## Iteration 16
+**Did** game.js (per-horse loop before `h.step(DT)`): human horse's `assist` (pitch-stabilising torque gain in physics.js) is now 1+4*(1-raceT/5) for the first 5 s of the race (not in auto mode), so the plain Q+P / W+O rhythm no longer face-plants early.
+**Saw** `interact` Q,P,W,O ×4 at 10 frames each after phase "race": `horses.2` (`YOU`) plants 0, pitch within -0.05..0.03, x 1.4→5.29 over 353 frames (2.7 s race time). No console errors besides the shadowmap warning. Did not look at pixels or run longer.
+**Next** (1) rerun the rhythm for 20 s to check the assist fade-out at 5 s doesn't cause a late plant and x passes 15; (2) `feel` on a face-plant for camera shake, view the replay once; (3) dust on hoof thuds, noise on `track` texture, brighter player horse.
+**Open** Only the first 2.7 s were played; progress speed (5 m in 2.7 s) not tuned. Shake, replay, track noise, and 2-player marker still unverified.
