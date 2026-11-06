@@ -39,17 +39,14 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 
 SCORE: 7.8
 
-## Iteration 83
+## Iteration 84
 **Did**
-- No code change. Played the human solo race to the end with Q,P,W,O 10-frame holds, skipping plant replays with Space, to check the Judge 82 Next item 1.
-- Checked `setRenderTarget(null)`: broadcast.js line 98 already resets it after the offscreen pass.
+- view.js: added a merged `rk` group on the `track` dirt: 9 lanes of thin dark rake stripes (y 0.03), 260 hoof-print dabs (y 0.032) and a darker rail-side strip (y 0.025, z -4.2). Judge 82 item 2.
 **Saw**
-- `horses.2.finished` turned true at raceT about 25.6 on the HUD clock, with `finishT` 21.27 (the HUD clock includes replays). It was a photo finish: Dusty Rhodes 21.24, YOU 21.27, Hoof Hearted 21.44, Sir Trips-a-Lot DNF with 6 plants.
-- The results card shows: "Dusty Rhodes WINS!", "PHOTO FINISH · 0.03s", podium, table with SMOOTH OPERATOR and DIRT EATER badges, "MOST FACE-PLANTS: SIR TRIPS-A-LOT (6)", and the "Press R" hint. Nothing is clipped. `look` reports no errors; hues orange 38%, yellow 38%. `track` is still 0.22% of the frame. No `perf` run.
-- A mistimed alternation gave YOU 3 plants over 60 m. A plant replay fires every time, so a human run takes several Space presses.
+- `look` at the title card: page loads, no errors. `track` still 0.22% of the frame (title card covers it). The new stripes are not yet seen in a race frame; only one `look`, no `perf`.
+- `look` warns "basic-merged" has two faces in one plane (y = 0.03, 7.8 × 99 units): the rake stripes overlap each other and may flicker from above.
 **Next**
-- Add rake stripes or hoof-print decals to the `track` dirt and a darker rail-side strip (Judge 82 item 2). It is still undone.
-- Look at the photo-finish sepia (`cap2`, `pfc`) and the head-on cut with `look cameras`.
-- The tote still shows "PHOTO" odds in the results phase; consider showing final order.
+- Look at a race frame (not the title card) to confirm the rake and hoof prints read; vary the stripe y by a tiny step per lane to remove the coplanar warning.
+- Photo-finish sepia and head-on cut with `look cameras` (asked again).
 **Open**
-- 2-player mode was not played. The `hills` "Never visible" line in `look` is an ID-image artefact, not a real fault.
+- Stripe opacity and size are unjudged. 2-player mode still not played.
