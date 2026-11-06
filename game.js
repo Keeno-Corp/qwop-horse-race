@@ -547,7 +547,7 @@ function tick(dt) {
     if (n !== S.lastCount && n <= 3) { S.lastCount = n; if (n > 0) { $('count').textContent = n; $('count').style.color = n === 1 ? '#ffd27a' : '#fff6e0'; sfx.play('blip', 0.7); } }
     if (S.countdown <= 0) {
       S.phase = 'race'; say(line('off'), 3, 4.5); $('count').textContent = 'GO!'; $('count').style.color = '#6fe36f'; S.goT = 0.9; sfx.play('powerup', 0.8); sfx.play('cheer', 0.6, 0.1);
-      horses.forEach((h) => { h.guard = 1.2; });
+      horses.forEach((h) => { h.guard = roles[h.idx].human >= 0 ? 3 : 1.2; });
     }
     updateRace(dt);
     if (S.phase === 'countdown') for (const h of horses) h.guard = 99;

@@ -816,3 +816,13 @@ SCORE: 7.2
 - Cut draw calls (411); name horse parts; enlarge blinker silks.
 **Open**
 - Whether pulses at another length (4 or 12 frames) avoid face-plants is untested. Full finish, photo-finish replay and 2-player are still unchecked.
+
+## Iteration 25
+**Did**
+- Softened the human start: `game.js:550` race-start `guard` is 3 s for human horses (1.2 s for AI).
+**Saw**
+- Syntax check only; no render, perf or play run this session.
+**Next**
+- Re-run the Q+P/W+O pulse test and check YOU survives past raceT 5. Then a full finish and the photo-finish replay. Then draw calls (411).
+**Open**
+- Whether `Horse.human` exists; full finish, photo-finish replay and 2-player still unchecked.
