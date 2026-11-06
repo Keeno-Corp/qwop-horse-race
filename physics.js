@@ -15,10 +15,10 @@ export function createWorld(R) {
 }
 
 const DIM = {
-  torso: [0.78, 0.27, 0.36], upper: 0.5, lower: 0.55, neck: 0.72, head: 0.5,
+  torso: [0.78, 0.27, 0.36], upper: 0.6, lower: 0.66, neck: 0.72, head: 0.5,
   hipX: 0.56, hipY: -0.18, hipZ: 0.2,
 };
-export const STAND_H = 0.18 + 0.5 + 0.55 + 0.03; // torso centre height standing
+export const STAND_H = 0.18 + 0.6 + 0.66 + 0.03; // torso centre height standing
 
 export const T = { // pose targets (radians)
   hipRel: -0.22, hipHeld: 1.05, kneeRel: 0.0, kneeHeld: -1.9,

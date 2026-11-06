@@ -1,19 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 9
-**Did**
-- broadcast.js `render()`: the real `scene` is now added as an invisible-during-final-pass child of the post-pass scene `scn` (`scene.visible` false only while `scn` draws), so tools reading the last-rendered scene find the horses. `look target:"horse0"` now works (size 2.51×1.13×1.05); the "horse0 not in scene" fault is fixed.
-**Saw**
-- Held alternation (Q+P / W+O, 18 frames each, after the countdown) took YOU from x 1.4 to 10.8 in 2.2 s (~3.2 m/s, so x 60 in ~20 s, well under 60 s), pitch about -0.2, no plant. Controls are fine.
-- Placing the horses at x≈53 and running gave `phase: replay`: the sepia PHOTO FINISH frame shows grain, gate weave, the REPLAY 0.25x tag and the `WINNER … BY 0.14 SEC` banner. It is not near-black. Race look: brightness 48%, no console errors.
-- `look` still reports z-fighting between "merged" meshes (x=0.80, y=1.35 planes), no fog/depth cue, and `div#crt` over 100%. I did not run `perf`; draw calls were ~441 last session and are unchanged.
-**Next**
-- Cut draw calls (<250) with `instances()` for crowd, posts, boards.
-- Fix the "merged" z-fighting (polygonOffset or move a plane) and add scene.fog in the sky colour.
-- Lengthen legs ~1.2× body depth and enlarge blinker silks.
-**Open**
-- Legs/blinker and draw calls untouched. `horse0` is the torso group only, so `look` says 0 of 3 named parts show.
-
 ### Judge 9
 
 **Scores (Must have, in order)**
@@ -46,3 +32,16 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Add depth fog and fix the y = 0.09 plane pairs.** Set `scene.fog` in the sky colour so the far grandstand and hills pale. Move one of each coplanar `PlaneGeometry` pair at least 1e-3 off the plane. The next `look` should drop the "no fog" and `Surfaces` lines. Then play to a finish and `look` at the results screen, so the sepia replay and the face-plant award are seen by a judge.
 
 SCORE: 6.9
+
+## Iteration 10
+**Did**
+- Lengthened legs 1.2×: physics.js `DIM.upper` 0.5→0.6, `DIM.lower` 0.55→0.66, `STAND_H` follows; view.js leg groups `u`/`l` in `buildHorseView` get `scale.y = 1.2` (mergeStatic bakes in root-local space, so the root scale applies at render).
+**Saw**
+- Held Q+P / W+O alternation after the countdown: YOU reached x 6.97 at race time 1.85 s, pitch -0.22, no plants, no console errors. Legs read longer and the gait still looks right in `look`. Brightness 47%, no fog fault listed (scene.fog already existed at view.js:301).
+- `look` still lists y=0.09 plane pairs (lake `glint` quads vs lake disc, out of view), `div#crt` 100%, and horse0 0 of 3 parts. I did not run `perf`; draw calls are still ~435.
+**Next**
+- Cut draw calls (<250): merge `merged` groups across horses by material, instance posts/boards.
+- Move lake glint quads to y=0.07 (lake is at 0.05, they sit at 0.09; pairs are among glints themselves, so offset each by i*1e-4).
+- Enlarge blinker silks; name horse body/legs/head meshes so `look target` counts them.
+**Open**
+- Legs are longer so speed is higher (~3.7 m/s); a 60 m race may now finish in ~16 s, check balance. Draw calls untouched.

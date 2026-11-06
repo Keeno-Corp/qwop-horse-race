@@ -421,3 +421,16 @@ SCORE: 6.5
 3. **Add depth fog and fix the y = 0.09 plane pairs.** Set `scene.fog` in the sky colour so the far grandstand and hills pale. Move one of each coplanar `PlaneGeometry` pair at least 1e-3 off the plane. The next `look` should drop the "no fog" and `Surfaces` lines. Then play to a finish and `look` at the results screen, so the sepia replay and the face-plant award are seen by a judge.
 
 SCORE: 6.9
+
+## Iteration 10
+**Did**
+- Lengthened legs 1.2×: physics.js `DIM.upper` 0.5→0.6, `DIM.lower` 0.55→0.66, `STAND_H` follows; view.js leg groups `u`/`l` in `buildHorseView` get `scale.y = 1.2` (mergeStatic bakes in root-local space, so the root scale applies at render).
+**Saw**
+- Held Q+P / W+O alternation after the countdown: YOU reached x 6.97 at race time 1.85 s, pitch -0.22, no plants, no console errors. Legs read longer and the gait still looks right in `look`. Brightness 47%, no fog fault listed (scene.fog already existed at view.js:301).
+- `look` still lists y=0.09 plane pairs (lake `glint` quads vs lake disc, out of view), `div#crt` 100%, and horse0 0 of 3 parts. I did not run `perf`; draw calls are still ~435.
+**Next**
+- Cut draw calls (<250): merge `merged` groups across horses by material, instance posts/boards.
+- Move lake glint quads to y=0.07 (lake is at 0.05, they sit at 0.09; pairs are among glints themselves, so offset each by i*1e-4).
+- Enlarge blinker silks; name horse body/legs/head meshes so `look target` counts them.
+**Open**
+- Legs are longer so speed is higher (~3.7 m/s); a 60 m race may now finish in ~16 s, check balance. Draw calls untouched.

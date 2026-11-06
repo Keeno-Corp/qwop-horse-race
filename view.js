@@ -222,12 +222,12 @@ export function buildHorseView(color, tint = 0, coat = COATS[0], silk = SILKS.re
     const u = new THREE.Group();
     u.add(tm(cyl(0.135, 0.085, 0.54, 9), body, [0, 0, 0], [0, 0, 0], [1, 1, 0.92], { smooth: true }));
     u.add(tm(sph(0.095, 8, 6), body, [0, -0.27, 0], [0, 0, 0], [1, 1, 1], { smooth: true, outline: 0.9 }));
-    groups.push(u);
+    u.scale.y = 1.2; groups.push(u);
     const l = new THREE.Group();
     l.add(tm(cyl(0.075, 0.058, 0.58, 8), body, [0, 0.0, 0], [0, 0, 0], [1, 1, 1], { smooth: true }));
     l.add(tm(cyl(0.082, 0.074, 0.27, 8), sock, [0, -0.07, 0], [0, 0, 0], [1, 1, 1], { smooth: true, outline: 0.8 }));
     l.add(tm(cyl(0.1, 0.155, 0.115, 9), hoof, [0.03, -0.218, 0], [0, 0, 0], [1.1, 1, 1], { smooth: true }));
-    groups.push(l);
+    l.scale.y = 1.2; groups.push(l);
   }
   for (const g of groups) mergeStatic(g);
   return groups;
