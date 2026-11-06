@@ -1,56 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-### Judge 50
-
-**Photo Finish Fiasco, judge 50**
-
-I ran `open`, one `interact` (Enter, alternating Q+P and W+O, then `until` the replay phase) with a `look`, `perf` with `costs`, and a second `interact` (Space, then Q+P) with a `look`. I did not play to a human finish, so no finish replay, 2-player mode or head-on cut was seen. Those scores carry over.
-
-1. **Plays as DESIGN.md's Core loop and Controls say: 7.**
-   - Space after the replay did not just skip it. It started a fresh race at `countdown` 3.8 with the title card up.
-   - My Q+P keys landed in that countdown, so `horses.2.legs` stayed "0000" and YOU stayed at x≈2.09.
-   - In the first run, YOU was at x=1.99 at `raceT` 9.9 while the AI were at x=20 to 25. My steps released the keys after about 40 frames and never pressed them again, so no human running was shown.
-2. **Real Rapier ragdoll, face-plant collapse and auto-right: 8.** The first run reached `phase:"replay"`, `kind:"plant"`, with "Hoof Hearted" `state:"down"`, `plants:1`, `pitch` 0.24, and `tangles:1`. The collapse and the plant replay trigger both work.
-3. **Replay (sepia, 0.25x, Space skips): 7.**
-   - The "INSTANT REPLAY · 0.25X" tag and "SPACE to skip" show.
-   - The plant replay is not sepia in the `look`: it is the normal orange palette with no visible grain or "PHOTO FINISH" frame. That may be right for a plant replay, but the finish version was not seen.
-   - Space then jumped straight to a new race, so I could not tell whether it skips to the result or to a restart.
-4. **Photo finish and tangled AI collapse within the first minute: 8.** An AI face-plant and `tangles:1` happened by `raceT` 9.9. No finish was seen.
-5. **Results with most face-plants award: 9.** `div#tote` shows "FACE-PLANTS 0" under each horse. The results screen was not reached.
-6. **Looks as LOOK.md says: 8.**
-   - The toon steps, outlines, `div#crt` and the 70s orange, yellow and brown palette hold.
-   - The horse silks (diamond, polka-dot, stripe) read clearly in the replay.
-   - The title card, the "TOP-CAT TIRES" and "GOLDEN HOOF OATS" billboards, and the crowd with its numbered board are in place.
-   - The grandstand fills the upper half and `hills` is still "Never visible".
-7. **window.__game convention, static deploy: 9.** `index.html` is at the root, assets are 0.32 MB and there is no runtime network use.
-8. **Horses match CHARACTERS.md and horse.png: 8.** Socks, hooves, round eyes, manes, blinkers and numbered saddle cloths are all there. The merged vertex-colour horses look unchanged.
-9. **Broadcast overlay: 9.** `div#tote` has odds (4-1, 3-1, 3-1, 2-1) and silks. `div#lower` has the Walt Dunmore "PLAY-BY-PLAY" line. The LIVE bug, 3:58 PM clock, "RACE TIME", progress bar, `div#keys`, `div#tips`, the "1 PLAYER / 2 PLAYERS (2) / RESTART" buttons and the "The Photo Finish Fiasco Stakes" title card are all present.
-10. **Camera: 8.** The side tracking framed the replay pack well. The head-on cut was not seen.
-11. **Controls feel learnable: 6.** No human finish has been seen in several sessions. The countdown also swallows early keys, and nothing on screen says when keys start to count.
-12. **Local 2-player: 7.** The "2 PLAYERS (2)" button is visible. It was not played.
-13. **Style judged as hard as gameplay: 8.** The 70s TV look holds.
-
-**Faults: 6.**
-- `perf` shows 266 draw calls (down from 410) and 141k triangles. The 160 ms frame is SwiftShader at host load 3.7, so it is not a budget signal.
-- `hills` is "Never visible".
-- The `look` after the replay says "every render call drew into a render target, none to the screen, so the canvas still shows an earlier frame". This is probably the post pass with the replay's own pass, but check that `setRenderTarget(null)` runs on the replay path.
-- No console errors were seen.
-
-**Next:**
-1. **Play to a human finish (asked again, third time).**
-   - Make Space during `phase:"replay"` skip to results or resume the race, not start a new race. That is what the second `interact` hit.
-   - Then run `interact` with Enter, `wait` until `countdown` is 0, alternating Q+P and W+O (about 15 frames each, repeated), `until` `{"horses.2.finished":true}` and `max` 3000, with `trace` on `horses.2.legs`.
-   - Success is `legs` showing "1001" and "0110" and `horses.2.x` rising past 40.
-   - Add a "GO!" cue at the start of play so a player knows keys now count.
-2. **Draw calls (266, asked again).**
-   - `Mesh` (59 calls, 6.7 MB of textures) and `merged-outline` (45) are the biggest left. Merge the outline hulls across all horses into one mesh per horse, not per limb, and merge `mesh-outline` (18).
-   - Instance or merge `tail` (16 calls).
-   - Thin `crowd` (47.9k triangles, 4 calls) since it is a third of the triangles.
-   - `perf` with `costs` should show under 200 draw calls.
-3. **Hills and sky behind the grandstand.** Lower the roof or raise the camera pitch so `hills` shows. A plain `look` should then not list `hills` under "Never visible". After that, check the finish replay: take a `look` with `sample` at two frames to show sepia, grain and the "PHOTO FINISH" frame.
-
-SCORE: 7.7
-
 ## Iteration 52
 **Did**
 - `stand()` in view.js: step boxes depth 1.14 → 1.10 so neighbouring rows' faces no longer overlap (a guess at the `crowd` z-fight warning; not re-checked with `look`).
@@ -62,3 +11,52 @@ SCORE: 7.7
 - Draw calls: merge outline hulls per horse, instance `tail`, thin `crowd`. See the finish replay, results and 2-player.
 **Open**
 - The z-fight fix is unverified. Finish replay, results screen and 2-player still unseen.
+
+### Judge 52
+
+**Photo Finish Fiasco, judge 52**
+
+I ran `open`, one `interact` (Enter, `until` countdown 0, alternating Q+P and W+O) and a second `interact` of the same alternation, each with a `look`, then `perf` with `costs`. I did not reach a finish, so the finish replay, the sepia photo finish, results, 2-player mode and the head-on cut were not seen. Those scores carry over.
+
+1. **Plays as DESIGN.md's Core loop and Controls say: 8.**
+   - The first run took `phase` from "countdown" to "race" at frame 277.
+   - `horses.2.legs` then cycled "1001" and "0110", and YOU went from x=2 to 5.35, then to 12.39 at `raceT` 2.4. A human run is shown for the first time.
+   - A large green "GO!" cue now shows when keys start to count, which was the open item.
+   - YOU led all three AI at `raceT` 2.4, with odds 1-2.
+2. **Real Rapier ragdoll, face-plant collapse and auto-right: 8.** This session's runs had `plants` 0 and `state` "run" throughout. The collapse was seen in judge 50 and is unchanged.
+3. **Replay (sepia, 0.25x, Space skips): 6.** No finish replay was seen. In judge 50, Space during the replay started a fresh race instead of skipping to results, and nothing says that was fixed.
+4. **Photo finish and tangled AI collapse within the first minute: 7.** Here the AI were still running at `raceT` 2.4 with no tangle yet. No finish was reached.
+5. **Results with most face-plants award: 8.** `div#tote` shows "FACE-PLANTS 0" under each horse. The results screen itself was not seen.
+6. **Looks as LOOK.md says: 8.**
+   - The toon steps and outlines hold, `div#crt` covers the whole canvas, and the palette is 70s orange (60%), yellow (18%) and grey (15%).
+   - The horses carry diamond, polka-dot and stripe silks, and the "PRONTO PIZZA" and "TOP-CAT TIRES" billboards, crowd and numbered board are in place.
+   - The grandstand roof still fills the upper frame, so the sky and `hills` do not show.
+7. **window.__game convention, static deploy: 9.** `index.html` is at the root, assets are 0.32 MB and there is no runtime network use.
+8. **Horses match CHARACTERS.md and horse.png: 8.** The silks, blinkers, bristly mane, socks and numbered saddle cloths read clearly. In the `look`, the horse with silk 3 shows its polka dots and the horse with silk 4 a black-and-yellow blinker patch.
+9. **Broadcast overlay: 9.**
+   - `div#tote` has live-moving odds (6-1 to 10-1 and 2-1 to 1-2 within 2 s) and silks.
+   - `div#lower` carries the "HANK 'HOOFBEAT' PRUITT" play-by-play, and the LIVE bug, clock, race time, progress bar, `div#keys`, `div#tips` and buttons are all present.
+   - The `div#lower` line still read "AND THEY'RE OFF" at 2.4 s.
+10. **Camera: 8.** The side tracking follows YOU and frames the grandstand and billboards. The head-on cut was not seen.
+11. **Controls feel learnable: 7.** The "GO!" cue and the on-screen `div#keys` Q/W/O/P hints work, and alternating Q+P and W+O drives YOU forward. No human finish has been seen yet, so it cannot score higher.
+12. **Local 2-player: 7.** The "2 PLAYERS (2)" button is visible. It was not played.
+13. **Style judged as hard as gameplay: 8.** The 1970s TV race look holds.
+
+**Faults: 6.**
+- `perf` shows 266 draw calls and 141k triangles, unchanged from last session. The 356 ms frame is SwiftShader at host load 2.0, so it is not a budget signal.
+- `hills` is "Never visible".
+- No console errors were seen.
+- Iteration 52's z-fight fix is still unchecked.
+
+**Next:**
+1. **Run to the finish, then check the finish replay, results and Space skip (asked again).**
+   - Repeat the same Q+P and W+O alternation with `interact`, `until` `{"horses.2.finished":true}`, `max` 3000. You will have to keep YOU upright, so vary the key timing if `horses.2.state` goes to "down".
+   - Then `look` with `sample` at the sepia, grain and "PHOTO FINISH" frame pixels, and press Space once.
+   - It is done when `phase` reaches "results" with the face-plants award text, and Space during the replay goes to results rather than a new race.
+2. **Draw calls (266, asked again).**
+   - Merge `merged-outline` (45 calls), `mesh-outline` (18) and `tail` (16) per horse.
+   - Thin `crowd` (47.9k triangles, 4 calls).
+   - `perf` with `costs` should then show under 200 draw calls.
+3. **Show `hills` behind the grandstand (asked again).** Lower the roof (`roofY`) or raise the camera pitch. A plain `look` should then not list `hills` under "Never visible", and the sky should show above the grandstand.
+
+SCORE: 7.7
