@@ -1,35 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-### Judge 37
-
-The replay is verified. The finish replay now fires after the first finish plus 4.5 s.
-
-1. **Plays as DESIGN.md's Core loop and Controls say: 7.** The countdown leads into `phase:"race"` at frame 277. `R` restarted the race. `div#keys`, `div#tips` and the "1 PLAYER / 2 PLAYERS (2) / RESTART" buttons show, and `div#off2` ("◀ YOU 55 m") tracks YOU. I pressed no leg keys, so the loop and the finish by a human are still unchecked.
-2. **Real Rapier ragdoll, face-plant collapse and auto-right: 8.** Sir Trips-a-Lot reached `plants:5`, `state:"down"` with `pitch:3.12`, and was back to `state:"run"` later. The `div.pop` "FACE-PLANT!" and the lower-third line fired.
-3. **Replay (last ~4 s, 0.25x, Space skips, sepia photo finish): 9.** `phase` went `finishing` → `replay` at frame 258 with `replay:{kind:"finish",rate:0.25,of:1300}`. The look is sepia with a film-frame border, a gate-weave edge and a vertical scratch, and shows the `div.tag` "REPLAY 0.25x", `div.cap2` "PHOTO FINISH", `div#pfc` "WINNER: Hoof Hearted · BY 0.13 SEC" and the "SPACE to skip" hint. I saw no grain or flicker in the single still. Face-plant-triggered replays were not seen.
-4. **Photo finish and tangled AI collapse within the first minute: 9.** Hoof Hearted finished at 21.03 s and Dusty Rhodes at 21.16 s (`tangles:1`), with the replay at about 25 s. That is two for two, with the margin at 0.13 s in one run and 0.19 s in another.
-5. **Results with most face-plants award: 9.** `div#results` shows "Hoof Hearted WINS! PHOTO FINISH · 0.19s", a podium, a "SMOOTH OPERATOR" badge and a red "DIRT EATER · MOST FACE-PLANTS" badge on Sir Trips-a-Lot, with a "DNF · 57 M SHORT" line for YOU.
-6. **Looks as LOOK.md says: 8.** Toon steps, thick outlines, a warm orange/yellow palette, `div#crt` over `postpass-quad`, and `crowd`, billboards, rail and finish post. The far `hills` are still invisible in the `look` and flagged "Never visible" while in view. The background reads as flat grandstand with no distance haze.
-7. **window.__game convention, static deploy: 9.** `index.html` is at the root, assets are 0.32 MB and the fonts are vendored. There is no network use at runtime.
-8. **Horses match CHARACTERS.md and horse.png: 8.** In the replay and race looks the horses have a barrel body, white socks, oversized dark hooves, big round eyes, a bristly mane and blinkers. The saddle-cloth silks show.
-9. **Broadcast overlay: 9.** `div#tote` has odds moving (2-1 → 30-1, 1-2, 6-5, WIN), silks and face-plant counts. `div#lower` has two commentators with live lines. The `LIVE` bug, the 4:00 PM clock, the RACE TIME bug and the progress bar are there.
-10. **Camera: 8.** The side-track telephoto and the head-on replay cam of the finish line (the finish looks as if seen from the line, with a tower behind) both read well. I did not see the head-on cut during the race.
-11. **Controls feel learnable: 7.** Unchanged. No human finish has been seen.
-12. **Local 2-player: 7.** The "2 PLAYERS (2)" button and the `div#tips` line show it. It was not played.
-13. **Style judged as hard as gameplay: 8.** The 70s TV and sepia replay hold up. The weak point is the missing depth on the far `hills`.
-
-**Faults: 6.**
-- `perf` shows 412 draw calls and 149k triangles, unchanged for six sessions. The 247 ms frame is SwiftShader at host load 1.4, so it is not a budget signal.
-- `hills` is "Never visible" while in view, and `ridge` is never visible.
-- The `until:{phase:"finishing"}` call reported "not met" even though the phase did reach `finishing`. That only affects the test harness.
-
-**Next:**
-1. **Draw calls (asked again, sixth time).** Merge the `merged` (142) and `Mesh` (59) calls by material across the horses, merge `merged-outline` (45) and `mesh-outline` (18), and instance `tail` (16). Cut `crowd` from 47.9k triangles with an InstancedMesh, and trim `dust` from 8.4k triangles. `perf` with `costs` should show under 250 draw calls.
-2. **Depth (asked again).** The far `hills` are still not visible, and `ridge` is still never visible, so delete it. Check that the toon and shader materials use `fog:true` and that `postpass-quad` doesn't hide the fog. Then raise `hills` so it shows above the grandstand in the side-cam `look`. `look` with `sample` at its pixels should come out paler and bluer than the grass.
-3. **Play both inputs.** `interact` with Q W O P and then `Digit2` with Q W E R and U I O P, and let YOU run so a human finish and the head-on cut show. Make sure the face-plant replay on a big plant also fires, and add grain and flicker that are visible in a `look` of the sepia replay.
-
-SCORE: 7.9
-
 ## Iteration 38
 **Did**
 - `view.js`: deleted the never-visible `ridge` mesh; raised far `hills` height (`far * 12` → `far * 18`) so they should rise above the grandstand.
@@ -41,3 +11,33 @@ SCORE: 7.9
 - Play Q W O P / 2-player to see a human finish.
 **Open**
 - Hills change unverified visually; treeline `hY` still uses factor 12.
+
+### Judge 38
+
+I ran about 3 tool calls: one `open`, one `interact` with Q, P, W and O at the race start, and one `perf` with `costs`. I made no `look` of a side-cam sample, so the `hills` change was judged from the race `look` and the "Never visible" list.
+
+1. **Plays as DESIGN.md's Core loop and Controls say: 7.** The countdown reaches `phase:"race"` and YOU (`legs:"0010"`) responds to Q, P, W and O, with `div#keys` lighting the keys. I did not run to a human finish.
+2. **Real Rapier ragdoll, face-plant collapse and auto-right: 8.** All four horses show `state:"run"` with `plants:0` at 2.2 s. YOU shows `pitch:-0.46` from the mistimed keys. No collapse was seen this session.
+3. **Replay (sepia, 0.25x, Space skips): 8.** Not re-run this session. Judge 37's `phase:"replay"` with `kind:"finish"` and `rate:0.25` and its "PHOTO FINISH" caption stand. Grain and flicker are still not clearly visible in a still.
+4. **Photo finish and tangled AI collapse within the first minute: 8.** Not re-run. Judge 37 saw it twice (0.13 s and 0.19 s margins).
+5. **Results with most face-plants award: 9.** Unchanged from 37 ("DIRT EATER · MOST FACE-PLANTS" badge).
+6. **Looks as LOOK.md says: 8.** The side-cam `look` shows toon steps, thick outlines, a warm orange palette, `div#crt` over `postpass-quad`, `crowd` and billboards ("TOP-CAT TIRES", "HOOF OATS"). `hills` is still listed "Never visible" while in view. Only a small green and orange sliver shows at the right edge behind the grandstand, so depth is still missing.
+7. **window.__game convention, static deploy: 9.** `index.html` is at the root, assets are 0.32 MB, fonts are vendored, and there is no runtime network use.
+8. **Horses match CHARACTERS.md and horse.png: 8.** The horses show a barrel body, white socks, dark hooves, big round eyes, a bristly mane, blinkers, and saddle cloths with stripes, polka dots and a "4" on a yellow-black cloth. Both leg and hoof proportions read well.
+9. **Broadcast overlay: 9.** `div#tote` shows 5-1, 3-1, 2-1 and 5-2 with silks. `div#lower` shows the "HANK HOOFBEAT PRUITT" line "AND THEY'RE OFF, FOLKS!". `LIVE`, the 3:58 PM clock, "RACE TIME 2.2s" and the progress bar are all present. The black rectangle from the restyle is gone.
+10. **Camera: 8.** The side-track telephoto reads well. I did not see the head-on cut during the race.
+11. **Controls feel learnable: 7.** No human finish has been seen.
+12. **Local 2-player: 7.** The "2 PLAYERS (2)" button and `div#tips` show it. It was not played.
+13. **Style judged as hard as gameplay: 8.** The 70s TV look holds. The weak point is the flat background with no distance haze.
+
+**Faults: 6.**
+- `perf` shows 411 draw calls and 149k triangles, unchanged for seven sessions. The 189 ms frame is SwiftShader at host load 1.9, so it is not a budget signal.
+- `hills` is still "Never visible" despite the iteration 38 height raise, so that change did not work. The treeline `hY` still uses the old factor 12 (Open item from 38).
+- No console errors were seen.
+
+**Next:**
+1. **Depth, `hills` (asked again, the raise did not show).** Move or raise `hills` so it sits above the grandstand roof in the side-cam `look`. Check its z against the grandstand, and that its material is not hidden by `postpass-quad`, fog or depth. Update the treeline `hY` to match. `look` with `sample` at about [1150, 150] should come out paler and bluer than the grass, and `hills` should leave the "Never visible" list.
+2. **Draw calls (asked again, seventh time).** Merge the `merged` (142) and `Mesh` (59) calls by material across the horses, merge `merged-outline` (45) and `mesh-outline` (18), and instance `tail` (16). Make `crowd` (47.9k triangles) an InstancedMesh and trim `dust` (8.4k). `perf` with `costs` should show under 250 draw calls.
+3. **Play both inputs to a finish.** `interact` with an alternating Q+P / W+O loop until `finished:true` for YOU, then `Digit2` with Q W E R and U I O P. This shows the human finish, the head-on cut and a face-plant replay. Also make grain and flicker visible in a `look` of the sepia replay.
+
+SCORE: 7.9
