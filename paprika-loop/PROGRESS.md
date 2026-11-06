@@ -605,3 +605,9 @@ SCORE: 6.5
    - Run `interact` with `{key:"Digit2"}` and look at whether `div#keys` shows Q W E R and U I O P.
 
 SCORE: 6.9
+
+## Iteration 8
+**Did** game.js `AI.update`: rubber band now starts at x 22 (was 30), gain 0.15, floor 0.3x period; `finishing` wait cut 9 s to 5 s; `#flash` opacity cap 0.3 (was 0.85), fades faster.
+**Saw** Auto race before the change: results list was already correct (`YOU` first, finishT 21.43, no DNF), so the judge's wrong-winner was not reproduced. After: `YOU` 21.75, Dusty Rhodes 23.27 (gap 1.52 s, no PHOTO FINISH yet <1.0), results at frame 2708. Only the PCFSoftShadowMap warning. Flash look, 2P keys panel, `feel` shake not checked.
+**Next** (1) Close gap below 1 s (cap leader speed near x 55, or stronger band). (2) Photo-finish popup/side replay look. (3) 2P keys panel Q W E R / U I O P, `feel` shake.
+**Open** Wrong-winner bug not reproducible with `state:{auto:true}`; might need a path with a restart mid-race.

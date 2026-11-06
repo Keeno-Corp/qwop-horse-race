@@ -56,7 +56,7 @@ class AI {
   update(h, dt, lead) {
     this.t += dt; this.wob += dt;
     const px = h.pos().x; let band = 1;
-    if (px > 30) { if (this.m) this.m = null; this.next = 99; const gapL = (AI.leadX || 0) - px; if (gapL > 0.5) band = 1 - clamp((gapL - 0.5) * 0.1, 0, 0.45); }
+    if (px > 22) { if (this.m) this.m = null; this.next = 99; const gapL = (AI.leadX || 0) - px; if (gapL > 0.5) band = 1 - clamp((gapL - 0.5) * 0.15, 0, 0.7); }
     if (this.t < this.delay) { for (let i = 0; i < 4; i++) h.setHeld(i, false); return; }
     const per = band * this.base * (1 + 0.14 * Math.sin(this.wob * 1.7) + 0.08 * Math.sin(this.wob * 4.1)) * (1 + clamp(lead * 0.07, -0.35, 0.5)) * (h.pos().x > 40 ? 1 - clamp(lead * 0.06, -0.3, 0.3) : 1);
     this.phase = (this.phase + dt / per) % 1;
@@ -305,7 +305,7 @@ function updateRace(dt) {
     }
     if (S.phase === 'finishing') {
       const since = S.raceT - S.firstFinish;
-      if (S.order.length >= 2 || since > 9 || horses.every((h) => h.finished)) startFinishReplay();
+      if (S.order.length >= 2 || since > 5 || horses.every((h) => h.finished)) startFinishReplay();
     } else if (S.raceT > 150) startFinishReplay();
   }
 }
@@ -404,7 +404,7 @@ function updateHud() {
   });
   $('timer').textContent = S.raceT.toFixed(1) + 's';
   KEYS[mode].forEach((set, pi) => set.forEach((c, li) => $(`cap-${pi}-${li}`)?.classList.toggle('dn', held.has(c))));
-  const f = $('flash'); if (S.flash > 0) { S.flash = Math.max(0, S.flash - 0.04); f.style.opacity = (S.flash * 0.85).toFixed(2); } else if (f.style.opacity !== '0') f.style.opacity = 0;
+  const f = $('flash'); if (S.flash > 0) { S.flash = Math.max(0, S.flash - 0.06); f.style.opacity = (S.flash * 0.3).toFixed(2); } else if (f.style.opacity !== '0') f.style.opacity = 0;
 }
 
 // ---------- main loop ----------
