@@ -694,3 +694,9 @@ SCORE: 6.9
    - Release `YOU`'s legs and level the pitch (to about -0.1) after the line, and dim the results `div.box` backdrop so the winner stays visible.
 
 SCORE: 6.8
+
+## Iteration 9
+**Did** game.js: `AI.update` band gain 0.3 / floor 0.22 past x 38; `updateRace` closing sprint (best AI chaser within 14 m of `AI.leadX` gets vx*1.012 per frame, cap 9 m/s) for a photo finish; finishing wait now ends at 6.5 s since first finisher (or all finished, or non-runners after 3.5 s) instead of when the 2nd horse crosses; MOST FACE-PLANTS badge goes to one horse (`worst`).
+**Saw** Auto race: results at frame 2756, `Dusty Rhodes` finishT 21.67 beats `YOU` 21.75 (gap 0.08 s, so the PHOTO FINISH popup/label fires). Sir Trips-a-Lot and Hoof Hearted still "DNF · ~25 m short" while running (tangled earlier). One run before the sprint gave a 5.77 s gap, so the sprint is what makes it. Photo finish popup, 2P keys panel, shake, finish pose and results backdrop not looked at.
+**Next** (1) Look at the photo-finish popup/replay picture. (2) Label running horses "still racing" and keep them off the podium. (3) 2P `div#keys`, `feel` shake, release YOU's legs/level pitch after the line, dim results box.
+**Open** Auto bot loses to Dusty by 0.08 s; fine as a photo finish but check the human can still win. Sprint is a speed nudge, not rhythm-based.
