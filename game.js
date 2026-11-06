@@ -56,6 +56,7 @@ class AI {
   update(h, dt, lead) {
     this.t += dt; this.wob += dt;
     const px = h.pos().x; let band = 1;
+    if (px > 6 && px <= 22) { const g0 = (AI.leadX || 0) - px; if (g0 > 1.5) band = 1 - clamp((g0 - 1.5) * 0.09, 0, 0.45); }
     if (px > 22) { if (this.m) this.m = null; this.next = 99; const gapL = (AI.leadX || 0) - px; if (gapL > 0.5) band = 1 - clamp((gapL - 0.5) * (px > 38 ? 0.3 : 0.15), 0, px > 38 ? 0.78 : 0.7); }
     if (this.t < this.delay) { for (let i = 0; i < 4; i++) h.setHeld(i, false); return; }
     const per = band * this.base * (1 + 0.14 * Math.sin(this.wob * 1.7) + 0.08 * Math.sin(this.wob * 4.1)) * (1 + clamp(lead * 0.07, -0.35, 0.5)) * (h.pos().x > 40 ? 1 - clamp(lead * 0.06, -0.3, 0.3) : 1);
@@ -390,9 +391,9 @@ function updateCamera(dt) {
       tp.set(FINISH_X + 3.4 - prog * 0.8, 2.2, 11.5); tl.set(FINISH_X - 0.2, 1.0, 0); fov = 29 - prog * 4;
     } else {
       const prog = (rp.pos - rp.start) / Math.max(1, rp.end - rp.start), s = subjectAt(rp.pos, rp.subject), a = 0.35 + prog * 1.1;
-      let cx = s.x, cz = s.z, d = 5.5;
-      if (rp.pair) { const s2 = subjectAt(rp.pos, rp.pair[0] === rp.subject ? rp.pair[1] : rp.pair[0]); cx = (s.x + s2.x) / 2; cz = (s.z + s2.z) / 2; d = 6.5 + Math.abs(s.x - s2.x) * 0.5; }
-      tp.set(cx + Math.sin(a) * d, 3.0 + prog * 1.0, Math.min(cz + Math.cos(a) * d, 3.4)); tl.set(cx, 0.8, cz); fov = 38;
+      let cx = s.x, cz = s.z, d = 8;
+      if (rp.pair) { const s2 = subjectAt(rp.pos, rp.pair[0] === rp.subject ? rp.pair[1] : rp.pair[0]); cx = (s.x + s2.x) / 2; cz = (s.z + s2.z) / 2; d = 9 + Math.abs(s.x - s2.x) * 0.5; }
+      tp.set(cx + Math.sin(a) * d, 3.0 + prog * 1.0, Math.min(cz + Math.cos(a) * d, 3.4)); tl.set(cx, 0.8, cz); fov = 42;
     }
     if (rp.snap) { rp.snap = false; camPos.copy(tp); camLook.copy(tl); } else { camPos.lerp(tp, 1 - Math.exp(-dt * 6)); camLook.lerp(tl, 1 - Math.exp(-dt * 8)); }
   } else if (S.phase === 'results') {

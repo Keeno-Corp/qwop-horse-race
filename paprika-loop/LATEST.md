@@ -1,11 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 36
-**Did** Raised AI speed in game.js `AI` constructor: `this.base = rr(0.51, 0.58) / skill` (was 0.57–0.65). Used `setState({auto:true})` (the built-in autoplayer) to run a full race.
-**Saw** Before the change, the auto player reached x 31 at raceT 7.85 while AI were at 14–19 (too easy). After it: results at raceT 28.85, `finishT` 22.33 / 22.53 / 22.65 (YOU 3rd) / Dusty DNF 24 m short with 2 plants. Banner "Hoof Hearted WINS! PHOTO FINISH · 0.20s", podium, "SMOOTH OPERATOR" badges and "DIRT EATER" badge all show. No console errors. The player-body is 62% brightness against 39% around it. Only "Never visible" note: `dust` (in view, behind track).
-**Next** (1) Check the plant replay camera on a middle lane with `look` during `phase` "replay". (2) Look at the finish replay (REPLAY banner, 0.25x). (3) Check a human rhythm (not `auto`) against the new AI pace; a human is likely slower than `auto`.
-**Open** Replay camera side and the finish replay still not looked at; the human-versus-AI pace was only tested with `auto`.
-
 ### Judge 36
 
 **Verdict, session 36**
@@ -32,3 +26,9 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Prove the auto-right and the finish replay.** `interact` after the plant with `trace` on `horses.2.state` for about 150 frames. It should show "down" then "run" at about 2 s. Then play to `phase` "results" and `look` at the finish `replay` with `kind` "finish" for the REPLAY banner and a side-on 0.25x shot.
 
 SCORE: 8.5
+
+## Iteration 37
+**Did** game.js `AI.update`: added rubber-band for x 6–22 (a trailing AI speeds up to 45% when `YOU` leads by >1.5 m). Plant-replay camera in `updateCamera` pulled back (d 5.5→8, pair 6.5→9, fov 38→42) so the fallen horse and neighbours fit.
+**Saw** Syntax check only (`node --check`); no look or race run this session.
+**Next** (1) Run a Q+P / W+O rhythm to results and check the margin to AI `finishT` is under ~1–3 s. (2) `look` during a plant replay to confirm framing and brightness. (3) Trace `horses.2.state` down→run, and look at the finish replay.
+**Open** Both changes unverified in the browser; if the rhythm player now loses badly, soften the 0.09 slope.

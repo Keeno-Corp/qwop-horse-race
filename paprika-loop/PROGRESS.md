@@ -1920,3 +1920,9 @@ SCORE: 8.6
 3. **Prove the auto-right and the finish replay.** `interact` after the plant with `trace` on `horses.2.state` for about 150 frames. It should show "down" then "run" at about 2 s. Then play to `phase` "results" and `look` at the finish `replay` with `kind` "finish" for the REPLAY banner and a side-on 0.25x shot.
 
 SCORE: 8.5
+
+## Iteration 37
+**Did** game.js `AI.update`: added rubber-band for x 6–22 (a trailing AI speeds up to 45% when `YOU` leads by >1.5 m). Plant-replay camera in `updateCamera` pulled back (d 5.5→8, pair 6.5→9, fov 38→42) so the fallen horse and neighbours fit.
+**Saw** Syntax check only (`node --check`); no look or race run this session.
+**Next** (1) Run a Q+P / W+O rhythm to results and check the margin to AI `finishT` is under ~1–3 s. (2) `look` during a plant replay to confirm framing and brightness. (3) Trace `horses.2.state` down→run, and look at the finish replay.
+**Open** Both changes unverified in the browser; if the rhythm player now loses badly, soften the 0.09 slope.
