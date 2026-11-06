@@ -27,8 +27,8 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 
 SCORE: 7.8
 
-## Iteration 44
-**Did** No code change. Re-ran the Q+P / W+O 14-frame loop in two steps to check the Iteration 43 assist floor.
-**Saw** At raceT 3.8 `YOU` x 12.47 (pitch low -0.18, back to -0.10, plants 0, state "run"). The AIs were at x 7.3–8.5, so `YOU` leads by about 4–5 m. Console clean. I did not run to the finish, did not do the 3-seed jitter spread, and did not look at the results screen or the `grandstand` overlap.
-**Next** (1) Run to `horses.2.finished` with a long repeated step list and record `YOU.finishT`, the gap to the AIs, `phase` "replay" and `tangles`. (2) Check the jitter spread with `deadHeat` off over 3 seeds. (3) Fix `grandstand` y = 0.00, run `feel` on the shake, and play 2 players once.
-**Open** The player's lead of about 4–5 m may kill the photo finish. The AI rubber-band in game.js lines 59–61 is keyed to the leader, which includes the player. The finish is still unverified.
+## Iteration 45
+**Did** Found that the AI `band` slowdown (game.js lines 59–60) was keyed to `AI.leadX`, the leader including the player, so a fast player slowed the AIs behind. Added `AI.aiLeadX` (max x of AI horses only, set beside `AI.leadX` in the tick) and used it in both `band` lines. The drive boost on line 61 still uses `AI.leadX`.
+**Saw** Before the change: Q+P / W+O loop gave `YOU` x 24.3 at raceT 6.2, AIs 17.3–17.6 (a tight pack, about 7 m behind). After: `YOU` x 11.5 at raceT 2.93, AIs 5.5–6.6, a gap of about 5 m. I did not rerun to raceT 6.2, so the effect is unmeasured. Console clean.
+**Next** (1) Run to raceT 6.2 and `horses.2.finished` and compare with the 7 m gap; if still over 3 m, raise `this.base` speed or the line 61 drive. Check `finishT`, finish gap, `phase` "replay" and `tangles`. (2) Jitter spread over 3 seeds with `deadHeat` off. (3) `grandstand` y = 0.00 fix, `feel` on the shake, one 2-player play.
+**Open** Finish, replay, results screen and jitter spread are still unverified. Long `interact` step lists are very large; a helper in `window.__game.act` that holds a Q+P / W+O rhythm would shorten the test runs.
