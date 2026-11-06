@@ -248,7 +248,7 @@ function clockText() { const sec = 58 * 60 + Math.floor(S.time * 4); const m = M
 function resetRace() {
   seed = 12345 + 7919 * (++S.seedRound);
   assignRoles();
-  horses.forEach((h, i) => { h.reset(STAGGER[i], LANES[i]); h.guard = 99; h.assist = 1; h.stiff = 1; h.plants = 0; h.finished = false; h.finishT = null; h.speedBefore = 0; h.drive = 0; h.legT = [0, 0, 0, 0]; for (let k = 0; k < 4; k++) h.setHeld(k, false); });
+  horses.forEach((h, i) => { h.reset(STAGGER[i], LANES[i]); h.guard = 99; h.assist = 1; h.stiff = 1; h.plants = 0; h.trip = undefined; h.finished = false; h.finishT = null; h.speedBefore = 0; h.drive = 0; h.legT = [0, 0, 0, 0]; for (let k = 0; k < 4; k++) h.setHeld(k, false); });
   Object.assign(S, { phase: 'countdown', countdown: 4.6, raceT: 0, finishT: null, firstFinish: null, order: [], pending: null, pair: null, lastReplayAt: -99, replay: null, tangles: 0, lastTangle: -99, focus: null, deadHeat: true, hhGap: 0.5 + rng() * 2.8, excite: 0, results: null, resultsShown: false, camBlend: 0 });
   ringN = 0; for (const d of dust) d.life = 0;
   for (const p of S.popups) p.el.remove(); S.popups = [];
@@ -295,19 +295,25 @@ function onPlant(h, kind) {
 
 // ---------- race logic ----------
 const AUTO = { period: 0.32 };
+const TUNE = { trip: 380, lo: 3, hi: 5.5, jit: 0.25 }; // trip: nose-down torque kick, lo..hi seconds between kicks, jit: +-fraction of random size
 function physStep() {
   for (const h of horses) {
     const r = roles[h.idx];
     if (r.human >= 0 && (S.phase === 'race' || S.phase === 'finishing') && !h.finished) {
       const set = KEYS[mode][r.human]; const ph = Math.floor(S.raceT / AUTO.period) % 2; for (let i = 0; i < 4; i++) { const d = S.auto ? ((i === 0 || i === 3) === (ph === 0)) : held.has(set[i]); if (d && !h.held[i]) h.drive = Math.min(2.2, (h.drive || 0) + 0.8); h.setHeld(i, d); }
-      if (S.phase === 'race') { const others = horses.filter((o, j) => roles[j].ai).map((o) => o.pos().x); const avg = others.reduce((a, b) => a + b, 0) / Math.max(1, others.length); h.driveF = (S.auto ? 0.5 : 40) * Math.max(0, 30 + clamp(avg - h.pos().x - 4, 0, 30) * 6 - clamp(h.pos().x - avg - 0.3, 0, 20) * 14); }
+      if (S.phase === 'race') { const others = horses.filter((o, j) => roles[j].ai).map((o) => o.pos().x); const avg = others.reduce((a, b) => a + b, 0) / Math.max(1, others.length); h.driveF = (S.auto ? 0.5 : 16) * Math.max(0, 30 + clamp(avg - h.pos().x - 4, 0, 30) * 6 - clamp(h.pos().x - avg - 0.3, 0, 20) * 14); }
     } else if (r.human >= 0) for (let i = 0; i < 4; i++) h.setHeld(i, false);
     if (h.finished || S.phase === 'results') h.guard = 99;
     if (r.human >= 0 && S.phase === 'race' && !h.finished && h.state === 'run') { // human stall watchdog: a stuck upright or tipped horse is stood up and nudged
       h.wd = (h.wd || 0) + DT; h.wdAny = h.wdAny || h.held.some((v) => v);
       if (h.wd > 2.5) { const px = h.pos().x; if (h.wdAny && px > 3 && px - (h.wdX ?? -9) < 0.5) { if (Math.abs(h.pitch()) > 0.7 || h.pos().y < 0.8) h.rise(); h.drive = 1; h.driveF = Math.max(h.driveF || 0, 420); } h.wdX = px; h.wd = 0; h.wdAny = false; }
     }
-    if (r.human >= 0 && !S.auto) h.assist = 3 + 7 * clamp(1 - S.raceT / 7, 0, 1) * (S.phase === "race" ? 1 : 0);
+    if (r.human >= 0) h.drag = S.auto ? 16 : 45;
+    if (r.human >= 0 && !S.auto && S.phase === 'race' && h.state === 'run' && h.guard <= 0) { // stumble: a rough patch of track pitches a running horse nose-down now and then
+      h.trip = (h.trip ?? rr(4, 7)) - DT;
+      if (h.trip <= 0) { h.trip = rr(TUNE.lo, TUNE.hi); if (h.torso.body.linvel().x > 2) h.torso.body.applyTorqueImpulse({ x: 0, y: 0, z: -TUNE.trip * (1 + TUNE.jit * (rng() * 2 - 1)) }, true); }
+    }
+    if (r.human >= 0 && !S.auto) h.assist = 0.6 + 9.4 * clamp(1 - S.raceT / 7, 0, 1) * (S.phase === "race" ? 1 : 0);
     const ev = h.step(DT);
     if (ev === 'rise') { const p = h.torso.body.translation(); emitDust(p.x, 0.05, p.z, 14, 2, 3, 1.1); sfx.play('boing', 0.5); }
     else if (ev) onPlant(h, ev);
