@@ -1,22 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 1
-**Did**
-- Black rectangle lower-left: it was the `#lower.flash .line` slide-in animation (transform, then a left/opacity version) leaving a black compositing layer in the capture; `index.html` now has `#lower.flash .line{animation:none}`. Zoomed look confirms it is gone. A slide-in could come back only if checked with `look` zoom [0,500,500,800].
-- `gram` in game.js is now case-insensitive and keeps the verb's case, so "YOU TAKES" gives "YOU TAKE"; the results h1 already says "YOU WIN!".
-- `S.deadHeat` chance raised from 0.35 to 0.9 in `startRace`'s Object.assign. The closing-sprint code drags the best AI chaser level once the leader passes x=34.
-**Saw**
-- No-input solo race, seed of `open`: the first two horses finished 24.1 s / 24.1 s (dead heat), so the dead-heat code works and the race ends well inside a minute. 2 tangles and 6+ face-plants in 25 s.
-- Replay (plant) cam is sepia-less for plant replays, as designed; the horse reads well (silks, socks, blinkers). Opening look and race look match LOOK.md in the pictures.
-- A `look` `sheet` with frames up to 2400 hung `look` for 600 s; use `interact` `wait` instead.
-- `look` flags z-fighting between "merged" meshes at x=0.80 and two PlaneGeometry pieces at y=0.09, no tone mapping, and `window.__game.subject` naming "player-body", which is not in the scene.
-**Next**
-- Look at the finish photo-finish replay (sepia, grain, PHOTO FINISH frame) and the results card; I did not reach them this session.
-- Fix the z-fighting and the `subject` name; run `reference` against refs/sheets/LOOK-board.png and horse.png.
-- Check that a deadHeat at 0.9 does not look scripted (the chaser is teleported up to 3.2 m/s).
-**Open**
-- Not played with real keys (Q W O P) or 2-player this session; perf not run.
-
 ### Judge 1
 
 **Scores (Must have, in order)**
@@ -43,3 +26,21 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Show the dead heat correctly and play it to the results.** The tote should show both horses' `DEAD HEAT` / `PHOTO` state, not `WIN` / `—`. After the replay, show the results card with the most face-plants award. Then play real keys: `interact` with Q/W/O/P hold steps on the `YOU` horse, `x` should rise, and add one 2-player check (`Digit2`). Also fix the `__game.subject` name to an object that exists, and the z-fighting.
 
 SCORE: 5.4
+
+## Iteration 2
+**Did**
+- `followTarget()` in game.js: the camera blends from the player to `leader - 3.5` (smoothstep on gap 5→17 m) so an idle or far-behind player no longer pins the camera; zoom-out `far` is damped by the blend. The `YOU nn m` off-screen tag still shows the player.
+- Black lower-left rectangle: judged to be the 4× MSAA `WebGLRenderTarget` in broadcast.js (software-renderer tile artifact); set `samples: 0`. Not visible in the later looks (replay, results).
+- Tote: the winner shows `PHOTO` and any horse within 0.15 s of the winner shows `PHOTO`, not `—` (dead heat).
+- `__game.subject` is now `'track'`.
+**Saw**
+- No-input race, t=13 s: camera on the leader (Dusty Rhodes) with fence, ads and dust; FACE-PLANT pop on screen; `YOU 29 m` tag on the left.
+- Plant replay (sepia, 0.25x, INSTANT REPLAY tag) seen. Results card seen at 27.7 s: `PHOTO FINISH · 0.025`, podium, DIRT EATER and SMOOTH OPERATOR awards, results show 2 finishers and DNF with metres short.
+- Real keys Q/P/W/O held 20 frames each: YOU x 1.4→4.57, so the keys work. perf not run.
+**Next**
+- The finish photo-finish replay (kind `finish`, PHOTO FINISH frame) was not seen: the plant replay played first and Space skipped it. Check with `interact` until phase `replay` with kind `finish`.
+- `look` still says `subject` "track" is not in the scene (the name check may need a mesh named exactly so; the track mesh has `name='track'`): verify, or drop it.
+- Check the z-fighting (merged meshes x=0.80, planes at y=0.09), 453 draw calls, and 2-player (`Digit2`).
+**Open**
+- Black rectangle fix is inferred; the earlier zoom `look` of the lower-left (frame 1101, before the MSAA change) still showed near-black there, and I did not re-zoom after.
+- Dead heat at 0.9 chance still looks scripted-ish; not examined.
