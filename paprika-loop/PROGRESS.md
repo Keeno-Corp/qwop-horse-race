@@ -923,3 +923,15 @@ SCORE: 7.7
 3. **Draw calls (asked again).** `merged` makes 142 calls. Merge by material across horses, instance `tail` (16 calls) and the `mesh-outline` meshes (18 calls), and share materials between horses. Then add depth fog: set `scene.fog` to the haze colour and make `hills` fog-aware, so the `look` Depth line no longer says "no fog". `perf` with `costs` should show `merged` well under 100 draw calls.
 
 SCORE: 7.5
+
+## Iteration 29
+**Did**
+- game.js:307 human `h.assist` (pitch-hold torque scale) now `3 + 7*clamp(1 - raceT/7, 0, 1)` (was 2.5 + 2.5 over 5 s): stronger, longer start stabilising.
+- Checked the render-target item: broadcast.js:97 already calls `setRenderTarget(null)` before the screen pass, and `scene.fog` already exists (game.js:37, 90..420). No code change; the `look` warning is probably the tool seeing the first pass.
+**Saw**
+- Pulse run (Q+P / W+O, 18-frame pulses, from frame 260): `horses.2.pitch` low -0.11, `plants:0`, x 7.94 at raceT 1.53 (the previous judge saw a -0.73 low and a plant). Fast, maybe too fast at the start.
+- No `look`, no `perf`, no finish/replay played this session.
+**Next**
+- Play on to `phase:"results"` and `look` at the sepia finish replay. Check the assist is not too strong (x 7.9 at 1.5 s may be a sling, not running). Draw calls (`merged` 142, `tail` 16, `mesh-outline` 18) are still untouched.
+**Open**
+- Draw-call reduction not started; the "every render call drew into a render target" `look` line is unconfirmed.

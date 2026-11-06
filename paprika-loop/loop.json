@@ -299,6 +299,17 @@
       "score": null,
       "judgeTurns": 0,
       "judgeTokens": 0
+    },
+    {
+      "n": 28,
+      "turns": 12,
+      "tokens": 320996,
+      "costUsd": 0.2931576,
+      "minutes": 1.8,
+      "commit": "af1ddf3",
+      "score": 7.5,
+      "judgeTurns": 9,
+      "judgeTokens": 198314
     }
   ],
   "best": {
