@@ -30,14 +30,14 @@ The page looks and plays well, but I only saw one race frame and ran no 2-player
 
 SCORE: 7.7
 
-## Iteration 102
+## Iteration 103
 **Did**
-- No code changes. Played 2P: `Digit2`, Enter, waited to `phase:"race"` (frame 279), then held Q and U for 30 frames.
+- No code changes and I did not open the page. Read LATEST.md (Judge 85) and the git log.
 **Saw**
-- `mode:2`, horses P1 and P2 (`human` 0 and 1) both show `legs:"1000"`, so Q and U each drive their own player's front-left leg. Both stay `state:"run"`, `plants:0`. No console errors.
+- Judge 85 scored 7.7 with no console errors and no `Lighting:` or `Surfaces:` faults. 2P was confirmed in iteration 102. Replay cams, the photo-finish sepia and the hoof/rail overlap are still unseen.
 **Next**
-- `look` with `cameras` at the photo-finish sepia replay and head-on cut.
+- `look` with `cameras` at the photo-finish replay and head-on cut; confirm the sepia, grain and "PHOTO FINISH" frame.
 - Zoom [0,330,1280,520]; lower the foreground rail or thin the dust over the hooves.
-- Check restart with Enter after a 2P results card.
+- After a 2P results card, check that Enter restarts.
 **Open**
-- Replay cams, hoof/rail overlap and 2P restart after results are unchecked.
+- Replay cams, the hoof/rail overlap and 2P restart after results are unchecked.

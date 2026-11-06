@@ -3415,3 +3415,15 @@ SCORE: 7.7
 - Check restart with Enter after a 2P results card.
 **Open**
 - Replay cams, hoof/rail overlap and 2P restart after results are unchecked.
+
+## Iteration 103
+**Did**
+- No code changes and I did not open the page. Read LATEST.md (Judge 85) and the git log.
+**Saw**
+- Judge 85 scored 7.7 with no console errors and no `Lighting:` or `Surfaces:` faults. 2P was confirmed in iteration 102. Replay cams, the photo-finish sepia and the hoof/rail overlap are still unseen.
+**Next**
+- `look` with `cameras` at the photo-finish replay and head-on cut; confirm the sepia, grain and "PHOTO FINISH" frame.
+- Zoom [0,330,1280,520]; lower the foreground rail or thin the dust over the hooves.
+- After a 2P results card, check that Enter restarts.
+**Open**
+- Replay cams, the hoof/rail overlap and 2P restart after results are unchecked.
