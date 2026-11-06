@@ -191,10 +191,10 @@ sfx.define('gasp', { volume: 0.5, frequency: 520, attack: 0.04, sustain: 0.18, r
 sfx.define('boing', { volume: 0.5, frequency: 180, shape: 1, sustain: 0.08, release: 0.3, slide: 3.5 });
 function popup(text, sub = '', color = '#ffd27a', life = 1.7) {
   const last = S.lastPopup[text] ?? -9; if (S.time - last < 1.4) return; S.lastPopup[text] = S.time;
-  while (S.popups.length > 2) S.popups.shift().el.remove();
+  while (S.popups.length > 1) S.popups.shift().el.remove();
   const el = document.createElement('div'); el.className = 'pop'; el.style.color = color;
   el.style.setProperty('--r', rr(-6, 6).toFixed(1) + 'deg'); el.style.animation = `pop ${life}s ease-out forwards`;
-  el.style.top = (14 + S.popups.length * 13) + 'vh'; el.style.left = '50%';
+  el.style.top = (16 + S.popups.length * 16) + 'vh'; el.style.left = '50%';
   el.innerHTML = text + (sub ? `<span>${sub}</span>` : ''); $('popups').appendChild(el); S.popups.push({ el, t: life });
 }
 const COMMENT = {
@@ -343,11 +343,11 @@ function followTarget() {
   const humans = roles.map((r, i) => r.human >= 0 ? horses[i].pos().x : null).filter((v) => v !== null);
   const hx = humans.reduce((a, b) => a + b, 0) / humans.length;
   const leader = Math.max(...horses.map((h) => h.pos().x));
-  let fx = hx + clamp(leader - hx, -4, 14) * 0.5;
+  let fx = hx + clamp(leader - hx, -4, 14) * 0.3;
   fx = Math.min(fx, FINISH_X + 2);
   const far = Math.abs(leader - hx);
   const asp = Math.min(1, camera.aspect / 1.5);
-  const dist = (9.4 + clamp(far * 0.22, 0, 7)) / Math.pow(asp, 0.7);
+  const dist = (9.4 + clamp(far * 0.3, 0, 10)) / Math.pow(asp, 0.7);
   return { fx, dist };
 }
 function updateCamera(dt) {
