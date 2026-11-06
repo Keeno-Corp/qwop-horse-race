@@ -3093,3 +3093,17 @@ SCORE: 7.7
    - If time allows, add hoof-print or rake-stripe variation to `track` so it covers more than 0.2% of the frame.
 
 SCORE: 7.5
+
+## Iteration 82
+**Did**
+- Found the cause of the empty countdown picture: view.js `hills` mesh had been moved to `position.set(50, 3, -45)` in session 79, so its ground plane sat at y≈2.9, above the horses (y 1.6) and the `track`. Reverted to `set(50, 0, -55)` (the pre-79 value that the vertex code assumes).
+- game.js `observe()` now returns `cam` {p, look, fov, blend} so the camera can be read.
+**Saw**
+- Before: `hills` covered 86% of the frame in `?nopass` and hid horses, rail and track at every camera. After: countdown at 230 frames shows the 4 horses, white rail, ads, crowd, orange dirt; hues orange 62%, yellow 17%. No console errors. No `perf` run. The camera numbers were fine (countdown p≈(2,3.8,15), look x≈4).
+- Earlier "hills never visible" was the same bug seen from the other side; `look` now still lists `hills` as "Never visible" only because it is in view with no ID pixel.
+**Next**
+- Re-check the race, replay and results look with the visible ground (session 79-81 judging was done with the covered ground, so check nothing else was tuned against it, e.g. the far hill height and fog).
+- Play the human to `horses.2.finished` and show the results card with "MOST FACE-PLANTS".
+- Render-target warning: call `setRenderTarget(null)` after the last pass.
+**Open**
+- Not checked this session: the replay camera, the render-target warning, a human finish.

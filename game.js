@@ -649,6 +649,7 @@ window.__game = {
     keys: { solo: { KeyQ: 'front-left leg (hold)', KeyW: 'front-right leg', KeyO: 'back-left leg', KeyP: 'back-right leg', KeyR: 'restart', Digit2: 'two players', Digit1: 'solo', Space: 'skip replay' }, twoPlayer: { p1: 'Q W E R', p2: 'U I O P', Enter: 'restart' } },
   }),
   observe: () => ({
+    cam: { p: camera.position.toArray().map(r2), look: camLook.toArray().map(r2), fov: r2(camera.fov), blend: r2(S.camBlend) },
     phase: S.phase, mode, raceT: r2(S.raceT), countdown: r2(Math.max(0, S.countdown)), replay: S.replay ? { kind: S.replay.kind, pos: r2(S.replay.pos), t: r2(S.replay.pos - S.replay.start), of: S.replay.end, rate: 0.25 } : null,
     pendingReplay: !!S.pending, tangles: S.tangles, results: S.results ? S.results.order.map((i) => roles[i].name) : null,
     horses: horses.map((h, i) => ({ name: roles[i].name, human: roles[i].human, x: r2(h.torso.body.translation().x), y: r2(h.torso.body.translation().y), z: r2(h.torso.body.translation().z), pitch: r2(h.pitch()), state: h.state, plants: h.plants, finished: h.finished, finishT: h.finishT && r2(h.finishT), legs: h.held.map((v) => (v ? 1 : 0)).join('') })),
