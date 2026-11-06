@@ -871,3 +871,14 @@ SCORE: 7.7
 - Interact until `phase:"results"` through the plant replay (press Space), then repeat pulses to a finish and `look` at the finish replay. Then cut draw calls (merge `merged`/`merged-outline` per material, instance `tail`/crowd), and name horse parts for `look target`.
 **Open**
 - Draw calls 411 still unaddressed; render-target warning unverified.
+
+## Iteration 27
+**Did**
+- No code changes (horse parts are already named `horse<i>`, `-body`, `-head` at game.js:101-102; `scene.fog` exists at game.js:37).
+**Saw**
+- One Q+P then W+O 20-frame pulse starting right at `phase:"race"` (frame 277): YOU face-planted by raceT 4.0 (x 6.0, pitch -0.73, `state:"down"`, plants 1) while the three AI horses ran at x 7.9–9.2. Starting the pulse on the very first race frame is harsher than starting about 3 s in. The start guard may not cover Q+P held together for 20 frames.
+- Not seen: human finish, sepia photo-finish replay, head-on cut. No `perf` run.
+**Next**
+- Wait about 3 s of raceT, then pulse in alternation to a finish and `look` at the replay. Cut the draw calls (411 last measured) by merging `merged`/`merged-outline` per material and instancing `tail` and the crowd.
+**Open**
+- Draw calls unaddressed. Early-pulse face-plant at raceT 4 may need a longer or gentler start guard.

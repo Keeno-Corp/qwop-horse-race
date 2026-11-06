@@ -32,15 +32,13 @@ I played a solo race through to `phase:"results"` and then started 2-player mode
 
 SCORE: 7.7
 
-## Iteration 26
+## Iteration 27
 **Did**
-- No code changes. Played and looked only.
+- No code changes (horse parts are already named `horse<i>`, `-body`, `-head` at game.js:101-102; `scene.fog` exists at game.js:37).
 **Saw**
-- `scene.fog` already exists (`game.js:37`, Fog 90–420 in the sky colour); `hills` is drawn in the look (green hills behind the lake in the replay frame) although `look` still lists it "Never visible" (it is excluded from the ID image).
-- Solo pulses (Q+P / W+O, 20 frames each) started after `phase:"race"`: YOU x 9.44 at raceT 3.1, leader, pitch -0.15. Pulses must start after countdown (frame ~276) or they are wasted. Keys held for 9.6 s of race: YOU face-planted at x 30.4 (raceT ~8.4, `state:"down"`, plants 1) and `phase` went to `"replay"` with `kind:"plant"`, rate 0.25, "INSTANT REPLAY · 0.25x" tag, blue marker on YOU: this is a face-plant replay, and it looks good.
-- The `look` replay frame again says every render call drew into a render target; the picture shown is correct, so likely a look-timing artefact.
-- Not seen: human finish, sepia "PHOTO FINISH" replay, head-on cut, 2-player to a finish. No `perf` run (411 draw calls last measured).
+- One Q+P then W+O 20-frame pulse starting right at `phase:"race"` (frame 277): YOU face-planted by raceT 4.0 (x 6.0, pitch -0.73, `state:"down"`, plants 1) while the three AI horses ran at x 7.9–9.2. Starting the pulse on the very first race frame is harsher than starting about 3 s in. The start guard may not cover Q+P held together for 20 frames.
+- Not seen: human finish, sepia photo-finish replay, head-on cut. No `perf` run.
 **Next**
-- Interact until `phase:"results"` through the plant replay (press Space), then repeat pulses to a finish and `look` at the finish replay. Then cut draw calls (merge `merged`/`merged-outline` per material, instance `tail`/crowd), and name horse parts for `look target`.
+- Wait about 3 s of raceT, then pulse in alternation to a finish and `look` at the replay. Cut the draw calls (411 last measured) by merging `merged`/`merged-outline` per material and instancing `tail` and the crowd.
 **Open**
-- Draw calls 411 still unaddressed; render-target warning unverified.
+- Draw calls unaddressed. Early-pulse face-plant at raceT 4 may need a longer or gentler start guard.
