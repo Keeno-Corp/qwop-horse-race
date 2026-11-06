@@ -1,0 +1,24 @@
+**Scores (Must have, in order)**
+
+1. **Plays as DESIGN.md says: 4.** Solo with 3 AI, the Q/W/O/P key panel and the 1/2 mode buttons are on the page. But the camera tracks the idle player (`YOU`, x≈1–2 m) for the whole race. The finish at x=60 and the AI horses' progress are never on screen, so a no-input race shows a horse standing still. I did not press real keys this session (budget).
+2. **Rapier ragdoll horses, face-plant and auto-right: 7.** `Dusty Rhodes` reached `state:"down"`, `pitch:-1.97`, `plants:3`, then returned to `"run"` after about 3 s. The `FACE-PLANT!` pop fires. `YOU` pitched to -0.45 with no input and recovered.
+3. **Replay and sepia photo finish: 3.** After the finish (phase `finishing`) the camera stayed on the idle `YOU` horse, so I saw no replay, sepia, grain or "PHOTO FINISH" frame. This is the third session in a row that it has not been seen. The tote shows `WIN` for `Sir Trips-a-Lot` and `—` for `Hoof Hearted` although both have finishT 24.1 s, so the dead heat is not shown as one.
+4. **Photo finish and tangled AI collapse within a minute: 6.** The race ended at 24.1 s with a dead heat, `tangles:2` and plants 2, 2 and 3. It is not visible, because the camera never follows the pack.
+5. **Results with most face-plants award: 3.** Not reached. `YOU` never finished, and I did not see the results card.
+6. **Looks as LOOK.md says: 7.** The toon shading, outlines, warm 70s palette, CRT/VHS vignette and scanlines, and the `div#crt` overlay read well. The look says "no tone mapping" and flags z-fighting. The black rectangle lower-left, at about [14,475,268,615] in the 1024-wide picture, is still present in all four looks, above `div#lower`. The last Iteration said it was fixed, and it is not.
+7. **`window.__game` convention, static, no network: 7.** `observe` works and assets are 0.32 MB with fonts vendored. `__game.subject` names `player-body`, which is not in the scene. `perf` shows 453 draw calls and 184k triangles, which is heavy. The 408 ms frame is a software renderer, so it says nothing about a real GPU.
+8. **Horses match CHARACTERS.md and horse.png: 7.** Silks (diamonds, stripes, dots), blinkers, oversized hooves, round eyes, mane and tail read at a glance. The sample is the player's white horse with blue spots. Legs are short for the "long wobbly" brief.
+9. **Broadcast overlay: 8.** The `div#tote` odds board with silks and moving odds (`6-5`, `15-1`), the `LIVE` bug, the `3:58 PM` clock bug and the `Walt Dunmore` lower-third with live lines are all present. The title card was not checked. The black rectangle breaks the lower-left corner.
+10. **Camera: 3.** Only a side view locked on the player showed. The head-on cut and the leader or pack tracking were not seen.
+11. **Controls feel learnable: 4.** Not played with real keys (budget).
+12. **Local 2-player, discoverable: 6.** The `2 PLAYERS (2)` button and the tips line are on screen. Not played.
+13. **Style judged as hard as gameplay: 7.** The 70s broadcast reads, apart from the black rectangle. `reference` against `LOOK-board.png` was not run.
+
+**Faults: 3.** Faults: the black rectangle persists. The camera sits on a stationary player. Z-fighting and the `subject` name are both still open. `perf` is not a fault on this host (software renderer, host load 2.4), but 453 draw calls is worth reducing.
+
+**Next:**
+1. **Camera follows the race.** Aim the broadcast tracking camera at the race leader or the pack's centroid, with the player as a fallback only when the human is competitive. The player horse should be framed only while it is near the pack. Switch to the head-on cut and to the photo-finish replay camera once the first horse passes x≈55. Check by `interact` wait 1500 frames, then `look` while `raceT` is about 20–25 s: the AI pack and the finish line should be on screen, then the sepia replay with the PHOTO FINISH frame (`look` with `sample` on the frame).
+2. **Remove the black rectangle** (asked again). The last fix targeted `#lower.flash .line` and it did not work. Check `look` `zoom` [0,500,500,800] with `sample` at (100,480) and (100,560): the sample should read the grass or track colour, not near-black. Look for what is drawn at roughly x 14–268, y 475–615 of the 1024-wide picture, using `look` `at` points there. Candidates are the `#crt` image, a `.pop` or `.line` element, or a `#lower::before` pseudo-element.
+3. **Show the dead heat correctly and play it to the results.** The tote should show both horses' `DEAD HEAT` / `PHOTO` state, not `WIN` / `—`. After the replay, show the results card with the most face-plants award. Then play real keys: `interact` with Q/W/O/P hold steps on the `YOU` horse, `x` should rise, and add one 2-player check (`Digit2`). Also fix the `__game.subject` name to an object that exists, and the z-fighting.
+
+SCORE: 5.4
