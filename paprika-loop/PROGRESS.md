@@ -3391,3 +3391,15 @@ SCORE: 7.7
 - Confirm the postpass ends with `setRenderTarget(null)`; thin the foreground rail/dust over the hooves (zoom [0,330,1280,520]).
 **Open**
 - 2P key response, replay cams, hoof/rail overlap and the render-target note are still unchecked.
+
+## Iteration 101
+**Did**
+- No page changes. Read broadcast.js: the postpass renders the scene to `rt`, then calls `renderer.setRenderTarget(null)` before drawing the quad (broadcast.js:96-98). The "render target left bound" note is a false alarm.
+**Saw**
+- I did not open the page. The last readings stand: no console errors, no `Lighting:`/`Surfaces:` faults, 268 draw calls, 128k triangles.
+**Next**
+- Play a 2P race past the countdown and read both `legs` strings.
+- `look` with `cameras` at the photo-finish sepia replay and head-on cut.
+- Zoom [0,330,1280,520] and lower the foreground rail or thin the dust so the hooves read.
+**Open**
+- 2P key response, replay cams and hoof/rail overlap are still unchecked.
