@@ -70,27 +70,7 @@ body.replaying .pop{top:30vh!important}
 #title .s{margin-top:10px;font-size:clamp(13px,1.7vw,19px);letter-spacing:1px}
 #title .s b{color:var(--blue)}
 @keyframes tc{0%{transform:rotate(-1.5deg) scale(.5)}100%{transform:rotate(-1.5deg) scale(1);opacity:1}}
-/* replay */
-#replay{inset:0;display:none}
-#replay .bar{position:absolute;left:0;right:0;height:7vh;background:var(--ink)}
-#replay .t{top:0}#replay .b{bottom:0}
-#replay .tag{position:absolute;top:10vh;left:3vw;font-size:clamp(20px,3vw,40px);color:var(--cream);background:var(--tomato);border:4px solid var(--ink);padding:2px 22px;box-shadow:6px 6px 0 var(--ink);letter-spacing:3px;transform:skewX(-8deg)}
-#replay .tag i{display:inline-block;width:.45em;height:.45em;border-radius:50%;background:var(--cream);margin-right:.35em;animation:bl .8s steps(2) infinite}
-#replay .sk{position:absolute;bottom:9vh;left:50%;transform:translateX(-50%);font-size:14px}
-#pf{inset:0;display:none}
-#pf .fr{position:absolute;inset:7vh 7vw;border:18px solid #efe2bd;box-shadow:inset 0 0 0 3px #3a2a1e,inset 0 0 90px rgba(40,20,5,.65),0 0 0 4px var(--ink);background:none}
-#pf .fr:before,#pf .fr:after{content:"";position:absolute;top:-3px;bottom:-3px;width:14px;background:repeating-linear-gradient(#1a110c 0 16px,transparent 16px 34px)}
-#pf .fr:before{left:-16px}#pf .fr:after{right:-16px}
-#pf .hair{position:absolute;top:7vh;bottom:7vh;left:50%;width:2px;background:rgba(255,235,190,.55);margin-left:-1px}
-#pf .cap2{position:absolute;left:50%;top:9vh;transform:translateX(-50%);font-family:"Shrikhand",serif;font-size:clamp(28px,5vw,64px);color:#efe2bd;text-shadow:3px 3px 0 #3a2a1e;letter-spacing:2px;white-space:nowrap}
-#pf .cap3{position:absolute;left:50%;bottom:9.5vh;transform:translateX(-50%);font-size:clamp(13px,1.6vw,20px);color:#efe2bd;background:rgba(40,25,15,.8);padding:3px 16px;border:2px solid #efe2bd;white-space:nowrap}
-body.replaying #tote,body.replaying #prog,body.replaying #top-r,body.replaying #tips,body.replaying #keys,body.replaying #lower{opacity:0}
-body.replaying #replay .sk{display:block}
-body.pfin #replay .bar{display:none}
-body.pfin .pop{display:none}
-body.pfin #replay .tag{top:15vh;bottom:auto;left:9vw;font-size:clamp(14px,1.8vw,24px);padding:1px 14px;border-width:3px;box-shadow:4px 4px 0 var(--ink)}
-body.pfin #replay .sk{bottom:10.5vh;left:auto;right:9vw;transform:none}
-@keyframes bl{50%{opacity:.15}}
+</style><link rel="stylesheet" href="./replay.css"><style>
 #flash{inset:0;background:var(--cream);opacity:0}
 /* results */
 #results{inset:0;display:none;align-items:center;justify-content:center;pointer-events:none;background:radial-gradient(ellipse at center,rgba(30,15,8,.1),rgba(30,15,8,.55))}
