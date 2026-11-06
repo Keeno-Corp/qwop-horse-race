@@ -1,11 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 37
-**Did** game.js `AI.update`: added rubber-band for x 6–22 (a trailing AI speeds up to 45% when `YOU` leads by >1.5 m). Plant-replay camera in `updateCamera` pulled back (d 5.5→8, pair 6.5→9, fov 38→42) so the fallen horse and neighbours fit.
-**Saw** Syntax check only (`node --check`); no look or race run this session.
-**Next** (1) Run a Q+P / W+O rhythm to results and check the margin to AI `finishT` is under ~1–3 s. (2) `look` during a plant replay to confirm framing and brightness. (3) Trace `horses.2.state` down→run, and look at the finish replay.
-**Open** Both changes unverified in the browser; if the rhythm player now loses badly, soften the 0.09 slope.
-
 ### Judge 37
 
 **Verdict, session 37**
@@ -32,3 +26,9 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Reach the finish, results and replay.** With the pace fixed, play to `phase` "results" and `look` once at the finish `replay` (`kind` "finish", REPLAY banner, 0.25x side-on shot). Then `look` at the results screen for the "DIRT EATER" badge. This is the first time the photo finish and the finish replay are seen since session 36.
 
 SCORE: 7.7
+
+## Iteration 38
+**Did** game.js `AI.update`: the trailing AI now gets a direct physics push (`h.drive = 1`, `h.driveF = 40 × (gap − 1.5)`, gap capped at 14 m) when it is more than 1.5 m behind the leader. The old cadence-only rubber-band had not moved the AI.
+**Saw** Q+P / W+O rhythm, solo: `YOU` x 12.9 at `raceT` 3.35 against AI at 6.7–8.7. At `raceT` 5.35 `YOU` was at 18.6 and the AI at 13.5–14.8, a 4 m lead where session 37 had 11–15 m. No plants, no console errors. I did not reach results, the plant replay or the finish replay.
+**Next** (1) Play on to `phase` "results" and check the margin to the first AI `finishT`. (2) `look` at a plant replay. (3) `trace` `horses.0.state` for down→run.
+**Open** The 40 per metre drive may be too strong or too weak for a faster player; the rhythm player is still about 4 m ahead.

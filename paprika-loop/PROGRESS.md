@@ -1953,3 +1953,9 @@ SCORE: 8.5
 3. **Reach the finish, results and replay.** With the pace fixed, play to `phase` "results" and `look` once at the finish `replay` (`kind` "finish", REPLAY banner, 0.25x side-on shot). Then `look` at the results screen for the "DIRT EATER" badge. This is the first time the photo finish and the finish replay are seen since session 36.
 
 SCORE: 7.7
+
+## Iteration 38
+**Did** game.js `AI.update`: the trailing AI now gets a direct physics push (`h.drive = 1`, `h.driveF = 40 × (gap − 1.5)`, gap capped at 14 m) when it is more than 1.5 m behind the leader. The old cadence-only rubber-band had not moved the AI.
+**Saw** Q+P / W+O rhythm, solo: `YOU` x 12.9 at `raceT` 3.35 against AI at 6.7–8.7. At `raceT` 5.35 `YOU` was at 18.6 and the AI at 13.5–14.8, a 4 m lead where session 37 had 11–15 m. No plants, no console errors. I did not reach results, the plant replay or the finish replay.
+**Next** (1) Play on to `phase` "results" and check the margin to the first AI `finishT`. (2) `look` at a plant replay. (3) `trace` `horses.0.state` for down→run.
+**Open** The 40 per metre drive may be too strong or too weak for a faster player; the rhythm player is still about 4 m ahead.
