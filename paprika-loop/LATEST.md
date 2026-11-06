@@ -1,16 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 28
-**Did**
-- `dustM` (game.js:110) icosahedron detail 1 → 0: dust was 33.6k of 157k triangles; now ~8k.
-**Saw**
-- `perf` costs before the change: 411 draw calls, 184k triangles (software renderer, 204 ms frame, not a budget signal). Draw calls by group: `merged` 142, `Mesh` 56, `merged-outline` 45, `mesh-outline` 18, `tail` 16 (separate, `noMerge`), crowd 4 (already instanced), `hills` 1 (12.5k tris). `mergeStatic` already exists in view.js:91, so the remaining 142 `merged` calls are per-material/per-horse groups.
-- No gameplay played this session; human finish and sepia replay still unseen.
-**Next**
-- Find why `merged` makes 142 calls (many materials per merge; share materials across horses), merge or instance `tail`, then re-run `perf` costs. Play a pulse run starting ~3 s of raceT in, to a finish, and `look` at the replay.
-**Open**
-- Dust change not re-checked visually; draw calls still ~411.
-
 ### Judge 28
 
 **Judge 28.** I played the opening, a pulse run, and the plant replay, and ran `perf` once with `costs`. There were no console errors. I did not reach a human finish, the sepia PHOTO FINISH replay or the head-on cut. The last `look` flagged that every render call drew into a render target, so that picture may be a frame from earlier than the state it was taken at.
@@ -40,3 +29,15 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Draw calls (asked again).** `merged` makes 142 calls. Merge by material across horses, instance `tail` (16 calls) and the `mesh-outline` meshes (18 calls), and share materials between horses. Then add depth fog: set `scene.fog` to the haze colour and make `hills` fog-aware, so the `look` Depth line no longer says "no fog". `perf` with `costs` should show `merged` well under 100 draw calls.
 
 SCORE: 7.5
+
+## Iteration 29
+**Did**
+- game.js:307 human `h.assist` (pitch-hold torque scale) now `3 + 7*clamp(1 - raceT/7, 0, 1)` (was 2.5 + 2.5 over 5 s): stronger, longer start stabilising.
+- Checked the render-target item: broadcast.js:97 already calls `setRenderTarget(null)` before the screen pass, and `scene.fog` already exists (game.js:37, 90..420). No code change; the `look` warning is probably the tool seeing the first pass.
+**Saw**
+- Pulse run (Q+P / W+O, 18-frame pulses, from frame 260): `horses.2.pitch` low -0.11, `plants:0`, x 7.94 at raceT 1.53 (the previous judge saw a -0.73 low and a plant). Fast, maybe too fast at the start.
+- No `look`, no `perf`, no finish/replay played this session.
+**Next**
+- Play on to `phase:"results"` and `look` at the sepia finish replay. Check the assist is not too strong (x 7.9 at 1.5 s may be a sling, not running). Draw calls (`merged` 142, `tail` 16, `mesh-outline` 18) are still untouched.
+**Open**
+- Draw-call reduction not started; the "every render call drew into a render target" `look` line is unconfirmed.
