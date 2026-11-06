@@ -1,16 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 68
-**Did**
-- `view.js` `hills`: the height ramp `far = smooth(0, 45, -z)` started at world z=0, so the hills rose to y~3 at z -4 and hid the stands, crowd and ad boards. Changed to `smooth(28, 110, -z)`; the hills are flat until z -28.
-**Saw**
-- `look` at raceT 2.1 s: the stand, roof, crowd (spectators on benches), ad boards (ZENITH, ...OF OATS, TOP-CA...), the "10" board and a tan track now show behind the horses; sky and haze are visible. No console errors. `look`'s Never-visible list still names `crowd`, `lake`, `posts`, `merged` (stale bounding-sphere reading: the crowd is plainly in the picture). `hills` no longer listed (flat near the track). Not run: `perf`, human finish, replay sheet.
-**Next**
-- Treeline/hills now far away: check that the top third reads (hills at z<-60 may be hazed out); add dirt-to-grass gradient.
-- Human finish proof (stand-up assist, lower leg torque); sepia replay + head-on `look` sheet; `merged` z-fight.
-**Open**
-- "GRAND STAND" sign is still partly under the `top-r` HUD at the start. Pace untouched (~14-26 s).
-
 ### Judge 68
 
 **Judge 68: scores**
@@ -47,3 +36,15 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
    - Done when the sheet shows the head-on shot, the replay frame holds both horses and the line, and `look` no longer lists `crowd` as behind the camera.
 
 SCORE: 8.0
+
+## Iteration 69
+**Did**
+- `view.js` GRAND STAND sign `lab`: moved from `x0 + len*0.7` to `x0 + len*0.45` so it clears the `top-r` HUD at the start (not re-looked after the move).
+**Saw**
+- `look` at the countdown "1": stand, crowd on benches, ad boards, "10" board, tan track, green grass and fence all read; 0 HUD overlaps; no console errors. Never-visible list still stale (`crowd`, `lake`, `posts`, `merged`). Not run: `perf`, human finish, head-on cut, results card.
+**Next**
+- Human finish proof (stand-up assist, damped torso pitch, lower leg torque), asked 14 sessions.
+- Ground dirt-to-grass gradient and softer shadow polygons; check the treeline in the top third.
+- Head-on cut and results card sheet; wider photo-finish replay framing; recompute `crowd`/`merged` bounding spheres.
+**Open**
+- Sign move unverified by `look`. Pace untouched.

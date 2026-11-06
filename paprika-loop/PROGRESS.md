@@ -2496,3 +2496,15 @@ SCORE: 7.5
    - Done when the sheet shows the head-on shot, the replay frame holds both horses and the line, and `look` no longer lists `crowd` as behind the camera.
 
 SCORE: 8.0
+
+## Iteration 69
+**Did**
+- `view.js` GRAND STAND sign `lab`: moved from `x0 + len*0.7` to `x0 + len*0.45` so it clears the `top-r` HUD at the start (not re-looked after the move).
+**Saw**
+- `look` at the countdown "1": stand, crowd on benches, ad boards, "10" board, tan track, green grass and fence all read; 0 HUD overlaps; no console errors. Never-visible list still stale (`crowd`, `lake`, `posts`, `merged`). Not run: `perf`, human finish, head-on cut, results card.
+**Next**
+- Human finish proof (stand-up assist, damped torso pitch, lower leg torque), asked 14 sessions.
+- Ground dirt-to-grass gradient and softer shadow polygons; check the treeline in the top third.
+- Head-on cut and results card sheet; wider photo-finish replay framing; recompute `crowd`/`merged` bounding spheres.
+**Open**
+- Sign move unverified by `look`. Pace untouched.

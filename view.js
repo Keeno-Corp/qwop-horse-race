@@ -418,7 +418,7 @@ export function buildEnvironment(scene, _tex, rng) {
     }
     // roof sign + a TV gantry box
     const cap = tm(box(5, 1.6, 1.8), concrete2, [x0 + len * 0.7, roofY + 1.1, rz - 1], [0, 0, 0], [1, 1, 1], { outline: 0.9 }); g.add(cap);
-    const lab = labelPlane('GRAND STAND', 3.4, 0.7, { bg: '#4c2c21', fg: '#e5af2c', w: 512, stripe: '#d3432b' }); lab.position.set(x0 + len * 0.7, roofY + 1.15, rz - 0.07); g.add(lab);
+    const lab = labelPlane('GRAND STAND', 3.4, 0.7, { bg: '#4c2c21', fg: '#e5af2c', w: 512, stripe: '#d3432b' }); lab.position.set(x0 + len * 0.45, roofY + 1.15, rz - 0.07); g.add(lab);
     scene.add(g);
   }
   stand(44, 32, 4, true); stand(2, 18, 3, false);
