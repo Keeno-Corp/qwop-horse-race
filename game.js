@@ -60,7 +60,7 @@ class AI {
     if (px > 22) { if (this.m) this.m = null; this.next = 99; const gapL = (AI.aiLeadX || 0) - px; if (gapL > 0.5) band = 1 - clamp((gapL - 0.5) * (px > 38 ? 0.3 : 0.15), 0, px > 38 ? 0.78 : 0.7); }
     { const g1 = (AI.leadX || 0) - px; if (g1 > 1.5 && h.state === 'run' && !h.finished) { h.drive = 1; h.driveF = 40 * clamp(g1 - 1.5, 0, 14); } else h.driveF = 0; }
     if (this.t < this.delay) { for (let i = 0; i < 4; i++) h.setHeld(i, false); return; }
-    const per = this.jit * band * this.base * (1 + 0.14 * Math.sin(this.wob * 1.7) + 0.08 * Math.sin(this.wob * 4.1)) * (1 + clamp(lead * 0.07, -0.35, 0.5)) * (1 - clamp(((AI.leadX || 0) - px - 1) * 0.06, 0, 0.4)) * (h.pos().x > 40 ? 1 - clamp(lead * 0.06, -0.3, 0.3) : 1);
+    const per = this.jit * band * this.base * (1 + 0.14 * Math.sin(this.wob * 1.7) + 0.08 * Math.sin(this.wob * 4.1)) * (1 + clamp(lead * 0.07, -0.35, 0.5)) * (1 - clamp(((AI.leadX || 0) - px - 1) * 0.06, 0, 0.4)) * (h.pos().x > 40 ? 1 - clamp(lead * 0.1, -0.4, 0.4) : 1);
     this.phase = (this.phase + dt / per) % 1;
     const off = [0, 0.5, 0.5, 0], duty = 0.58;
     const flags = off.map((o) => ((this.phase + o) % 1) < duty);
@@ -257,7 +257,7 @@ function footDust(dt) {
     for (let i = 0; i < 4; i++) {
       const L = h.legs[i], v = L.lo.body.linvel(), f = h.footPos(i);
       h.legT[i] -= dt;
-      if (f.y < 0.12 && Math.abs(v.x) > 2.6 && h.legT[i] <= 0) { emitDust(f.x, 0.02, f.z, 2, 1.1, 1.8, 0.8); h.legT[i] = 0.09; }
+      if (f.y < 0.2 && Math.abs(v.x) > 1.5 && h.legT[i] <= 0) { emitDust(f.x, 0.02, f.z, 3, 1.1, 1.8, 1); h.legT[i] = 0.07; }
     }
   }
 }
@@ -390,7 +390,7 @@ function updateCamera(dt) {
     const rp = S.replay;
     if (rp.kind === 'finish') {
       const prog = (rp.pos - rp.start) / Math.max(1, rp.end - rp.start);
-      tp.set(FINISH_X + 3.4 - prog * 0.8, 2.2, 11.5); tl.set(FINISH_X - 0.2, 1.0, 0); fov = 29 - prog * 4;
+      tp.set(FINISH_X + 4.5 - prog * 0.8, 2.6, 15); tl.set(FINISH_X - 0.8, 1.0, 0); fov = 34 - prog * 3;
     } else {
       const prog = (rp.pos - rp.start) / Math.max(1, rp.end - rp.start), s = subjectAt(rp.pos, rp.subject), a = 0.35 + prog * 1.1;
       let cx = s.x, cz = s.z, d = 8;

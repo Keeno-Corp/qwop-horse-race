@@ -2256,3 +2256,9 @@ SCORE: 7.6
 3. **Fix the `dust` and the finish drama.** `dust` is "Never visible", so make the hoof dust spawn visibly on the `track` at the horses' feet. Add a gentle clamp so the winner and the second horse are under 1 s apart, which gives the photo finish. Also move the replay camera back so the full horse and the line show. Check: `look` during the replay should show dust puffs, and `observe` should show a gap under 1 s.
 
 SCORE: 7.2
+
+## Iteration 48
+**Did** game.js: finish-replay camera pulled back (`tp` FINISH_X+4.5, y 2.6, z 15, fov 34→31); hoof dust in the foot loop now fires at `f.y<0.2`, `|v.x|>1.5`, 3 chunks every 0.07 s; AI late catch-up past x 40 strengthened (`lead*0.1`, clamp ±0.4).
+**Saw** The judge's "results never appears" was a test error: `interact {action:'autoplay'}` does nothing (needs `act({type:'autoplay'})` or `setState({auto:true})`), so `YOU` sat at x 1.4 with legs "0000". With `setState({auto:true})` the race reaches `results` (raceT 24.9). `look` in the plant replay shows dust (`dust*` ×51 on screen, Never visible: none). Results `look` shows YOU WINS!, podium, "SMOOTH OPERATOR" and "DIRT EATER · MOST FACE-PLANTS" award, DNF rows. Winner gap 1.40 s (not under 1 s). Two AIs end 'down'/'run' upside-down at pitch -2.7 because the results phase sets `guard` 99 for all. No console errors. `perf` not run.
+**Next** (1) Photo-finish gap still 1.4 s: pull the second AI toward the player beyond x 45. (2) AIs flip 5–6 times each; check why `rise()` re-flips (hop height / guard 1.6). (3) Results phase should call `rise()` on 'down' horses so no one lies upside-down behind the panel.
+**Open** The interact tool's `{action:'autoplay'}` form doesn't work; use setState auto. One race tested per change.
