@@ -95,3 +95,20 @@ SCORE: 5.4
 3. **Play with real keys and reach the results card.** Run `interact` with Q, P, W and O held in alternation through a full race, then `Digit2` for 2-player. Keep the idle `YOU` from dominating by showing the player in the pack, or by stopping the `YOU` tag from sitting over the grandstand. Also drop `__game.subject` or point it at a real named mesh. To cut draw calls, merge the crowd and fence into instanced meshes. A `perf` after that should show under 250 draw calls.
 
 SCORE: 6.5
+
+## Iteration 3
+**Did**
+- Finish replay camera (`updateCamera`, kind `finish`, plus the start pose in the finish-replay setup in game.js): now a low head-on cam at (FINISH_X+7, 1.1, 3.2) looking back down the track, fov 30→26, instead of the live side view.
+- `body.pfin #replay .tag` moved to top:15vh, so it no longer sits on `div#pfc` (lower left).
+- `__game.subject` now `'tote-board'` (a Group named in view.js; look may still say it is not in the scene).
+**Saw**
+- Black lower-left rectangle: it is the tote box (`div#tote`, [18,16,335,207]) mirrored vertically (y 593–784). It vanished when `#tote` was set to display:none. The render target read back by `readRenderTargetPixels` at that spot is normal colour. Swapping the silk `<img>` for a canvas did not remove it (reverted). I take it as a harness screenshot artifact (DOM drawn into the GL capture), not in the page's own render; unproven in a real browser.
+- Finish replay seen (frame 1702+150): sepia, sprocket frame, `PHOTO FINISH` title, scratches, head-on view with checkered line; `REPLAY 0.25x` tag [112,120,379,158] and `#pfc` [300,688,979,723] no longer overlap. Dead heat still `BY 0.00 SEC`, both leaders finishT 24.1.
+- No-input race: Dusty Rhodes pitch 3.12, plants 5; YOU idle at x 2.27. `look` still warns that the last render call drew into a render target (the replay's broadcast pass; `setRenderTarget(null)` does run in broadcast.js:94, so it reads as a harness note). perf not run; draw calls still ~443.
+**Next**
+- Dead heat reads scripted: break the AI tie (vary finishT by seed) so gaps like 0.03–0.4 s appear.
+- Cut draw calls (<250): merge crowd, fence, ad boards into InstancedMesh; run `perf`.
+- Play real keys (Q/P/W/O, then Digit2) through to the results card; the player still sits at the start with the camera on the leader, so make the player visible/relevant.
+**Open**
+- The black-rectangle cause is inferred only; check `look` sample at (100,520) in the next session after any tote edit.
+- The first plant-replay frame brightness was not re-measured.

@@ -400,7 +400,7 @@ function startFinishReplay() {
   const start = Math.max(Math.max(0, ringN - RING + 2), (S.firstFinishFrame || ringN - 1) - 24), end = Math.min(ringN - 1, start + 64);
   S.replay = { kind: 'finish', start, end, pos: start, subject: w.idx };
   S.phase = 'replay'; setReplayUi(true, 'finish'); S.flash = 1; sfx.play('cheer', 0.8);
-  camPos.set(FINISH_X + 8, 2.7, 12.5); camLook.set(FINISH_X - 0.6, 1.1, 0);
+  camPos.set(FINISH_X + 7, 1.1, 3.2); camLook.set(FINISH_X - 2.5, 1.2, 0);
 }
 function startPlantReplay() {
   const hi = S.pending.horse; S.pending = null;
@@ -457,7 +457,7 @@ function updateCamera(dt) {
     const rp = S.replay;
     if (rp.kind === 'finish') {
       const prog = (rp.pos - rp.start) / Math.max(1, rp.end - rp.start);
-      tp.set(FINISH_X + 8 - prog * 1.2, 2.7, 12.5); tl.set(FINISH_X - 0.6, 1.1, 0); fov = 24 - prog * 3;
+      tp.set(FINISH_X + 7 - prog * 1.5, 1.1 + prog * 0.3, 3.2); tl.set(FINISH_X - 2.5 - prog * 1.0, 1.2, 0); fov = 30 - prog * 4;
     } else { // low rail cam orbiting the pile-up
       const prog = (rp.pos - rp.start) / Math.max(1, rp.end - rp.start), s = subjectAt(rp.pos, rp.subject), a = 0.35 + prog * 1.1;
       let cx = s.x, cz = s.z, d = 8;
@@ -632,7 +632,7 @@ requestAnimationFrame(frame);
 // ---------- window.__game ----------
 const r2 = (v) => +v.toFixed(2);
 window.__game = {
-  subject: 'track',
+  subject: 'tote-board',
   describe: () => ({
     name: 'Photo Finish Fiasco', stack: 'three + rapier ragdoll', units: 'metres, x down the track (finish at x=60), y up, z across lanes',
     keys: { solo: { KeyQ: 'front-left leg (hold)', KeyW: 'front-right leg', KeyO: 'back-left leg', KeyP: 'back-right leg', KeyR: 'restart', Digit2: 'two players', Digit1: 'solo', Space: 'skip replay' }, twoPlayer: { p1: 'Q W E R', p2: 'U I O P', Enter: 'restart' } },
