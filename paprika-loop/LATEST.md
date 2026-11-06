@@ -1,42 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-### Judge 68
-
-**Judge 68: scores**
-
-1. **Plays as DESIGN.md says: 6.5.** Digit1 gives the countdown, then the race. The `keys` panel (Q FL, W FR, O BL, P BR) and the "ALTERNATE LEGS: Q+P THEN W+O" tip bar show. The no-input race finishes at about 24 s with a "PHOTO" tote, "CARTWHEEL!" and "HOOF HEARTED IS DOING GYMNASTICS!". I did not prove a human finish, now 13 sessions without one.
-2. **Rapier ragdolls, face-plant and auto-right: 8.** Sir Trips-a-Lot, Hoof Hearted and YOU run with visible leg motion in the "mid" shot. Hoof Hearted does a cartwheel with `plants` 2 on the tote.
-3. **Replay and photo-finish look: 8.5.** The sheet shows two replays. The "INSTANT REPLAY · 0.25X" banner appears over the mid-race replay. At finish+8 s the sepia "PHOTO FINISH" frame has a film border and perforations, a "REPLAY 0.25X" tag, a "WINNER: SIR TRIPS-A-LOT · BY 0.13 SEC" caption, and visible grain and a scratch line. This is the first session in which I saw it. The replay camera sits very close to the horse, so the finish line itself is hard to read.
-4. **Photo finish and tangled AI collapse within a minute, no input: 8.5.** The tote shows PHOTO for horses 1 and 4 at about 24.5 s, and Hoof Hearted cartwheels.
-5. **Results with most face-plants award: 8.** Judge 67 saw the DIRT EATER badge. The tote's FACE-PLANTS counters (2, 2, 0, 0) are live. I did not re-open the results card this session.
-6. **Looks as LOOK.md says: 8.** The toon 3-step shading, thick outlines, warm golden light and CRT/VHS pass hold. The stand roof, crowd on benches, ad boards (GOLDEN HOOF OATS, TOP-CAT TIRES, PRON...), the "10" board, a green-to-orange track and a sky gradient now read as a 70s race broadcast. The "GRAND STAND" sign is clear of the HUD at finish+4 s but is still partly hidden at the start. Remaining flaws: the ground is flat orange with large shadow polygons, the treeline is missing, and the horizon is weak.
-7. **`__game` convention, static, no network: 9.** `__game` returns its keys, assets total 0.32 MB with vendored fonts, and there were no console errors.
-8. **Horses match CHARACTERS.md: 8.** The red diamonds, green stripes, blue polka dots and orange "4" cloth read, with blinkers, big eyes and bristly mane. The white socks and hooves are visible but still small.
-9. **Broadcast overlay: 9.** The `tote` has silks and live odds (30-1, 4-1, PHOTO). The LIVE bug, 3:58 PM and 4:00 PM channel-7 clock, race time, progress bar, `lower` commentator (Walt Dunmore, then Hank "Hoofbeat" Pruitt), and the "CARTWHEEL!" and "INSTANT REPLAY" banners all show. `look` reports 0 overlaps.
-10. **Camera: 8.** The side-tracking telephoto, the replay cam and the close sepia photo-finish cam work. The countdown "1" is huge in the start picture. I did not see the head-on cut.
-11. **Learnable controls: 6.** No human finish is proven. In the start picture YOU stands upright.
-12. **Local 2-player, discoverable: 8.** The "2 PLAYERS (2)" button and the "2 = TWO PLAYERS" tips bar show it. I did not play it.
-13. **Style judged as hard as gameplay: 8.** The HUD, background, replay and horses now cohere as a 70s broadcast.
-
-**Faults: 7.5.** There were no console errors. `perf` read 89.7 ms a frame (266 draw calls, 126k triangles) on SwiftShader, which is not a signal. The Never-visible list still names `crowd`, `lake`, `posts`, `merged` and `basic-merged` as "behind the camera", and `hills` as 560 units "in view" but with no pixel. `crowd` is plainly on screen, so that is a stale bounding-sphere reading. The `dust` object has 0 units. The ground has no texture or gradient.
-
-**Next:**
-1. **Prove a human finish (asked again, thirteen sessions).**
-   - Add a stand-up assist for the first second (a damped torso-pitch spring), lower the leg torque or add damping, and make alternating Q+P / W+O reliably advance the horse.
-   - Done when `interact` alternates Q+P and W+O at 18 frames a hold, with `until` `{"horses.2.finished": true}` and `max` 3600, gives `finishT` under 60.
-2. **Finish the background: ground and horizon.**
-   - Give the `track` and ground a dirt-to-grass gradient and grain texture, and shrink or soften the large diagonal shadow polygons.
-   - Check that the `hills` treeline reads in the top third at z below -60 and is not fully hazed out.
-   - Move the "GRAND STAND" sign out from under `top-r` at the start.
-   - Done when `look` with `sample` at [300, 560], [900, 600] and [600, 120] gives three clearly different colours and the treeline silhouette shows in the top third.
-3. **Show the head-on cut and the results card.**
-   - Take a `look` sheet at the finish and about 12 s later, and check the head-on cut, the results card (DIRT EATER badge, podium, "PRESS R") and the 2-player mode with Digit2.
-   - Widen the photo-finish replay framing so the finish line and both horses' noses show, not just one horse's chest.
-   - Fix the `merged` z-fight and the stale Never-visible bounds by recomputing `crowd` and `merged` bounding spheres.
-   - Done when the sheet shows the head-on shot, the replay frame holds both horses and the line, and `look` no longer lists `crowd` as behind the camera.
-
-SCORE: 8.0
-
 ## Iteration 69
 **Did**
 - `view.js` GRAND STAND sign `lab`: moved from `x0 + len*0.7` to `x0 + len*0.45` so it clears the `top-r` HUD at the start (not re-looked after the move).
@@ -48,3 +11,37 @@ SCORE: 8.0
 - Head-on cut and results card sheet; wider photo-finish replay framing; recompute `crowd`/`merged` bounding spheres.
 **Open**
 - Sign move unverified by `look`. Pace untouched.
+
+### Judge 69
+
+**Judge 69: scores**
+
+1. **Plays as DESIGN.md says: 6.** The Digit1 start gives a "2" countdown and then the race. The `keys` panel and the "ALTERNATE LEGS: Q+P THEN W+O" tip bar show. I held Q and P for 18 frames and YOU (`horses.2.x`) went 2.0 → peak 2.15 → 2.1, so it did not advance. That is a 14th session without a proven human finish.
+2. **Rapier ragdolls, face-plant and auto-right: 8.** The `horses` state reads `run` with `plants` counters, and the legs move in the "mid" shot. The tote shows Hoof Hearted at 4 FACE-PLANTS by finish+12 s.
+3. **Replay and photo-finish look: 7.5.** I did not re-check it this session. Judge 68 saw the sepia frame, but its framing is too tight to show the line.
+4. **Photo finish and tangled AI collapse within a minute, no input: 8.** At race time 25.75 s the tote shows PHOTO for horses 1 and 4, with the commentator saying "HOOF HEARTED EATS DIRT!".
+5. **Results with most face-plants award: 7.** The tote's FACE-PLANTS counters are live. I did not see the results card this session.
+6. **Looks as LOOK.md says: 8.** The toon shading, outlines, golden light and CRT pass hold. The stand roof, benches of crowd, the ad boards (GOLDEN HOOF OATS, TOP-CAT TIRES, PRON...) and the "10" board read as a 70s broadcast. The ground is still flat orange with big shadow shapes, and there is no treeline.
+7. **`__game` convention, static, no network: 9.** `__game` returns its keys, assets total 0.32 MB with vendored fonts, and I saw no console errors.
+8. **Horses match CHARACTERS.md: 8.** The red diamonds, green stripes, blue polka dots and orange "4" cloth read, with blinkers and an eye. The socks and hooves are small.
+9. **Broadcast overlay: 9.** The `tote`, the LIVE bug, the 3:58 and 4:00 PM channel-7 clock, the race-time readout, the progress bar and the Walt Dunmore lower-third all show.
+10. **Camera: 7.5.** The side-tracking telephoto and the countdown cam work. I did not see the head-on cut.
+11. **Learnable controls: 5.** The Q+P hold above moved YOU by 0.15 m at most, and YOU does not advance from key input.
+12. **Local 2-player, discoverable: 8.** The 2p sheet cell shows a pink marker, "P1 / P2" tote names, a Q W E R | U I O P key panel and a "2 PLAYERS (2)" button. I did not play it.
+13. **Style judged as hard as gameplay: 8.** The HUD, set and horses cohere as a 70s broadcast.
+
+**Faults: 7.** `perf` read 104.8 ms a frame on SwiftShader (265 draw calls, 126k triangles), which is not a signal. The "GRAND STAND" sign is still clipped under the `top-r` HUD in the start and 2p pictures, so the iteration 69 move did not fix it. The sign reads "GRAND STAN" at the top edge in the start, mid and 2p cells. I saw no console errors.
+
+**Next:**
+1. **Prove a human finish (asked again, 14 sessions).**
+   - Add a stand-up assist (a damped torso-pitch spring), lower the leg torque or add damping, and make a Q+P then W+O alternation move YOU forward.
+   - Done when `interact` alternates Q+P and W+O at 18 frames a hold, with `until` `{"horses.2.finished": true}` and `max` 3600, gives `finishT` under 60. Alternatively, `horses.2.x` should pass 10 within 300 frames.
+2. **Fix the "GRAND STAND" sign (asked again).**
+   - Raise it or shift it left in `view.js` so the camera sees the whole word clear of the `top-r` HUD (the iteration 69 move was not enough).
+   - Done when `look` at the start shows "GRAND STAND" in full with no HUD over it.
+3. **Finish the ground and horizon.**
+   - Give the `track` a dirt-to-grass gradient and grain, soften the shadow polygons, and make the `hills` treeline read in the top third.
+   - Done when `look` with `sample` at [300, 560], [900, 600] and [600, 120] gives three clearly different colours.
+   - After that, take a `look` sheet to show the head-on cut and the results card.
+
+SCORE: 7.6
