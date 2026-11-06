@@ -14,8 +14,9 @@ function mesh(geo, mat, p = [0, 0, 0], r = [0, 0, 0], s = [1, 1, 1]) {
 const cyl = (rt, rb, h, seg = 5) => new THREE.CylinderGeometry(rt, rb, h, seg);
 
 /** Visual groups for one horse, in the same order as Horse.parts: torso, neck, head, then upper/lower per leg. */
-export function buildHorseView(color, tint = 0) {
-  const body = lam(new THREE.Color(BODY).offsetHSL(0, 0, tint)), sock = lam(SOCK), dark = lam(DARK), cloth = lam(color);
+export const COATS = [0xc9793c, 0x8e929a, 0xe8d8b0, 0xa8462a];
+export function buildHorseView(color, tint = 0, coat = BODY) {
+  const body = lam(new THREE.Color(coat).offsetHSL(0, 0, tint)), sock = lam(SOCK), dark = lam(DARK), cloth = lam(color);
   const clothDark = lam(new THREE.Color(color).multiplyScalar(0.7));
   const eyeW = new THREE.MeshLambertMaterial({ color: 0xffffff }), eyeB = new THREE.MeshBasicMaterial({ color: 0x111111 });
   const groups = [];
@@ -73,9 +74,9 @@ export function buildEnvironment(scene, tex, rng) {
   const env = { spectators: null, clouds: [], excite: 0 };
   // sky dome (vertex gradient)
   const sky = new THREE.SphereGeometry(500, 16, 10);
-  const cols = []; const top = new THREE.Color(0x4f9cf4), hor = new THREE.Color(0xbfe0ff), c = new THREE.Color();
+  const cols = []; const top = new THREE.Color(0x5aa6ff), hor = new THREE.Color(0x70b4ff), c = new THREE.Color();
   const pos = sky.attributes.position;
-  for (let i = 0; i < pos.count; i++) { const y = pos.getY(i) / 500; c.copy(hor).lerp(top, Math.pow(Math.max(0, y), 0.6)); cols.push(c.r, c.g, c.b); }
+  for (let i = 0; i < pos.count; i++) { const y = pos.getY(i) / 500; c.copy(hor).lerp(top, Math.pow(Math.max(0, y), 0.12)); cols.push(c.r, c.g, c.b); }
   sky.setAttribute('color', new THREE.Float32BufferAttribute(cols, 3));
   const skyM = new THREE.Mesh(sky, new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.BackSide, fog: false, depthWrite: false }));
   skyM.name = 'sky'; skyM.position.set(40, 0, 0); scene.add(skyM);
@@ -109,7 +110,7 @@ export function buildEnvironment(scene, tex, rng) {
   const tn = tg.toNonIndexed(); tn.computeVertexNormals();
   const tcols = []; const d1 = new THREE.Color(0x9a653d), d2 = new THREE.Color(0x805431);
   const tq = tn.attributes.position;
-  for (let i = 0; i < tq.count; i += 3) { cc.copy(d1).lerp(d2, rng()); for (let k = 0; k < 3; k++) tcols.push(cc.r, cc.g, cc.b); }
+  for (let i = 0; i < tq.count; i += 3) { cc.copy(d1).lerp(d2, rng()); { const z = tq.getZ(i), x = tq.getX(i); if (Math.abs(((z + 4.7 + Math.sin(x * 0.05) * 0.6) % (1.4 + 0.5 * noise2(Math.floor(x / 12), 3)))) < 0.16) cc.lerp(new THREE.Color(0xc79a6a), 0.4); cc.offsetHSL(0, 0, (noise2(x * 0.15, z * 0.9) - 0.5) * 0.08 + (noise2(x * 0.03 + 9, z * 0.3) - 0.5) * 0.1); } for (let k = 0; k < 3; k++) tcols.push(cc.r, cc.g, cc.b); }
   tn.setAttribute('color', new THREE.Float32BufferAttribute(tcols, 3));
   const track = new THREE.Mesh(tn, new THREE.MeshLambertMaterial({ vertexColors: true, flatShading: true }));
   track.position.set(45, 0.005, 0); track.receiveShadow = true; track.name = 'track'; scene.add(track);
@@ -165,14 +166,14 @@ export function buildEnvironment(scene, tex, rng) {
     const z0 = -7.4;
     for (let r = 0; r < rows; r++) {
       const y = 0.35 + r * 0.6, z = z0 - r * 1.0;
-      const step = mesh(new THREE.BoxGeometry(len, y, 1.04), r % 2 ? concrete : concrete2, [x0 + len / 2, y / 2, z]); step.receiveShadow = true; g.add(step);
+      const step = mesh(new THREE.BoxGeometry(len, y, 1.04), r % 2 ? concrete : concrete2, [x0 + len / 2, y / 2 + 0.003, z]); step.receiveShadow = true; g.add(step);
       const bench = mesh(new THREE.BoxGeometry(len - 0.4, 0.12, 0.27), lam(benchCols[r % 4], { polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 }), [x0 + len / 2, y + 0.3, z + 0.3]); g.add(bench);
       for (let k = 0; k < Math.floor(len / 1.05); k++) if (rng() < 0.9) spectators.push({ x: x0 + 0.8 + k * 1.05 + (rng() - 0.5) * 0.2, y: y + 0.36, z: z - 0.05, ph: rng() * 6.28, col: [0xf2d03a, 0x3f6cdc, 0xd93a2e, 0x3fb04a, 0xff8fb1, 0x7de0e0, 0xffffff, 0xff9a3c][Math.floor(rng() * 8)], skin: [0xf5cfa0, 0xe0a878, 0x9b6a45][Math.floor(rng() * 3)] });
     }
-    const back = mesh(new THREE.BoxGeometry(len, rows * 0.6 + 1.2, 0.3), lam(0x7a746a), [x0 + len / 2, (rows * 0.6 + 1.2) / 2, z0 - rows * 1.0 - 0.1]); g.add(back);
+    const back = mesh(new THREE.BoxGeometry(len, rows * 0.6 + 1.2, 0.3), lam(0x7a746a), [x0 + len / 2, (rows * 0.6 + 1.2) / 2 + 0.006, z0 - rows * 1.0 - 0.1]); g.add(back);
     const roofY = rows * 0.6 + 3.3;
     const roof = mesh(new THREE.BoxGeometry(len + 2, 0.25, rows * 1.0 + 3.6), lam(0xd6c59f), [x0 + len / 2, roofY, z0 - rows * 0.5 + 0.2], [0.14, 0, 0]); g.add(roof);
-    for (const px of [0.4, len - 0.4, len / 2]) for (const pz of [-1.0, -rows * 1.0 - 0.2]) { const h = pz > -2 ? roofY - 0.4 : roofY + 0.3; g.add(mesh(new THREE.BoxGeometry(0.25, h, 0.25), wood, [x0 + px, h / 2, z0 + pz])); }
+    for (const px of [0.4, len - 0.4, len / 2]) for (const pz of [-1.0, -rows * 1.0 - 0.2]) { const h = pz > -2 ? roofY - 0.4 : roofY + 0.3; g.add(mesh(new THREE.BoxGeometry(0.25, h, 0.25), wood, [x0 + px, h / 2 + 0.009, z0 + pz])); }
     for (let k = 0; k <= 6; k++) g.add(mesh(new THREE.BoxGeometry(0.12, 0.12, rows + 2.6), wood, [x0 + k * len / 6, roofY - 0.2, z0 - rows * 0.5 + 0.2], [0.14, 0, 0]));
     scene.add(g);
   }

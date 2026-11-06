@@ -118,11 +118,13 @@ export class Horse {
       // lane keeping + light yaw-free steering
       const m = 42;
       tb.addForce({ x: 0, y: 0, z: (-(p.z - this.laneZ) * 40 - v.z * 25) * m * 0.2 }, true);
+      this.drive = Math.max(0, (this.drive || 0) - dt * 0.7);
+      if (this.drive > 0) tb.addForce({ x: this.drive * (this.driveF || 150) * 1, y: 0, z: 0 }, true);
       tb.addForce({ x: -v.x * Math.abs(v.x) * (this.drag ?? 16), y: 0, z: 0 }, true);
       // keep the hinge plane upright: torso roll and yaw are springs, pitch is free (that is the game)
       const q = tb.rotation(), f = qrot(q, 1, 0, 0), u = qrot(q, 0, 1, 0), w = tb.angvel();
       const pit = Math.atan2(f.y, f.x), assist = this.assist ?? 1;
-      tb.addTorque({ x: -u.z * 5000 - w.x * 450, y: f.z * 5000 - w.y * 450, z: (-pit * 380 - w.z * 90) * assist * Math.max(0, 1 - Math.abs(pit) / 1.2) }, true);
+      tb.addTorque({ x: -u.z * 5000 - w.x * 450, y: f.z * 5000 - w.y * 450, z: this.finished ? (-(pit + 0.1) * 2600 - w.z * 260) : (-pit * 380 - w.z * 90) * assist * Math.max(0, 1 - Math.abs(pit) / 1.2) }, true);
       // pass the same sideways damping to the neck and head so they stay in plane
       for (const part of [this.neck, this.head]) { const aw = part.body.angvel(); part.body.addTorque({ x: -aw.x * 6, y: -aw.y * 6, z: 0 }, true); }
       // plant detection
