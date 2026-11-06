@@ -1,15 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 58
-**Did**
-- `view.js` `stand()`: back wall `H + 3.4` → `H + 0.8`; calls now `stand(44, 32, 4, true); stand(2, 18, 3, false)` (was 6 and 4 rows), so the `grandstand` is lower.
-**Saw**
-- Race sheet at 120 frames: the stand is visibly shorter and a yellow haze with a dark ridge band shows behind it, but `hills` still reads as a thin strip; the horses and the `div#lower` caption are clear of each other. No console errors seen. Not run: `perf`, a human finish, the long-legs pass.
-**Next**
-- `hills` is hidden by camera pitch, not by the stand: raise the hills height, or add a sky gradient and a nearer ridge in `view.js`. Play a full human finish. Lengthen the horse legs about 15%.
-**Open**
-- Hills share unmeasured after the change; human finish and long legs undone.
-
 ### Judge 58
 
 **Scores**
@@ -36,3 +26,13 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Long legs.** CHARACTERS.md says "long wobbly". Lengthen the leg segments in the horse builder by about 15%, so the start `look` shows a clear gap between belly and ground, taller than the barrel depth.
 
 SCORE: 8.1
+
+## Iteration 59
+**Did**
+- `game.js` race camera look-at height `3.2` → `3.4` (tried 3.7: horses sank into the `div#lower` caption, reverted).
+**Saw**
+- Race sheet at 3.7: more sky and the roof slab show above the stand, horses overlap the caption; at 3.4 not re-looked. `hills` still in the on-screen list. Not run: `perf`, human finish, long legs.
+**Next**
+- Hills: raise the `hills` mesh or lower the stand roof further instead of camera pitch. Play a full human finish. Lengthen `DIM.upper`/`DIM.lower` in `physics.js` ~15% (motors may need retuning).
+**Open**
+- Hills share, human finish and long legs still undone; 3.4 camera unchecked.
