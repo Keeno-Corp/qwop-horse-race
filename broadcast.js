@@ -6,7 +6,7 @@ import * as THREE from 'three';
 export function createBroadcast(renderer) {
   const size = new THREE.Vector2();
   renderer.getDrawingBufferSize(size);
-  const rt = new THREE.WebGLRenderTarget(size.x, size.y, { samples: 4 });
+  const rt = new THREE.WebGLRenderTarget(size.x, size.y, { samples: 0 });
   const U = { tDiffuse: { value: rt.texture }, uRes: { value: size.clone() }, uTime: { value: 0 }, uReplay: { value: 0 }, uGlitch: { value: 0 }, uDpr: { value: renderer.getPixelRatio() }, uFlash: { value: 0 } };
   const mat = new THREE.ShaderMaterial({
     uniforms: U, depthTest: false, depthWrite: false,

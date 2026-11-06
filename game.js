@@ -228,7 +228,7 @@ function updateOdds(dt) {
     if (o.t <= 0) {
       o.t = 0.35; const v = o.shown, num = v >= 10 ? Math.round(v) : v >= 4 ? Math.round(v * 2) / 2 : Math.round(v * 2) / 2;
       let txt = v < 1 ? '1-2' : v < 1.25 ? '6-5' : v < 1.75 ? '3-2' : v < 2.25 ? '2-1' : v < 2.75 ? '5-2' : v < 3.5 ? '3-1' : v < 4.5 ? '4-1' : v < 5.5 ? '5-1' : v < 7 ? '6-1' : v < 8.5 ? '8-1' : v < 12 ? '10-1' : v < 17 ? '15-1' : v < 25 ? '20-1' : '30-1';
-      if (h.finished && S.order[0] === i) txt = 'WIN'; else if (h.finished) txt = '—';
+      if (h.finished && S.order[0] === i) txt = horses.some((o, j) => j !== i && o.finished && Math.abs(o.finishT - h.finishT) < 0.15) ? 'PHOTO' : 'WIN'; else if (h.finished) txt = Math.abs(h.finishT - horses[S.order[0]].finishT) < 0.15 ? 'PHOTO' : '—';
       if (txt !== o.text) { o.dir = v > (o.last || v) ? -1 : 1; o.last = v; o.text = txt; const el = $('od' + i); if (el) { el.textContent = txt; el.className = 'od ' + (o.dir > 0 ? 'up' : 'dn'); setTimeout(() => el && (el.className = 'od'), 700); } }
     }
   });
@@ -439,9 +439,11 @@ function followTarget() {
   const leader = Math.max(...horses.map((h) => h.pos().x));
   const gap = leader - hx, sm = clamp((gap - 8) / 22, 0, 1);
   // when the player falls far behind, the camera drifts to the lead pack so the race stays in frame
-  let fx = hx + Math.min(clamp(gap, -4, 60) * (0.3 + 0.55 * sm * sm * (3 - 2 * sm)), 4.5);
+  const sm2 = clamp((gap - 5) / 12, 0, 1), sm3 = sm2 * sm2 * (3 - 2 * sm2);
+  const mine = hx + Math.min(clamp(gap, -4, 60) * 0.3, 4.5);
+  let fx = mine + (leader - 3.5 - mine) * sm3;
   fx = Math.min(fx, FINISH_X + 2);
-  const far = Math.min(Math.abs(leader - hx), 26);
+  const far = Math.min(Math.abs(leader - hx), 26) * (1 - sm3 * 0.7);
   const asp = Math.min(1, camera.aspect / 1.5);
   const dist = (14.5 + clamp(far * 0.5, 0, 14)) / Math.pow(asp, 0.7);   // long telephoto from the infield, far off the rail
   return { fx, dist, leader };
@@ -630,7 +632,7 @@ requestAnimationFrame(frame);
 // ---------- window.__game ----------
 const r2 = (v) => +v.toFixed(2);
 window.__game = {
-  subject: 'player-body',
+  subject: 'track',
   describe: () => ({
     name: 'Photo Finish Fiasco', stack: 'three + rapier ragdoll', units: 'metres, x down the track (finish at x=60), y up, z across lanes',
     keys: { solo: { KeyQ: 'front-left leg (hold)', KeyW: 'front-right leg', KeyO: 'back-left leg', KeyP: 'back-right leg', KeyR: 'restart', Digit2: 'two players', Digit1: 'solo', Space: 'skip replay' }, twoPlayer: { p1: 'Q W E R', p2: 'U I O P', Enter: 'restart' } },
