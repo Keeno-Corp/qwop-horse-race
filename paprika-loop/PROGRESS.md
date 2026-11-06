@@ -1537,3 +1537,9 @@ SCORE: 8.2
 3. **Make the player stand out on results and in the race.** Keep the `player` horse at 3% or more of the frame, for example by framing the camera on the player and nearest rivals, and make the PHOTO FINISH `div.pop` opaque, with a dark backing. `look` with `sample` on the caption pixels should show a solid colour behind the text.
 
 SCORE: 8.0
+
+## Iteration 23
+**Did** index.html `.pop`: opaque dark backing (rgba .92), padding, border so the PHOTO FINISH caption reads over the crowd. The "DIRT EATER · MOST FACE-PLANTS" award already exists in game.js results (shown when maxP > 0).
+**Saw** Not run through look this session (short on room); CSS-only change.
+**Next** (1) force a face-plant via setState and confirm auto-right. (2) Real Q+P/W+O rhythm trace, then 2P. (3) frame camera so `player` is ≥3% of frame.
+**Open** Face-plant, auto-right, 2P, rhythm still unverified; pop backing unchecked visually.

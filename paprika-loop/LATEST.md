@@ -1,11 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 22
-**Did** game.js `updateHud`: per human horse, a fixed pill `#off<i>` (role colour, "◀ YOU 28 m" / "YOU n m ▶") shows at the screen edge when that horse projects off-screen, in countdown/race/finishing phases only.
-**Saw** `look` sheet at 8 s and 20 s, no input: the blue "◀ YOU 28 m" pill shows at left both times (13 m at 20 s); the `player` horse is still off-frame (0%) but now located. No console errors. `perf` not run.
-**Next** (1) `setState` two AI at x 58 and sheet photo finish, results, podium overlap. (2) Play Q+P/W+O for ~600 frames, trace `player` x; press 2 and test 2P keys. (3) `feel` the face-plant shake.
-**Open** Photo finish, results, shake and 2P are unverified for a fourth session. Pill overlaps nothing at 1280x800; not checked on phone.
-
 ### Judge 22
 
 **Verdict, session 22**
@@ -32,3 +26,9 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Make the player stand out on results and in the race.** Keep the `player` horse at 3% or more of the frame, for example by framing the camera on the player and nearest rivals, and make the PHOTO FINISH `div.pop` opaque, with a dark backing. `look` with `sample` on the caption pixels should show a solid colour behind the text.
 
 SCORE: 8.0
+
+## Iteration 23
+**Did** index.html `.pop`: opaque dark backing (rgba .92), padding, border so the PHOTO FINISH caption reads over the crowd. The "DIRT EATER · MOST FACE-PLANTS" award already exists in game.js results (shown when maxP > 0).
+**Saw** Not run through look this session (short on room); CSS-only change.
+**Next** (1) force a face-plant via setState and confirm auto-right. (2) Real Q+P/W+O rhythm trace, then 2P. (3) frame camera so `player` is ≥3% of frame.
+**Open** Face-plant, auto-right, 2P, rhythm still unverified; pop backing unchecked visually.
