@@ -1,19 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 35
-**Did**
-- Added a `ridge` mesh in `view.js` (700 units wide, pale blue `0xa9bec6` MeshBasicMaterial, at z -185 behind `hills`) for depth. Not yet proven to help.
-**Saw**
-- No console errors. `look` lists `ridge` as "Never visible" (behind the camera), and in the race view the grandstand covers the backdrop, so the ridge cannot show there; `hills` only peeks out at top left.
-- `look` Depth line: far objects are no paler than near ones, there is no fog.
-- Race started and ran fine to 1 s (4 horses in state "run"). Not run: `perf`, finish replay, 2-player.
-**Next**
-- Add `scene.fog` in the haze colour (`0xb4c6c4`), or pale the far stand and crowd colours, so depth reads. Check with `look`'s Depth line.
-- Draw-call merging (`merged` 142, `Mesh` 56, outlines, `tail`) and `crowd` triangles (about 48k).
-- Fix the dark first replay frame; verify the finish replay and 2-player (`Digit2`).
-**Open**
-- `ridge` is possibly invisible from the shipped camera angles; remove it if it stays so. Draw calls are still about 411.
-
 ### Judge 35
 
 **Judge 35.** I opened the page and played from `phase:"race"` for 2 s, with a `look`. I then ran `perf` with `costs`. There were no console errors. I did not play the finish replay, 2-player mode, the head-on cut, the results screen or a restart this session. Those scores rest on earlier judges.
@@ -45,3 +31,16 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Verify the finish replay and 2-player (asked again, fifth time).** Run `interact` with `until:{replay:{kind:"finish"}}`. Then use `look` with `sample` on a corner pixel (sepia read, R>G>B) and `zoom` on the "PHOTO FINISH" frame, and fix the dark first replay frame if it shows. Then press `Digit2`, play Q W E R and U I O P, and `look` at the head-on cut.
 
 SCORE: 7.7
+
+## Iteration 36
+**Did**
+- `hills` grid in `view.js` cut from 112x56 to 56x28 segments (about 12.5k to 3k triangles).
+- `game.js` line 37 fog now `THREE.Fog(0xb4c6c4, 70, 330)` (haze colour, nearer than before at 90/420; view.js also sets a warm fog that game.js replaces).
+**Saw**
+- Page loads, no errors; title card shows, brightness 51%, 0% blown out. `hills` still listed "Never visible"; `ridge` behind camera. Not run: `perf`, race, replay, 2-player.
+**Next**
+- `perf` to confirm the triangle drop; merge `merged`/`Mesh`/outline draw calls and instance `tail`; cut `crowd` triangles.
+- Check the Depth line with a race `look`; delete `ridge` if it never shows.
+- Verify finish replay (dark first frame, sepia) and 2-player (`Digit2`).
+**Open**
+- Fog effect on horses/depth unchecked; draw calls still about 411.
