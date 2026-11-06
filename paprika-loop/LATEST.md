@@ -1,23 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 2
-**Did**
-- `followTarget()` in game.js: the camera blends from the player to `leader - 3.5` (smoothstep on gap 5→17 m) so an idle or far-behind player no longer pins the camera; zoom-out `far` is damped by the blend. The `YOU nn m` off-screen tag still shows the player.
-- Black lower-left rectangle: judged to be the 4× MSAA `WebGLRenderTarget` in broadcast.js (software-renderer tile artifact); set `samples: 0`. Not visible in the later looks (replay, results).
-- Tote: the winner shows `PHOTO` and any horse within 0.15 s of the winner shows `PHOTO`, not `—` (dead heat).
-- `__game.subject` is now `'track'`.
-**Saw**
-- No-input race, t=13 s: camera on the leader (Dusty Rhodes) with fence, ads and dust; FACE-PLANT pop on screen; `YOU 29 m` tag on the left.
-- Plant replay (sepia, 0.25x, INSTANT REPLAY tag) seen. Results card seen at 27.7 s: `PHOTO FINISH · 0.025`, podium, DIRT EATER and SMOOTH OPERATOR awards, results show 2 finishers and DNF with metres short.
-- Real keys Q/P/W/O held 20 frames each: YOU x 1.4→4.57, so the keys work. perf not run.
-**Next**
-- The finish photo-finish replay (kind `finish`, PHOTO FINISH frame) was not seen: the plant replay played first and Space skipped it. Check with `interact` until phase `replay` with kind `finish`.
-- `look` still says `subject` "track" is not in the scene (the name check may need a mesh named exactly so; the track mesh has `name='track'`): verify, or drop it.
-- Check the z-fighting (merged meshes x=0.80, planes at y=0.09), 453 draw calls, and 2-player (`Digit2`).
-**Open**
-- Black rectangle fix is inferred; the earlier zoom `look` of the lower-left (frame 1101, before the MSAA change) still showed near-black there, and I did not re-zoom after.
-- Dead heat at 0.9 chance still looks scripted-ish; not examined.
-
 ### Judge 2
 
 **Scores (Must have, in order)**
@@ -49,3 +31,21 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Play with real keys and reach the results card.** Run `interact` with Q, P, W and O held in alternation through a full race, then `Digit2` for 2-player. Keep the idle `YOU` from dominating by showing the player in the pack, or by stopping the `YOU` tag from sitting over the grandstand. Also drop `__game.subject` or point it at a real named mesh. To cut draw calls, merge the crowd and fence into instanced meshes. A `perf` after that should show under 250 draw calls.
 
 SCORE: 6.5
+
+## Iteration 3
+**Did**
+- Finish replay camera (`updateCamera`, kind `finish`, plus the start pose in the finish-replay setup in game.js): now a low head-on cam at (FINISH_X+7, 1.1, 3.2) looking back down the track, fov 30→26, instead of the live side view.
+- `body.pfin #replay .tag` moved to top:15vh, so it no longer sits on `div#pfc` (lower left).
+- `__game.subject` now `'tote-board'` (a Group named in view.js; look may still say it is not in the scene).
+**Saw**
+- Black lower-left rectangle: it is the tote box (`div#tote`, [18,16,335,207]) mirrored vertically (y 593–784). It vanished when `#tote` was set to display:none. The render target read back by `readRenderTargetPixels` at that spot is normal colour. Swapping the silk `<img>` for a canvas did not remove it (reverted). I take it as a harness screenshot artifact (DOM drawn into the GL capture), not in the page's own render; unproven in a real browser.
+- Finish replay seen (frame 1702+150): sepia, sprocket frame, `PHOTO FINISH` title, scratches, head-on view with checkered line; `REPLAY 0.25x` tag [112,120,379,158] and `#pfc` [300,688,979,723] no longer overlap. Dead heat still `BY 0.00 SEC`, both leaders finishT 24.1.
+- No-input race: Dusty Rhodes pitch 3.12, plants 5; YOU idle at x 2.27. `look` still warns that the last render call drew into a render target (the replay's broadcast pass; `setRenderTarget(null)` does run in broadcast.js:94, so it reads as a harness note). perf not run; draw calls still ~443.
+**Next**
+- Dead heat reads scripted: break the AI tie (vary finishT by seed) so gaps like 0.03–0.4 s appear.
+- Cut draw calls (<250): merge crowd, fence, ad boards into InstancedMesh; run `perf`.
+- Play real keys (Q/P/W/O, then Digit2) through to the results card; the player still sits at the start with the camera on the leader, so make the player visible/relevant.
+**Open**
+- The black-rectangle cause is inferred only; check `look` sample at (100,520) in the next session after any tote edit.
+- The first plant-replay frame brightness was not re-measured.
+- Film grain in broadcast.js lowered 0.16→0.10 (look flagged the full-screen `PlaneGeometry` quad as noisy; grain is intended by LOOK.md).
