@@ -61,6 +61,7 @@ class AI {
     const px = h.pos().x; let band = 1;
     if (px > 6 && px <= 22) { const g0 = (AI.aiLeadX || 0) - px; if (g0 > 1.5) band = 1 - clamp((g0 - 1.5) * 0.09, 0, 0.45); }
     if (px > 22) { if (this.m) this.m = null; this.next = 99; const gapL = (AI.aiLeadX || 0) - px; if (gapL > 0.5) band = 1 - clamp((gapL - 0.5) * (px > 38 ? 0.3 : 0.15), 0, px > 38 ? 0.78 : 0.7); }
+    h.drag = 16 * (AI.humanX > 5 && px > 6 ? 1 + clamp((px - AI.humanX - 1) * 0.25, 0, 1.5) : 1); // ease off while a human is still racing behind
     { const g1 = (AI.leadX || 0) - px; if (g1 > 1.5 && h.state === 'run' && !h.finished) { h.drive = 1; h.driveF = 40 * clamp(g1 - 1.5, 0, 14); } else h.driveF = 0; }
     { // stall watchdog: a horse that has barely moved in 3 s while upright gets a firm shove
       this.wx = this.wx ?? px; this.wt = (this.wt || 0) + dt;
@@ -160,7 +161,7 @@ const { camLook, CUT } = G;   // shared objects (never reassigned), read live
 function resetRace() {
   seed = 12345 + 7919 * (++S.seedRound);
   assignRoles();
-  horses.forEach((h, i) => { h.reset(STAGGER[i], LANES[i]); h.guard = 99; h.assist = 1; h.stiff = 1; h.plants = 0; h.trip = undefined; h.finished = false; h.finishT = null; h.speedBefore = 0; h.drive = 0; h.legT = [0, 0, 0, 0]; for (let k = 0; k < 4; k++) h.setHeld(k, false); });
+  horses.forEach((h, i) => { h.reset(STAGGER[i], LANES[i]); h.guard = 99; h.assist = 1; h.stiff = 1; h.plants = 0; h.trip = undefined; h.finished = false; h.finishT = null; h.speedBefore = 0; h.drive = 0; h.driveF = 0; h.wd = 0; h.wdX = undefined; h.wdAny = false; h.legT = [0, 0, 0, 0]; for (let k = 0; k < 4; k++) h.setHeld(k, false); });
   Object.assign(S, { phase: 'countdown', countdown: 4.6, raceT: 0, finishT: null, firstFinish: null, order: [], pending: null, pair: null, lastReplayAt: -99, replay: null, tangles: 0, lastTangle: -99, focus: null, deadHeat: true, hhGap: 0.5 + rng() * 2.8, excite: 0, results: null, resultsShown: false, camBlend: 0 });
   G.ringN = 0; for (const d of dust) d.life = 0;
   for (const p of S.popups) p.el.remove(); S.popups = [];
@@ -230,7 +231,7 @@ function frontOrder() {
 
 function updateRace(dt) {
   // AI
-  const xs = horses.map((h) => h.pos().x); AI.leadX = Math.max(...xs); AI.aiLeadX = Math.max(...xs.filter((_, i) => roles[i] && roles[i].ai)); const sorted = [...xs].sort((a, b) => b - a), mean = (sorted[0] + sorted[1] + sorted[2]) / 3;
+  const xs = horses.map((h) => h.pos().x); AI.leadX = Math.max(...xs); AI.aiLeadX = Math.max(...xs.filter((_, i) => roles[i] && roles[i].ai)); AI.humanX = Math.max(0, ...xs.filter((_, i) => roles[i] && roles[i].human >= 0 && !horses[i].finished)); const sorted = [...xs].sort((a, b) => b - a), mean = (sorted[0] + sorted[1] + sorted[2]) / 3;
   if (S.phase === 'race' || S.phase === 'finishing') {
     horses.forEach((h, i) => { const r = roles[i]; if (r.ai) { if (h.finished) for (let k = 0; k < 4; k++) h.setHeld(k, false); else r.ai.update(h, dt, xs[i] - mean); } });
   }
@@ -281,7 +282,7 @@ function updateRace(dt) {
     }
     if (S.phase === 'finishing') {
       const since = S.raceT - S.firstFinish;
-      const humanWait = roles.some((r, i) => r.human >= 0 && !horses[i].finished && horses[i].state === 'run') && since < 4;
+      const humanWait = roles.some((r, i) => r.human >= 0 && !horses[i].finished && horses[i].pos().x > 40) && since < 9; // a human still coming (even mid face-plant) gets to finish
       if ((since > 4.5 && !humanWait) || horses.every((h) => h.finished || h.state !== 'run' && since > 3.5)) G.startFinishReplay();
     } else if (S.raceT > 150) G.startFinishReplay();
   }
