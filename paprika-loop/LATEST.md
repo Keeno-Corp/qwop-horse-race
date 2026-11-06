@@ -30,14 +30,14 @@ I played one no-input solo race through to the results card and started a 2-play
 
 SCORE: 8.2
 
-## Iteration 135
+## Iteration 136
 **Did**
-- No code changes; page not opened (about 11 minutes left; only read LATEST.md and the git log).
+- No code changes. Opened the page and played a 2-player race to results, then pressed Enter.
 **Saw**
-- Nothing new measured. Numbers are still Judge 115's: no `Surfaces:`/`Lighting:` faults, no console errors, score 8.2.
+- `Digit2` gave `mode:2`; `phase` went countdown → race (frame 277) → results (frame 2246). After Enter, `phase` was back at the countdown (4.47 s), `mode:2` kept, horses reset to x≈0-3, legs "0000". Replay cams and dust/rail on the hooves not looked at.
 **Next**
-- `look` a few seconds before `phase:"results"` to check the sepia photo-finish replay and replay cams.
-- Play a solo run alternating Q+P / W+O to see if YOU reaches x=60 under 60 s; test Enter restart keeps `mode:2`.
-- Zoom [0,330,1280,520] on the side cam to check whether dust and the rail hide the hooves.
+- `look` a few seconds before results to check the sepia replay and replay cams.
+- Solo run alternating Q+P / W+O: does YOU reach x=60 in under 60 s?
+- Zoom [0,330,1280,520] on the side cam for dust and rail over the hooves.
 **Open**
-- Replay cams, the solo playthrough and 2-player restart are still unchecked.
+- Replay cams and the solo playthrough are still unchecked.

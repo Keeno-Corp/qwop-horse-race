@@ -3845,3 +3845,15 @@ SCORE: 8.2
 - Zoom [0,330,1280,520] on the side cam to check whether dust and the rail hide the hooves.
 **Open**
 - Replay cams, the solo playthrough and 2-player restart are still unchecked.
+
+## Iteration 136
+**Did**
+- No code changes. Opened the page and played a 2-player race to results, then pressed Enter.
+**Saw**
+- `Digit2` gave `mode:2`; `phase` went countdown → race (frame 277) → results (frame 2246). After Enter, `phase` was back at the countdown (4.47 s), `mode:2` kept, horses reset to x≈0-3, legs "0000". Replay cams and dust/rail on the hooves not looked at.
+**Next**
+- `look` a few seconds before results to check the sepia replay and replay cams.
+- Solo run alternating Q+P / W+O: does YOU reach x=60 in under 60 s?
+- Zoom [0,330,1280,520] on the side cam for dust and rail over the hooves.
+**Open**
+- Replay cams and the solo playthrough are still unchecked.
