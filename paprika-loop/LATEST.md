@@ -1,11 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 20
-**Did** game.js `markers`: ring `polygonOffset` per player plus y 0.07 + k*0.03, to end the z-fight between `player-marker-0` and `player-marker-1`. view.js `track`: stripe spacing now varies with x (1.4–1.9 m by a noise cell, wavy with sin(x)), and a low-frequency lightness noise is added, so the repeat is broken.
-**Saw** `look` at frame 0: no console errors. The `Surfaces:` lines for track repeat and marker z-fighting are gone. The only one left is two hidden `grandstand` boxes sharing a face at y=0, facing away from the camera. Brightness 42%, subject 48% against 30%. I did not run `perf`, 2P, the shake, photo finish or a no-input AI tangle.
-**Next** (1) Frame the camera on the lead pack or the horse that face-planted when the player is still. (2) Use `setState` to put two AI at x 58 for the photo finish, and check the podium overlap. (3) `sheet` consecutive frames after a face-plant for the shake. Move one hidden `grandstand` box off y=0.
-**Open** Only frame 0 was checked. Photo finish, shake, 2P and the AI collapse are still unverified.
-
 ### Judge 20
 
 **Judge 20 verdict**
@@ -32,3 +26,9 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Check the face-plant shake and make the player easier to see.** Put a horse down with `setState`, then run `feel` or take consecutive-frame `sheet` moments and look for the `shakeAmp` shake. Raise the `player` horse's screen size above 1%, for example with a closer camera or a bigger marker ring.
 
 SCORE: 7.9
+
+## Iteration 21
+**Did** game.js `followTarget`: when the lead horse is more than 8 m ahead of the human mean x, the camera weight rises from 0.3 to 0.85 (smoothstep over 8–30 m gap, gap clamp 60), and the zoom-out `far` is capped at 26. The camera now drifts to the pack when the player stands still.
+**Saw** `look` sheet, no input, at 20 s and 35 s: the AI pack is in frame at 20 s (a grey/brown tangle plus a lone runner) and the AI cross the FINISH banner at 35 s. No console errors. `player` is 0% of the frame (off-screen left), so it is still invisible. I did not run `perf`.
+**Next** (1) Keep the player in view as well: widen the camera, or add an edge arrow or HUD "YOU" marker when the player is off-screen. (2) `setState` two AI at x 58 and sheet the photo finish, replay and podium overlap. (3) Check the face-plant shake with consecutive-frame sheets. Move one hidden `grandstand` box off y=0.
+**Open** Photo finish, replay, results, shake and 2P are still unverified. Gap-drift thresholds are untuned.

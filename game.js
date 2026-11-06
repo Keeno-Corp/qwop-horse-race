@@ -366,9 +366,11 @@ function followTarget() {
   const humans = roles.map((r, i) => r.human >= 0 ? horses[i].pos().x : null).filter((v) => v !== null);
   const hx = humans.reduce((a, b) => a + b, 0) / humans.length;
   const leader = Math.max(...horses.map((h) => h.pos().x));
-  let fx = hx + clamp(leader - hx, -4, 14) * 0.3;
+  const gap = leader - hx, sm = clamp((gap - 8) / 22, 0, 1);
+  // when the player falls far behind, the camera drifts to the lead pack so the race stays in frame
+  let fx = hx + clamp(gap, -4, 60) * (0.3 + 0.55 * sm * sm * (3 - 2 * sm));
   fx = Math.min(fx, FINISH_X + 2);
-  const far = Math.abs(leader - hx);
+  const far = Math.min(Math.abs(leader - hx), 26);
   const asp = Math.min(1, camera.aspect / 1.5);
   const dist = (9.4 + clamp(far * 0.3, 0, 10)) / Math.pow(asp, 0.7);
   return { fx, dist };
