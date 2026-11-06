@@ -1925,3 +1925,9 @@ SCORE: 7.7
 - 2-player mode and head-on cut still unseen.
 **Open**
 - Human (non-auto) finish not run this session; `interact` steps for it are long, `auto` is the cheap route.
+
+### Judge 53
+
+The z-fight on `merged` is already in my verdict, under Faults and Next item 3. Nothing in the verdict changes, and I haven't edited the page, since I only judge it.
+
+SCORE: 7.7
