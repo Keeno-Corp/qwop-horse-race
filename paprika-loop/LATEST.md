@@ -1,34 +1,34 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-### Judge 24
-
-**Verdict, session 24**
-
-1. **Plays as DESIGN.md's Core loop and Controls say: 8.** The `1 PLAYER`, `2 PLAYERS (2)` and `RESTART` buttons, `div#tips` and `div#keys` all show. Q+P / W+O alternation now moves `YOU` (`horses.2.x`). It went 1.4 → 5.5 m at 1.9 s and 16.3 m at 5.2 s, with `plants` 0 and `pitch` within ±0.03. I did not run it to the finish line or press R.
-2. **Real Rapier jointed ragdoll, face-plant, auto-right: 8.** The `legs` bitmasks follow the keys. In this session's runs the AI horses stayed in `state:"run"`. Face-plant and auto-right were seen last session, not in this one.
-3. **Replay: 7.** Last session's `REPLAY` banner and Space skip hold. I did not trigger a replay this session, and the 0.25x rate is still unmeasured.
-4. **Photo finish and tangled AI collapse: 7.** Last session's `tangles:1` and "PHOTO FINISH · 0.10s" hold. This session's quick runs showed no AI collapse. With `YOU` now fast, the tangle and photo finish depend on the AI, so the clip moments need re-checking.
-5. **Results with most face-plants award: 8.** Not replayed this session. Last session's "DIRT EATER" badge and face-plants column stand.
-6. **Looks as LOOK.md says: 8.** `grandstand` with its blocky crowd, white rail, `hills`, dirt `track`, `dust*`, socks, saddle cloths and the `GO!` banner match refs/01.jpg. There are no `Lighting:` lines. The `Subject:` line says `player` is 0.66–1.1% of the picture with 0 of its named parts showing, because the `player-marker-*` and `horse*` parts are all that is named. The player horse is drawn among its rivals, but the camera is not framed on it.
-7. **window.__game convention, index.html at root: 9.** `observe` returns phase, mode, raceT and horses with their `legs`, `plants` and `pitch`.
-8. **Clip moments in the first minute: 7.** The race has horses bunched in the first 2 s with dust. The AI face-plants and tangles were not seen this session, and the faster `YOU` may change the timing of both.
-9. **Controls feel learnable: 7.** The alternation now holds about 3.3 m/s from 5 to 16 m (11 m in 3.3 s), which would put 60 m at roughly 20 s. Last session it managed 1–2 m in 30 s. I did not run it to 60 m or test mistimed keys, and `YOU` led the AI by 3 m at 5 s.
-10. **Horses read as horses, match refs/01.jpg: 9.** Head, mane, tail, saddle cloth, white socks and dark hooves read clearly in both looks.
-11. **Juice: 8.** Sounds fired (blip, powerup, cheer). The `GO!` banner, `div#chips` and the `player-marker` arrow and ring show. Shake was not measured.
-12. **Local 2-player discoverable from the HUD: 8.** `2` gives `mode:2` with the `P1` and `P2` horses (`human` 0 and 1), `div#keys` for both players and the tips line. With Q, E, U and O held both horses moved (`legs` "1010"). Neither was played through a race.
-13. **Static page, vendored lib, no network: 9.** `perf` gave 386 draw calls, 33.8k triangles and 0 MB of assets. The 85 ms frame is SwiftShader, not a budget signal.
-
-**Faults: 8.** The console has only the PCFSoftShadowMap warning, and `Never visible` is none, so `dust*` is now seen. The player horse still shows 0 named parts in `Subject`.
-
-**Next:**
-1. **Frame the camera on `YOU` plus the nearest rival (asked again).** The `Subject: player` line gives 0.66–1.1% of the picture with 0 named parts. Follow the human horse's x, or the midpoint of the humans in 2P, and keep a slightly closer fov. A mid-race `look` should show `player` at 3% or more with its named parts listed.
-2. **Re-check the clip moments now that `YOU` is fast.** Check that the AI still tangles and face-plants in the first minute, that a player running a good rhythm still gets a close finish, and that a replay and a results screen fire. `interact` the rhythm for about 1500 frames with `until` `phase` "results", then `observe` `tangles` and `results`. Slow the player's drive slightly, or give the AI a rubber-band, so the finish stays close.
-3. **Add a mistimed-key test and measure the replay and shake.** Press Q+W+O+P together or a single leg, and confirm a dog-sit, cartwheel or face-plant with `plants` rising. Run `feel` on a face-plant for the camera shake, and time the 0.25x replay against `replay.t` for wall-clock.
-
-SCORE: 7.9
-
 ## Iteration 25
 **Did** game.js camera: `followTarget` dist base 9.4 → 7.4 (height 3.5 → 3.0 offset), and `updateCamera` fov 36 while `S.phase` is 'race' or 'finishing' (42 elsewhere), so the camera sits closer on `YOU` plus nearby rivals.
 **Saw** Mid-race `look` at 1.8 s: `Subject: player` takes 3.8% [102,359,531,533] (was 0.66–1.1%); `horse*`, `player-marker-*`, `dust*` all visible; `Never visible` none; only the PCFSoftShadowMap warning, plus a grandstand coplanar-face note (faces turned away). YOU at x 2.39 in a bunch of 4. `Subject` still lists 0 named parts. Not run: perf, full-race rhythm, replay, mistimed keys, 2P.
 **Next** (1) Run ~1500 frames of rhythm to phase "results" and check `tangles`, `results`, and a close finish (rubber-band the AI if YOU wins by far). (2) Mistimed keys (Q+W+O+P, single leg) → `plants` rising; `feel` on shake; time replay 0.25x. (3) Check the closer camera in 2P (humans' midpoint) and when YOU falls behind.
 **Open** Closer camera untested at speed, in 2P and in the finish replay; the interact `key` steps need `down:true/false` (no `hold`).
+
+### Judge 25
+
+**Verdict, session 25**
+
+1. **Plays as DESIGN.md's Core loop and Controls say: 8.** The `1 PLAYER`, `2 PLAYERS (2)` and `RESTART` buttons, `div#tips` and `div#keys` show, and `YOU` moves under Q+P / W+O. One short rhythm (about 4 s) only took it from x 1.4 to 2.2. After I stopped pressing, it stood at x 4.7 with `plants` 2 while both AI horses finished. I did not press R or run 2P.
+2. **Real Rapier jointed ragdoll, face-plant, auto-right: 8.** `legs` bitmasks follow the keys. `YOU` reached `plants` 2 and the sounds included "thud", "gasp" and "boing". I did not see auto-right.
+3. **Replay: 6.** `replay.t` is not in `observe()`, so the 0.25x rate cannot be measured. I did not watch the banner this session.
+4. **Photo finish and tangled AI collapse: 6.** `Hoof Hearted` (`finishT` 22.12) and `Dusty Rhodes` (22.22) finished 0.10 s apart, so the photo finish holds. `tangles` stayed 0 and no AI had `plants` above 0 in this run, so the AI tangle did not happen.
+5. **Results with most face-plants award: 7.** `phase:"results"` came at `raceT` 28.6 with `results` ordered Hoof Hearted, Dusty Rhodes, Sir Trips-a-Lot, YOU. I did not look at the screen for the award badge. Results fired while `Sir Trips-a-Lot` (x 35.8) and `YOU` had not finished.
+6. **Looks as LOOK.md says: 7.** The `grandstand` with its crowd, white rail, `hills`, dirt `track` and `dust*` match refs/01.jpg. The `Subject: player` line is 1.2% with 0 named parts, which was 3.8% last session. In the mid-race look the `YOU` horse is half hidden behind `horse3` and its yellow saddle cloth. The "GO!" banner covers the grandstand. The camera is so close that horses are cut off at the left edge. There is a grandstand coplanar-face note, on faces turned away.
+7. **window.__game convention, index.html at root: 9.** `observe` returns phase, mode, raceT, results and horses.
+8. **Clip moments in the first minute: 6.** The photo finish came at 22 s. The tangle did not occur in this run, and a laugh in the first 10 s depends on it.
+9. **Controls feel learnable: 6.** I could not reproduce the finish in under 60 s from one short rhythm. The earlier 3.3 m/s run is last session's, and I did not test it at length this time.
+10. **Horses read as horses, match refs/01.jpg: 9.** Head, mane, tail, saddle cloths, white socks and dark hooves read clearly.
+11. **Juice: 8.** Sounds fired (blip, powerup, cheer, thud, gasp, boing). The `GO!` banner, `div#chips`, `player-marker` and `div#keys` show. Shake was not measured.
+12. **Local 2-player discoverable from the HUD: 7.** The tips line says "2 = two players" and the `2 PLAYERS (2)` button shows. I did not run 2P this session.
+13. **Static page, vendored lib, no network: 9.** 383 draw calls, 33.6k triangles and 0 MB of assets. The 80 ms frame is SwiftShader and says nothing about a real GPU.
+
+**Faults: 7.** The only console line is the PCFSoftShadowMap warning, and `Never visible` is none. `Subject` still lists 0 named parts. The closer camera lets rivals hide `YOU`.
+
+**Next:**
+1. **Fix the camera so `YOU` is never hidden (asked again).** Raise the camera or offset it sideways so rivals do not cover `player`, and put `YOU`'s lane in the near half of the frame. Pull the dist back to about 8.5 and keep the fov at 36 during the race. A mid-race `look` at 1.8 s should give `Subject: player` at 3% or more, with `player` not overlapped by `horse3`. Name the player's parts (`player-body`, `player-head`) so `Subject` lists them.
+2. **Make the AI tangle reliably in the first 30 s, and let results wait for everyone.** `tangles` was 0 and all AI `plants` were 0 here. Add a forced pile-up event, such as two neighbouring lanes crossing with a stumble at x 20–35 m, and check it with `interact` `until` `tangles` 1. The results screen showed with `Sir Trips-a-Lot` and `YOU` unfinished. Wait for the player, or show DNF for them.
+3. **Expose `replay.t` and `replay.rate` in `observe` and test the replay, shake and mistimed keys.** Run `interact` for 2300 frames of a good rhythm and check that `phase` shows "replay" at the finish. Run `feel` on a face-plant for the camera shake. Press Q+W+O+P together and confirm `plants` rises.
+
+SCORE: 7.4
