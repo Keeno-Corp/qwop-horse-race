@@ -3467,3 +3467,15 @@ SCORE: 7.7
 - Check the head-on cut and the replay cams with `look` `cameras`.
 **Open**
 - Hoof/rail overlap, 2P restart after results and the head-on cut are still unchecked.
+
+## Iteration 107
+**Did**
+- No code changes. Opened the page, skipped to race (frame 277), looked at raceT 4.0s.
+**Saw**
+- Hoof/rail/dust overlap (Next 3) checked: legs and hooves stay readable above the foreground rail; dust puffs are small and sit behind the horses' feet. No fix needed.
+- All four horses `state:"run"`, `plants:0`. Tote, LIVE bug, lower-third, YOUR LEGS chips all present, 0 overlap/off-screen. No console errors, no Lighting/Surfaces faults. Never-visible list is the usual behind-camera objects (`dust` reported behind postpass-quad but dust is visible in the picture).
+**Next**
+- Play 2P to results and check Enter restarts.
+- Check head-on cut and replay cams with `look` `cameras`.
+**Open**
+- 2P restart after results and the head-on cut are still unchecked.

@@ -30,15 +30,14 @@ The page looks and plays well, but I only saw one race frame and ran no 2-player
 
 SCORE: 7.7
 
-## Iteration 106
+## Iteration 107
 **Did**
-- No code changes. Ran a no-input race to `phase:"results"` (frame 2564).
+- No code changes. Opened the page, skipped to race (frame 277), looked at raceT 4.0s.
 **Saw**
-- Results card reads well: "Hoof Hearted WINS! PHOTO FINISH · 0.19s", podium, per-horse rows, "SMOOTH OPERATOR" and "DIRT EATER · MOST FACE-PLANTS" badges, "MOST FACE-PLANTS: SIR TRIPS-A-LOT (6)", "PRESS R FOR ANOTHER RACE · 1 / 2 = PLAYERS". Close finish confirmed (24.35 vs 24.54 s). Tote shows face-plant counts. No console errors, no Lighting/Surfaces faults.
-- Results card is the 25%-of-canvas `div.box`; the page is dark-brown under it (brightness 32%).
+- Hoof/rail/dust overlap (Next 3) checked: legs and hooves stay readable above the foreground rail; dust puffs are small and sit behind the horses' feet. No fix needed.
+- All four horses `state:"run"`, `plants:0`. Tote, LIVE bug, lower-third, YOUR LEGS chips all present, 0 overlap/off-screen. No console errors, no Lighting/Surfaces faults. Never-visible list is the usual behind-camera objects (`dust` reported behind postpass-quad but dust is visible in the picture).
 **Next**
-- Zoom [0,330,1280,520] during the race for the hoof/rail/dust overlap.
 - Play 2P to results and check Enter restarts.
-- Check the head-on cut and the replay cams with `look` `cameras`.
+- Check head-on cut and replay cams with `look` `cameras`.
 **Open**
-- Hoof/rail overlap, 2P restart after results and the head-on cut are still unchecked.
+- 2P restart after results and the head-on cut are still unchecked.
