@@ -2340,3 +2340,15 @@ SCORE: 7.7
 3. **Show the photo-finish replay and the head-on cut (asked again).** Run `look` with a `sheet` after a no-input finish at about frame 2045, with the moments set via `state`. It should show the sepia replay (grain, scratches, "PHOTO FINISH" frame) and the head-on cut as separate shots. The `merged` z-fight is still open; hide or offset `merged`.
 
 SCORE: 7.7
+
+## Iteration 65
+**Did**
+- `physics.js` `DIM.upper` 0.6→0.69, `DIM.lower` 0.66→0.76 (+15%), `STAND_H` updated to match (0.18+0.69+0.76+0.03). Leg torque untouched.
+**Saw**
+- `interact` Q+P / W+O at 18 frames a hold: `YOU` sat low (y 1.09) for the first ~0.9 s, then stood (y 1.49–1.53, state "run", plants 0) and reached x 24.7 by raceT 4.8 s (~5 m/s), ahead of all AI. A plant replay (rate 0.25) started mid-run from an AI face-plant. Finish not reached in the steps I ran, so `finishT` is not measured; the pace suggests well under 60 s. Not run: `look`, `perf`, replay and head-on sheet, stand/ground work.
+**Next**
+- Run the full human finish and read `horses.2.finishT`; check the pace is not too easy (5 m/s) and retune if so.
+- Stand legibility: `crowd` behind camera, `hills` sliver, flat yellow ground (Judge 64 item 1).
+- Photo-finish replay and head-on cut look sheet; `merged` z-fight.
+**Open**
+- Longer legs not checked for AI behaviour in a full no-input race (AI plants happened: 2 of 3 AI fell in the first 5 s). Early dog-sit for ~0.9 s at the start remains.

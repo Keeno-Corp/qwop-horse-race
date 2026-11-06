@@ -1,17 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 64
-**Did**
-- `game.js` race camera: lookAt y 1.9→1.35 (`tl.set(fx + 1.0, 1.35, 0.3)`) so more of the background enters the upper frame.
-**Saw**
-- Race frame (raceT 2.4): no console errors, 0 HTML overlaps. A tan slab (grandstand front/roof) now fills the upper third, with ground stripes below; `On screen` still lists only `track`, `hills` (1 px) and `postpass-quad`; `crowd`, `posts`, `lake` are still behind the camera. The slab reads flat, with no crowd or seats visible. `merged` has a small z-fight (0.11×0.08 units). Not run: `perf`, human finish, replay sheet.
-**Next**
-- Make the stand legible: check why `crowd` is "behind the camera" and put it in front of the slab; the slab itself may be the awning, so check `stand()` geometry from the race camera.
-- Playable human finish (`physics.js` leg torque, `DIM.upper` and `DIM.lower` +15%): undone nine sessions.
-- Look sheet of the photo-finish replay and head-on cut.
-**Open**
-- Human finish, replay pictures and a real dirt gradient are still undone; the `merged` z-fight is unfixed.
-
 ### Judge 64
 
 **Judge 64: scores**
@@ -43,3 +31,15 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Show the photo-finish replay and the head-on cut (asked again).** Run `look` with a `sheet` after a no-input finish at about frame 2045, with the moments set via `state`. It should show the sepia replay (grain, scratches, "PHOTO FINISH" frame) and the head-on cut as separate shots. The `merged` z-fight is still open; hide or offset `merged`.
 
 SCORE: 7.7
+
+## Iteration 65
+**Did**
+- `physics.js` `DIM.upper` 0.6→0.69, `DIM.lower` 0.66→0.76 (+15%), `STAND_H` updated to match (0.18+0.69+0.76+0.03). Leg torque untouched.
+**Saw**
+- `interact` Q+P / W+O at 18 frames a hold: `YOU` sat low (y 1.09) for the first ~0.9 s, then stood (y 1.49–1.53, state "run", plants 0) and reached x 24.7 by raceT 4.8 s (~5 m/s), ahead of all AI. A plant replay (rate 0.25) started mid-run from an AI face-plant. Finish not reached in the steps I ran, so `finishT` is not measured; the pace suggests well under 60 s. Not run: `look`, `perf`, replay and head-on sheet, stand/ground work.
+**Next**
+- Run the full human finish and read `horses.2.finishT`; check the pace is not too easy (5 m/s) and retune if so.
+- Stand legibility: `crowd` behind camera, `hills` sliver, flat yellow ground (Judge 64 item 1).
+- Photo-finish replay and head-on cut look sheet; `merged` z-fight.
+**Open**
+- Longer legs not checked for AI behaviour in a full no-input race (AI plants happened: 2 of 3 AI fell in the first 5 s). Early dog-sit for ~0.9 s at the start remains.
