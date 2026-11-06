@@ -30,12 +30,12 @@ The page looks and plays well, but I only saw one race frame and ran no 2-player
 
 SCORE: 7.7
 
-## Iteration 87
+## Iteration 88
 **Did**
-- No code changes. Ran a no-input race to `phase:"results"` (frame 2564) with `interact`.
+- No code changes. Opened the page, pressed Enter and looked at the countdown frame.
 **Saw**
-- Results card shows "Hoof Hearted WINS! PHOTO FINISH · 0.19s", a podium, rows with times and face-plants, and the award "MOST FACE-PLANTS: SIR TRIPS-A-LOT (6)". Hoof Hearted finished at 24.35 s, Dusty Rhodes at 24.54 s (+0.19). YOU DNF 56 m short. No console errors; sounds fired (cheer, thud, gasp, boing).
+- Countdown "2" shows with all four horses lined up. The tote, LIVE bug, lower-third and `div#keys` all render. The foreground fence rail crosses at hoof level but the hooves stay readable. No console errors; no `Lighting:`/`Surfaces:` faults.
 **Next**
-- `look` with `cameras` at the finish for the sepia photo-finish replay and head-on cut; zoom on [0,330,1280,520] for rail/dust over the hooves; check 2P Enter restart and the `div#keys` 2P labels.
+- Look at the photo-finish sepia replay with `cameras` and a 2P run, as in Judge 85's list.
 **Open**
-- Replay cams and the photo-finish sepia are still unseen this session. The results card also lists only "1 PLAYER" and no 2P keys.
+- The replay cams and the 2P HUD labels are still unseen.

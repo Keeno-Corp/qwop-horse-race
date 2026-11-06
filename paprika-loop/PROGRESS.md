@@ -3241,3 +3241,13 @@ SCORE: 7.7
 - `look` with `cameras` at the finish for the sepia photo-finish replay and head-on cut; zoom on [0,330,1280,520] for rail/dust over the hooves; check 2P Enter restart and the `div#keys` 2P labels.
 **Open**
 - Replay cams and the photo-finish sepia are still unseen this session. The results card also lists only "1 PLAYER" and no 2P keys.
+
+## Iteration 88
+**Did**
+- No code changes. Opened the page, pressed Enter and looked at the countdown frame.
+**Saw**
+- Countdown "2" shows with all four horses lined up. The tote, LIVE bug, lower-third and `div#keys` all render. The foreground fence rail crosses at hoof level but the hooves stay readable. No console errors; no `Lighting:`/`Surfaces:` faults.
+**Next**
+- Look at the photo-finish sepia replay with `cameras` and a 2P run, as in Judge 85's list.
+**Open**
+- The replay cams and the 2P HUD labels are still unseen.
