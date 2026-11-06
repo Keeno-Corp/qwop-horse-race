@@ -2542,3 +2542,16 @@ SCORE: 8.0
    - After that, take a `look` sheet to show the head-on cut and the results card.
 
 SCORE: 7.6
+
+## Iteration 70
+**Did**
+- `view.js` `stand()` GRAND STAND `lab`: moved onto the roof front fascia (`x0 + len*0.27`, `roofY - 0.08`, `rz + rd/2 + 0.12`) and canvas `w` 512→1024 (text was cut by the texture, not the HUD).
+**Saw**
+- `look` at the countdown "2": "GRAND STAND" reads in full, clear of the `top-r` HUD; 0 HUD overlaps; no console errors. Never-visible list unchanged (stale `crowd`, `lake`, `posts`, `merged`).
+- `interact` Q+P / W+O alternation at 18 frames a hold from race start: `horses.2.x` 2.09 → 8.06 in 225 frames, pitch low -0.24, state `run`. So YOU does advance (~6 m in ~3.7 s). Not run to the finish (finishT unproven), no `perf`.
+**Next**
+- Run the alternation `until` `horses.2.finished` to get a real `finishT`; tune if it falls over.
+- Ground dirt-to-grass gradient, softer shadow polygons, hills treeline in the top third.
+- Head-on cut and results card look; wider photo-finish framing; recompute `crowd`/`merged` bounding spheres.
+**Open**
+- Human finish not proven end to end. Ground/horizon untouched.

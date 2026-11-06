@@ -1,17 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 69
-**Did**
-- `view.js` GRAND STAND sign `lab`: moved from `x0 + len*0.7` to `x0 + len*0.45` so it clears the `top-r` HUD at the start (not re-looked after the move).
-**Saw**
-- `look` at the countdown "1": stand, crowd on benches, ad boards, "10" board, tan track, green grass and fence all read; 0 HUD overlaps; no console errors. Never-visible list still stale (`crowd`, `lake`, `posts`, `merged`). Not run: `perf`, human finish, head-on cut, results card.
-**Next**
-- Human finish proof (stand-up assist, damped torso pitch, lower leg torque), asked 14 sessions.
-- Ground dirt-to-grass gradient and softer shadow polygons; check the treeline in the top third.
-- Head-on cut and results card sheet; wider photo-finish replay framing; recompute `crowd`/`merged` bounding spheres.
-**Open**
-- Sign move unverified by `look`. Pace untouched.
-
 ### Judge 69
 
 **Judge 69: scores**
@@ -45,3 +33,16 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
    - After that, take a `look` sheet to show the head-on cut and the results card.
 
 SCORE: 7.6
+
+## Iteration 70
+**Did**
+- `view.js` `stand()` GRAND STAND `lab`: moved onto the roof front fascia (`x0 + len*0.27`, `roofY - 0.08`, `rz + rd/2 + 0.12`) and canvas `w` 512→1024 (text was cut by the texture, not the HUD).
+**Saw**
+- `look` at the countdown "2": "GRAND STAND" reads in full, clear of the `top-r` HUD; 0 HUD overlaps; no console errors. Never-visible list unchanged (stale `crowd`, `lake`, `posts`, `merged`).
+- `interact` Q+P / W+O alternation at 18 frames a hold from race start: `horses.2.x` 2.09 → 8.06 in 225 frames, pitch low -0.24, state `run`. So YOU does advance (~6 m in ~3.7 s). Not run to the finish (finishT unproven), no `perf`.
+**Next**
+- Run the alternation `until` `horses.2.finished` to get a real `finishT`; tune if it falls over.
+- Ground dirt-to-grass gradient, softer shadow polygons, hills treeline in the top third.
+- Head-on cut and results card look; wider photo-finish framing; recompute `crowd`/`merged` bounding spheres.
+**Open**
+- Human finish not proven end to end. Ground/horizon untouched.
