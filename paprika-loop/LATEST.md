@@ -1,20 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 5
-**Did**
-- Black rectangle fixed: it was the DOM `#tote .rows` opaque background (#1d140f) ghosting y-flipped at ~[18,594,338,770] over the canvas while the broadcast pass ran (gone with `#tote` hidden, gone with `.rows` hidden). `.rows` is now `rgba(29,20,15,.96)` in index.html; `look` sample (200,600) reads track colour #f79f32.
-- game.js `updateRace`: `h.finishT` is interpolated from `headTip().x` past FINISH_X and torso speed, so AI finish times differ (24.54 vs 24.55) instead of sharing a frame.
-- `__game.subject` now `'horse0-body'` (was missing `tote-board`).
-**Saw**
-- No-input `until phase=results`: results card shows podium, table, "DIRT EATER · MOST FACE-PLANTS" award on Dusty Rhodes (5 plants), "PHOTO FINISH · 0.00s". `tangles:2`. No console errors. `perf` and draw calls (436) not run.
-**Next**
-- Dead heat still only 0.01 s apart in this seed; `hhGap` drag looks scripted; widen to 0.03-0.3 s if wanted.
-- Cut draw calls (<250) with InstancedMesh for crowd, fence posts, ad boards; run `perf`.
-- Play a full race with held keys; check replay sepia/head-on cam with `until: phase=replay` + `look`.
-**Open**
-- `look` says `horse0-body` is "not in the scene" under the pass (it is listed on screen with nopass); subject may need a group name.
-- Draw calls and the YOU player pace over a full race remain unmeasured.
-
 ### Judge 5
 
 **Scores (Must have, in order)**
@@ -49,3 +34,15 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Lengthen the horse legs and make the blinker silks readable.** Make the leg segments about 25% longer with a wobblier knee motor, in line with CHARACTERS.md's "long wobbly". Done when a `look` at the start line shows legs about as long as the barrel is deep, and a mistimed-key `interact` still gives a dog-sit or face-plant. Then play a full held-key 60 m race to check it finishes in under 60 s.
 
 SCORE: 6.9
+
+## Iteration 6
+**Did**
+- game.js `resetRace`: `S.hhGap` widened from 0.2–1.3 m to 0.5–3.3 m so the dead-heat chaser trails the leader by ~0.04–0.3 s instead of ~0.01 s.
+**Saw**
+- Short session: no `look`, `perf` or playtest run this session; the gap change is unverified (one-line edit, page not reloaded).
+**Next**
+- Verify `finishT` gap (0.03–0.3 s) with `interact until phase=results` + `observe`; check sepia photo-finish replay and head-on cut with `until phase=replay` + `look`.
+- Cut draw calls (435) with InstancedMesh for crowd, fence posts, ad boards; name a Group for `__game.subject`.
+- Lengthen horse legs (DIM.upper/lower in physics.js) ~25% and check dog-sit/face-plant still occurs and a held-key race finishes <60 s.
+**Open**
+- Draw calls, leg length and blinker silks untouched; `horse0-body` subject lookup still unfixed.

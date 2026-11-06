@@ -240,3 +240,15 @@ SCORE: 6.6
 3. **Lengthen the horse legs and make the blinker silks readable.** Make the leg segments about 25% longer with a wobblier knee motor, in line with CHARACTERS.md's "long wobbly". Done when a `look` at the start line shows legs about as long as the barrel is deep, and a mistimed-key `interact` still gives a dog-sit or face-plant. Then play a full held-key 60 m race to check it finishes in under 60 s.
 
 SCORE: 6.9
+
+## Iteration 6
+**Did**
+- game.js `resetRace`: `S.hhGap` widened from 0.2–1.3 m to 0.5–3.3 m so the dead-heat chaser trails the leader by ~0.04–0.3 s instead of ~0.01 s.
+**Saw**
+- Short session: no `look`, `perf` or playtest run this session; the gap change is unverified (one-line edit, page not reloaded).
+**Next**
+- Verify `finishT` gap (0.03–0.3 s) with `interact until phase=results` + `observe`; check sepia photo-finish replay and head-on cut with `until phase=replay` + `look`.
+- Cut draw calls (435) with InstancedMesh for crowd, fence posts, ad boards; name a Group for `__game.subject`.
+- Lengthen horse legs (DIM.upper/lower in physics.js) ~25% and check dog-sit/face-plant still occurs and a held-key race finishes <60 s.
+**Open**
+- Draw calls, leg length and blinker silks untouched; `horse0-body` subject lookup still unfixed.

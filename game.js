@@ -243,7 +243,7 @@ function resetRace() {
   seed = 12345 + 7919 * (++S.seedRound);
   assignRoles();
   horses.forEach((h, i) => { h.reset(STAGGER[i], LANES[i]); h.guard = 99; h.assist = 1; h.stiff = 1; h.plants = 0; h.finished = false; h.finishT = null; h.speedBefore = 0; h.drive = 0; h.legT = [0, 0, 0, 0]; for (let k = 0; k < 4; k++) h.setHeld(k, false); });
-  Object.assign(S, { phase: 'countdown', countdown: 4.6, raceT: 0, finishT: null, firstFinish: null, order: [], pending: null, pair: null, lastReplayAt: -99, replay: null, tangles: 0, lastTangle: -99, focus: null, deadHeat: rng() < 0.9, hhGap: 0.2 + rng() * 1.1, excite: 0, results: null, resultsShown: false, camBlend: 0 });
+  Object.assign(S, { phase: 'countdown', countdown: 4.6, raceT: 0, finishT: null, firstFinish: null, order: [], pending: null, pair: null, lastReplayAt: -99, replay: null, tangles: 0, lastTangle: -99, focus: null, deadHeat: rng() < 0.9, hhGap: 0.5 + rng() * 2.8, excite: 0, results: null, resultsShown: false, camBlend: 0 });
   ringN = 0; for (const d of dust) d.life = 0;
   for (const p of S.popups) p.el.remove(); S.popups = [];
   $('results').style.display = 'none'; setReplayUi(false); $('count').textContent = '';
