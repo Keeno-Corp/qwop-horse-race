@@ -34,7 +34,7 @@ sun.shadow.bias = -0.0006; sun.shadow.normalBias = 0.03; sun.shadow.radius = 3;
 scene.add(sun, sun.target);
 const env = buildEnvironment(scene, tex, rng);
 window.__scene = scene; window.__cam = camera;
-if (scene.background && scene.background.isColor) scene.fog = new THREE.Fog(scene.background.clone(), 90, 420);   // sky-coloured haze so far objects read as farther
+if (scene.background && scene.background.isColor) scene.fog = new THREE.Fog(0xb4c6c4, 70, 330);   // sky-coloured haze so far objects read as farther
 
 // ---------- physics + horses ----------
 const world = createWorld(RAPIER);
