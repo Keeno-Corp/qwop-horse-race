@@ -435,14 +435,20 @@ export function buildEnvironment(scene, _tex, rng) {
   sp.forEach((s, i) => { s.h = 0.85 + rng() * 0.3; s.hat = rng() < 0.3; s.wave = rng() < 0.5; bodies.setColorAt(i, col.set(s.col)); heads.setColorAt(i, col.set(s.skin)); arms.setColorAt(i * 2, col.set(s.skin)); arms.setColorAt(i * 2 + 1, col.set(s.skin)); hats.setColorAt(i, col.set([0xd3432b, 0xf2e1ad, 0x305da2, 0x4c2c21][i % 4])); });
   bodies.name = heads.name = arms.name = hats.name = 'crowd'; for (const m of [bodies, heads, arms, hats]) { m.frustumCulled = false; m.castShadow = false; scene.add(m); }
   const mm = new THREE.Matrix4(), qq = new THREE.Quaternion(), ee = new THREE.Euler(), p3 = new THREE.Vector3(), s3 = new THREE.Vector3(), zero = new THREE.Matrix4().makeScale(0, 0, 0);
+  sp.forEach((s) => { s.th = 0.12 + rng() * 0.5; s.k = 0; s.ak = 0; });   // standing threshold + smoothed stand / arms-up amounts
+  let lastT = 0; const m2 = new THREE.Matrix4();
   env.spectators = { update(t, excite) {
+    const dt = Math.min(0.1, Math.max(0, t - lastT)); lastT = t; const e = Math.max(0, Math.min(1, excite)), f = Math.min(1, dt * 7);
     for (let i = 0; i < sp.length; i++) {
-      const s = sp[i], b = Math.abs(Math.sin(t * (4 + excite * 6) + s.ph)) * (0.03 + excite * 0.25), hh = s.h;
+      const s = sp[i];
+      // calm: seated, arms down, tiny bob. Excited: the crowd stands up, stretches, throws both arms up and jumps
+      s.k += (Math.max(0, Math.min(1, (e - s.th) / 0.15)) - s.k) * f; s.ak += (Math.max(0, Math.min(1, (e - s.th * 0.5) / 0.2)) - s.ak) * f;
+      const hh = s.h * (1 + 0.3 * s.k), lift = 0.28 * s.k, b = Math.abs(Math.sin(t * (4 + e * 7) + s.ph)) * (0.012 + 0.2 * e * s.k) + lift;
       mm.compose(p3.set(s.x, s.y + 0.25 * hh + b, s.z), qq.identity(), s3.set(1, hh, 1)); bodies.setMatrixAt(i, mm);
       mm.compose(p3.set(s.x, s.y + 0.55 * hh + 0.1 + b, s.z), qq.identity(), s3.set(1, 1, 1)); heads.setMatrixAt(i, mm);
       if (s.hat) { mm.compose(p3.set(s.x, s.y + 0.55 * hh + 0.31 + b, s.z), qq.identity(), s3.set(1, 1, 1)); hats.setMatrixAt(i, mm); } else hats.setMatrixAt(i, zero);
-      const up = s.wave ? Math.min(2.6, 0.5 + excite * 2.4 + Math.sin(t * 9 + s.ph) * 0.3 * excite) : 0.25;
-      for (const side of [-1, 1]) { qq.setFromEuler(ee.set(0, 0, side * up)); mm.compose(p3.set(s.x + side * 0.2, s.y + 0.42 * hh + b, s.z), qq, s3.set(1, 1, 1)); mm.multiply(new THREE.Matrix4().makeTranslation(0, 0.15, 0)); arms.setMatrixAt(i * 2 + (side > 0 ? 1 : 0), mm); }
+      const calm = s.wave ? 0.6 : Math.PI - 0.25, up = calm + (-0.5 + Math.sin(t * 9 + s.ph) * 0.35 * e - calm) * s.ak;
+      for (const side of [-1, 1]) { qq.setFromEuler(ee.set(0, 0, side * (side > 0 || s.ak > 0.3 || !s.wave ? up : Math.PI - 0.25))); mm.compose(p3.set(s.x + side * 0.2, s.y + 0.42 * hh + b, s.z), qq, s3.set(1, 1, 1)); mm.multiply(m2.makeTranslation(0, 0.15, 0)); arms.setMatrixAt(i * 2 + (side > 0 ? 1 : 0), mm); }
     }
     for (const m of [bodies, heads, arms, hats]) m.instanceMatrix.needsUpdate = true;
   } };
