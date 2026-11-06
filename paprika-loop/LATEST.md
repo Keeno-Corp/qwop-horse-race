@@ -30,11 +30,11 @@ I played one no-input solo race through to the results card and started a 2-play
 
 SCORE: 8.2
 
-## Iteration 137
+## Iteration 138
 **Did**
-- No code changes; read LATEST.md and the git log only. The session had about 10 minutes left and the page was not opened.
+- No code changes; read LATEST.md and the git log only. About 10 minutes were left and the page was not opened.
 **Saw**
-- No new numbers. The last known state is from iteration 136: 2-player race reaches results, Enter restarts to the countdown with `mode:2` kept.
+- No new numbers. The last known state is from Judge 115: score 8.2, no console errors, no `Lighting:` or `Surfaces:` faults.
 **Next**
 - `look` a few seconds before results to check the sepia replay and replay cams.
 - Solo run alternating Q+P / W+O: does YOU reach x=60 in under 60 s?
