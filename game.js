@@ -249,7 +249,7 @@ function resetRace() {
   seed = 12345 + 7919 * (++S.seedRound);
   assignRoles();
   horses.forEach((h, i) => { h.reset(STAGGER[i], LANES[i]); h.guard = 99; h.assist = 1; h.stiff = 1; h.plants = 0; h.finished = false; h.finishT = null; h.speedBefore = 0; h.drive = 0; h.legT = [0, 0, 0, 0]; for (let k = 0; k < 4; k++) h.setHeld(k, false); });
-  Object.assign(S, { phase: 'countdown', countdown: 4.6, raceT: 0, finishT: null, firstFinish: null, order: [], pending: null, pair: null, lastReplayAt: -99, replay: null, tangles: 0, lastTangle: -99, focus: null, deadHeat: rng() < 0.9, hhGap: 0.5 + rng() * 2.8, excite: 0, results: null, resultsShown: false, camBlend: 0 });
+  Object.assign(S, { phase: 'countdown', countdown: 4.6, raceT: 0, finishT: null, firstFinish: null, order: [], pending: null, pair: null, lastReplayAt: -99, replay: null, tangles: 0, lastTangle: -99, focus: null, deadHeat: true, hhGap: 0.5 + rng() * 2.8, excite: 0, results: null, resultsShown: false, camBlend: 0 });
   ringN = 0; for (const d of dust) d.life = 0;
   for (const p of S.popups) p.el.remove(); S.popups = [];
   $('results').style.display = 'none'; setReplayUi(false); $('count').textContent = '';
@@ -336,12 +336,12 @@ function updateRace(dt) {
   if (S.phase === 'race' || S.phase === 'finishing') {
     horses.forEach((h, i) => { const r = roles[i]; if (r.ai) { if (h.finished) for (let k = 0; k < 4; k++) h.setHeld(k, false); else r.ai.update(h, dt, xs[i] - mean); } });
   }
-  if (S.deadHeat && (S.phase === 'race' || S.phase === 'finishing') && AI.leadX > 34) { // closing sprint: the best chaser is dragged level for a photo finish
-    let ld = null; horses.forEach((h) => { if (!h.finished && (!ld || h.pos().x > ld.pos().x)) ld = h; });
+  if (S.deadHeat && (S.phase === 'race' || S.phase === 'finishing') && AI.leadX > 25) { // closing sprint: the best chaser is dragged level for a photo finish
+    let ld = null; horses.forEach((h) => { if (!ld || h.pos().x > ld.pos().x) ld = h; });
     let ch = null; horses.forEach((h, i) => { if (roles[i].ai && h !== ld && !h.finished && xs[i] > 14 && (!ch || xs[i] > xs[ch.idx])) ch = h; });
     if (ch && ld) {
       if (ch.state !== 'run') { ch.rise(); ch.guard = 99; }
-      const gap = ld.pos().x - ch.pos().x, sh = Math.min(Math.max(0, gap - (S.hhGap || 0.7)), (gap > 8 ? 7 : 3.2) * dt);
+      const gap = (ld.finished ? 60 : ld.pos().x) - ch.pos().x, sh = Math.min(Math.max(0, gap - (S.hhGap || 0.7)), (gap > 8 ? 7 : 3.2) * dt);
       if (sh > 0) for (const p of ch.parts) { const t = p.body.translation(); p.body.setTranslation({ x: t.x + sh, y: t.y, z: t.z }, true); }
       for (const p of ch.parts) { const v = p.body.linvel(), lv = ld.torso.body.linvel().x; if (v.x < lv) p.body.setLinvel({ x: v.x + (lv - v.x) * 0.1, y: v.y, z: v.z }, true); }
     }

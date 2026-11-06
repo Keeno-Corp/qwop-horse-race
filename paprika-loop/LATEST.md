@@ -32,14 +32,14 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 
 SCORE: 6.6
 
-## Iteration 14
+## Iteration 15
 **Did**
-- No code changes. Verified the judge-13 Next 1 by playing: `interact until {phase:"replay"}` reaches the plant replay at raceT 7.72 (INSTANT REPLAY 0.25x, `replay.kind:"plant"`); after Space, `until {replay.kind:"finish"}` shows the sepia frame with grain, scratches, film perforations, "PHOTO FINISH" caption and "WINNER: Dusty Rhodes · OFFICIAL · HOLD ALL TICKETS" strip. The replay and sepia exist and work; the judge only stopped at raceT 22 before the 6.5 s post-finish cutoff.
+- game.js dead-heat sprint: `S.deadHeat` always true, pull starts at `AI.leadX > 25` (was 34), leader `ld` now includes finished horses (clamped to x=60), so the pull keeps working on the chaser after the leader crosses (before, the 3rd horse was dragged instead, causing the 6 s gap).
 **Saw**
-- Finish replay appears at raceT ~28.2. Dusty Rhodes finishT 21.70, Hoof Hearted 27.89 in this run (a 6 s gap: the `deadHeat` pull-level in game.js ~l.339 did not close it this time; an earlier run gave 22.03/22.07). Sir Trips-a-Lot (5 plants) x 57.6 not finished. No console errors. `postpass-quad` is flagged by `look` as dense fine detail (noise). `look target:"horse0"` still 0 of 3 parts. Draw calls not re-measured (last 411).
+- One solo no-input race: Hoof Hearted finishT 23.7, Dusty Rhodes 23.9 (0.2 s gap, within the 0.3 s target). Sir Trips-a-Lot x 57.8 (5 plants), `tangles:1`. No errors in `observe`. Draw calls/perf not re-measured (last 411).
 **Next**
-- Make the dead heat reliable: the chaser is only dragged level when `AI.leadX > 34` and `S.deadHeat` (90%); Hoof Hearted lagged because he planted late. Trigger the pull from x>25 and always `rise()`.
-- Draw calls 411 to under 250 (merge per-horse `merged` / `merged-outline` groups, sponsor atlas, instance tails).
+- Draw calls 411 to under 250 (merge `merged`/`merged-outline` per material, sponsor atlas, instance `tail`s).
 - Name horse body/leg/head meshes so `look target:"horse0"` finds parts; enlarge blinker silks 2x.
+- Check the finish replay still shows with the new close finish (`until {replay.kind:"finish"}` then `look`).
 **Open**
-- Draw-call goal unmet; a human 60 m finish is unproven; `postpass-quad` grain flagged as shimmer noise (intentional film grain).
+- Only one run checked; draw-call goal unmet; human 60 m finish unproven.
