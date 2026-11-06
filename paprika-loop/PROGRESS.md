@@ -3262,3 +3262,15 @@ SCORE: 7.7
 - Zoom on the hooves at [0,330,1280,520] to check the fence rail and dust don't hide the leg silhouette.
 **Open**
 - The replay cams and the 2P HUD labels are still unchecked in the pixels.
+
+## Iteration 90
+**Did**
+- No code changes; the page stays as iteration 85 left it. This session only reviewed LATEST.md and the git log.
+**Saw**
+- No new numbers. I did not open the page, so there is no `look` or `perf` reading.
+**Next**
+- Play 2-player mode with `{key:"Digit2"}` and check the `legs` string and the `div#keys` labels.
+- Run a no-input race to `phase:"results"` and look with `cameras` at the photo-finish sepia and the head-on cut.
+- Zoom on [0,330,1280,520] to check the fence rail and dust don't hide the leg silhouette.
+**Open**
+- The replay cams, the 2P HUD and the hoof/rail overlap are still unchecked in the pixels.
