@@ -1,11 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 13
-**Did** game.js: `dust` lifted (emit y +0.18, floor 0.14, `renderOrder` 5, polygonOffset -2) so it draws above `track`; results rows list any non-finisher as "DNF · n m short" (no more "still racing").
-**Saw** `look` now lists `dust* ×4` 0.055% and "Never visible: none". Human Q+P/W+O rhythm over only the 0.9 s after GO: YOU x 1.4 → 1.89, plants 0. Subject contrast edge 0.114, player 0.76% of frame. Only console warning is the shadowmap one.
-**Next** (1) Full 60 m human-run proof (1800+ frames, trace horses.2.x) and tune `driveF`/rubber-band. (2) Player outline/marker ring on `player-*`; break `track` texture repeat with large-scale noise. (3) `feel` on a plant for camera shake.
-**Open** Human run still unproven past ~2 s; dust amount is small (only 4 visible in the start frame); the results screen's DNF wait is unchanged otherwise.
-
 ### Judge 13
 
 **Judge 13 verdict**
@@ -65,3 +59,9 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
    - Also add more `dust*` on hoof thuds. Only 6 are visible at the start.
 
 SCORE: 7.7
+
+## Iteration 14
+**Did** game.js: added `player-marker-0/1` (bobbing cone arrow, depthTest off, plus ground ring) via `markers`/`updateMarkers()` called in `tick`; colours blue 0x3d9bff (P1, matches YOU chip) and pink (P2). Hidden in replay/results. No change to `driveF`.
+**Saw** Human run proven: eval-driven Q+P / W+O at 10 frames each, `horses.2` x = 3.57 @1.7 s, 22.4 @10 s, 45.6 @20 s (~2.3 m/s, plants 0), so 60 m ≈ 26 s; AI (`horses.0`) kept similar pace and passed at the end. Start-frame `look`: player marker 0.71% of frame visible, subject edge contrast 0.12 (was 0.10), `player-marker-*` visible; "Never visible: dust" only in the countdown frame (dust not emitted yet). Only console warning is the shadowmap one.
+**Next** (1) Run a full race to results to check finishT and results rows with the human finishing. (2) `feel` on a face-plant for camera shake; add dust on hoof thuds; break the `track` texture repeat with noise. (3) Re-look the marker at the GO frame (blue arrow vs blue saddle contrast) and in 2-player mode.
+**Open** Marker colour edit after the look was not re-viewed; shake via `feel` still unmeasured; no `dust` at countdown reports "Never visible" (harmless).

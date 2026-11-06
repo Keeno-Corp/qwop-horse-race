@@ -454,12 +454,32 @@ function tick(dt) {
     const steps = Math.round(dt / DT); for (let s = 0; s < steps; s++) physStep();
   }
   if (S.phase !== 'replay') syncViews();
+  updateMarkers();
   updateDust(dt); dustM.visible = S.phase !== 'replay' || true;
   env.update(S.time, dt); clouds.position.x = camLook.x * 0.9 + S.time * 0.4;
   env.spectators.update(S.time, S.phase === 'results' ? 0.8 : S.excite);
   // popups lifetimes
   for (let i = S.popups.length - 1; i >= 0; i--) { S.popups[i].t -= dt; if (S.popups[i].t <= 0) { S.popups[i].el.remove(); S.popups.splice(i, 1); } }
   updateCamera(dt); updateHud();
+}
+// player markers: bobbing arrow above and a ground ring under each human horse
+const markers = [0, 1].map((k) => {
+  const col = k === 0 ? 0x3d9bff : 0xff7ad9;
+  const g = new THREE.Group(); g.name = 'player-marker-' + k;
+  const arrow = new THREE.Mesh(new THREE.ConeGeometry(0.28, 0.5, 4), new THREE.MeshBasicMaterial({ color: col, depthTest: false }));
+  arrow.rotation.x = Math.PI; arrow.position.y = 2.7; arrow.renderOrder = 20; arrow.castShadow = false; g.add(arrow);
+  const ring = new THREE.Mesh(new THREE.RingGeometry(0.85, 1.05, 32), new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.8, side: THREE.DoubleSide }));
+  ring.rotation.x = -Math.PI / 2; ring.position.y = 0.06; ring.castShadow = false; ring.renderOrder = 4; g.add(ring);
+  g.userData.arrow = arrow; g.frustumCulled = false; scene.add(g); return g;
+});
+function updateMarkers() {
+  markers.forEach((m, k) => {
+    const hi = roles.findIndex((r) => r.human === k);
+    m.visible = hi >= 0 && S.phase !== 'replay' && S.phase !== 'results';
+    if (!m.visible) return;
+    const t = horses[hi].torso.body.translation();
+    m.position.set(t.x, 0, t.z); m.userData.arrow.position.y = 2.6 + Math.sin(S.time * 6) * 0.12;
+  });
 }
 function syncViews() {
   horses.forEach((h, hi) => h.parts.forEach((p, pi) => {
