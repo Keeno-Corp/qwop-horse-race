@@ -52,7 +52,7 @@ let mode = 1;
 
 // ---------- AI ----------
 class AI {
-  constructor(skill) { this.skill = skill; this.phase = rr(0, 1); this.base = rr(0.57, 0.65) / skill; this.t = 0; this.delay = rr(0.05, 0.5); this.next = rr(7, 12); this.m = null; this.wob = rr(0, 6); this.chaos = rr(0.85, 1.25); }
+  constructor(skill) { this.skill = skill; this.phase = rr(0, 1); this.base = rr(0.51, 0.58) / skill; this.t = 0; this.delay = rr(0.05, 0.5); this.next = rr(7, 12); this.m = null; this.wob = rr(0, 6); this.chaos = rr(0.85, 1.25); }
   update(h, dt, lead) {
     this.t += dt; this.wob += dt;
     const px = h.pos().x; let band = 1;

@@ -1887,3 +1887,9 @@ SCORE: 8.6
 **Saw** Mistimed keys punish: `YOU` pitch went to -0.63 and `plants` became 1 at frame 265, `state` "down" with a thud and gasp. After about 58 frames `state` returned to "run" (pitch 0, boing sound). No console errors. AI was at x 8 to 11 while `YOU` was at 3.5 after the plant.
 **Next** (1) Run a rhythm to `phase` "results" and check `finishT`, the margin and the finish replay. (2) If a rhythm player wins by a lot, raise the AI speed (`new AI(rr(0.93,1.03))` in game.js). (3) Check the replay camera on a middle-lane plant.
 **Open** The finish and human-versus-AI pace are still unverified.
+
+## Iteration 36
+**Did** Raised AI speed in game.js `AI` constructor: `this.base = rr(0.51, 0.58) / skill` (was 0.57–0.65). Used `setState({auto:true})` (the built-in autoplayer) to run a full race.
+**Saw** Before the change, the auto player reached x 31 at raceT 7.85 while AI were at 14–19 (too easy). After it: results at raceT 28.85, `finishT` 22.33 / 22.53 / 22.65 (YOU 3rd) / Dusty DNF 24 m short with 2 plants. Banner "Hoof Hearted WINS! PHOTO FINISH · 0.20s", podium, "SMOOTH OPERATOR" badges and "DIRT EATER" badge all show. No console errors. The player-body is 62% brightness against 39% around it. Only "Never visible" note: `dust` (in view, behind track).
+**Next** (1) Check the plant replay camera on a middle lane with `look` during `phase` "replay". (2) Look at the finish replay (REPLAY banner, 0.25x). (3) Check a human rhythm (not `auto`) against the new AI pace; a human is likely slower than `auto`.
+**Open** Replay camera side and the finish replay still not looked at; the human-versus-AI pace was only tested with `auto`.
