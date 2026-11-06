@@ -1,37 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-### Judge 8
-
-**Scores (Must have, in order)**
-
-1. **Plays as DESIGN.md says: 6.** A solo race starts and the AI horses run, with `Tote`, `div#keys` (Q FL / W FR / O BL / P BR) and the `1 PLAYER` / `2 PLAYERS (2)` / `RESTART` buttons. My `interact` alternation (Q+P then W+O, 40 frames each, R first) took `YOU` only from x 1.37 to 3.76 in 3.35 s, with `plants:1` and a pitch low of -0.29. I did not run a full 60 m with held keys, so "60 m in under 60 s" is still unproven (asked again).
-2. **Rapier ragdoll, face-plant, auto-right: 7.** `Sir Trips-a-Lot` hit `plants:2`, and a `FACE-PLANT! … kisses the track!` pop appeared with a `thud` and `gasp`. After my alternation, `YOU`'s pitch went from -0.29 back to 0 by frame 475. I did not time the ~2 s auto-right.
-3. **Replay and sepia photo finish: 5.** I did not reach a finish replay this session, so the sepia `PHOTO FINISH` frame with grain, scratches and gate weave is unseen for five sessions. The last judge also saw a near-black first replay frame.
-4. **Photo finish and tangle within a minute: 7.** `tangles:1` appeared by raceT 13.75 with no input. I did not re-check the finish gap or the `PHOTO FINISH` card this session.
-5. **Results with most face-plants award: 7.** Not re-read this session. The `plants` counters feed `Tote` (`FACE-PLANTS 2`, `1`, `0`, `0`).
-6. **Looks as LOOK.md says: 8.** The race look is strong. The horse has a bold outline, flat toon steps, a warm orange and yellow track, and `RANCH-O COLA` and `SUNNY LAGER` ad boards. `div#crt` gives a VHS grade, with 2% near-black and 0% blown out. I did not `sample` the 3-step shading.
-7. **`window.__game`, static, no network: 6.** `observe` works and assets are 0.32 MB. `look` still says `subject` "horse0" is not in the scene, and iteration 8's rename did not fix it. This is the fifth session with that fault.
-8. **Horses match CHARACTERS.md and horse.png: 6.** The horse has socks, dark hooves, big eyes, a mane, a saddle cloth with number and a blinker. The legs are still short against "long wobbly", and the blinker silks are small.
-9. **Broadcast overlay: 9.** `Tote` has silks chips and `WIN ODDS` that now move (`20-1`, `15-1`, `30-1`, `1-2`). There is a `LIVE` bug, a `3:59 PM` clock bug, `RACE TIME 13.8s`, a `WALT DUNMORE` play-by-play lower-third and an `◀ YOU 31 M` offscreen marker. A progress bar sits at the top.
-10. **Camera: 7.** The side-tracking telephoto is clear. I did not see the head-on cut.
-11. **Controls feel learnable: 4.** My alternating pattern gave 2.4 m in 3.35 s and a face-plant. No held-key race has reached x 60 in six sessions.
-12. **Local 2-player, discoverable: 6.** The `2 PLAYERS (2)` button and the footer line `2 = TWO PLAYERS` are visible. I did not play it.
-13. **Style judged as hard as gameplay: 8.** The title card, `Tote`, lower-third, key caps and the VHS pass look like one 70s broadcast. I did not run `reference` against `LOOK-board.png`.
-
-**Faults: 5.**
-- `perf` shows 441 draw calls and 183,986 triangles (scene pass 166 ms). This is a software renderer, so the frame time is noise, but the draw count is unchanged for five sessions.
-- `subject` "horse0" is not found by `look`.
-- `div#crt` covers 100% of the canvas.
-- The one-frame `look` at race start also lists a full-screen `Mesh` as the only thing on screen, so the 3D objects are not named in `On screen` and the post-pass quad hides them.
-- No console errors.
-
-**Next:**
-1. **(asked again) Prove the controls and finish.** Write a held-key rhythm and check that `YOU` reaches x 60 in under 60 s. Use `interact` with `until:{"horses.2.finished":true}` and `max` 4000, with Q+P and W+O alternating about every 20 frames. Tune the leg motor force or key gain if it can't. Done when `finishT` for `YOU` is under 60 and `phase` goes to the finish replay. Then `look` at that replay to show the sepia `PHOTO FINISH` frame, and fade in its first frame.
-2. **(asked again) Fix `subject`, then cut draw calls from 441 to under 250.** Set `__game.subject` to an object that `scene.getObjectByName` finds, for example a Group named `horse0` added to the scene. Use `instances()` for crowd figures, fence posts and ad boards. Done when `look` stops saying "horse0 is not in the scene" and `perf costs:true` reports under 250 draw calls.
-3. **Lengthen the legs and enlarge the blinker silks.** Legs should be about 1.2× body depth, with bigger blinker patterns so the silks read in the race look. Done when `look target:"horse0"` shows long legs and the blinker pattern is legible at play distance.
-
-SCORE: 6.5
-
 ## Iteration 9
 **Did**
 - broadcast.js `render()`: the real `scene` is now added as an invisible-during-final-pass child of the post-pass scene `scn` (`scene.visible` false only while `scn` draws), so tools reading the last-rendered scene find the horses. `look target:"horse0"` now works (size 2.51×1.13×1.05); the "horse0 not in scene" fault is fixed.
@@ -45,3 +13,36 @@ SCORE: 6.5
 - Lengthen legs ~1.2× body depth and enlarge blinker silks.
 **Open**
 - Legs/blinker and draw calls untouched. `horse0` is the torso group only, so `look` says 0 of 3 named parts show.
+
+### Judge 9
+
+**Scores (Must have, in order)**
+
+1. **Plays as DESIGN.md says: 7.** A solo race starts with a 3-2-1 countdown, and the held Q+P / W+O alternation moves `YOU` from x 1.42 to 4.66 in about 100 frames after the countdown. The `Tote`, `div#keys` and the `1 PLAYER` / `2 PLAYERS (2)` / `RESTART` buttons are all there. I did not run a full 60 m this session; iteration 9's ~3.2 m/s estimate stands.
+2. **Rapier ragdoll, face-plant, auto-right: 7.** `YOU` pitched to a low of -0.46 at frame 148 and recovered to -0.19 by frame 177, with no `plants` count. The legs are visibly jointed in the dust-cloud picture. I did not time the ~2 s auto-right.
+3. **Replay and sepia photo finish: 6.** Not reached this session. Iteration 9 reported a sepia `PHOTO FINISH` frame with grain and weave when it forced the finish, but I did not see it myself.
+4. **Photo finish and tangle within a minute: 6.** Not re-checked. The fixed race-start alignment and the "0.14 SEC" banner from iteration 9 are the only evidence.
+5. **Results with most face-plants award: 6.** Not reached. The `Tote` shows a `FACE-PLANTS` counter per horse.
+6. **Looks as LOOK.md says: 8.** The outlined horses have flat toon steps. The track is warm orange and yellow, with `GOLDEN HOOF OATS` and `TOP-CAT TIRES` boards and a wooden grandstand. `div#crt` gives a warm VHS grade at 49% brightness. `look` finds no depth cue (no fog) and unnamed `PlaneGeometry` pairs at y = 0.09 that flicker from above. I did not `sample` the 3-step shading.
+7. **`window.__game`, static, no network: 7.** `observe` works, assets are 0.32 MB with fonts vendored, and there are no console errors. `look`'s `Subject` says `horse0` shows 0 of its 3 named parts, because `Mesh` (the post-pass quad) covers 89–92% of the frame.
+8. **Horses match CHARACTERS.md and horse.png: 7.** The horses have a bristly mane, a tufted tail, white socks, dark hooves, big round eyes, a bridle, a saddle cloth with a number roundel and blinkers. Four distinct silks show on the tote chips (diamond, stripe, dots, band). The legs are still short against "long wobbly", and the blinker silks are small.
+9. **Broadcast overlay: 9.** `Tote` has `WIN ODDS` that moved from 4-1 to 5-1 and 3-1, and a progress bar sits at the top. The lower-third switches commentators (`WALT DUNMORE` to `HANK "HOOFBEAT" PRUITT`) with new lines. The `LIVE` bug, the `3:58 PM` clock bug, `RACE TIME 1.7s`, `div#keys` and the countdown are all present.
+10. **Camera: 7.** The telephoto side-track is clear, with the grandstand behind. I did not see the head-on cut or the replay cams.
+11. **Controls feel learnable: 6.** The alternation moves the horse and dust particles show the gait. The 60 m finish is still unproven.
+12. **Local 2-player, discoverable: 6.** The `2 PLAYERS (2)` button and the `2 = TWO PLAYERS` footer are visible. I did not play it.
+13. **Style judged as hard as gameplay: 8.** The countdown numerals, `Tote`, lower-third, key caps and CRT pass read as one 70s broadcast. I did not run `reference` against `LOOK-board.png`.
+
+**Faults: 5.**
+- `perf` shows 435 draw calls and 183,974 triangles (scene pass 140 ms). The host load is 2.5 on 8 cores and this is a software renderer, so the frame time is noise, but the draw count is unchanged. `merged` is 142 draw calls, `Mesh` 97, `merged-outline` 45, and `crowd` 48k triangles in 4 calls.
+- The "merged" z-fighting from iteration 9's Next is not visible in this look, but unnamed `PlaneGeometry` pairs share a face plane at y = 0.09 (2 more pairs out of view).
+- `look`'s depth check says there is no fog, so depth does not read.
+- `div#crt` covers 100% of the canvas.
+- `look` still reports `Subject` horse0 as showing 0 of 3 parts, and the `hills` object is listed as never visible.
+- No console errors.
+
+**Next:**
+1. **Cut draw calls from 435 to under 250.** Merge the `merged` groups (142 calls) and `merged-outline` (45) by material, and use `instances()` for fence posts and ad boards. In `perf costs:true`, `merged` should drop below about 40 calls and the total below 250.
+2. **Make `horse0` a subject `look` can measure.** The post-pass quad `Mesh` hides all three named parts. Name the horse's body, legs and head meshes so they appear in `On screen`, and make `look target:"horse0"` show the horse with its long legs. Then lengthen the legs to about 1.2× body depth and enlarge the blinker silks. The target look should show long legs and a legible blinker pattern.
+3. **Add depth fog and fix the y = 0.09 plane pairs.** Set `scene.fog` in the sky colour so the far grandstand and hills pale. Move one of each coplanar `PlaneGeometry` pair at least 1e-3 off the plane. The next `look` should drop the "no fog" and `Surfaces` lines. Then play to a finish and `look` at the results screen, so the sepia replay and the face-plant award are seen by a judge.
+
+SCORE: 6.9
