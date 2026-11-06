@@ -91,6 +91,7 @@ void main(){
     render(scene, camera, t) {
       U.uTime.value = t;
       if (scene.parent !== scn) scn.add(scene); // so tools that read the last-rendered scene still find the horses
+      scn.fog = scene.fog;
       scene.visible = true;
       renderer.setRenderTarget(rt); renderer.clear(); renderer.render(scene, camera);
       scene.visible = false;

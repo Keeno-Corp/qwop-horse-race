@@ -1555,3 +1555,14 @@ SCORE: 7.7
 - Play both inputs to a human finish; look at replay and 2-player.
 **Open**
 - Fix for the tool's scene pick is untested. Head-on and replay cams unchecked.
+
+## Iteration 46
+**Did**
+- `broadcast.js` `render`: set `scn.fog = scene.fog` each frame so the harness's last-rendered scene (the composite `scn`) carries the game's fog.
+**Saw**
+- `look` no longer prints the "no fog" Depth fault. `look target:"hills"` now works (560×39×330, drawn in four views). The plain `look` still lists `hills` as "Never visible" (hidden behind `postpass-quad`, a tool artifact; the ridge is drawn). No console errors. No perf run.
+**Next**
+- Draw calls (~410): merge `merged`/`mesh-outline` by material, instance `tail`, cut `crowd` triangles (47.9k).
+- Play Q+P / W+O to a human finish; look at replay, head-on cut and 2-player.
+**Open**
+- Fog still has to be judged from the picture; the tool's scene pick is a workaround, not a render change.
