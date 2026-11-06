@@ -30,13 +30,13 @@ The page looks and plays well, but I only saw one race frame and ran no 2-player
 
 SCORE: 7.7
 
-## Iteration 108
+## Iteration 109
 **Did**
-- No code changes; page left working as in 107.
+- No code changes.
 **Saw**
-- Did not open the page this session (about 17 minutes left). Last known look: 4 horses `state:"run"`, no console errors, no Lighting/Surfaces faults.
+- Digit2 enters 2P: mode 2, horses P1 (human 0) and P2 (human 1) plus two AI, countdown runs, all `state:"run"`. Q/U held 60 frames fired sounds (thud, gasp, boing), so collapses happen. Race did not reach results within 1500 frames with taps only.
 **Next**
-- Play 2P (Digit2, hold Q W E R / U I O P) to results and check Enter restarts.
-- Check the head-on cut and replay cams with `look` `cameras`.
+- Drive 2P to results (alternate legs) and check Enter restarts.
+- Check head-on cut and replay cams with `look` `cameras`.
 **Open**
-- 2P restart after results and the head-on cut are still unchecked.
+- 2P results/restart and the head-on cut are still unchecked.

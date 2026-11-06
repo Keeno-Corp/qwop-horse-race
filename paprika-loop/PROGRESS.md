@@ -3490,3 +3490,14 @@ SCORE: 7.7
 - Check the head-on cut and replay cams with `look` `cameras`.
 **Open**
 - 2P restart after results and the head-on cut are still unchecked.
+
+## Iteration 109
+**Did**
+- No code changes.
+**Saw**
+- Digit2 enters 2P: mode 2, horses P1 (human 0) and P2 (human 1) plus two AI, countdown runs, all `state:"run"`. Q/U held 60 frames fired sounds (thud, gasp, boing), so collapses happen. Race did not reach results within 1500 frames with taps only.
+**Next**
+- Drive 2P to results (alternate legs) and check Enter restarts.
+- Check head-on cut and replay cams with `look` `cameras`.
+**Open**
+- 2P results/restart and the head-on cut are still unchecked.
