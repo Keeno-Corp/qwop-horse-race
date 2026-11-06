@@ -52,7 +52,7 @@ let mode = 1;
 
 // ---------- AI ----------
 class AI {
-  constructor(skill) { this.skill = skill; this.phase = rr(0, 1); this.base = rr(0.51, 0.58) / skill; this.t = 0; this.delay = rr(0.05, 0.5); this.next = rr(7, 12); this.m = null; this.wob = rr(0, 6); this.chaos = rr(0.85, 1.25); }
+  constructor(skill) { this.skill = skill; this.phase = rr(0, 1); this.base = rr(0.51, 0.58) / skill; this.t = 0; this.delay = rr(0.05, 0.5); this.next = rr(7, 12); this.m = null; this.wob = rr(0, 6); this.chaos = rr(0.85, 1.25); this.jit = rr(0.95, 1.05); }
   update(h, dt, lead) {
     this.t += dt; this.wob += dt;
     const px = h.pos().x; let band = 1;
@@ -60,7 +60,7 @@ class AI {
     if (px > 22) { if (this.m) this.m = null; this.next = 99; const gapL = (AI.leadX || 0) - px; if (gapL > 0.5) band = 1 - clamp((gapL - 0.5) * (px > 38 ? 0.3 : 0.15), 0, px > 38 ? 0.78 : 0.7); }
     { const g1 = (AI.leadX || 0) - px; if (g1 > 1.5 && h.state === 'run' && !h.finished) { h.drive = 1; h.driveF = 40 * clamp(g1 - 1.5, 0, 14); } else h.driveF = 0; }
     if (this.t < this.delay) { for (let i = 0; i < 4; i++) h.setHeld(i, false); return; }
-    const per = band * this.base * (1 + 0.14 * Math.sin(this.wob * 1.7) + 0.08 * Math.sin(this.wob * 4.1)) * (1 + clamp(lead * 0.07, -0.35, 0.5)) * (h.pos().x > 40 ? 1 - clamp(lead * 0.06, -0.3, 0.3) : 1);
+    const per = this.jit * band * this.base * (1 + 0.14 * Math.sin(this.wob * 1.7) + 0.08 * Math.sin(this.wob * 4.1)) * (1 + clamp(lead * 0.07, -0.35, 0.5)) * (h.pos().x > 40 ? 1 - clamp(lead * 0.06, -0.3, 0.3) : 1);
     this.phase = (this.phase + dt / per) % 1;
     const off = [0, 0.5, 0.5, 0], duty = 0.58;
     const flags = off.map((o) => ((this.phase + o) % 1) < duty);

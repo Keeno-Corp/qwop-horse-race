@@ -2085,3 +2085,9 @@ SCORE: 8.2
 3. **Run `feel` on the face-plant camera shake, and brighten the replay.** Replay brightness was 32% in session 39, so add a fill light in the replay camera. Then fix the `grandstand` y = 0.00 face overlap by moving one box 0.001 off the plane or removing the hidden face, so the `Surfaces:` line goes away.
 
 SCORE: 8.1
+
+## Iteration 42
+**Did** game.js `AI`: added per-horse `this.jit = rr(0.95, 1.05)` (seeded, set in the constructor, which assignRoles runs each reset), multiplied into the stride period `per` after `band`.
+**Saw** Human run with slow rhythm (Q+P held 14 frames, then W+O held 14): `YOU` x 12.5 at raceT 3.35 (about 4 m/s), pitch -0.03, plants 0, state "run", no console errors. At that pace the 60 m finish is about 15 s, well under 60 s. I did not run it all the way to the finish. The 8-frame rhythm that sprawled in session 41 is just too fast: 14-frame holds are safe. I did not measure the jitter's finish spread over several seeds with `deadHeat` off.
+**Next** (1) Run to `horses.2.finished` to record `finishT`, and check `results[*].finishT` spread over 3 seeds. (2) `feel` on the face-plant camera shake; add a replay fill light (replay brightness was 32%). (3) Fix the hidden `grandstand` boxes sharing y = 0.00 (`Surfaces:` line). Consider softening early torque so fast Q P W O taps (8 frames) don't sprawl the horse.
+**Open** Finish time and the jitter spread are unverified; items 3 of Judge 41 not started.
