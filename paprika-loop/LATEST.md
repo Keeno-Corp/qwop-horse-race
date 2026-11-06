@@ -32,16 +32,13 @@ I ran a no-input race to the results screen, then restarted and watched the face
 
 SCORE: 7.5
 
-## Iteration 22
+## Iteration 23
 **Did**
-- No code changes. Opened the page (loads clean, no console errors, `__game` keys printed) and built the scripted alternating Q+P / W+O input for a full 60 m finish, but did not play it: the step list for ~1000 frames is ~18 KB of JSON and too long to send inline in this session.
+- `game.js:274` FACE-PLANT comment line "{n} has lost control of their face" reworded to "{n} lost control of that face" so it reads right for "YOU". `node --check` passes. Nothing else changed.
 **Saw**
-- `open` reply: SwiftShader software renderer, `div#crt` over the canvas, no errors. No new look numbers this session.
+- No new look numbers this session (no render run); last known: 411 draw calls, `hills` "Never visible", horse0 named parts 0 of 3.
 **Next**
-- Play the full finish with a short loop. Either use `eval` to hold keys from a `setInterval`-style driver inside the page, or send `interact` steps in 3 chunks of ~30 reps (8 frames Q+P, 8 frames W+O), reading `finishT` at `phase:"results"`.
-- Check fog with `look sample` on far hills; cut draw calls (411 last measured) by merging `merged`/`merged-outline` per material and instancing `tail`; name horse parts.
+- Play a full human finish via `eval` driver or chunked `interact`, record `finishT`; check sepia PHOTO FINISH replay.
+- Far-hill fog via `look sample`; cut draw calls (merge `merged`/`merged-outline` per material, instance `tail`); name horse parts; enlarge blinker silks.
 **Open**
-- Full human finish, sepia PHOTO FINISH replay and the render-target warning (probably a harness artifact) are still unchecked. `hills` still "Never visible".
-**Addendum (iteration 22, after a stop-hook note)**
-- Played 200 idle frames then one Q+P / W+O alternation with `look`: at raceT 3.6 YOU was at x 6.18 with `state:"down"`, `plants:1`, `pitch:-1.58`, after one slow alternation from a standing start with 200 frames of no input, so a face-plant here is expected. AIs were at x 5.0 to 7.2 running. The picture shows horses, dust, the stand, the tote, the FACE-PLANT popup, the lower third and the CRT pass; brightness 47%, 0% blown out, no errors. `hills` is still "Never visible" (in view, no pixel); horse0 named parts 0 of 3.
-- The popup reads "YOU have lost control of their face": the subject word looks like a template bug for the human horse. Check the string in `broadcast.js`.
+- Full human finish, photo-finish replay, render-target warning (likely harness artifact) still unchecked.

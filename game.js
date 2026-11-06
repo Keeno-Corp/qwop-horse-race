@@ -271,7 +271,7 @@ function popup(text, sub = '', color = '#ffd27a', life = 1.7) {
   S.popups.forEach((p, i) => { p.el.style.top = (22 + i * 20) + 'vh'; }); // re-stack so two pops never overlap
 }
 const COMMENT = {
-  'FACE-PLANT!': ['{n} eats dirt!', '{n} kisses the track!', 'Nose-first for {n}!', '{n} has lost control of their face'],
+  'FACE-PLANT!': ['{n} eats dirt!', '{n} kisses the track!', 'Nose-first for {n}!', '{n} lost control of that face'],
   'CARTWHEEL!': ['{n} is doing gymnastics!', '10/10 from the judges, {n}!'],
   'DOG SIT!': ['{n} is sitting like a dog!', '{n} thinks this is a picnic'],
   'SPLITS!': ['{n} does the splits!', 'Ouch! {n} is not a gymnast'],

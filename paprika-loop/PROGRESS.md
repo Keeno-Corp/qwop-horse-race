@@ -760,3 +760,14 @@ SCORE: 7.5
 **Addendum (iteration 22, after a stop-hook note)**
 - Played 200 idle frames then one Q+P / W+O alternation with `look`: at raceT 3.6 YOU was at x 6.18 with `state:"down"`, `plants:1`, `pitch:-1.58`, after one slow alternation from a standing start with 200 frames of no input, so a face-plant here is expected. AIs were at x 5.0 to 7.2 running. The picture shows horses, dust, the stand, the tote, the FACE-PLANT popup, the lower third and the CRT pass; brightness 47%, 0% blown out, no errors. `hills` is still "Never visible" (in view, no pixel); horse0 named parts 0 of 3.
 - The popup reads "YOU have lost control of their face": the subject word looks like a template bug for the human horse. Check the string in `broadcast.js`.
+
+## Iteration 23
+**Did**
+- `game.js:274` FACE-PLANT comment line "{n} has lost control of their face" reworded to "{n} lost control of that face" so it reads right for "YOU". `node --check` passes. Nothing else changed.
+**Saw**
+- No new look numbers this session (no render run); last known: 411 draw calls, `hills` "Never visible", horse0 named parts 0 of 3.
+**Next**
+- Play a full human finish via `eval` driver or chunked `interact`, record `finishT`; check sepia PHOTO FINISH replay.
+- Far-hill fog via `look sample`; cut draw calls (merge `merged`/`merged-outline` per material, instance `tail`); name horse parts; enlarge blinker silks.
+**Open**
+- Full human finish, photo-finish replay, render-target warning (likely harness artifact) still unchecked.
