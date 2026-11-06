@@ -1,34 +1,34 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-### Judge 47
-
-**Verdict, session 47**
-
-1. **Plays as DESIGN.md's Core loop and Controls say: 7.** I started `act({type:'autoplay'})` and ran up to 2400 frames. `YOU` was stuck at x 2.29 at `raceT` 29.55 with `legs` "0000" and `plants` 1. `Dusty Rhodes` finished at `finishT` 23.03. Session 47 reported autoplay winning the race, so this run did not repeat it. Either autoplay dies after a face-plant, or the result depends on the seed. I did not test 2-player play or R.
-2. **Real Rapier jointed ragdoll, face-plant, auto-right: 7.** `Sir Trips-a-Lot` and `Hoof Hearted` each had `plants` 6 and `pitch` about -2 (-2.22 and -1.94), while their `state` still read "run". Those horses are lying upside-down and still marked running, so the auto-right may be failing. The legs and white socks read well in the replay.
-3. **Replay: 8.** The finish replay ran with `kind` "finish", `rate` 0.25, the `REPLAY` banner and "SPACE to skip".
-4. **Photo finish and tangled AI collapse: 6.** `tangles` reached 1 and the AIs piled up, which is funny. The finish was not a photo finish: the nearest horses were at x 37–38 while the winner was already over the line.
-5. **Results with most face-plants award: 5.** `phase` stayed "replay" through 2400 frames and never reached "results". The award text has not been seen in 5 sessions. The `results` array is filled in, with `YOU` last.
-6. **Looks as LOOK.md says: 8.** The `track`, `grandstand` with blocky crowd, white rail, `finish-line` checker, `hills` and a red-brown horse with a yellow saddle and white socks all show. Saturation was 53%, 20% near black and 1% blown out. The look had no `Lighting:` or `Surfaces:` lines. The camera sits very close during the replay and crops the horse's body. The `WINNER!` text overlaps the crowd and is hard to read because it is faint.
-7. **window.__game convention, index.html at root: 9.** `observe` and `act` both work and the state is full.
-8. **Clip moments in the first minute: 7.** The pile-up now happens on its own, with `tangles` 1 and plants of 6, 6 and 0 across the AIs. The photo finish is still missing.
-9. **Controls feel learnable: 6.** A held rhythm worked in session 47. This session the player ended at x 2.29. I did not check whether autoplay or the physics stopped it.
-10. **Horses read as horses, match refs/01.jpg: 9.** Head, neck, dark mane and tail, saddle, socks and dark hooves show next to the stands and fence.
-11. **Juice: 8.** 48 sounds fired: blip, powerup, cheer, thud, gasp and boing. The `div.pop` "WINNER!" popup, the banner and the finish checker all show. I did not run `feel` on the shake.
-12. **Local 2-player discoverable from the HUD: 8.** This was carried over from session 46, and I did not play it.
-13. **Static page, vendored lib, no network: 9.** `perf` shows 378 draw calls, 33.5k triangles and 0 MB of assets. The 85 ms frame is SwiftShader and does not count.
-
-**Faults: 6.** There were no console errors. `Never visible` lists `dust`, which should show on a dirt track. In `look`, `player-body` drew no pixel and the replay camera framed an AI instead. The `results` phase did not appear within 2400 frames, and AIs in "run" state lie upside-down with `pitch` -2.
-
-**Next:**
-1. **The results screen never appears (asked again).** After the finish replay, `phase` stayed "replay" for thousands of frames and the race never ended. Find why the replay or the finish does not hand over to `results`. The cause may be that the race waits for every horse, including the upside-down AIs with `state` "run". Then end the race a few seconds after the first finish, or when the player finishes. Check: `interact` with `act({type:'autoplay'})` and `until {phase:'results'}`, then `look` should show the face-plants award text.
-2. **Fix horses stuck upside-down and make autoplay reliable.** `Sir Trips-a-Lot` and `Hoof Hearted` have `pitch` about -2 with `plants` 6 but never recover. Check that the auto-right fires after about 2 s and sets `state` to "plant" while down. Also make autoplay re-hold keys after a face-plant, so `YOU` finishes every run. Check: `interact` with autoplay, where `YOU.finished` should be true by `raceT` 30 and no horse should have `|pitch|` > 1.2 for more than 3 s.
-3. **Fix the `dust` and the finish drama.** `dust` is "Never visible", so make the hoof dust spawn visibly on the `track` at the horses' feet. Add a gentle clamp so the winner and the second horse are under 1 s apart, which gives the photo finish. Also move the replay camera back so the full horse and the line show. Check: `look` during the replay should show dust puffs, and `observe` should show a gap under 1 s.
-
-SCORE: 7.2
-
 ## Iteration 48
 **Did** game.js: finish-replay camera pulled back (`tp` FINISH_X+4.5, y 2.6, z 15, fov 34→31); hoof dust in the foot loop now fires at `f.y<0.2`, `|v.x|>1.5`, 3 chunks every 0.07 s; AI late catch-up past x 40 strengthened (`lead*0.1`, clamp ±0.4).
 **Saw** The judge's "results never appears" was a test error: `interact {action:'autoplay'}` does nothing (needs `act({type:'autoplay'})` or `setState({auto:true})`), so `YOU` sat at x 1.4 with legs "0000". With `setState({auto:true})` the race reaches `results` (raceT 24.9). `look` in the plant replay shows dust (`dust*` ×51 on screen, Never visible: none). Results `look` shows YOU WINS!, podium, "SMOOTH OPERATOR" and "DIRT EATER · MOST FACE-PLANTS" award, DNF rows. Winner gap 1.40 s (not under 1 s). Two AIs end 'down'/'run' upside-down at pitch -2.7 because the results phase sets `guard` 99 for all. No console errors. `perf` not run.
 **Next** (1) Photo-finish gap still 1.4 s: pull the second AI toward the player beyond x 45. (2) AIs flip 5–6 times each; check why `rise()` re-flips (hop height / guard 1.6). (3) Results phase should call `rise()` on 'down' horses so no one lies upside-down behind the panel.
 **Open** The interact tool's `{action:'autoplay'}` form doesn't work; use setState auto. One race tested per change.
+
+### Judge 48
+
+**Verdict, session 48**
+
+1. **Plays as DESIGN.md's Core loop and Controls say: 8.** `setState({auto:true})` ran the race to `phase` "results" at `raceT` 24.88. `YOU` finished at `finishT` 21.28, ahead of `Dusty Rhodes` at 22.68. The HUD shows the Q W O P key chips and the tips line. I did not test 2-player play or R.
+2. **Real Rapier jointed ragdoll, face-plant, auto-right: 6.** `Sir Trips-a-Lot` (`plants` 5) and `Hoof Hearted` (`plants` 6) end with `state` "down" and `pitch` -2.67 and -2.84. They are still on their backs at results, and the builder's notes say the results phase locks the auto-right. They flip 5–6 times each in 25 s, which is too many.
+3. **Replay: 8.** Carried from session 47 (`kind` "finish", `rate` 0.25, `REPLAY` banner). I did not run the replay this session.
+4. **Photo finish and tangled AI collapse: 6.** `tangles` is 1 and the AIs pile up. The finish gap is +1.40 s, so it is not a photo finish.
+5. **Results with most face-plants award: 9.** The results box shows "YOU WINS!", a podium, "SMOOTH OPERATOR" on `YOU` and "DIRT EATER · MOST FACE-PLANTS" on `Hoof Hearted`. The DNF rows read "22 m short" and "29 m short".
+6. **Looks as LOOK.md says: 8.** `track`, `grandstand` with blocky crowd, white rail, `finish-line` checker, `hills` and sky all show. Saturation is 60%, with 0% near black and 0% blown out. There were no `Lighting:` or `Surfaces:` fault lines. In the results look, the panel covers the horses and the `player-body` is only 0.27% of the picture.
+7. **window.__game convention, index.html at root: 9.** `observe` and `setState` both work.
+8. **Clip moments in the first minute: 7.** The pile-up happens with no input. The slow-motion replay exists, but the photo finish is not tight.
+9. **Controls feel learnable: 6.** Only autoplay was tested. `interact` with `{action:'autoplay'}` does nothing, which is a harness quirk. No human-rhythm run was done, so there is no new evidence.
+10. **Horses read as horses, match refs/01.jpg: 9.** Head, mane, saddle, socks and hooves show beside the `grandstand` and fence.
+11. **Juice: 8.** 43 sounds fired (blip, powerup, cheer, thud, gasp, boing). The popups and the results panel work. I did not run `feel` on the shake.
+12. **Local 2-player discoverable from the HUD: 8.** The "2 PLAYERS (2)" button sits in `div#top-r`. I did not play it.
+13. **Static page, vendored lib, no network: 9.** `perf` shows 377 draw calls, 33.5k triangles and 0 MB of assets. The 96 ms frame is SwiftShader and does not count.
+
+**Faults: 7.** There were no console errors. `Never visible` lists `dust`, "in view, behind finish-line", while the builder saw dust in the plant replay. Two horses lie upside-down at results.
+
+**Next:**
+1. **Photo-finish gap (asked again).** The winner gap is still 1.40 s. Pull the nearest AI toward the leader from about x 40, with a stronger rubber-band that is skipped when the AI is face-planted. This should give a gap under 0.5 s in most seeds. Check: run `interact` with `setState({auto:true})` and `until {phase:'results'}`. The results row for 2nd should then read "(+0.4x)" or less.
+2. **Stop the AI flip loop and results-phase upside-down horses (asked again).** In `rise()`, check why the AIs re-flip 5–6 times; the cause may be the hop height or `guard` 1.6. Also call `rise()` on every horse in "down" state when `phase` becomes "results". Check: after `phase` "results", `observe` should show no horse with `|pitch|` > 1.2, and `plants` should be 3 or fewer for each AI.
+3. **Show the horses and the dust at the finish.** In the results `look`, the panel hides the horses. Move the panel to the side or lower it, or add a small win pose for the winner. Also check that `dust` is visible on the `track` in the normal race camera. Check: `look` after `interact` with `until {raceT:8}` should show dust puffs and have `Never visible` empty.
+
+SCORE: 7.7
