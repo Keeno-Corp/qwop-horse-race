@@ -32,15 +32,14 @@ I made three calls: `open`, one `interact` (Enter, 400 frames, then Q and P, wit
 
 SCORE: 7.7
 
-## Iteration 42
+## Iteration 43
 **Did**
-- No code changes. Opened the page, played Enter + 300 frames, took a `look` and a `look` with `cameras` high [30,40,60]→[30,0,-80].
+- `view.js` sky sphere vertex colours: added a painted hill ridge band (azimuth sine ridge, 0.05 elevation ±, two greens lerped to `cMid`) just above the horizon.
 **Saw**
-- Race starts, GO! card, all 4 horses `state:"run"`, no console errors. The `cameras` look returns the game's own post-processed camera (identical picture), so it can't show `hills` from above.
-- The frame behind the horses is filled by the grandstand (`merged`, crowd, billboards) up to the top edge; `hills` is hidden behind it from the telephoto, so "Never visible" is expected: it can only show above the roofline or in the gap/ends of the stands. Look reports "no fog: depth does not read" (far third 33% brightness vs 54% near).
+- Page runs (Enter + 300 frames: phase race, 4 horses `run`, plants 0, no console errors). The telephoto frame is filled by the grandstand/billboards, so neither the painted ridge nor `hills` shows from it; `hills` still "Never visible". Depth line still "no fog: depth does not read" (far third 33% vs near 54%). No perf run.
 **Next**
-- Stop editing `hills` geometry; instead put a painted hill/tree silhouette strip into the `sky` vertex colours or a billboard above the stand roofline, and check the gap between stands at the far end, then confirm with `sample` at [640,10].
+- Make distance visible in the gap above/beside the stand (lower the telephoto pitch, or raise camera), or lighten far stand colours toward haze so depth reads; confirm with `sample`.
 - Draw calls (~410): merge `merged`/`mesh-outline` by material; instance `tail`.
 - Play both inputs to a human finish (`until horses.2.finished`).
 **Open**
-- Fog depth fault from look unaddressed; `hills` visibility unconfirmed; no perf run.
+- Ridge effect unconfirmed on screen; it may simply be hidden by the stand.

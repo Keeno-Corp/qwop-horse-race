@@ -297,7 +297,7 @@ export function buildEnvironment(scene, _tex, rng) {
   // sky: warm gradient + low sun glow
   const sky = new THREE.SphereGeometry(500, 24, 14), cols = [], c = new THREE.Color(), cTop = new THREE.Color(0x8fb0bf), cMid = new THREE.Color(0xd2dac0), cHor = new THREE.Color(0xfbf1b6), cLow = new THREE.Color(0xf0d28a);
   const pos = sky.attributes.position;
-  for (let i = 0; i < pos.count; i++) { const y = pos.getY(i) / 500; if (y < 0) c.copy(cLow); else if (y < 0.18) c.copy(cHor).lerp(cMid, y / 0.18); else c.copy(cMid).lerp(cTop, Math.min(1, Math.pow((y - 0.18) / 0.6, 0.8))); cols.push(c.r, c.g, c.b); }
+  for (let i = 0; i < pos.count; i++) { const y = pos.getY(i) / 500, az = Math.atan2(pos.getX(i), pos.getZ(i)), ridge = 0.05 + 0.035 * Math.sin(az * 5 + 1) + 0.02 * Math.sin(az * 13) + 0.012 * Math.sin(az * 29); if (y >= 0 && y < ridge) { c.set(y < ridge * 0.45 ? 0x7d9040 : 0x8fa04a).lerp(cMid, 0.35); cols.push(c.r, c.g, c.b); continue; } if (y < 0) c.copy(cLow); else if (y < 0.18) c.copy(cHor).lerp(cMid, y / 0.18); else c.copy(cMid).lerp(cTop, Math.min(1, Math.pow((y - 0.18) / 0.6, 0.8))); cols.push(c.r, c.g, c.b); }
   sky.setAttribute('color', new THREE.Float32BufferAttribute(cols, 3));
   const skyG = new THREE.Group(); skyG.name = 'sky';
   skyG.add(new THREE.Mesh(sky, new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.BackSide, fog: false, depthWrite: false })));

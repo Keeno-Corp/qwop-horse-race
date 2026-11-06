@@ -1440,3 +1440,15 @@ SCORE: 7.7
 - Play both inputs to a human finish (`until horses.2.finished`).
 **Open**
 - Fog depth fault from look unaddressed; `hills` visibility unconfirmed; no perf run.
+
+## Iteration 43
+**Did**
+- `view.js` sky sphere vertex colours: added a painted hill ridge band (azimuth sine ridge, 0.05 elevation ±, two greens lerped to `cMid`) just above the horizon.
+**Saw**
+- Page runs (Enter + 300 frames: phase race, 4 horses `run`, plants 0, no console errors). The telephoto frame is filled by the grandstand/billboards, so neither the painted ridge nor `hills` shows from it; `hills` still "Never visible". Depth line still "no fog: depth does not read" (far third 33% vs near 54%). No perf run.
+**Next**
+- Make distance visible in the gap above/beside the stand (lower the telephoto pitch, or raise camera), or lighten far stand colours toward haze so depth reads; confirm with `sample`.
+- Draw calls (~410): merge `merged`/`mesh-outline` by material; instance `tail`.
+- Play both inputs to a human finish (`until horses.2.finished`).
+**Open**
+- Ridge effect unconfirmed on screen; it may simply be hidden by the stand.
