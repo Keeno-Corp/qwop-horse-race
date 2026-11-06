@@ -1,11 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 28
-**Did** game.js: human drive stronger (`h.drive` +0.5 per press, cap 1.6; `driveF` factor 12→26); `startFinishReplay` snaps `camPos`/`camLook` to the finish framing so the replay opens on the line; `__game.subject` = `player-body`; forced tangle now shifts the partner's parts to ~1.2 m behind / 0.5 m beside the first (`setTranslation`) before both collapse.
-**Saw** Q+P / W+O in 10-frame beats: YOU x 5.8 at raceT 1.35, 10.7 at 2.7 (~3.7 m/s, rubber-banded by the avg-AI term). `until tangles 1` at raceT 9.15: `look` shows the two AI horses overlapping mid-frame under the PILE-UP pop-up; `Subject: player-body` listed, YOU on screen at the left edge. Only the PCFSoftShadowMap warning. Not run: finish replay `look`, full race finish time, perf, 2P.
-**Next** (1) Run a full rhythm race to `phase replay` and `look` to confirm leaders in frame at t=0. (2) Check the player isn't now too fast (may win by far; tune `driveF` so a good rhythm wins narrowly). (3) YOU sits at the left screen edge in the pile-up view: shift camera fx a bit.
-**Open** Finish-replay camera fix unverified visually. Forced tangle still always hits the first AI pair.
-
 ### Judge 28
 
 **Verdict, session 28**
@@ -32,3 +26,9 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Auto-right and the 2P and R paths, beyond the brief.** Play a keys-held `interact` where `YOU` goes `state:"down"` and show `state:"run"` again after ~2 s. Also run a 2P session (`Digit2`, then Q W E R and U I O P) and the Enter and R restarts. Then add a visible stumble recovery (a `dust` burst or squash) when the horse auto-rights.
 
 SCORE: 8.0
+
+## Iteration 29
+**Did** game.js: tangle sets `S.pair=[first,other]` and forces a pending plant replay (`S.pending`) if none; `startPlantReplay` stores `rp.pair` and `snap:true` (camera snaps to target on the first replay frame); plant-replay camera aims at the midpoint of the pair, distance 6.5+0.5·dx. Follow camera lead offset cap 6→4.5 so YOU stays further in frame.
+**Saw** `interact until phase replay` (raceT 9.9, kind plant): `look` lists horse3-body, horse0-body, horse1-* in frame, two horses large in the middle with the grandstand; the white rail crosses the foreground. Only the PCFSoftShadowMap warning. Not run: finish tuning, 2P, R, auto-right, perf.
+**Next** (1) Replay camera sits on the rail side at z 6+; raise y or pull the camera inside the fence so the rail doesn't cover the horses. (2) Full rhythm race: check margin vs Dusty (photo finish). (3) Auto-right dust burst and a 2P/R test.
+**Open** Replay opens just before the tangle (horses still running); the collapse comes later in the 0.25x clip. YOU is not in the pile-up view of the live race beyond the 4.5 cap — unverified.

@@ -188,7 +188,7 @@ function resetRace() {
   seed = 12345 + 7919 * (++S.seedRound);
   assignRoles();
   horses.forEach((h, i) => { h.reset(STAGGER[i], LANES[i]); h.guard = 99; h.assist = 1; h.stiff = 1; h.plants = 0; h.finished = false; h.finishT = null; h.speedBefore = 0; h.drive = 0; h.legT = [0, 0, 0, 0]; for (let k = 0; k < 4; k++) h.setHeld(k, false); });
-  Object.assign(S, { phase: 'countdown', countdown: 3.2, raceT: 0, finishT: null, firstFinish: null, order: [], pending: null, lastReplayAt: -99, replay: null, tangles: 0, lastTangle: -99, excite: 0, results: null, resultsShown: false, camBlend: 0 });
+  Object.assign(S, { phase: 'countdown', countdown: 3.2, raceT: 0, finishT: null, firstFinish: null, order: [], pending: null, pair: null, lastReplayAt: -99, replay: null, tangles: 0, lastTangle: -99, excite: 0, results: null, resultsShown: false, camBlend: 0 });
   ringN = 0; for (const d of dust) d.life = 0;
   for (const p of S.popups) p.el.remove(); S.popups = [];
   $('results').style.display = 'none'; setReplayUi(false); $('count').textContent = '';
@@ -311,6 +311,7 @@ function updateRace(dt) {
           const dir = Math.sign(other.pos().z - first.pos().z) || 1;
           for (const p of first.parts) p.body.setLinvel({ x: p.body.linvel().x * 0.9, y: p.body.linvel().y, z: dir * 4.2 }, true);
           if (roles[other.idx].ai) { other.collapse('CARTWHEEL!'); onPlant(other, 'CARTWHEEL!'); for (const p of other.parts) p.body.setLinvel({ x: p.body.linvel().x * 0.9, y: p.body.linvel().y + 1.5, z: -dir * 2.6 }, true); }
+          S.pair = [first.idx, other.idx]; if (!S.pending) { S.pending = { at: S.time + 0.9, horse: first.idx }; S.lastReplayAt = S.raceT; }
           popup('PILE-UP!', 'A tangle of legs!', '#ff9a3c', 1.9); sfx.play('cheer', 0.7);
           break;
         }
@@ -339,7 +340,8 @@ function startFinishReplay() {
 function startPlantReplay() {
   const hi = S.pending.horse; S.pending = null;
   const end = ringN - 1, start = Math.max(Math.max(0, ringN - RING + 2), end - 110);
-  S.replay = { kind: 'plant', start, end, pos: start, subject: hi, back: S.phase };
+  const pr = S.pair && S.pair.includes(hi) ? S.pair : null;
+  S.replay = { kind: 'plant', start, end, pos: start, subject: hi, pair: pr, snap: true, back: S.phase };
   S.prevPhase = S.phase; S.phase = 'replay'; for (const p of S.popups) p.el.remove(); S.popups = []; setReplayUi(true);
 }
 function endReplay() {
@@ -372,7 +374,7 @@ function followTarget() {
   const leader = Math.max(...horses.map((h) => h.pos().x));
   const gap = leader - hx, sm = clamp((gap - 8) / 22, 0, 1);
   // when the player falls far behind, the camera drifts to the lead pack so the race stays in frame
-  let fx = hx + Math.min(clamp(gap, -4, 60) * (0.3 + 0.55 * sm * sm * (3 - 2 * sm)), 6);
+  let fx = hx + Math.min(clamp(gap, -4, 60) * (0.3 + 0.55 * sm * sm * (3 - 2 * sm)), 4.5);
   fx = Math.min(fx, FINISH_X + 2);
   const far = Math.min(Math.abs(leader - hx), 26);
   const asp = Math.min(1, camera.aspect / 1.5);
@@ -388,9 +390,11 @@ function updateCamera(dt) {
       tp.set(FINISH_X + 3.4 - prog * 0.8, 2.2, 11.5); tl.set(FINISH_X - 0.2, 1.0, 0); fov = 29 - prog * 4;
     } else {
       const prog = (rp.pos - rp.start) / Math.max(1, rp.end - rp.start), s = subjectAt(rp.pos, rp.subject), a = 0.35 + prog * 1.1;
-      tp.set(s.x + Math.sin(a) * 5.5, 1.3 + prog * 1.2, s.z + Math.cos(a) * 5.5); tl.set(s.x, 0.8, s.z); fov = 38;
+      let cx = s.x, cz = s.z, d = 5.5;
+      if (rp.pair) { const s2 = subjectAt(rp.pos, rp.pair[0] === rp.subject ? rp.pair[1] : rp.pair[0]); cx = (s.x + s2.x) / 2; cz = (s.z + s2.z) / 2; d = 6.5 + Math.abs(s.x - s2.x) * 0.5; }
+      tp.set(cx + Math.sin(a) * d, 1.3 + prog * 1.2, cz + Math.cos(a) * d); tl.set(cx, 0.8, cz); fov = 38;
     }
-    camPos.lerp(tp, 1 - Math.exp(-dt * 6)); camLook.lerp(tl, 1 - Math.exp(-dt * 8));
+    if (rp.snap) { rp.snap = false; camPos.copy(tp); camLook.copy(tl); } else { camPos.lerp(tp, 1 - Math.exp(-dt * 6)); camLook.lerp(tl, 1 - Math.exp(-dt * 8)); }
   } else if (S.phase === 'results') {
     tp.set(FINISH_X - 4, 2.6, 12); tl.set(FINISH_X + 2, 1.2, 0);
     camPos.lerp(tp, 1 - Math.exp(-dt * 1.5)); camLook.lerp(tl, 1 - Math.exp(-dt * 2));

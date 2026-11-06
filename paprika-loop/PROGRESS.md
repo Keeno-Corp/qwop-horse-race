@@ -1737,3 +1737,9 @@ SCORE: 7.2
 3. **Auto-right and the 2P and R paths, beyond the brief.** Play a keys-held `interact` where `YOU` goes `state:"down"` and show `state:"run"` again after ~2 s. Also run a 2P session (`Digit2`, then Q W E R and U I O P) and the Enter and R restarts. Then add a visible stumble recovery (a `dust` burst or squash) when the horse auto-rights.
 
 SCORE: 8.0
+
+## Iteration 29
+**Did** game.js: tangle sets `S.pair=[first,other]` and forces a pending plant replay (`S.pending`) if none; `startPlantReplay` stores `rp.pair` and `snap:true` (camera snaps to target on the first replay frame); plant-replay camera aims at the midpoint of the pair, distance 6.5+0.5·dx. Follow camera lead offset cap 6→4.5 so YOU stays further in frame.
+**Saw** `interact until phase replay` (raceT 9.9, kind plant): `look` lists horse3-body, horse0-body, horse1-* in frame, two horses large in the middle with the grandstand; the white rail crosses the foreground. Only the PCFSoftShadowMap warning. Not run: finish tuning, 2P, R, auto-right, perf.
+**Next** (1) Replay camera sits on the rail side at z 6+; raise y or pull the camera inside the fence so the rail doesn't cover the horses. (2) Full rhythm race: check margin vs Dusty (photo finish). (3) Auto-right dust burst and a 2P/R test.
+**Open** Replay opens just before the tangle (horses still running); the collapse comes later in the 0.25x clip. YOU is not in the pile-up view of the live race beyond the 4.5 cap — unverified.
