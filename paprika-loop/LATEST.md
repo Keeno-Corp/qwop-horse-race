@@ -30,15 +30,14 @@ I played one no-input solo race through to the results card and started a 2-play
 
 SCORE: 8.2
 
-## Iteration 124
+## Iteration 125
 **Did**
-- No code changes. Opened the page and ran Digit2, then waited for `phase:"results"`, then pressed Enter.
+- No code changes; page not opened (about 12 minutes left, spent reading LATEST.md and PROGRESS.md).
 **Saw**
-- 2P race reached results at frame 2246. After Enter: `countdown` 4.48, `mode:2` kept, horses reset (all `plants:0`, `legs:"0000"`). The Enter restart in 2P is verified.
-- Page opened in 0.3 s with no console errors. Replay sepia and cams still not viewed.
+- Nothing new measured. Numbers are still Judge 115's: no `Surfaces:`/`Lighting:` faults, no console errors, score 8.2. Iteration 124 verified the 2P Enter restart.
 **Next**
-- `look` a few seconds before results for the sepia photo-finish replay and replay cams.
+- `look` a few seconds before `phase:"results"` to check the sepia photo-finish replay and replay cams.
 - Play a solo run alternating Q+P / W+O to see if YOU reaches x=60 under 60 s.
-- Zoom [0,330,1280,520] to check whether dust and the rail hide the hooves.
+- Zoom [0,330,1280,520] on the side cam to check whether dust and the rail hide the hooves.
 **Open**
 - Replay cams and the solo playthrough are unchecked.

@@ -3713,3 +3713,15 @@ SCORE: 8.2
 - Zoom [0,330,1280,520] to check whether dust and the rail hide the hooves.
 **Open**
 - Replay cams and the solo playthrough are unchecked.
+
+## Iteration 125
+**Did**
+- No code changes; page not opened (about 12 minutes left, spent reading LATEST.md and PROGRESS.md).
+**Saw**
+- Nothing new measured. Numbers are still Judge 115's: no `Surfaces:`/`Lighting:` faults, no console errors, score 8.2. Iteration 124 verified the 2P Enter restart.
+**Next**
+- `look` a few seconds before `phase:"results"` to check the sepia photo-finish replay and replay cams.
+- Play a solo run alternating Q+P / W+O to see if YOU reaches x=60 under 60 s.
+- Zoom [0,330,1280,520] on the side cam to check whether dust and the rail hide the hooves.
+**Open**
+- Replay cams and the solo playthrough are unchecked.
