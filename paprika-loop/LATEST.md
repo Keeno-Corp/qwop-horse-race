@@ -1,11 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 26
-**Did** game.js: camera dist base 7.4 → 8.5, height 3.0 → 4.6 (look target y 0.9, z 0.4) so rivals stop covering `player`; fov 36 kept. Pile-up in `updateRace`: if `S.tangles` is 0 and `raceT` > 12, the neighbour window widens to 3.2 m and the chance to 0.08/tick (was 1.7 m, 0.012), so a tangle should happen in the first 30 s. Finish replay waits up to 14 s after the first finish while a human is still running (`humanWait`). `observe().replay` now has `t` and `rate`.
-**Saw** Mid-race `look` at 1.8 s: `Subject: player` 2.9% [108,318,461,473], blue saddle and marker clear, no rival on top of it; `Never visible` only sky; only the PCFSoftShadowMap warning. Not run: perf, a full race (tangle forcing, humanWait, replay), 2P, shake, mistimed keys.
-**Next** (1) Run ~2300 frames of rhythm with `until tangles 1` and `phase results`; confirm the forced tangle fires, replay `t`/`rate` reads right, and results wait for YOU. (2) Name the player's parts (`player-body`, `player-head`) so `Subject` lists them. (3) Check the new camera in 2P and when YOU is far behind; `feel` on shake; Q+W+O+P → `plants`.
-**Open** The forced-tangle and humanWait changes are untested over a whole race; `Subject` still lists 0 named parts.
-
 ### Judge 26
 
 **Verdict, session 26**
@@ -32,3 +26,9 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **Fix the replay and the stall.** Set the replay rate to 0.25 (it reads 0.6) and make `replay.t` count up. Cut `humanWait` to about 4 s, or end the finish early with DNF for a player who is far behind, so the replay starts about 3 s after the first finish. Check with `interact` `until: {phase: "replay"}`, which should hold by raceT ≈ 26 s, and then `observe`, where `replay.rate` is 0.25 and `replay.t` is above 0.
 
 SCORE: 6.9
+
+## Iteration 27
+**Did** game.js: forced tangle in `updateRace` (first AI pair `horses[i],horses[i+1]` both AI, raceT > 9, `tangles` 0 → collapse both, no proximity/chance); `humanWait` cut 14 s → 4 s; finish replay is now ~64 frames (24 before first finish) at fixed rate 0.25, `observe().replay.rate` 0.25 and `t` counts up; `followTarget` caps the lead-pack pull at 6 m so `player` stays near frame; view groups named `player-body`, `player-head` (`horseN-body/-head`).
+**Saw** `interact until tangles 1`: fires at raceT 9.0 (frame 732), two AI `state:"down"`, `pendingReplay` true, sounds thud/gasp/cheer; only the PCFSoftShadowMap warning. Not run: `look` of the new camera with YOU trailing, full race to results, perf, 2P.
+**Next** (1) `look` at raceT ~20 with YOU trailing: `Subject: player` should list the new parts. (2) Run to `phase replay`/`results`; check replay length (~4 s) and the plant replay of the forced tangle. (3) 2P camera, `feel` on shake.
+**Open** Camera cap of 6 m may crop the leaders entirely when YOU is far behind; untested visually. Forced tangle always hits the first AI pair (red/green), predictable.
