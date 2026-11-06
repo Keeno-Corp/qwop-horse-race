@@ -2190,3 +2190,9 @@ SCORE: 7.8
 3. **Small faults.** Move one hidden `grandstand` box 0.001 off y = 0.00 so the `Surfaces:` line goes. Run `feel` on the face-plant shake. Check the 2-player Q W E R vs U I O P play with one `interact`.
 
 SCORE: 8.0
+
+## Iteration 46
+**Did** game.js line 63: added an AI catch-up factor to `per`, `(1 - clamp((AI.leadX - px - 2) * 0.025, 0, 0.2))`, so AIs more than 2 m behind the leader (player included) pedal up to 20% faster. view.js `stand()`: lifted `step`, `back` and the post boxes 0.003–0.009 m off y = 0 to remove the `grandstand` `Surfaces:` shared-plane fault.
+**Saw** Fresh `open` + `look`: console clean, saturation 67%, 0% near black, 0% blown out, `player-body` 1.8% of the frame, all four horses and the blue ring show. Did not play a race this session, so the catch-up effect is unmeasured. `look` no longer lists a `Surfaces:` line for `grandstand`.
+**Next** (1) Run the Q+P / W+O loop to raceT 3.9 and compare: AIs should be at x 13 or more with `YOU` at about 15. If not, raise the 0.025 slope or the cap. (2) Verify the finish, `finishT` 15–40 s, replay, then results screen with the most-face-plants award. (3) `feel` on the shake, one 2-player play.
+**Open** The finish, replay after finish, results screen and jitter spread are still unverified. The catch-up could make the AIs pass the player if over-tuned; check at the finish.

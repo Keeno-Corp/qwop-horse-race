@@ -166,14 +166,14 @@ export function buildEnvironment(scene, tex, rng) {
     const z0 = -7.4;
     for (let r = 0; r < rows; r++) {
       const y = 0.35 + r * 0.6, z = z0 - r * 1.0;
-      const step = mesh(new THREE.BoxGeometry(len, y, 1.04), r % 2 ? concrete : concrete2, [x0 + len / 2, y / 2, z]); step.receiveShadow = true; g.add(step);
+      const step = mesh(new THREE.BoxGeometry(len, y, 1.04), r % 2 ? concrete : concrete2, [x0 + len / 2, y / 2 + 0.003, z]); step.receiveShadow = true; g.add(step);
       const bench = mesh(new THREE.BoxGeometry(len - 0.4, 0.12, 0.27), lam(benchCols[r % 4], { polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 }), [x0 + len / 2, y + 0.3, z + 0.3]); g.add(bench);
       for (let k = 0; k < Math.floor(len / 1.05); k++) if (rng() < 0.9) spectators.push({ x: x0 + 0.8 + k * 1.05 + (rng() - 0.5) * 0.2, y: y + 0.36, z: z - 0.05, ph: rng() * 6.28, col: [0xf2d03a, 0x3f6cdc, 0xd93a2e, 0x3fb04a, 0xff8fb1, 0x7de0e0, 0xffffff, 0xff9a3c][Math.floor(rng() * 8)], skin: [0xf5cfa0, 0xe0a878, 0x9b6a45][Math.floor(rng() * 3)] });
     }
-    const back = mesh(new THREE.BoxGeometry(len, rows * 0.6 + 1.2, 0.3), lam(0x7a746a), [x0 + len / 2, (rows * 0.6 + 1.2) / 2, z0 - rows * 1.0 - 0.1]); g.add(back);
+    const back = mesh(new THREE.BoxGeometry(len, rows * 0.6 + 1.2, 0.3), lam(0x7a746a), [x0 + len / 2, (rows * 0.6 + 1.2) / 2 + 0.006, z0 - rows * 1.0 - 0.1]); g.add(back);
     const roofY = rows * 0.6 + 3.3;
     const roof = mesh(new THREE.BoxGeometry(len + 2, 0.25, rows * 1.0 + 3.6), lam(0xd6c59f), [x0 + len / 2, roofY, z0 - rows * 0.5 + 0.2], [0.14, 0, 0]); g.add(roof);
-    for (const px of [0.4, len - 0.4, len / 2]) for (const pz of [-1.0, -rows * 1.0 - 0.2]) { const h = pz > -2 ? roofY - 0.4 : roofY + 0.3; g.add(mesh(new THREE.BoxGeometry(0.25, h, 0.25), wood, [x0 + px, h / 2, z0 + pz])); }
+    for (const px of [0.4, len - 0.4, len / 2]) for (const pz of [-1.0, -rows * 1.0 - 0.2]) { const h = pz > -2 ? roofY - 0.4 : roofY + 0.3; g.add(mesh(new THREE.BoxGeometry(0.25, h, 0.25), wood, [x0 + px, h / 2 + 0.009, z0 + pz])); }
     for (let k = 0; k <= 6; k++) g.add(mesh(new THREE.BoxGeometry(0.12, 0.12, rows + 2.6), wood, [x0 + k * len / 6, roofY - 0.2, z0 - rows * 0.5 + 0.2], [0.14, 0, 0]));
     scene.add(g);
   }

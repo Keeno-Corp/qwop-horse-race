@@ -60,7 +60,7 @@ class AI {
     if (px > 22) { if (this.m) this.m = null; this.next = 99; const gapL = (AI.aiLeadX || 0) - px; if (gapL > 0.5) band = 1 - clamp((gapL - 0.5) * (px > 38 ? 0.3 : 0.15), 0, px > 38 ? 0.78 : 0.7); }
     { const g1 = (AI.leadX || 0) - px; if (g1 > 1.5 && h.state === 'run' && !h.finished) { h.drive = 1; h.driveF = 40 * clamp(g1 - 1.5, 0, 14); } else h.driveF = 0; }
     if (this.t < this.delay) { for (let i = 0; i < 4; i++) h.setHeld(i, false); return; }
-    const per = this.jit * band * this.base * (1 + 0.14 * Math.sin(this.wob * 1.7) + 0.08 * Math.sin(this.wob * 4.1)) * (1 + clamp(lead * 0.07, -0.35, 0.5)) * (h.pos().x > 40 ? 1 - clamp(lead * 0.06, -0.3, 0.3) : 1);
+    const per = this.jit * band * this.base * (1 + 0.14 * Math.sin(this.wob * 1.7) + 0.08 * Math.sin(this.wob * 4.1)) * (1 + clamp(lead * 0.07, -0.35, 0.5)) * (1 - clamp(((AI.leadX || 0) - px - 2) * 0.025, 0, 0.2)) * (h.pos().x > 40 ? 1 - clamp(lead * 0.06, -0.3, 0.3) : 1);
     this.phase = (this.phase + dt / per) % 1;
     const off = [0, 0.5, 0.5, 0], duty = 0.58;
     const flags = off.map((o) => ((this.phase + o) % 1) < duty);
