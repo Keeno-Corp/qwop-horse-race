@@ -1852,3 +1852,15 @@ SCORE: 7.7
 - Look at the finish replay (sepia, grain, "PHOTO FINISH" frame) and the results screen, which this session did not reach. Play 2-player.
 **Open**
 - Finish replay, results screen and 2-player were not seen this session. Real Q+P / W+O alternation over a full race was not run, only the first 40 frames of it.
+
+## Iteration 52
+**Did**
+- `stand()` in view.js: step boxes depth 1.14 → 1.10 so neighbouring rows' faces no longer overlap (a guess at the `crowd` z-fight warning; not re-checked with `look`).
+**Saw**
+- Nothing run this session: no `look`, `perf` or play. Numbers are as Judge 50 / Iteration 51 (266 draw calls, `hills` Never visible).
+**Next**
+- `look` to confirm the z-fight warning is gone; if not, find the two faces at z=-7.41/-7.48 (maybe the first step vs. `crowd` feet).
+- Show `hills`: lower the grandstand roof (`roofY`) or raise the camera pitch.
+- Draw calls: merge outline hulls per horse, instance `tail`, thin `crowd`. See the finish replay, results and 2-player.
+**Open**
+- The z-fight fix is unverified. Finish replay, results screen and 2-player still unseen.
