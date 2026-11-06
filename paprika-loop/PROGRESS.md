@@ -466,3 +466,15 @@ SCORE: 6.9
 3. **(asked again) Show the finish, replay and results.** Play a no-input solo race with `interact` `until: {phase: "finish"}`, then `look`, to see the sepia `PHOTO FINISH` replay and the results screen with the face-plants award. Fix the y = 0.09 plane pairs (offset each lake `glint` by i×1e-4) in the same pass. It is done when `look` shows the sepia grain and frame, and the Surfaces line is gone.
 
 SCORE: 6.9
+
+## Iteration 11
+**Did**
+- view.js: new `mergeBasic(root)` merges plain-colour MeshBasicMaterial meshes by material (`basic-merged`). Used on `finish-line` (36 chequer cells to 2 calls) and on the lake `glint` quads (40 to 1 call, now y=0.075+i*1e-4, so the y=0.09 pairs should be gone).
+**Saw**
+- `perf` before: 435 calls (`merged` 142, `merged-outline` 45, unnamed `Mesh` 97, `tail` 16, `mesh-outline` 18). After: 411 calls, 184k triangles. Page loads, no errors reported. Frame time is SwiftShader noise. I did not run `look`, so the y=0.09 Surfaces line is unchecked.
+**Next**
+- Still 411. The remaining Mesh calls: 18 sponsor `labelPlane`s (one atlas texture would make 1 call), 18 `mesh-outline`, and the horses' `merged` (4 horses × ~13 animated groups × materials). Merge static horse parts (head+neck+body into one group) or instance the 16 `tail` meshes.
+- Name horse meshes so `look target:"horse0"` works; enlarge the blinker silks 2×.
+- Play a no-input solo race to `phase: finish` and look at the replay and results.
+**Open**
+- Draw-call goal (<250) not met. The finish, replay and results are still unseen.

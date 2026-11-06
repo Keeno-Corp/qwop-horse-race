@@ -131,6 +131,14 @@ export function mergeStatic(root) {
   }
   return root;
 }
+/** merge plain-colour basic meshes (no map, not transparent-sorted separately) under `root` into one mesh per material */
+export function mergeBasic(root) {
+  root.updateMatrixWorld(true);
+  const inv = new THREE.Matrix4().copy(root.matrixWorld).invert(), by = new Map(), doomed = [];
+  root.traverse((o) => { if (o.isMesh && !o.isInstancedMesh && o !== root && o.material.isMeshBasicMaterial && !o.material.map) { const g = o.geometry.clone().applyMatrix4(new THREE.Matrix4().multiplyMatrices(inv, o.matrixWorld)); g.deleteAttribute('uv'); if (g.index) { const n = g.toNonIndexed(); g.dispose(); (by.get(o.material) || by.set(o.material, []).get(o.material)).push(n); } else (by.get(o.material) || by.set(o.material, []).get(o.material)).push(g); doomed.push(o); } });
+  for (const o of doomed) o.parent.remove(o);
+  for (const [mat, gs] of by) { let n = 0; for (const g of gs) n += g.attributes.position.count; const pos = new Float32Array(n * 3), nor = new Float32Array(n * 3); let k = 0; for (const g of gs) { pos.set(g.attributes.position.array, k * 3); nor.set(g.attributes.normal.array, k * 3); k += g.attributes.position.count; } const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); g.setAttribute('normal', new THREE.BufferAttribute(nor, 3)); const m = new THREE.Mesh(g, mat); m.name = 'basic-merged'; root.add(m); }
+}
 const cyl = (rt, rb, h, seg = 8) => new THREE.CylinderGeometry(rt, rb, h, seg);
 const sph = (r, w = 14, h = 10) => new THREE.SphereGeometry(r, w, h);
 const box = (x, y, z) => new THREE.BoxGeometry(x, y, z);
@@ -326,7 +334,7 @@ export function buildEnvironment(scene, _tex, rng) {
   // infield lake behind the gap between the stands
   const lake = new THREE.Mesh(new THREE.CircleGeometry(1, 36).rotateX(-Math.PI / 2), toon(0x9cc3bd)); lake.scale.set(22, 1, 11); lake.position.set(32, 0.05, -36); lake.receiveShadow = true; lake.name = 'lake'; scene.add(lake);
   const glint = new THREE.MeshBasicMaterial({ color: 0xfff6d0, transparent: true, opacity: 0.8, fog: true });
-  for (let i = 0; i < 40; i++) { const q = new THREE.Mesh(new THREE.PlaneGeometry(1 + rng() * 4, 0.3).rotateX(-Math.PI / 2), glint); q.position.set(32 + (rng() - 0.3) * 26, 0.09, -36 + (rng() - 0.5) * 12); lake.parent.add(q); }
+  { const gl = new THREE.Group(); for (let i = 0; i < 40; i++) { const q = new THREE.Mesh(new THREE.PlaneGeometry(1 + rng() * 4, 0.3).rotateX(-Math.PI / 2), glint); q.position.set(32 + (rng() - 0.3) * 26, 0.075 + i * 1e-4, -36 + (rng() - 0.5) * 12); gl.add(q); } mergeBasic(gl); lake.parent.add(gl); }
 
   // dirt track: warm ochre bands with ruts
   const tg = new THREE.PlaneGeometry(190, 9.4, 76, 8).rotateX(-Math.PI / 2), tp = tg.attributes.position;
@@ -355,7 +363,7 @@ export function buildEnvironment(scene, _tex, rng) {
   scene.add(env.finNear);
   const ban = tm(box(0.3, 1.3, 10.8), toon(PAL.tomato), [FIN, 5.2, 0]); fin.add(ban);
   for (const side of [1, -1]) { const lab = labelPlane('FINISH', 6.2, 1.2, { bg: '#d3432b', fg: '#f2e1ad', stripe: '#e5af2c' }); lab.position.set(FIN + side * 0.17, 5.2, 0); lab.rotation.y = side > 0 ? Math.PI / 2 : -Math.PI / 2; fin.add(lab); }
-  scene.add(fin);
+  mergeBasic(fin); scene.add(fin);
   // numbered distance poles standing on the far rail (the near side stays clear of the horses)
   for (let d = 10; d <= 50; d += 10) {
     const g = new THREE.Group(); g.position.set(1.2 + d, 0, -4.95);
