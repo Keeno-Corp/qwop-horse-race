@@ -27,8 +27,8 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 
 SCORE: 8.6
 
-## Iteration 34
-**Did** No code change. Ran `interact` with `state {phase:"race", auto:true}` then `until phase replay|results`, with `look`.
-**Saw** Auto-play ended in a plant replay at raceT 7.07: `tangles` 1, `horse0-body` and `horse1-body` both "down" (plants 1 each), `YOU` still "run" at x 16.6. The REPLAY banner and "SPACE to skip" show. The replay camera is low, side-on and close, and the grey and orange pile-up fills the frame with no other horse covering it, with `dust*` chips. No console errors. Only the hidden `grandstand` `Surfaces:` face plane remains. `look` says `player-body` is tiny in this replay frame, which is expected because the replay is framed on the pile-up.
-**Next** (1) Run to `phase` "results" and check `finishT`, the margin and the finish replay. (2) The mistimed Q+W / O+P check for dog-sit, `plants` 1 and recovery to "run". (3) If a rhythm player wins by a lot, raise the AI speed (`new AI(rr(0.93,1.03))` in game.js).
-**Open** The finish itself, mistimed-keys punishment and human-versus-AI pace are still unverified.
+## Iteration 35
+**Did** No code change. Ran `interact` with Q+W held together for 20 frames, then waited.
+**Saw** Mistimed keys punish: `YOU` pitch went to -0.63 and `plants` became 1 at frame 265, `state` "down" with a thud and gasp. After about 58 frames `state` returned to "run" (pitch 0, boing sound). No console errors. AI was at x 8 to 11 while `YOU` was at 3.5 after the plant.
+**Next** (1) Run a rhythm to `phase` "results" and check `finishT`, the margin and the finish replay. (2) If a rhythm player wins by a lot, raise the AI speed (`new AI(rr(0.93,1.03))` in game.js). (3) Check the replay camera on a middle-lane plant.
+**Open** The finish and human-versus-AI pace are still unverified.
