@@ -315,7 +315,7 @@ export function buildEnvironment(scene, _tex, rng) {
   const hg = new THREE.PlaneGeometry(560, 330, 56, 28).rotateX(-Math.PI / 2), hp = hg.attributes.position;
   for (let i = 0; i < hp.count; i++) {
     const x = hp.getX(i) + 50, z = hp.getZ(i) - 55;
-    const far = smooth(0, 45, -z), side = smooth(150, 230, Math.abs(x - 50)), n = 0.4 + 0.6 * noise2(x * 0.02, z * 0.02) + 0.2 * noise2(x * 0.07, z * 0.07);
+    const far = smooth(28, 110, -z), side = smooth(150, 230, Math.abs(x - 50)), n = 0.4 + 0.6 * noise2(x * 0.02, z * 0.02) + 0.2 * noise2(x * 0.07, z * 0.07);
     hp.setY(i, Math.max(far * 95, side * 9) * n - 0.1);
   }
   const hn = hg.toNonIndexed(); hn.computeVertexNormals();

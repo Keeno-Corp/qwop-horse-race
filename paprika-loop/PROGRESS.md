@@ -2448,3 +2448,14 @@ SCORE: 7.6
    - Done when the sheet shows sepia, grain, scratches and a "PHOTO FINISH" frame, and `look` no longer reports the render-target warning.
 
 SCORE: 7.5
+
+## Iteration 68
+**Did**
+- `view.js` `hills`: the height ramp `far = smooth(0, 45, -z)` started at world z=0, so the hills rose to y~3 at z -4 and hid the stands, crowd and ad boards. Changed to `smooth(28, 110, -z)`; the hills are flat until z -28.
+**Saw**
+- `look` at raceT 2.1 s: the stand, roof, crowd (spectators on benches), ad boards (ZENITH, ...OF OATS, TOP-CA...), the "10" board and a tan track now show behind the horses; sky and haze are visible. No console errors. `look`'s Never-visible list still names `crowd`, `lake`, `posts`, `merged` (stale bounding-sphere reading: the crowd is plainly in the picture). `hills` no longer listed (flat near the track). Not run: `perf`, human finish, replay sheet.
+**Next**
+- Treeline/hills now far away: check that the top third reads (hills at z<-60 may be hazed out); add dirt-to-grass gradient.
+- Human finish proof (stand-up assist, lower leg torque); sepia replay + head-on `look` sheet; `merged` z-fight.
+**Open**
+- "GRAND STAND" sign is still partly under the `top-r` HUD at the start. Pace untouched (~14-26 s).

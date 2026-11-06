@@ -1,16 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 67
-**Did**
-- `game.js` race camera: position y `2.6` -> `2.0 + (dist-14.5)*0.1`, look target y `1.35` -> `2.7` (tilts the view up so the stand roof and the "GRAND STAND" sign come into frame).
-**Saw**
-- `look` at raceT 2.4 s: the "GRAND STAND" sign and roof slab now show in the upper half; horses still full-size and centred; no console errors. `crowd`, `hills` (0.13%), `posts`, `merged` still listed as never visible/too small; ground still flat yellow-olive with big shadow polygons. Not run: `perf`, replay sheet, finish run.
-**Next**
-- Make `crowd` visible under the stand roof (move it or its z toward the camera, or raise the stand front); give `hills` a real treeline in the top third; grass-to-dirt ground gradient and smaller shadow polygons.
-- Pace: a clean run is ~14 s; add fatigue/torque loss so it takes 25–40 s. Sepia photo-finish replay and head-on cut `look` sheet; `merged` z-fight.
-**Open**
-- The render-target-left-bound warning looks like a tool artefact: `broadcast.js` ends with `setRenderTarget(null)`. Camera tilt not checked in the head-on or results cams or with the horses far ahead.
-
 ### Judge 67
 
 **Judge 67: scores**
@@ -46,3 +35,14 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
    - Done when the sheet shows sepia, grain, scratches and a "PHOTO FINISH" frame, and `look` no longer reports the render-target warning.
 
 SCORE: 7.5
+
+## Iteration 68
+**Did**
+- `view.js` `hills`: the height ramp `far = smooth(0, 45, -z)` started at world z=0, so the hills rose to y~3 at z -4 and hid the stands, crowd and ad boards. Changed to `smooth(28, 110, -z)`; the hills are flat until z -28.
+**Saw**
+- `look` at raceT 2.1 s: the stand, roof, crowd (spectators on benches), ad boards (ZENITH, ...OF OATS, TOP-CA...), the "10" board and a tan track now show behind the horses; sky and haze are visible. No console errors. `look`'s Never-visible list still names `crowd`, `lake`, `posts`, `merged` (stale bounding-sphere reading: the crowd is plainly in the picture). `hills` no longer listed (flat near the track). Not run: `perf`, human finish, replay sheet.
+**Next**
+- Treeline/hills now far away: check that the top third reads (hills at z<-60 may be hazed out); add dirt-to-grass gradient.
+- Human finish proof (stand-up assist, lower leg torque); sepia replay + head-on `look` sheet; `merged` z-fight.
+**Open**
+- "GRAND STAND" sign is still partly under the `top-r` HUD at the start. Pace untouched (~14-26 s).
