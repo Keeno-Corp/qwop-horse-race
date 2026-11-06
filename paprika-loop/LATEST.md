@@ -1,37 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-### Judge 6
-
-**Scores (Must have, in order)**
-
-1. **Plays as DESIGN.md says: 6.** In a no-input solo run `phase` reached `results` at raceT 31.33 with `YOU` parked at x 2.27, so the `results` card and `RESTART`/`1 PLAYER`/`2 PLAYERS (2)` buttons work. `div#keys` shows `YOUR LEGS Q FL W FR O BL P BR`. I did not hold keys through a full race.
-2. **Rapier ragdoll, face-plant, auto-right: 7.** `Dusty Rhodes` is `state:"down"`, `pitch` 3.13, `plants` 5. The others are back in `run` with `plants` 1. I did not time the ~2 s auto-right.
-3. **Replay and sepia photo finish: 5.** This run ended in a photo finish, but `interact` ran straight through to `results`. I did not see the sepia replay (grain, scratches, `PHOTO FINISH` frame) or any plant replay. It has been unproven for three sessions.
-4. **Photo finish and tangle within a minute: 5.** `tangles:1` came with no input and the race ended at 31 s. The gap is still 0.01 s: `finishT` is 24.81 for `Hoof Hearted` and 24.82 for `Sir Trips-a-Lot`. The `results` card prints `PHOTO FINISH · 0.01s`, so the iteration 6 `hhGap` edit did not take effect and the finish looks scripted.
-5. **Results with most-face-plants award: 8.** The `results` card has a `DIRT EATER · MOST FACE-PLANTS` tag on `Dusty Rhodes` (5 face-plants). It also has a podium and `SMOOTH OPERATOR` tags.
-6. **Looks as LOOK.md says: 8.** The cream `div.box` card with striped awning and the `Tote` board read as a 70s broadcast. There is a warm brown CRT pass and 0% near-black. I did not `sample` the toon shading steps this session.
-7. **`window.__game`, static, no network: 7.** `observe` works and assets are 0.32 MB with the fonts vendored. `subject` is `horse0-body`, which `look` still says is not in the scene, so the fault is open for a third time.
-8. **Horses match CHARACTERS.md and horse.png: 6.** The horses were not on screen under the results card, so this is carried from last session. The legs are still short against "long wobbly" and the blinker silks are barely visible.
-9. **Broadcast overlay: 9.** `div#tote` shows the silks, `PHOTO` odds labels, `30-1` and the face-plant counts. `div#top-r` has `LIVE`, `4:01 PM` and `RACE TIME`. `div#lower` has the Walt Dunmore line "THIS ONE IS GOING TO THE PHOTOGRAPHERS". The progress bar is in place.
-10. **Camera: 6.** I did not see the side-tracking, head-on or replay cams this session, so this is carried over.
-11. **Controls feel learnable: 5.** No input was sent, so the 60 m in under 60 s claim is untested after four sessions.
-12. **Local 2-player, discoverable: 6.** The `2 PLAYERS (2)` button and the tips line `2 = TWO PLAYERS` are visible. I did not play it.
-13. **Style judged as hard as gameplay: 8.** The results card, tote and lower-third are cohesive. I did not run `reference` against `LOOK-board.png`.
-
-**Faults: 4.**
-- `perf` shows 441 draw calls and 183,986 triangles. The 225 ms frame is SwiftShader, so it is not a fault by itself, but the draw count is high and has been left alone for three sessions.
-- The 0.01 s AI dead heat is still there.
-- `__game.subject` points at `horse0-body`, which is not in the scene.
-- `div#crt` covers the whole canvas.
-- No console errors.
-
-**Next:**
-1. **(asked again) Make the dead heat actually widen.** In game.js find where the AI `finishT` is decided, because `S.hhGap` in `resetRace` is evidently not what sets it. The two leaders still finish 0.01 s apart (24.81 vs 24.82). Done when `interact` with `until:{phase:"results"}` plus `observe` shows the `finishT` gap at 0.03–0.3 s and the card prints that value in `PHOTO FINISH · …s`.
-2. **(asked again) Prove the sepia photo-finish replay and the head-on cut.** Run `interact` with `until:{phase:"replay"}` and `look: true` right after the first finish. Done when the picture shows sepia, grain, scratches, gate weave and the `PHOTO FINISH` frame. A second `look` with the head-on cam should show the front view of the horses crossing the line. If the replay never starts, fix that first.
-3. **(asked again) Cut draw calls and fix `subject`.** Draw calls are at 441. Put the crowd figures, fence posts, ad boards and grandstand pieces into `instances()`. Name a Group `horse0` so `look` can find `__game.subject`. Done when `perf costs:true` reports under 250 draw calls and `look` no longer says the subject is not in the scene. Lengthening the legs by ~25% and the blinker silks come after this; check that a mistimed-key `interact` still gives a dog-sit and that a held-key race finishes under 60 s.
-
-SCORE: 6.4
-
 ## Iteration 7
 **Did**
 - game.js `updateRace`: when the 2nd horse finishes under `S.deadHeat`, `finishT` is floored to first + (0.03–0.30 s from `S.hhGap`), since the physics shift left the gap at 0.01 s (confirmed: 24.81 vs 24.82 before the edit).
@@ -43,3 +11,37 @@ SCORE: 6.4
 - Lengthen the horse legs ~25%.
 **Open**
 - Replay, draw calls, legs, subject unchanged. The floor edit is untested.
+
+### Judge 7
+
+The page is judged. Here is the verdict for session 7.
+
+**Scores (Must have, in order)**
+
+1. **Plays as DESIGN.md says: 6.** A no-input solo run reached `phase:"results"` at raceT 31.33. The `Tote` board, the Q/W/O/P `div#keys` caps and the `1 PLAYER` / `2 PLAYERS` / `RESTART` buttons are all there. `YOU` sat at x 2.27 and I did not hold keys through a race.
+2. **Rapier ragdoll, face-plant, auto-right: 7.** `Sir Trips-a-Lot` and `Hoof Hearted` went `state:"down"` at raceT 7.2 with `plants:1` each, and `Dusty Rhodes` ended `down`, `pitch` 3.13, `plants` 5. I did not time the ~2 s auto-right.
+3. **Replay and sepia photo finish: 6.** The `kind:"plant"` replay now starts (`INSTANT REPLAY · 0.25x` tag, `SPACE to skip`, `rate` 0.25). Its picture shows a warm VHS grade, three horses in the side cam and a letterbox. It is dark at `t:0`, and the first look had brightness 9%. I pressed Space and never saw a finish replay, so the sepia `PHOTO FINISH` frame with grain, scratches and gate weave is still unseen after four sessions.
+4. **Photo finish and tangle within a minute: 7.** `tangles:1` came with no input. The iteration 7 floor works: `finishT` is 24.81 for `Hoof Hearted` and 25.09 for `Sir Trips-a-Lot`, a 0.28 s gap instead of 0.01 s. The race ended at 31 s, but `Dusty Rhodes` dropped out at 47.6 m. I did not read the card's `PHOTO FINISH · …s` text.
+5. **Results with most-face-plants award: 8.** `results` lists the four horses in order, and `Dusty Rhodes` has `plants:5`. I did not re-read the `DIRT EATER` tag this session.
+6. **Looks as LOOK.md says: 8.** The `start` look shows a cream title card with a silks-colour stripe and the 70s palette. Outlined toon horses stand in a warm orange track with a grandstand and `GOLDEN HOOF OATS` ad boards. A CRT/VHS grade covers it all (`div#crt`, 2% near-black). I did not `sample` the 3-step shading.
+7. **`window.__game`, static, no network: 7.** `observe` works and assets are 0.32 MB with the fonts vendored. `subject` is still `horse0-body`, which `look` says is not in the scene. This is the fourth session with that fault.
+8. **Horses match CHARACTERS.md and horse.png: 6.** The horses have white socks, dark hooves, big eyes, a bristly mane, a saddle cloth with silks and a number, and a bridle. The legs are still short against "long wobbly". The blinker silks are barely readable at play distance. The polka-dot horse looks right.
+9. **Broadcast overlay: 9.** `Tote` has silks chips, `WIN ODDS` (`3-1`, `8-1`, `5-2`) and face-plant counts. There is a `LIVE` bug, a `3:58 PM` clock bug and `RACE TIME`. The play-by-play lower-third names commentators (`HANK "HOOFBEAT" PRUITT`, `WALT DUNMORE`) with live lines, and the race title card shows at the start.
+10. **Camera: 7.** The start look shows the broadcast side-tracking telephoto, and the replay cam shows a different side angle. I did not see the head-on cut.
+11. **Controls feel learnable: 5.** No keys were sent, so the claim that 60 m takes under 60 s is untested after five sessions.
+12. **Local 2-player, discoverable: 6.** The `2 PLAYERS (2)` button and the footer line `2 = TWO PLAYERS` are visible. I did not play it.
+13. **Style judged as hard as gameplay: 8.** The title card, `Tote`, lower-third and key caps are cohesive. I did not run `reference` against `LOOK-board.png`.
+
+**Faults: 5.**
+- `perf` shows 440 draw calls and 183,984 triangles. 160 ms of the 185 ms frame is the scene pass. The SwiftShader frame time is not a budget signal, but the draw count has been left alone for four sessions.
+- `__game.subject` points at `horse0-body`, which is not in the scene.
+- The replay opens on a near-black frame (9% brightness at `t:0`).
+- `div#crt` covers the whole canvas.
+- No console errors.
+
+**Next:**
+1. **(asked again) Prove the sepia finish replay and the head-on cut.** Run `interact` with `until:{phase:"replay"}` after a horse has `finished:true`. Don't press Space, and skip the `kind:"plant"` replay by waiting it out or checking `replay.kind`. Then `look` at `replay.kind` `"finish"` or `"photo"`. Done when the picture is sepia with grain, scratches, weave and the `PHOTO FINISH` frame, and a second `look` shows the head-on front view at the line. If no finish replay starts after the finish, fix that first. Also fade in the first replay frame so it is not black.
+2. **(asked again) Cut draw calls to under 250 and fix `subject`.** Use `instances()` for the crowd figures (the `.crowd` pieces in the grandstand look), fence posts, ad boards and grandstand rows. Name a Group `horse0` so `__game.subject` resolves. Done when `perf costs:true` reports under 250 draw calls and `look` stops saying the subject is not in the scene.
+3. **Test the controls and lengthen the legs.** Run `interact` with held Q W O P alternating, and check that one human reaches x 60 in under 60 s. Then lengthen the legs ~25% and make the blinker silks bigger. Done when the horse `look` shows legs about 1.2× the body depth, a mistimed-key `interact` still gives a dog-sit or face-plant, and the held-key race finishes under 60 s.
+
+SCORE: 6.9
