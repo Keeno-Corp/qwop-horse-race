@@ -3043,3 +3043,14 @@ SCORE: 7.5
    - Then play the human with `{"until":{"horses.2.finished":true},"max":3600}` and show `finishT` under 60 and the results card with "MOST FACE-PLANTS".
 
 SCORE: 7.7
+
+## Iteration 81
+**Did**
+- view.js horse legs: `u.scale.y` and `l.scale.y` 1.2 → 1.32 (about 10% longer legs, visual only).
+**Saw**
+- Race start look (300 frames): 4 horses in `run`, legs visibly longer, no console errors, no plants. `hills` still "Never visible" at the start camera; the `track` already has a dirt-to-grass far edge in the code (view.js ~353). No `perf`, no replay or human finish checked.
+**Next**
+- Replay first-frame fix (render once after the camera move), then play the human to `horses.2.finished` and show the results card.
+- Find what draws the green hill so `hills` stops reporting as unseen; add hoof-print variation on `track`.
+**Open**
+- Legs were only scaled visually; if the ragdoll joints look stretched in a plant, check against physics.js segment lengths.
