@@ -469,8 +469,8 @@ const markers = [0, 1].map((k) => {
   const g = new THREE.Group(); g.name = 'player-marker-' + k;
   const arrow = new THREE.Mesh(new THREE.ConeGeometry(0.28, 0.5, 4), new THREE.MeshBasicMaterial({ color: col, depthTest: false }));
   arrow.rotation.x = Math.PI; arrow.position.y = 2.7; arrow.renderOrder = 20; arrow.castShadow = false; g.add(arrow);
-  const ring = new THREE.Mesh(new THREE.RingGeometry(0.85, 1.05, 32), new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.8, side: THREE.DoubleSide }));
-  ring.rotation.x = -Math.PI / 2; ring.position.y = 0.06; ring.castShadow = false; ring.renderOrder = 4; g.add(ring);
+  const ring = new THREE.Mesh(new THREE.RingGeometry(0.85, 1.05, 32), new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.8, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -2 - k, polygonOffsetUnits: -2 - k }));
+  ring.rotation.x = -Math.PI / 2; ring.position.y = 0.07 + k * 0.03; ring.castShadow = false; ring.renderOrder = 4; g.add(ring);
   g.userData.arrow = arrow; g.frustumCulled = false; scene.add(g); return g;
 });
 function updateMarkers() {

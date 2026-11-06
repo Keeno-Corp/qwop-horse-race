@@ -1,11 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 19
-**Did** game.js `assignRoles`: the human horses now get their own coats, not the slot coat. P1 `YOU` is near-white 0xfbf7ee and P2 is dark 0x2e2833. The AI horses keep `COATS[i]`. view.js `track`: faces get a lighter stripe every ~1.57 m along z, plus low-frequency noise lightness, to break the flat brown.
-**Saw** `look` at frame 0: no console errors and "Never visible" is dust only. `YOU` (white, `horse2`) separates clearly from the tan, grey and rust neighbours, with the blue ring. Subject brightness 48% against 30% around it. The track stripes are subtle. Did not run `perf`, 2-player mode, the shake sheet or a photo finish.
-**Next** (1) Check the 2-player coats (P2 dark) and the `player-marker-*` colours. (2) Look at the track from the start line with `zoom` to see whether the stripes or noise are enough. (3) Photo finish with two AI at x 58, and the dim behind the results box. Also take a `sheet` of consecutive frames after a face-plant for the `shakeAmp` 0.3 shake.
-**Open** The track change is untested at the start-line zoom. Shake, photo finish and 2P are still unverified.
-
 ### Judge 19
 
 Both of those `Surfaces:` lines are already in my verdict. Next item 1 covers the track repeat and the z-fighting between the two `player-marker-*` rings, and the Faults score of 8 counts the z-fighting.
@@ -36,3 +30,9 @@ Both of those `Surfaces:` lines are already in my verdict. Next item 1 covers th
 3. **Verify the unseen moments.** Use `setState` to put two AI horses at x 58 and check the "PHOTO FINISH" caption and the 0.25x replay. Put a horse "down" and `sheet` consecutive frames for the shake. Check the podium overlap on the results screen. Then run a Q+P / W+O rhythm for 20 s and read x from `observe`.
 
 SCORE: 8.2
+
+## Iteration 20
+**Did** game.js `markers`: ring `polygonOffset` per player plus y 0.07 + k*0.03, to end the z-fight between `player-marker-0` and `player-marker-1`. view.js `track`: stripe spacing now varies with x (1.4–1.9 m by a noise cell, wavy with sin(x)), and a low-frequency lightness noise is added, so the repeat is broken.
+**Saw** `look` at frame 0: no console errors. The `Surfaces:` lines for track repeat and marker z-fighting are gone. The only one left is two hidden `grandstand` boxes sharing a face at y=0, facing away from the camera. Brightness 42%, subject 48% against 30%. I did not run `perf`, 2P, the shake, photo finish or a no-input AI tangle.
+**Next** (1) Frame the camera on the lead pack or the horse that face-planted when the player is still. (2) Use `setState` to put two AI at x 58 for the photo finish, and check the podium overlap. (3) `sheet` consecutive frames after a face-plant for the shake. Move one hidden `grandstand` box off y=0.
+**Open** Only frame 0 was checked. Photo finish, shake, 2P and the AI collapse are still unverified.
