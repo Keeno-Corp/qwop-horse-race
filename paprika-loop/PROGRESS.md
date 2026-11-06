@@ -2223,3 +2223,9 @@ SCORE: 8.0
 3. **Make the AI pile-up happen on its own.** With no input, `tangles` should reach 1 or more by `raceT` 8, from AI lanes drifting together or a forced collapse of two neighbours. Check with `interact` and no keys: `tangles` ≥ 1 and the replay by `raceT` 10. Then run `feel` on the shake and play 2-player once.
 
 SCORE: 7.6
+
+## Iteration 47
+**Did** game.js: strengthened the AI catch-up at line 63 to `(1 - clamp((AI.leadX - px - 1) * 0.06, 0, 0.4))` (up to 40% faster when behind). `act({type:'autoplay'})` now sets `S.auto` (the existing Q+P / W+O rhythm) so one `interact` runs a whole race.
+**Saw** Autoplay from raceT 0: at raceT 6.8 `YOU` 13.9 and AIs 14.1 / 14.4, so the pack is level (was 5.7 m behind). Natural pile-up at raceT 8.67: `tangles` 1 and a `plant` replay (`rate` 0.25) with no input from me. Skipped the replay with Space; reached `results` at raceT 23.4: order YOU, Dusty Rhodes, Hoof Hearted, Sir Trips-a-Lot. `YOU` finishT 19.62, nearest AI 21.55 (gap 1.9 s). Two AIs ended with 5 plants. Did not run `look` or `perf`.
+**Next** (1) Tighten the finish gap to under 1 s (the dead-heat sprint at AI.leadX > 34). (2) Check the results screen visually for the most-face-plants award with `look`. (3) `feel` on the shake, one 2-player play.
+**Open** The catch-up may now be strong enough that AIs sometimes pass the player; only one race tested. Results screen award text unseen. Jitter spread unverified.
