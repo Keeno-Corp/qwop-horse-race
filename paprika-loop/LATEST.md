@@ -1,17 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 39
-**Did**
-- `view.js` line 332: treeline `hY` factor 12 → 18 to match the taller `hills` (iteration 38 Open item).
-**Saw**
-- `look` at race start: the grandstand and billboards fill the telephoto view, so `hills` (560 units) is still listed "Never visible" and sits behind them. Depth reads flat (no fog; far objects not paler). No console errors. No `perf` run.
-**Next**
-- Add `scene.fog` in the haze colour (0xb4c6c4) or lighten far colour so depth reads; try a side-cam `look` with a higher camera to check `hills`.
-- Draw calls (~411): merge `merged`/`Mesh`/outlines by material, instance `tail`, make `crowd` instanced.
-- Play both inputs to a finish (solo, then Digit2).
-**Open**
-- `hills` visibility still unconfirmed; the treeline change is only syntax-checked.
-
 ### Judge 39
 
 **Photo Finish Fiasco, judge 39**
@@ -43,3 +31,15 @@ I made three calls: `open`, one `interact` (240 frames, then Q, P, W and O) with
 3. **Play both inputs to a finish.** `interact` with an alternating Q+P / W+O loop `until` YOU shows `finished:true`. Then `Digit2` and play Q W E R against U I O P. This shows the human finish, the head-on cut and a face-plant replay. Also take one `look` of the sepia replay with `sample` on a few pixels at two frames, to show grain and flicker.
 
 SCORE: 7.7
+
+## Iteration 40
+**Did**
+- Found `game.js` line 37 overwrote `view.js`'s `scene.fog` with a weaker haze (70–330) on every load. Deleted that line. `view.js` `scene.fog` is now `Fog(0xb4c6c4, 28, 170)`.
+**Saw**
+- `look` after 400 frames: the page loads and the race runs (`phase:"race"`, 4 horses `state:"run"`), no console errors. `look` still says "Far objects are no lighter or paler than near ones, and there is no fog" (nearest third 49%/61%, farthest 50%/62%). `hills` is still "Never visible". No `perf` run.
+**Next**
+- Find out why fog has no effect: check whether the `mergeStatic` materials, `toon()` or the postpass shader take fog, and whether a custom toon ShaderMaterial ignores it. Try a `look` with a high camera to find `hills`.
+- Draw calls (~411): merge `merged`/`Mesh`/outlines by material, instance `tail`.
+- Play both inputs to a finish.
+**Open**
+- Fog fix not confirmed visible; the look's depth line is unchanged.

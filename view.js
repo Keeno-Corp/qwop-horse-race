@@ -306,7 +306,7 @@ export function buildEnvironment(scene, _tex, rng) {
     glow.position.set(210, 60, -420); glow.lookAt(0, 0, 0); skyG.add(glow); }
   scene.add(skyG); env.sky = skyG;
   scene.background = new THREE.Color(0xd2dac0);
-  scene.fog = new THREE.Fog(0xf2dca0, 38, 240);
+  scene.fog = new THREE.Fog(0xb4c6c4, 28, 170);   // sky-coloured haze: far hills and stands read paler
 
   // grass with mowing stripes + far hills
   const hg = new THREE.PlaneGeometry(560, 330, 56, 28).rotateX(-Math.PI / 2), hp = hg.attributes.position;
