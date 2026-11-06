@@ -1,34 +1,34 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-### Judge 22
-
-**Verdict, session 22**
-
-1. **Plays as DESIGN.md's Core loop and Controls say: 8.** `div#keys` (Q W O P) lights the held key caps, and the 1 PLAYER, 2 PLAYERS (2) and RESTART buttons show. After a `setState` jump, a Space press moved the game from the `replay` phase to the `results` phase. I did not run a real key rhythm over 60 m, and I did not press 2 for two players.
-2. **Real Rapier jointed ragdoll, face-plant, auto-right: 7.** The `horse*` parts are jointed and the legs move with the keys. This session had no face-plant: `plants` was 0 for all four horses. Auto-right is still unseen.
-3. **Replay: 8.** The REPLAY banner and "SPACE to skip" show over a side view of the finish. The 0.25x rate was not measured.
-4. **Photo finish and tangled AI collapse: 8.** The `div.pop` reads "PHOTO FINISH! YOU by a nose (0.43s)!" over the replay, with the `finish-line` checker in view. The caption is semi-transparent and fights the crowd behind it. No tangle appeared this run.
-5. **Results with most face-plants award: 7.** The podium (YOU 1, Hoof Hearted 2, Sir Trips-a-Lot 3) and a table with a face-plants column show, and the podium does not overlap the table. With 0 face-plants everywhere there was no "most face-plants" award line, so the award itself is unverified.
-6. **Looks as LOOK.md says: 8.** `grandstand`, white rail, `hills`, `clouds` and the dirt `track` match refs/01.jpg, and there are no `Lighting:` or `Surfaces:` lines. The `player` subject is 1.3% of the frame in the race and 0.11% on results, so it only just stands out. There is a `player-marker-*` triangle and a blue ring, which help.
-7. **window.__game convention, index.html at root: 9.** `observe` returns phase, horses, replay and results.
-8. **Clip moments in the first minute: 7.** The photo finish and replay work. The tangle needs a face-plant, which this run did not produce, so the "laugh" is only reliable in the replay of a tangle.
-9. **Controls feel learnable: 7.** The tip "Alternate legs: Q+P then W+O" and the key caps guide the player. A 300-frame rhythm moved `YOU` only 1.4 m to 2.98 m, and a 60 m run was not tested.
-10. **Horses read as horses, match refs/01.jpg: 9.** Head, mane, tail, white socks, dark hooves and saddle cloths all show at close range.
-11. **Juice: 8.** Sounds fired (blip, powerup, cheer), and the popups, dust, FINISH banner and results box show. I did not feel the camera shake.
-12. **Local 2-player discoverable from the HUD: 9.** The "2 PLAYERS (2)" button is visible.
-13. **Static page, vendored lib, no network: 9.** `perf` gave 387 draw calls, 33.8k triangles and 0 MB of assets. The 64 ms frame is SwiftShader at host load 4.5, so it is no budget signal.
-
-**Faults: 8.** No errors. The only console line is the three.js "PCFSoftShadowMap has been removed" warning, a trivial one. There is no `Never visible` object. The `player` is 0.11% of the frame on the results screen.
-
-**Next:**
-1. **Verify a face-plant, auto-right and the most-face-plants award.** Use `interact` with `{ state: ... }` to give a horse a pitch of about 1.4, then `observe`. It should show `plants` of 1 or more, a `state` that returns to "run" after about 2 s, and a "most face-plants" line in the results `div.box`. If the results never name that award, add it.
-2. **Play a real rhythm and 2P.** Use `interact` with Q+P then W+O for 10 frames each over about 1800 frames, and `trace` `horses.2.x`. It should reach 60 m in under 60 s. Then press `2` and send Q W E R and U I O P, which should move two `human` horses.
-3. **Make the player stand out on results and in the race.** Keep the `player` horse at 3% or more of the frame, for example by framing the camera on the player and nearest rivals, and make the PHOTO FINISH `div.pop` opaque, with a dark backing. `look` with `sample` on the caption pixels should show a solid colour behind the text.
-
-SCORE: 8.0
-
 ## Iteration 23
 **Did** index.html `.pop`: opaque dark backing (rgba .92), padding, border so the PHOTO FINISH caption reads over the crowd. The "DIRT EATER · MOST FACE-PLANTS" award already exists in game.js results (shown when maxP > 0).
 **Saw** Not run through look this session (short on room); CSS-only change.
 **Next** (1) force a face-plant via setState and confirm auto-right. (2) Real Q+P/W+O rhythm trace, then 2P. (3) frame camera so `player` is ≥3% of frame.
 **Open** Face-plant, auto-right, 2P, rhythm still unverified; pop backing unchecked visually.
+
+### Judge 23
+
+**Verdict, session 23**
+
+1. **Plays as DESIGN.md's Core loop and Controls say: 7.** `div#keys` (Q W O P), the 1 PLAYER, 2 PLAYERS (2) and RESTART buttons and `div#tips` all show. Replay → results works, and Space skipped the replay. My Q+P / W+O rhythm barely moved `YOU`: 1.39 m after 8 s, then 2.37 m at the end of the race. I did not press 2.
+2. **Real Rapier jointed ragdoll, face-plant, auto-right: 8.** With no setup, the AI horses face-planted by themselves. `Sir Trips-a-Lot` and `Hoof Hearted` reached `state:"down"` with `plants:1`. By the end `Hoof Hearted` had 2 plants and was back in `state:"run"`, so auto-right works. The `legs` bitmasks follow the keys.
+3. **Replay: 8.** The `REPLAY` banner and "SPACE to skip" show over a face-plant replay (`kind:"plant"`, `tangles:1`). The 0.25x rate was not measured.
+4. **Photo finish and tangled AI collapse: 8.** A tangle was logged (`tangles:1`) at 7.9 s. The results `div.box` reads "Dusty Rhodes WINS! PHOTO FINISH · 0.10s" with the `finish-line` checker in view.
+5. **Results with most face-plants award: 9.** The podium and table show the "DIRT EATER · MOST FACE-PLANTS" badge on `Hoof Hearted` (2 plants), "SMOOTH OPERATOR" on the winner, and a face-plants column.
+6. **Looks as LOOK.md says: 8.** `grandstand` with its blocky crowd, white rail, `hills`, the dirt `track` and the replay close-up with saddle and socks match refs/01.jpg. There are no `Lighting:` lines. One `Surfaces:` note on two `grandstand` boxes shares a hidden face plane and only matters from below. `Subject: player drew no pixel` in both looks: the player is hidden or off-camera.
+7. **window.__game convention, index.html at root: 9.** `observe` returns phase, horses, replay, results and tangles.
+8. **Clip moments in the first minute: 8.** Two AI face-plants, a tangle replay and a photo-finish replay happened with the player's input being a bad rhythm. The first laugh is reliably early.
+9. **Controls feel learnable: 4.** The suggested "Alternate legs: Q+P then W+O" rhythm gets about 1 to 2 m in 30 s, and `YOU` ended 56 m short with a face-plant. Finishing 60 m in under 60 s is not shown.
+10. **Horses read as horses, match refs/01.jpg: 9.** Head, mane, tail, eye, saddle cloth, white socks and dark hooves all read.
+11. **Juice: 8.** Sounds fired (thud, gasp, cheer, boing, powerup). The `div.pop`, `#chips` and results box show, and the PHOTO FINISH caption now has a darker backing. Shake was not measured.
+12. **Local 2-player discoverable from the HUD: 8.** The "2 PLAYERS (2)" button and the tips line show. 2P play is still unplayed.
+13. **Static page, vendored lib, no network: 9.** `perf` gave 386 draw calls, 33.8k triangles and 0 MB of assets. The 80 ms frame is SwiftShader and not a budget signal.
+
+**Faults: 7.** The console has only the PCFSoftShadowMap warning. `dust` is reported as `Never visible` (outside the view). The player horse drew no pixel in either look.
+
+**Next:**
+1. **Make the controls learnable (asked again).** Tune the leg motor drive so a simple Q+P / W+O alternation, 10 frames each, gives steady forward motion. Add a stability aid such as a pitch-correcting torque, or a forward impulse on the leg that is down. Showing it done: `interact` with that rhythm for 1800 frames, `trace` `horses.2.x`. It should reach 60 with `plants` 0 or 1.
+2. **Keep the `player` horse in frame.** The `Subject: player drew no pixel` line shows the camera follows the AI leaders. Frame the camera on `YOU` plus the nearest rival. A `look` mid-race should show the `player-marker` and `horse2-*` parts at 3% or more of the frame.
+3. **Verify and polish 2P.** Press `2`, then hold Q/W/E/R and U/I/O/P in `interact`. `observe` should show two `human` horses (0 and 1) moving. Also make `dust` visible near the leaders so it is not `Never visible`.
+
+SCORE: 7.9
