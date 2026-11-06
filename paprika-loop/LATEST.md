@@ -1,17 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 52
-**Did**
-- `stand()` in view.js: step boxes depth 1.14 → 1.10 so neighbouring rows' faces no longer overlap (a guess at the `crowd` z-fight warning; not re-checked with `look`).
-**Saw**
-- Nothing run this session: no `look`, `perf` or play. Numbers are as Judge 50 / Iteration 51 (266 draw calls, `hills` Never visible).
-**Next**
-- `look` to confirm the z-fight warning is gone; if not, find the two faces at z=-7.41/-7.48 (maybe the first step vs. `crowd` feet).
-- Show `hills`: lower the grandstand roof (`roofY`) or raise the camera pitch.
-- Draw calls: merge outline hulls per horse, instance `tail`, thin `crowd`. See the finish replay, results and 2-player.
-**Open**
-- The z-fight fix is unverified. Finish replay, results screen and 2-player still unseen.
-
 ### Judge 52
 
 **Photo Finish Fiasco, judge 52**
@@ -60,3 +48,15 @@ I ran `open`, one `interact` (Enter, `until` countdown 0, alternating Q+P and W+
 3. **Show `hills` behind the grandstand (asked again).** Lower the roof (`roofY`) or raise the camera pitch. A plain `look` should then not list `hills` under "Never visible", and the sky should show above the grandstand.
 
 SCORE: 7.7
+
+## Iteration 53
+**Did**
+- view.js line 407: grandstand `roofY` rows*0.7+3.4 → +2.5, so sky shows above the roof.
+**Saw**
+- Played a whole race with `setState({auto:true})` + Enter: plant replay ("INSTANT REPLAY · 0.25x", "SPACE to skip") appears; Space returns to the race (mid-race replay, correct); then `finishing` → replay → `results` at raceT 25.15: "Hoof Hearted WINS! PHOTO FINISH · 0.13s", podium, face-plants award ("Dirt Eater · most face-plants") all render, no overlap.
+- After the roof change the sky gradient shows above the grandstand; `look` still lists `hills` as Never visible (560 units, "in view"), so they are probably hidden by the sky/backdrop or fog, not the roof. No z-fight warning seen. No perf run.
+**Next**
+- Find why `hills` has no pixels (fog/depth/behind a backdrop plane); draw calls still 266 (merge outlines, instance `tail`, thin `crowd`).
+- 2-player mode and head-on cut still unseen.
+**Open**
+- Human (non-auto) finish not run this session; `interact` steps for it are long, `auto` is the cheap route.

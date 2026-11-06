@@ -404,7 +404,7 @@ export function buildEnvironment(scene, _tex, rng) {
     g.add(tm(box(len, H + 3.4, 0.5), concrete2, [x0 + len / 2, (H + 3.4) / 2, z0 - rows * 1.1 - 0.4], [0, 0, 0], [1, 1, 1], { outline: 0.8 }));
     // window slit band on the back wall + upper glass level
     for (let k = 0; k < Math.floor(len / 3); k++) g.add(tm(box(1.8, 0.8, 0.08), glass, [x0 + 1.8 + k * 3, H + 1.4, z0 - rows * 1.1 - 0.1], [0, 0, 0], [1, 1, 1], { outline: 0.6, shadow: false }));
-    const roofY = rows * 0.7 + 3.4, rz = z0 - rows * 0.55 + 0.4, rd = rows * 1.1 + 3.2;
+    const roofY = rows * 0.7 + 2.5, rz = z0 - rows * 0.55 + 0.4, rd = rows * 1.1 + 3.2;
     g.add(tm(box(len + 2.4, 0.5, rd), slab, [x0 + len / 2, roofY, rz], [0.08, 0, 0], [1, 1, 1], { outline: 1 }));
     g.add(tm(box(len + 2.4, 0.9, 0.3), concrete, [x0 + len / 2, roofY - 0.1, rz + rd / 2 - 0.1], [0.08, 0, 0], [1, 1, 1], { outline: 0.9 }));
     for (const px of [0.3, len * 0.33, len * 0.66, len - 0.3]) for (const pz of [-0.6, -rows * 1.1 + 0.3]) { const hh = roofY - 0.3; g.add(tm(cyl(0.11, 0.11, hh, 6), steel, [x0 + px, hh / 2, z0 + pz], [0, 0, 0], [1, 1, 1], { outline: 0.7 })); }
