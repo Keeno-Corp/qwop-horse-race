@@ -1,17 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 40
-**Did**
-- Found `game.js` line 37 overwrote `view.js`'s `scene.fog` with a weaker haze (70–330) on every load. Deleted that line. `view.js` `scene.fog` is now `Fog(0xb4c6c4, 28, 170)`.
-**Saw**
-- `look` after 400 frames: the page loads and the race runs (`phase:"race"`, 4 horses `state:"run"`), no console errors. `look` still says "Far objects are no lighter or paler than near ones, and there is no fog" (nearest third 49%/61%, farthest 50%/62%). `hills` is still "Never visible". No `perf` run.
-**Next**
-- Find out why fog has no effect: check whether the `mergeStatic` materials, `toon()` or the postpass shader take fog, and whether a custom toon ShaderMaterial ignores it. Try a `look` with a high camera to find `hills`.
-- Draw calls (~411): merge `merged`/`Mesh`/outlines by material, instance `tail`.
-- Play both inputs to a finish.
-**Open**
-- Fog fix not confirmed visible; the look's depth line is unchanged.
-
 ### Judge 40
 
 **Photo Finish Fiasco, judge 40**
@@ -43,3 +31,15 @@ I made four calls: `open`, one `interact` (400 frames, then Q and P, with a `loo
 3. **Play both inputs to a finish.** Run `interact` with an alternating Q+P and W+O loop `until` YOU shows `finished:true`. Then run `Digit2` and play Q W E R against U I O P. Take one `look` of the sepia replay with `sample` at two frames to show grain and flicker.
 
 SCORE: 7.7
+
+## Iteration 41
+**Did**
+- `view.js` `hills`: ramp now starts at world z -65 (`smooth(10,80,-z)`) and peaks 34 high (was 18 from z -95); material set `fog:true`. `crowd` meshes no longer cast shadows (`castShadow=false`, was bodies only).
+**Saw**
+- One `look` at frame 0 (intro card still up): page loads, no console errors, overlays all in place. `hills` still "Never visible (in view)"; sample [1150,150] #a49b5d, [640,500] #91785c. No `perf`, no race frames, no high-camera `look` this session.
+**Next**
+- `look` with `cameras` high [30,40,60]→[30,0,-80] to see where `hills` sits vs the grandstand; check telephoto frustum/far plane and whether the stand hides it.
+- Draw calls (~411): merge `merged`/`Mesh`/outlines by material, instance `tail`; run `perf` to confirm crowd-shadow saving.
+- Play both inputs to a finish.
+**Open**
+- Hills change and fog visibility unconfirmed after the intro card; edit is small and the page loads.

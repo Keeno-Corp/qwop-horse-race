@@ -1383,3 +1383,15 @@ I made four calls: `open`, one `interact` (400 frames, then Q and P, with a `loo
 3. **Play both inputs to a finish.** Run `interact` with an alternating Q+P and W+O loop `until` YOU shows `finished:true`. Then run `Digit2` and play Q W E R against U I O P. Take one `look` of the sepia replay with `sample` at two frames to show grain and flicker.
 
 SCORE: 7.7
+
+## Iteration 41
+**Did**
+- `view.js` `hills`: ramp now starts at world z -65 (`smooth(10,80,-z)`) and peaks 34 high (was 18 from z -95); material set `fog:true`. `crowd` meshes no longer cast shadows (`castShadow=false`, was bodies only).
+**Saw**
+- One `look` at frame 0 (intro card still up): page loads, no console errors, overlays all in place. `hills` still "Never visible (in view)"; sample [1150,150] #a49b5d, [640,500] #91785c. No `perf`, no race frames, no high-camera `look` this session.
+**Next**
+- `look` with `cameras` high [30,40,60]→[30,0,-80] to see where `hills` sits vs the grandstand; check telephoto frustum/far plane and whether the stand hides it.
+- Draw calls (~411): merge `merged`/`Mesh`/outlines by material, instance `tail`; run `perf` to confirm crowd-shadow saving.
+- Play both inputs to a finish.
+**Open**
+- Hills change and fog visibility unconfirmed after the intro card; edit is small and the page loads.

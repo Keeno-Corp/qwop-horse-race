@@ -312,8 +312,8 @@ export function buildEnvironment(scene, _tex, rng) {
   const hg = new THREE.PlaneGeometry(560, 330, 56, 28).rotateX(-Math.PI / 2), hp = hg.attributes.position;
   for (let i = 0; i < hp.count; i++) {
     const x = hp.getX(i) + 50, z = hp.getZ(i) - 55;
-    const far = smooth(40, 120, -z), side = smooth(150, 230, Math.abs(x - 50)), n = 0.4 + 0.6 * noise2(x * 0.02, z * 0.02) + 0.2 * noise2(x * 0.07, z * 0.07);
-    hp.setY(i, Math.max(far * 18, side * 9) * n - 0.1);
+    const far = smooth(10, 80, -z), side = smooth(150, 230, Math.abs(x - 50)), n = 0.4 + 0.6 * noise2(x * 0.02, z * 0.02) + 0.2 * noise2(x * 0.07, z * 0.07);
+    hp.setY(i, Math.max(far * 34, side * 9) * n - 0.1);
   }
   const hn = hg.toNonIndexed(); hn.computeVertexNormals();
   const hc = [], g1 = new THREE.Color(0xa8ad4a), g2 = new THREE.Color(0x96a444), g3 = new THREE.Color(0x7d9040), cc = new THREE.Color(), haze = new THREE.Color(0xb4c6c4), p2 = hn.attributes.position;
@@ -324,7 +324,7 @@ export function buildEnvironment(scene, _tex, rng) {
     for (let k = 0; k < 3; k++) hc.push(cc.r, cc.g, cc.b);
   }
   hn.setAttribute('color', new THREE.Float32BufferAttribute(hc, 3));
-  const hills = new THREE.Mesh(hn, new THREE.MeshToonMaterial({ vertexColors: true, gradientMap: ramp })); hills.position.set(50, 0, -55); hills.receiveShadow = true; hills.name = 'hills'; scene.add(hills);
+  const hills = new THREE.Mesh(hn, new THREE.MeshToonMaterial({ vertexColors: true, gradientMap: ramp, fog: true })); hills.position.set(50, 0, -55); hills.receiveShadow = true; hills.name = 'hills'; scene.add(hills);
 
   // treeline on the far hills
   const treeG = new THREE.SphereGeometry(1, 12, 8), trunkG = cyl(0.12, 0.18, 1, 5), tcols = [0x5f7a2e, 0x6f8a3a, 0x7a8a34, 0x9a7a2a, 0x4f6a2a];
@@ -420,7 +420,7 @@ export function buildEnvironment(scene, _tex, rng) {
   const sp = spectators, bodyG = new THREE.CylinderGeometry(0.17, 0.2, 0.5, 8), headG = new THREE.SphereGeometry(0.16, 10, 7), armG = new THREE.BoxGeometry(0.07, 0.34, 0.07), hatG = new THREE.ConeGeometry(0.17, 0.2, 7);
   const bodies = new THREE.InstancedMesh(bodyG, toon(0xffffff), sp.length), heads = new THREE.InstancedMesh(headG, toon(0xffffff), sp.length), arms = new THREE.InstancedMesh(armG, toon(0xffffff), sp.length * 2), hats = new THREE.InstancedMesh(hatG, toon(0xffffff), sp.length), col = new THREE.Color();
   sp.forEach((s, i) => { s.h = 0.85 + rng() * 0.3; s.hat = rng() < 0.3; s.wave = rng() < 0.5; bodies.setColorAt(i, col.set(s.col)); heads.setColorAt(i, col.set(s.skin)); arms.setColorAt(i * 2, col.set(s.skin)); arms.setColorAt(i * 2 + 1, col.set(s.skin)); hats.setColorAt(i, col.set([0xd3432b, 0xf2e1ad, 0x305da2, 0x4c2c21][i % 4])); });
-  bodies.name = heads.name = arms.name = hats.name = 'crowd'; for (const m of [bodies, heads, arms, hats]) { m.frustumCulled = false; m.castShadow = m === bodies; scene.add(m); }
+  bodies.name = heads.name = arms.name = hats.name = 'crowd'; for (const m of [bodies, heads, arms, hats]) { m.frustumCulled = false; m.castShadow = false; scene.add(m); }
   const mm = new THREE.Matrix4(), qq = new THREE.Quaternion(), ee = new THREE.Euler(), p3 = new THREE.Vector3(), s3 = new THREE.Vector3(), zero = new THREE.Matrix4().makeScale(0, 0, 0);
   env.spectators = { update(t, excite) {
     for (let i = 0; i < sp.length; i++) {
