@@ -494,7 +494,7 @@ function updateCamera(dt) {
       tp.set(-6 + (fx - 0.4 + 6) * e, 3.4 + 0.4 * e, 17 - (17 - dist) * e); tl.set(1.5 + (fx + 1.8 - 1.5) * e, 1.2, 0);
       camPos.copy(tp); camLook.copy(tl);
     } else {
-      tp.set(fx - 0.4, 3.0 + (dist - 14.5) * 0.14, dist); tl.set(fx + 2.0, 1.7, 0.3);
+      tp.set(fx - 0.4, 2.2 + (dist - 14.5) * 0.1, dist); tl.set(fx + 2.0, 2.7, 0.3);
       if (snap) { camPos.copy(tp); camLook.copy(tl); } else { camPos.lerp(tp, 1 - Math.exp(-dt * 2.6)); camLook.lerp(tl, 1 - Math.exp(-dt * 4)); }
     }
   }

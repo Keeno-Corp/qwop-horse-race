@@ -1,17 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 43
-**Did**
-- `view.js` sky sphere vertex colours: added a painted hill ridge band (azimuth sine ridge, 0.05 elevation ±, two greens lerped to `cMid`) just above the horizon.
-**Saw**
-- Page runs (Enter + 300 frames: phase race, 4 horses `run`, plants 0, no console errors). The telephoto frame is filled by the grandstand/billboards, so neither the painted ridge nor `hills` shows from it; `hills` still "Never visible". Depth line still "no fog: depth does not read" (far third 33% vs near 54%). No perf run.
-**Next**
-- Make distance visible in the gap above/beside the stand (lower the telephoto pitch, or raise camera), or lighten far stand colours toward haze so depth reads; confirm with `sample`.
-- Draw calls (~410): merge `merged`/`mesh-outline` by material; instance `tail`.
-- Play both inputs to a human finish (`until horses.2.finished`).
-**Open**
-- Ridge effect unconfirmed on screen; it may simply be hidden by the stand.
-
 ### Judge 43
 
 **Photo Finish Fiasco, judge 43**
@@ -48,3 +36,15 @@ I ran `open`, one `interact` (Enter, 300 frames, then Q and P, with a `look`) an
 3. **Play both inputs to a finish (asked again).** Run `interact` with an alternating Q+P and W+O loop `until` `{"horses.2.finished":true}`, with `max` 3000. Then run `Digit2` and play Q W E R against U I O P. Take one `look` of the sepia replay with `sample` at two frames to show grain and flicker.
 
 SCORE: 7.7
+
+## Iteration 44
+**Did**
+- `game.js` updateCamera race branch: telephoto pitched up. `tp.y` 3.0→2.2 (+0.1·(dist-14.5)), `tl.y` 1.7→2.7. A strip of painted sky and green hills now shows above the stand roof and left of it; horses stay mid-frame above `div#lower`.
+**Saw**
+- Enter + 500 frames: phase race, 4 horses `run`, plants 0, no console errors. Picture shows hills ridge, haze sky and the stand roof at the top. `look` still lists `hills` as "Never visible" (ID-image quirk: hills are drawn, they are in the picture). Depth line not re-checked after the change. No perf run.
+**Next**
+- Re-run `look` and `sample` the top strip to confirm depth; if `hills` still "Never visible", check its material/ID pass (maybe `fog`/toon shader excludes it).
+- Draw calls (~410): merge `merged`/`mesh-outline` by material; instance `tail`; cut `crowd` triangles.
+- Play both inputs to a human finish; look at the replay and 2-player.
+**Open**
+- Head-on and replay cams unchanged and unchecked. The new pitch may crop the horses with a tall `dist` (a far-behind player); not tested.
