@@ -243,7 +243,7 @@ function resetRace() {
   seed = 12345 + 7919 * (++S.seedRound);
   assignRoles();
   horses.forEach((h, i) => { h.reset(STAGGER[i], LANES[i]); h.guard = 99; h.assist = 1; h.stiff = 1; h.plants = 0; h.finished = false; h.finishT = null; h.speedBefore = 0; h.drive = 0; h.legT = [0, 0, 0, 0]; for (let k = 0; k < 4; k++) h.setHeld(k, false); });
-  Object.assign(S, { phase: 'countdown', countdown: 4.6, raceT: 0, finishT: null, firstFinish: null, order: [], pending: null, pair: null, lastReplayAt: -99, replay: null, tangles: 0, lastTangle: -99, focus: null, deadHeat: rng() < 0.9, excite: 0, results: null, resultsShown: false, camBlend: 0 });
+  Object.assign(S, { phase: 'countdown', countdown: 4.6, raceT: 0, finishT: null, firstFinish: null, order: [], pending: null, pair: null, lastReplayAt: -99, replay: null, tangles: 0, lastTangle: -99, focus: null, deadHeat: rng() < 0.9, hhGap: 0.2 + rng() * 1.1, excite: 0, results: null, resultsShown: false, camBlend: 0 });
   ringN = 0; for (const d of dust) d.life = 0;
   for (const p of S.popups) p.el.remove(); S.popups = [];
   $('results').style.display = 'none'; setReplayUi(false); $('count').textContent = '';
@@ -294,7 +294,7 @@ function physStep() {
     const r = roles[h.idx];
     if (r.human >= 0 && (S.phase === 'race' || S.phase === 'finishing') && !h.finished) {
       const set = KEYS[mode][r.human]; const ph = Math.floor(S.raceT / AUTO.period) % 2; for (let i = 0; i < 4; i++) { const d = S.auto ? ((i === 0 || i === 3) === (ph === 0)) : held.has(set[i]); if (d && !h.held[i]) h.drive = Math.min(1.6, (h.drive || 0) + 0.5); h.setHeld(i, d); }
-      if (S.phase === 'race') { const others = horses.filter((o, j) => roles[j].ai).map((o) => o.pos().x); const avg = others.reduce((a, b) => a + b, 0) / Math.max(1, others.length); h.driveF = (S.auto ? 0.5 : 26) * Math.max(0, 30 + clamp(avg - h.pos().x - 4, 0, 30) * 6 - clamp(h.pos().x - avg - 0.3, 0, 20) * 14); }
+      if (S.phase === 'race') { const others = horses.filter((o, j) => roles[j].ai).map((o) => o.pos().x); const avg = others.reduce((a, b) => a + b, 0) / Math.max(1, others.length); h.driveF = (S.auto ? 0.5 : 40) * Math.max(0, 30 + clamp(avg - h.pos().x - 4, 0, 30) * 6 - clamp(h.pos().x - avg - 0.3, 0, 20) * 14); }
     } else if (r.human >= 0) for (let i = 0; i < 4; i++) h.setHeld(i, false);
     if (h.finished || S.phase === 'results') h.guard = 99;
     if (r.human >= 0 && !S.auto) h.assist = 2.5 + 2.5 * clamp(1 - S.raceT / 5, 0, 1) * (S.phase === "race" ? 1 : 0);
@@ -335,7 +335,7 @@ function updateRace(dt) {
     let ch = null; horses.forEach((h, i) => { if (roles[i].ai && h !== ld && !h.finished && xs[i] > 14 && (!ch || xs[i] > xs[ch.idx])) ch = h; });
     if (ch && ld) {
       if (ch.state !== 'run') { ch.rise(); ch.guard = 99; }
-      const gap = ld.pos().x - ch.pos().x, sh = Math.min(Math.max(0, gap - 0.7), (gap > 8 ? 7 : 3.2) * dt);
+      const gap = ld.pos().x - ch.pos().x, sh = Math.min(Math.max(0, gap - (S.hhGap || 0.7)), (gap > 8 ? 7 : 3.2) * dt);
       if (sh > 0) for (const p of ch.parts) { const t = p.body.translation(); p.body.setTranslation({ x: t.x + sh, y: t.y, z: t.z }, true); }
       for (const p of ch.parts) { const v = p.body.linvel(), lv = ld.torso.body.linvel().x; if (v.x < lv) p.body.setLinvel({ x: v.x + (lv - v.x) * 0.1, y: v.y, z: v.z }, true); }
     }

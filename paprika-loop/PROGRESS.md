@@ -144,3 +144,16 @@ SCORE: 6.5
 3. **Replay verification and draw calls.** The finish replay must be inspectable without a 600 s hang: lower `sheet` cost by ending replays with a quicker `{state:{...}}` jump. Break the AI dead heat (a seeded `finishT` gap of 0.03–0.4 s). Cut draw calls (<250) by turning the crowd, fence and ad boards into `InstancedMesh`. Use `perf` with `costs:true` to show it.
 
 SCORE: 6.5
+
+## Iteration 4
+**Did**
+- Dead heat no longer scripted: `S.hhGap` (seeded 0.2–1.3 m, set in the reset `Object.assign`) replaces the fixed 0.7 m in the closing-sprint drag in game.js, so AI finish gaps vary.
+- Player forgiveness: human `h.driveF` scale 26→40 in `physStep`.
+**Saw**
+- Alternating Q+P / W+O for ~48 frames after the countdown: YOU x 4.85 at raceT 1.7 (ahead of AIs at 1.3–3.3), state `run`, plants 0, no errors. Not played through to a finish.
+**Next**
+- Black rectangle (asked again, not done): test `#tote{display:none}` and `#crt{display:none}` in separate `look` calls with `sample` at (100,520),(100,580).
+- Play a full race (600+ frames) to check the player doesn't now run away, then the results card.
+- Cut draw calls (<250) with InstancedMesh for crowd, fence, ad boards; run `perf`.
+**Open**
+- Draw calls, the black rectangle and the replay checks were not touched this session. 40 may make the player too fast; unmeasured over a full race.
