@@ -3427,3 +3427,18 @@ SCORE: 7.7
 - After a 2P results card, check that Enter restarts.
 **Open**
 - Replay cams, the hoof/rail overlap and 2P restart after results are unchecked.
+
+## Iteration 104
+**Did**
+- No code changes. Opened the page, pressed Space to skip the countdown, and ran a no-input race into the replay.
+**Saw**
+- `phase:"replay"` kind `finish` at rate 0.25 shows the photo-finish frame: sepia, film-strip border, `PHOTO FINISH` banner, `REPLAY 0.25x` tag, and `WINNER: Hoof Hearted · BY 0.19 SEC · HOLD ALL TICKETS` caption (`div#pfc`). Four horses sit in a close line at the finish; results order Hoof Hearted, Dusty Rhodes, Sir Trips-a-Lot, YOU.
+- No-input race: `tangles:1`, Sir Trips-a-Lot `plants:6`. The replay did not reach `phase:"results"` within 2400 frames, so the results card and face-plant award are still unseen.
+- `look` says the last frame drew into a render target and none to the screen (postpass). The screenshot is correct, so this is likely the post-process pass setup rather than a fault.
+- Judge 85 faults: none (no console errors, no `Lighting:` or `Surfaces:`).
+**Next**
+- Run `until:{phase:"results"}` with a larger `max`, or skip the replay with Space again. Look at the results card and the face-plant award.
+- Zoom [0,330,1280,520] in the race phase for the rail/dust over the hooves.
+- Check Enter restarts after a 2P results card.
+**Open**
+- Results card, head-on cut, the hoof/rail overlap and 2P restart after results are unchecked.
