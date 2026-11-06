@@ -595,3 +595,9 @@ SCORE: 6.6
 - Check the finish replay still shows with the new close finish (`until {replay.kind:"finish"}` then `look`).
 **Open**
 - Only one run checked; draw-call goal unmet; human 60 m finish unproven.
+
+### Judge 15
+
+The `postpass-quad` note is about the replay's film grain, which Must have item 3 asks for ("sepia with film grain, scratches, flicker"). So it is intended, and my verdict stands as written. I listed it under Faults as strong but intended, and I added nothing to Next for it.
+
+SCORE: 7.2
