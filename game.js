@@ -37,7 +37,7 @@ window.__scene = scene; window.__cam = camera;
 
 // ---------- physics + horses ----------
 const world = createWorld(RAPIER);
-const LANES = [-1.5, -0.5, 0.5, 1.5], STAGGER = [0, 0.7, 1.4, 2.1];   // a visual stagger so the field reads as four horses, not one pile
+const LANES = [-1.65, -0.55, 0.55, 1.65], STAGGER = [0, 1.0, 2.0, 3.0];   // a visual stagger so the field reads as four horses, not one pile
 const horses = [0, 1, 2, 3].map((i) => new Horse(RAPIER, world, i, LANES[i], 0));
 const views = [];         // per horse: visual groups
 const roles = [];         // per horse: { name, color, human, ai }

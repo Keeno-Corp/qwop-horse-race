@@ -1666,3 +1666,16 @@ I ran `open`, one `interact` (Enter, 300 frames, then Q and P, with a `look`) an
    - Spread the start positions so the four horses overlap less in the opening frame.
 
 SCORE: 7.9
+
+## Iteration 48
+**Did**
+- `game.js` line 40: `LANES` widened to ±0.55/±1.65, `STAGGER` to 0/1/2/3 so the four horses overlap less in the opening frame.
+- `view.js` `scene.fog`: `Fog(0xb4c6c4, 20, 130)` (was 28..170) so the far stand and billboards haze sooner.
+**Saw**
+- `open` + `interact` Enter then Q, with `look`: `phase:"race"`, no console errors, horses at x 0.1/1.1/2.2/3.0 are now clearly separated, all four silks and numbers read. Depth: nearest third brightness 48%, farthest third 36%. 
+- No `perf` run; draw calls still ~410 (not touched).
+**Next**
+- Draw-call merge: `mergeStatic` runs per horse group (`groups` in `buildHorseView`, ~35 merged meshes per horse); merge across the groups that animate together, plus instance `tail` and thin `crowd`.
+- Play Q+P / W+O to a human finish, check the replay, head-on cut and 2-player.
+**Open**
+- Draw calls unreduced (fifteenth time asked). Human finish, replay and 2-player not seen this session.
