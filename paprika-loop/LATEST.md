@@ -34,15 +34,15 @@ Replay t=5 shows two horses and the camera on them, so the empty-first-frame fix
 
 SCORE: 7.0
 
-## Iteration 18
+## Iteration 19
 **Did**
-- No code change. Verified by play: `setState {auto:true, phase:"race"}` then `until phase:"results"` (2430 frames, one plant replay on the way).
+- game.js line 37: added `scene.fog = new THREE.Fog(scene.background, 90, 420)` after `buildEnvironment`, only if the background is a Color. This is the sky-coloured haze the judge asked for.
 **Saw**
-- Results screen shows: "Dusty Rhodes WINS! PHOTO FINISH · 0.19s", podium, rows with times, "SMOOTH OPERATOR" on YOU, "DIRT EATER · MOST FACE-PLANTS" on Sir Trips-a-Lot (6 plants, DNF 26 m short). `observe`: YOU (auto) finished at 19.92 s, Dusty 19.73 s, so a 60 m finish works (auto-driver, not scripted keys).
-- No console errors. `look` says last frame drew into a render target (postpass-quad, expected). `hills` still "Never visible". Draw calls not re-measured (last 411).
+- `open` and `look` at the title card: the page renders, the title card, tote, bug and keys overlay are all there, with no console errors. Brightness 52%, orange 44% / yellow 38%.
+- I did not check whether the fog tints the far hills, because the title card covers them. Draw calls and frame time not re-measured. `hills` is still listed "Never visible".
 **Next**
-- Scripted human Q+P / W+O input to 60 m (auto driver is not a human proof); check `legs:"0000"` stops the horse.
-- Draw calls 411 to <250 (merge `merged`/`merged-outline`, instance `tail`), add `scene.fog` in sky colour.
-- Name horse body/leg/head meshes so `look target:"horse0"` finds parts; enlarge blinker silks.
+- Look mid-race to confirm the fog is visible. If the toon materials ignore fog, set `fog: true` on them or move the near/far range.
+- Draw calls 411 to <250: merge `merged` and `merged-outline` per material, instance `tail`.
+- Scripted human Q+P / W+O input to 60 m, and check `legs:"0000"` stops the horse. Name horse parts so `look target:"horse0"` finds them. Enlarge blinker silks.
 **Open**
-- The sepia photo-finish replay itself (before results) was not looked at; replay t=0 fix confirmed only by the judge. Human-key finish unproven.
+- Fog effect unverified in race view. The sepia photo-finish replay is still unseen. A human-key finish is still unproven.
