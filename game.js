@@ -411,7 +411,7 @@ function startFinishReplay() {
   const start = Math.max(Math.max(0, ringN - RING + 2), (S.firstFinishFrame || ringN - 1) - 24), end = Math.min(ringN - 1, start + 64);
   S.replay = { kind: 'finish', start, end, pos: start, subject: w.idx, snap: true }; applyFrame(start);
   S.phase = 'replay'; setReplayUi(true, 'finish'); S.flash = 0.5; sfx.play('cheer', 0.8);
-  camPos.set(FINISH_X + 7, 1.1, 3.2); camLook.set(FINISH_X - 2.5, 1.2, 0);
+  camPos.set(FINISH_X + 4, 1.3, 10); camLook.set(FINISH_X - 0.5, 1.0, 0);
 }
 function startPlantReplay() {
   const hi = S.pending.horse; S.pending = null;
@@ -468,7 +468,7 @@ function updateCamera(dt) {
     const rp = S.replay;
     if (rp.kind === 'finish') {
       const prog = (rp.pos - rp.start) / Math.max(1, rp.end - rp.start);
-      tp.set(FINISH_X + 7 - prog * 1.5, 1.1 + prog * 0.3, 3.2); tl.set(FINISH_X - 2.5 - prog * 1.0, 1.2, 0); fov = 30 - prog * 4;
+      tp.set(FINISH_X + 4 - prog * 1.5, 1.3 + prog * 0.3, 10); tl.set(FINISH_X - 0.5 - prog * 0.5, 1.0, 0); fov = 34 - prog * 4;
     } else { // low rail cam orbiting the pile-up
       const prog = (rp.pos - rp.start) / Math.max(1, rp.end - rp.start), s = subjectAt(rp.pos, rp.subject), a = 0.35 + prog * 1.1;
       let cx = s.x, cz = s.z, d = 8;

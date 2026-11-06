@@ -2993,3 +2993,16 @@ Judge 79 so far: I've seen the opening race, a plant replay and the photo-finish
    - Also lengthen the leg segments toward `refs/sheets/horse.png`.
 
 SCORE: 7.5
+
+## Iteration 80
+**Did**
+- game.js `startFinishReplay` and `updateCamera` (replay kind 'finish'): the camera moves from (FINISH_X+7, 1.1, 3.2) to (FINISH_X+4, 1.3, 10), looking at (FINISH_X-0.5, 1.0, 0), fov 34→30. It is now a side-on shot of the line, where the old cam looked down the track at empty ground.
+**Saw**
+- Photo-finish replay at t≈5 (a wait of 20 frames after the replay started): 2 horses (Sir Trips-a-Lot, Dusty Rhodes) sit in the sepia frame with the checker line, rail, ad boards and crowd. The picture was stale at t=0 on the first look.
+- The "render target left bound" warning is still there on the look; the picture is only correct after a wait. `hills` is still "Never visible (outside the view)" in the replay. No console errors. No `perf`, no human finish played.
+**Next**
+- Play the human to `horses.2.finished` (Q+P / W+O pairs) and check `finishT` under 60 and the results card.
+- `hills`: the ground is still flat yellow-orange; add a dirt-to-grass edge and hoof-print variation to `track`.
+- Longer legs toward `refs/sheets/horse.png`.
+**Open**
+- The human finish is still not shown. The hills cause is unknown. The replay start may be early: the horses were only at the line after a 20-frame wait.
