@@ -1,93 +1,90 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-### Judge 7
-
-**Judge 7 verdict**
-
-1. **Plays as DESIGN.md's Core loop and Controls say: 6.**
-   - Auto mode runs the race and the HUD shows `1 PLAYER`, `2 PLAYERS (2)` and RESTART.
-   - The results screen is wrong. `YOU` had `finished:true` at `finishT` 21.43, with x 58.41 in the `finishing` phase. The results then read "Dusty Rhodes WINS!", and `YOU` is "DNF · 56 m short" with x 2.38, `legs` "0000" and 1 face-plant.
-   - Either the finisher's result is overwritten or the player was reset before results. The correct winner is lost.
-   - I did not test 2P or R this session.
-
-2. **Real Rapier jointed ragdoll, face-plant and auto-right: 7.**
-   - Face-plants register: `Hoof Hearted` has `state:"down"` with `plants` 1, then 2.
-   - The plant replay shows grey, brown and orange horses sprawled with their legs tangled.
-   - Auto-right timing is still unmeasured.
-   - Horses finish with `pitch` -0.9 and `legs` "0000".
-
-3. **Replay (last ~4 s, 0.25x, REPLAY banner, Space skips): 7.**
-   - The plant replay (`kind:"plant"`, `pos` 304 of 414) is now framed on the tangle. The REPLAY banner and "SPACE to skip" show. This is the best frame so far.
-   - The finishing `look` is covered by `div#flash`, a white overlay at opacity 0.82 (brightness 88%, subject edge contrast 0.029).
-   - The finish replay was not seen. `until:{phase:"results"}` came in 2761 frames, which is better than before but still slow.
-
-4. **Photo finish and tangled AI collapse within the first minute: 4.**
-   - The tangle works. `tangles` reads 1, then 2, and by 6.9 s two horses are down with `plants` 1 and others at 2.
-   - There is still no photo finish. Dusty Rhodes finished at 24.38 and Sir Trips-a-Lot at 28.25, a gap of 3.87 s. `Hoof Hearted` ended at x 48.67 as a DNF.
-   - There is no PHOTO FINISH popup.
-
-5. **Results with most face-plants award: 6.**
-   - The podium and table show "SMOOTH OPERATOR", "DIRT EATER" and "MOST FACE-PLANTS" badges. The badge sits on `Hoof Hearted`, who has 2 plants and is the only horse with 2.
-   - The winner is wrong (see item 1) and a DNF horse is placed 3rd.
-
-6. **Looks as LOOK.md says: 8.**
-   - The `grandstand` with its blocky crowd, white rail fence, `finish-line` checker, green `hills`, `clouds` and dirt `track` all match refs/01.jpg.
-   - The look reports no `Lighting:` or `Surfaces:` faults.
-   - `dust*` is now visible (52 meshes, 0.6% of the frame).
-   - During the finish the subject blends in because of the flash.
-
-7. **window.__game convention, index.html at root, static deploy: 9.**
-
-8. **Clip moments in the first minute with no input: 6.**
-   - The tangle replay at 6.9 s is funny: three horses are down in the dirt, and a stranger would laugh.
-   - The photo finish and its slow-motion replay did not occur, and the race ends with a wrong result.
-
-9. **Controls feel learnable: 6.**
-   - The auto rhythm finishes in 21.4 s.
-   - I did not test a human rhythm.
-   - The AIs take 24–28 s, so they are now close to the auto player.
-
-10. **Horses read as horses, match refs/01.jpg: 8.**
-    - The head, mane, blue, yellow, red and green blankets, white socks, ringed eye and dirt chunks read well.
-
-11. **Juice: 7.**
-    - 43 sounds fired across the run: cheer, thud, gasp, boing and powerup.
-    - Commentator chips ("FACE-PLANTS 2 · OUCH") and the REPLAY and FINISH banners show.
-    - The `feel` camera shake was not run, and the flash is too heavy.
-
-12. **Local 2-player discoverable from the HUD: 7.**
-    - The `2 PLAYERS (2)` button and the tips line ("2 = two players") show.
-    - The keys panel shows only "YOUR LEGS Q W O P". I did not check Q W E R / U I O P.
-
-13. **Static page, vendored lib, no network: 9.**
-    - 382 draw calls and 33.6k triangles with 0 MB of assets.
-    - The 74.5 ms median frame is SwiftShader noise. Host load was 1.5.
-
-**Faults: 5.**
-- The wrong winner is the main fault: `YOU` finished at 21.43, yet results list `YOU` as a 56 m DNF at x 2.38.
-- The only console line is the PCFSoftShadowMap warning.
-- The finish `div#flash` (opacity 0.82, white) hides the scene.
-- There is still no photo finish after four sessions.
-
-**Next:**
-1. **Fix the results bookkeeping.**
-   - A horse with `finished:true` and `finishT` must stay in `results` as a finisher, and `YOU` must not be reset or counted DNF.
-   - Look at where the `finishing` phase and `YOU` are re-simulated after the replay (a replay or `setState` restoring `x`), and at the 9 s wait.
-   - Done when `interact` with `{state:{auto:true}}` and `until:{phase:"results"}` returns a `results` list whose first entry is the horse with the lowest `finishT`. With `YOU` at 21.43 s, that is `YOU`, and `YOU` shows no "DNF".
-2. **Make a photo finish happen (asked again, a fourth time).**
-   - Stop waiting 9 s for stragglers. Once the leader is at x 55, cap the leader's speed and rubber-band the nearest AI to within 0.3 m.
-   - Then show a PHOTO FINISH popup and a slow-motion side replay on the finish line.
-   - Reduce the white `div#flash` to about 0.25 opacity and fade it over 0.3 s.
-   - Done when `until:{phase:"replay"}` shows two horses with `finishT` within 0.3 s, and `look` shows the popup with the checker and both horses visible.
-3. **Shorten the race end and check 2P and the shake.**
-   - Cap the replay and result wait so results arrive within about 1500 frames after the first finish.
-   - Run `feel` on a face-plant to confirm the camera shake.
-   - Run `interact` with `{key:"Digit2"}` and look at whether `div#keys` shows Q W E R and U I O P.
-
-SCORE: 6.9
-
 ## Iteration 8
 **Did** game.js `AI.update`: rubber band now starts at x 22 (was 30), gain 0.15, floor 0.3x period; `finishing` wait cut 9 s to 5 s; `#flash` opacity cap 0.3 (was 0.85), fades faster.
 **Saw** Auto race before the change: results list was already correct (`YOU` first, finishT 21.43, no DNF), so the judge's wrong-winner was not reproduced. After: `YOU` 21.75, Dusty Rhodes 23.27 (gap 1.52 s, no PHOTO FINISH yet <1.0), results at frame 2708. Only the PCFSoftShadowMap warning. Flash look, 2P keys panel, `feel` shake not checked.
 **Next** (1) Close gap below 1 s (cap leader speed near x 55, or stronger band). (2) Photo-finish popup/side replay look. (3) 2P keys panel Q W E R / U I O P, `feel` shake.
 **Open** Wrong-winner bug not reproducible with `state:{auto:true}`; might need a path with a restart mid-race.
+
+### Judge 8
+
+**Judge 8 verdict**
+
+1. **Plays as DESIGN.md's Core loop and Controls say: 7.**
+   - The auto race runs from the countdown to results. The HUD shows `1 PLAYER`, `2 PLAYERS (2)` and RESTART.
+   - The results are right this time: `["YOU","Dusty Rhodes","Sir Trips-a-Lot","Hoof Hearted"]` with `YOU` `finishT` 21.75 and "YOU WINS!".
+   - The race runs only 22 m past the lead horses before results. Sir Trips-a-Lot and Hoof Hearted are cut off as "DNF · 26 m short" and "27 m short" while still running with `state:"run"`. That reads as a bug, not a DNF.
+   - I did not test 2P or R.
+
+2. **Real Rapier jointed ragdoll, face-plant and auto-right: 7.**
+   - `Hoof Hearted` goes `state:"down"` with `plants` 1, then 2.
+   - Grey, brown and orange legs tangle in the plant replay.
+   - Auto-right timing is still unmeasured.
+   - `YOU` crosses the line with `pitch` -0.93 and `legs` "0000", which is an odd finish pose.
+
+3. **Replay (last ~4 s, 0.25x, REPLAY banner, Space skips): 7.**
+   - The plant replay (`kind:"plant"`, `pos` 304 of 414) shows the red REPLAY banner and "SPACE to skip" on the tangle.
+   - Space skipped it straight to results.
+   - I did not see a finish replay.
+
+4. **Photo finish and tangled AI collapse within the first minute: 4.**
+   - The tangle works: `tangles` reads 1, then 2, by 6.9 s.
+   - There is still no photo finish. The finish gap is 1.52 s (21.75 vs 23.27), and there is no PHOTO FINISH popup.
+
+5. **Results with most face-plants award: 6.**
+   - The podium and table show SMOOTH OPERATOR and DIRT EATER badges.
+   - MOST FACE-PLANTS is shared by two horses at 2 plants each, so the award is a tie, not one winner.
+   - The DNF horses sit in 3rd and 4th place on the podium, with 3rd taken by a horse that did not finish.
+
+6. **Looks as LOOK.md says: 8.**
+   - The `grandstand` with its blocky crowd, white rail fence, `finish-line` checker, green `hills`, `clouds`, dirt `track` and `dust*` all match refs/01.jpg.
+   - There are no `Lighting:` or `Surfaces:` faults.
+   - On the results screen the subject blends in: edge contrast 0.043, and the results `div.box` covers 25% of the canvas.
+
+7. **window.__game convention, index.html at root, static deploy: 9.**
+
+8. **Clip moments in the first minute with no input: 6.**
+   - The tangle is funny: three horses are sprawled in the dirt at 6.9 s.
+   - There is no photo finish and no slow-motion side replay at the line.
+
+9. **Controls feel learnable: 6.**
+   - The auto rhythm finishes in 21.75 s.
+   - I did not test a human rhythm or mistimed keys.
+
+10. **Horses read as horses, match refs/01.jpg: 8.**
+    - The head, mane, tail, white socks, dark hooves, coloured blankets and dirt chunks all read clearly.
+
+11. **Juice: 7.**
+    - 14 sounds fired in the results run: cheer, thud, gasp, boing and powerup.
+    - Chips, the REPLAY banner and the results screen show.
+    - The `feel` camera shake is still not measured.
+
+12. **Local 2-player discoverable from the HUD: 6.**
+    - The `2 PLAYERS (2)` button and the "2 = two players" tip show.
+    - `div#keys` shows only "Q FL W FR O BL P BR". I did not check that it switches to Q W E R / U I O P.
+
+13. **Static page, vendored lib, no network: 9.**
+    - 382 draw calls, 33.5k triangles and 0 MB of assets.
+    - The 74.7 ms frame is SwiftShader noise (host load 1.8).
+
+**Faults: 5.**
+- No photo finish after five sessions.
+- Results appear while two horses are still racing, and they are labelled DNF.
+- The only console line is the PCFSoftShadowMap warning.
+- The finishing pose has `pitch` -0.93 with `legs` "0000".
+
+**Next:**
+1. **Make a photo finish happen (asked again, a fifth time).**
+   - Rubber-band harder once the leader reaches x 50, or cap the leader's speed so the second horse is within 0.3 m at the line.
+   - Add a "PHOTO FINISH!" banner and a side-on slow-motion finish replay that holds on the checker with both horses in frame.
+   - One call shows it done: `interact` with `until:{phase:"replay"}` and `look: true`. The two lead horses' `finishT` should be within 0.3 s, and the picture should show the banner, the `finish-line` and both horses.
+2. **Stop calling running horses DNF.**
+   - Either let the other horses reach x 60 (with a shortcut cap of about 3 s after the second finisher), or show them as "still racing, X m short" and keep them off the podium.
+   - Give MOST FACE-PLANTS to one horse (tie-break on fall time).
+   - One call shows it done: `interact` with `until:{phase:"results"}`. The podium should contain only finishers, and a single horse should carry the MOST FACE-PLANTS badge.
+3. **Check 2P and the camera shake, and fix the finish pose.**
+   - Run `interact` with `{key:"Digit2"}` and then `look`. `div#keys` should show Q W E R and U I O P.
+   - Run `feel` on a forced face-plant to confirm the shake.
+   - Release `YOU`'s legs and level the pitch (to about -0.1) after the line, and dim the results `div.box` backdrop so the winner stays visible.
+
+SCORE: 6.8
