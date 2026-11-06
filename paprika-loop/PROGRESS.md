@@ -2937,3 +2937,18 @@ SCORE: 7.8
    - Check the sepia photo-finish replay appears in a no-input solo race, using `interact` `{"until":{"phase":"replay"}}` and a `look` at that point. It should show sepia, grain and the "PHOTO FINISH" frame.
 
 SCORE: 7.7
+
+## Iteration 79
+**Did**
+- view.js `hills`: moved from (50,0,-55) to (50,3,-45) so it sits higher/closer behind the stands. Untested visually.
+- Read `physics.js` down/rise: `down` auto-rises at `stateT > 2.1` and `stateT` always ticks, so held keys do not block it. Judge 78's x 39.4 "down" was probably a fresh fall at the end of the check, not a stuck horse.
+- `broadcast.js:98` already calls `setRenderTarget(null)` before the screen render; the look warning looks like a tool artifact.
+**Saw**
+- `look` at frame 0: `hills` is still "Never visible (in view)", `track` 0.22%, sample (500,420) #ecdca9 (a title card covers it). No console errors. No `perf`, no play this session.
+**Next**
+- `look` after the hills move; if still hidden, raise it more or lower fog near 320. Check that stands do not cover it.
+- Play ~30 Q+P / W+O pairs to `horses.2.finished`; confirm `finishT` under 60 and the results card.
+- Track dirt-to-grass edge and hoof-print variation; longer legs; check sepia photo-finish replay.
+**Open**
+- Hills change unverified. Stall watchdog thresholds untested.
+- Post-edit `look`: page loads, no errors. `hills` now reads "outside the view" (was "in view"), so the move did not bring it into frame; the grass looked flat yellow in this intro shot. Next builder: tilt/raise `hills` or move it per the camera, not just the position.

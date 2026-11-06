@@ -328,7 +328,7 @@ export function buildEnvironment(scene, _tex, rng) {
     for (let k = 0; k < 3; k++) hc.push(cc.r, cc.g, cc.b);
   }
   hn.setAttribute('color', new THREE.Float32BufferAttribute(hc, 3));
-  const hills = new THREE.Mesh(hn, new THREE.MeshToonMaterial({ vertexColors: true, gradientMap: ramp, fog: true })); hills.position.set(50, 0, -55); hills.receiveShadow = true; hills.name = 'hills'; hills.frustumCulled = false; scene.add(hills);
+  const hills = new THREE.Mesh(hn, new THREE.MeshToonMaterial({ vertexColors: true, gradientMap: ramp, fog: true })); hills.position.set(50, 3, -45); hills.receiveShadow = true; hills.name = 'hills'; hills.frustumCulled = false; scene.add(hills);
 
   // treeline on the far hills
   const treeG = new THREE.SphereGeometry(1, 12, 8), trunkG = cyl(0.12, 0.18, 1, 5), tcols = [0x5f7a2e, 0x6f8a3a, 0x7a8a34, 0x9a7a2a, 0x4f6a2a];
