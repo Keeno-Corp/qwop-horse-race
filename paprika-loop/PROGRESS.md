@@ -784,3 +784,9 @@ The scores below are unchanged. The `track` repeat note is a small Looks and Fau
    - Move `dust` in front of `track` so it is no longer "Never visible".
 
 SCORE: 6.7
+
+## Iteration 10
+**Did** game.js: closing sprint now runs in 'race' and 'finishing' from leadX>34, range 20 m, gain 1.02, cap 10.5 m/s, skips finished horses. `showResults`: podium only has finishers; running horses read "still racing · X m short", others "DNF". index.html: `#results .box` background alpha 0.92 -> 0.69.
+**Saw** Auto race to results at frame 3359: only Dusty Rhodes finished (24.37 s); no photo finish (Sir Trips 11 m short, Hoof Hearted 24 m, YOU at x 2.4 with legs "0000"). Podium shows one block; box no longer hides the track. `dust` still "Never visible". Page has no console errors. Not done: finish replay picture, auto bot rhythm for YOU, post-line pitch (-0.88), track texture repeat, feel/shake.
+**Next** (1) Make the auto YOU alternate Q+P / W+O so it reaches x 50+ (the AUTO.period branch in `physStep` leaves legs 0000 after a tangle?). (2) Deterministic photo finish: chaser gets pulled to the leader's vx once leadX>45, not only a 1.02 nudge. (3) Level the finished horse (release legs, pitch ~ -0.1), move `dust` in front of `track`, break the 60 px track repeat.
+**Open** The sprint still fails if the chaser is face-planted; the podium with one finisher looks sparse.

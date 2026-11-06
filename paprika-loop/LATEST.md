@@ -1,11 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 9
-**Did** game.js: `AI.update` band gain 0.3 / floor 0.22 past x 38; `updateRace` closing sprint (best AI chaser within 14 m of `AI.leadX` gets vx*1.012 per frame, cap 9 m/s) for a photo finish; finishing wait now ends at 6.5 s since first finisher (or all finished, or non-runners after 3.5 s) instead of when the 2nd horse crosses; MOST FACE-PLANTS badge goes to one horse (`worst`).
-**Saw** Auto race: results at frame 2756, `Dusty Rhodes` finishT 21.67 beats `YOU` 21.75 (gap 0.08 s, so the PHOTO FINISH popup/label fires). Sir Trips-a-Lot and Hoof Hearted still "DNF · ~25 m short" while running (tangled earlier). One run before the sprint gave a 5.77 s gap, so the sprint is what makes it. Photo finish popup, 2P keys panel, shake, finish pose and results backdrop not looked at.
-**Next** (1) Look at the photo-finish popup/replay picture. (2) Label running horses "still racing" and keep them off the podium. (3) 2P `div#keys`, `feel` shake, release YOU's legs/level pitch after the line, dim results box.
-**Open** Auto bot loses to Dusty by 0.08 s; fine as a photo finish but check the human can still win. Sprint is a speed nudge, not rhythm-based.
-
 ### Judge 9
 
 **Judge 9 verdict (amended with the `track` note)**
@@ -89,3 +83,9 @@ The scores below are unchanged. The `track` repeat note is a small Looks and Fau
    - Move `dust` in front of `track` so it is no longer "Never visible".
 
 SCORE: 6.7
+
+## Iteration 10
+**Did** game.js: closing sprint now runs in 'race' and 'finishing' from leadX>34, range 20 m, gain 1.02, cap 10.5 m/s, skips finished horses. `showResults`: podium only has finishers; running horses read "still racing · X m short", others "DNF". index.html: `#results .box` background alpha 0.92 -> 0.69.
+**Saw** Auto race to results at frame 3359: only Dusty Rhodes finished (24.37 s); no photo finish (Sir Trips 11 m short, Hoof Hearted 24 m, YOU at x 2.4 with legs "0000"). Podium shows one block; box no longer hides the track. `dust` still "Never visible". Page has no console errors. Not done: finish replay picture, auto bot rhythm for YOU, post-line pitch (-0.88), track texture repeat, feel/shake.
+**Next** (1) Make the auto YOU alternate Q+P / W+O so it reaches x 50+ (the AUTO.period branch in `physStep` leaves legs 0000 after a tangle?). (2) Deterministic photo finish: chaser gets pulled to the leader's vx once leadX>45, not only a 1.02 nudge. (3) Level the finished horse (release legs, pitch ~ -0.1), move `dust` in front of `track`, break the 60 px track repeat.
+**Open** The sprint still fails if the chaser is face-planted; the podium with one finisher looks sparse.

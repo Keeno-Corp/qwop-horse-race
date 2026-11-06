@@ -272,9 +272,9 @@ function updateRace(dt) {
   if (S.phase === 'race' || S.phase === 'finishing') {
     horses.forEach((h, i) => { const r = roles[i]; if (r.ai) { if (h.finished) for (let k = 0; k < 4; k++) h.setHeld(k, false); else r.ai.update(h, dt, xs[i] - mean); } });
   }
-  if (S.phase === 'race' && AI.leadX > 38) { // closing sprint: the best chaser draws level for a photo finish
-    let ch = null; horses.forEach((h, i) => { if (roles[i].ai && h.state === 'run' && xs[i] < AI.leadX - 0.2 && xs[i] > 30 && (!ch || xs[i] > xs[ch.idx])) ch = h; });
-    if (ch && AI.leadX - xs[ch.idx] < 14) for (const p of ch.parts) { const v = p.body.linvel(); if (v.x < 9) p.body.setLinvel({ x: v.x * 1.012 + 0.02, y: v.y, z: v.z }, true); }
+  if ((S.phase === 'race' || S.phase === 'finishing') && AI.leadX > 34) { // closing sprint: the best chaser draws level for a photo finish
+    let ch = null; horses.forEach((h, i) => { if (roles[i].ai && h.state === 'run' && !h.finished && xs[i] < AI.leadX - 0.2 && xs[i] > 28 && (!ch || xs[i] > xs[ch.idx])) ch = h; });
+    if (ch && AI.leadX - xs[ch.idx] < 20) for (const p of ch.parts) { const v = p.body.linvel(); if (v.x < 10.5) p.body.setLinvel({ x: v.x * 1.02 + 0.03, y: v.y, z: v.z }, true); }
   }
   const steps = Math.round(dt / DT);
   for (let s = 0; s < steps; s++) physStep();
@@ -341,9 +341,9 @@ function showResults() {
   const res = S.results || { order: frontOrder().map((h) => h.idx) };
   const worst = horses.reduce((b, h) => (h.plants > horses[b].plants ? h.idx : b), 0); const ord = res.order, maxP = Math.max(...horses.map((h) => h.plants)), minP = Math.min(...horses.map((h) => h.plants));
   const hex = (i) => '#' + roles[i].color.toString(16).padStart(6, '0');
-  const pod = [1, 0, 2].filter((k) => ord[k] !== undefined).map((k) => `<div class="p${k + 1}"><i style="background:${hex(ord[k])};width:16px;height:16px;border-radius:50%;border:2px solid #3a2416"></i><span>${roles[ord[k]].name}</span><b>${k + 1}</b></div>`).join('');
+  const pod = [1, 0, 2].filter((k) => ord[k] !== undefined && horses[ord[k]].finished).map((k) => `<div class="p${k + 1}"><i style="background:${hex(ord[k])};width:16px;height:16px;border-radius:50%;border:2px solid #3a2416"></i><span>${roles[ord[k]].name}</span><b>${k + 1}</b></div>`).join('');
   const w = horses[ord[0]], rows = ord.map((i, k) => {
-    const h = horses[i], t = h.finished ? h.finishT.toFixed(2) + 's' + (k ? ' (+' + (h.finishT - w.finishT).toFixed(2) + ')' : '') : 'DNF · ' + Math.max(0, FINISH_X - h.headTip().x).toFixed(0) + ' m short';
+    const h = horses[i], t = h.finished ? h.finishT.toFixed(2) + 's' + (k ? ' (+' + (h.finishT - w.finishT).toFixed(2) + ')' : '') : (h.state === 'run' ? 'still racing · ' : 'DNF · ') + Math.max(0, FINISH_X - h.headTip().x).toFixed(0) + ' m short';
     const aw = (i === worst && maxP > 0 ? '<span class="award">DIRT EATER · MOST FACE-PLANTS</span>' : '') + (h.plants === minP && minP < maxP && h.finished ? '<span class="award g">SMOOTH OPERATOR</span>' : '');
     return `<tr><td class="n">${k + 1}</td><td><i style="background:${hex(i)}"></i>${roles[i].name}${aw}</td><td>${t}</td><td class="n">${h.plants} face-plant${h.plants === 1 ? '' : 's'}</td></tr>`;
   }).join('');
