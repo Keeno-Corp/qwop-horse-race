@@ -1,17 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 6
-**Did**
-- game.js `resetRace`: `S.hhGap` widened from 0.2–1.3 m to 0.5–3.3 m so the dead-heat chaser trails the leader by ~0.04–0.3 s instead of ~0.01 s.
-**Saw**
-- Short session: no `look`, `perf` or playtest run this session; the gap change is unverified (one-line edit, page not reloaded).
-**Next**
-- Verify `finishT` gap (0.03–0.3 s) with `interact until phase=results` + `observe`; check sepia photo-finish replay and head-on cut with `until phase=replay` + `look`.
-- Cut draw calls (435) with InstancedMesh for crowd, fence posts, ad boards; name a Group for `__game.subject`.
-- Lengthen horse legs (DIM.upper/lower in physics.js) ~25% and check dog-sit/face-plant still occurs and a held-key race finishes <60 s.
-**Open**
-- Draw calls, leg length and blinker silks untouched; `horse0-body` subject lookup still unfixed.
-
 ### Judge 6
 
 **Scores (Must have, in order)**
@@ -43,3 +31,15 @@ The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.m
 3. **(asked again) Cut draw calls and fix `subject`.** Draw calls are at 441. Put the crowd figures, fence posts, ad boards and grandstand pieces into `instances()`. Name a Group `horse0` so `look` can find `__game.subject`. Done when `perf costs:true` reports under 250 draw calls and `look` no longer says the subject is not in the scene. Lengthening the legs by ~25% and the blinker silks come after this; check that a mistimed-key `interact` still gives a dog-sit and that a held-key race finishes under 60 s.
 
 SCORE: 6.4
+
+## Iteration 7
+**Did**
+- game.js `updateRace`: when the 2nd horse finishes under `S.deadHeat`, `finishT` is floored to first + (0.03–0.30 s from `S.hhGap`), since the physics shift left the gap at 0.01 s (confirmed: 24.81 vs 24.82 before the edit).
+**Saw**
+- Run before the edit: results at raceT 31.33, `YOU` at x 2.27, Dusty down with 5 plants. The edit itself is not rerun, and I ran no `look` or `perf`.
+**Next**
+- Rerun `interact until phase=results` and check the `finishT` gap and the card's `PHOTO FINISH · …s` text; then prove the sepia replay with `until phase=replay` + `look`.
+- Cut draw calls (441) with `instances()`; name a Group `horse0` for `__game.subject`.
+- Lengthen the horse legs ~25%.
+**Open**
+- Replay, draw calls, legs, subject unchanged. The floor edit is untested.
