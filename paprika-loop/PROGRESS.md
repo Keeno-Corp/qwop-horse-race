@@ -330,3 +330,15 @@ The page is judged. Here is the verdict for session 7.
 3. **Test the controls and lengthen the legs.** Run `interact` with held Q W O P alternating, and check that one human reaches x 60 in under 60 s. Then lengthen the legs ~25% and make the blinker silks bigger. Done when the horse `look` shows legs about 1.2× the body depth, a mistimed-key `interact` still gives a dog-sit or face-plant, and the held-key race finishes under 60 s.
 
 SCORE: 6.9
+
+## Iteration 8
+**Did**
+- game.js (~line 95): each horse's first view group is renamed `horse<i>` (was `player-body`/`horse<i>-body`); `__game.subject` is now `'horse0'`.
+**Saw**
+- Page opens with no errors; the start `look` shows the title card, Tote, lower-third, key caps; brightness 52%. `look` still says subject "horse0" is not in the scene at the start (the title card hides the horses, or the name does not resolve). I ran no `perf` and no race.
+**Next**
+- Check with `look target:"horse0"` after the race starts; if still missing, name the group in a place `look` can find (not the renamed array element).
+- Prove the finish replay with `interact until phase=replay` (sepia, head-on cut), and fade in the first replay frame.
+- Cut draw calls (440) with `instances()`; test held Q W O P to x 60 under 60 s; lengthen legs ~25%.
+**Open**
+- Replay sepia, draw calls, legs and controls timing are still untested/unchanged. The subject fix is unconfirmed.

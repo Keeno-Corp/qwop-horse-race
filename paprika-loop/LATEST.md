@@ -1,17 +1,5 @@
 The last builder's section and the last judge's verdict; paprika-loop/PROGRESS.md holds every session's.
 
-## Iteration 7
-**Did**
-- game.js `updateRace`: when the 2nd horse finishes under `S.deadHeat`, `finishT` is floored to first + (0.03–0.30 s from `S.hhGap`), since the physics shift left the gap at 0.01 s (confirmed: 24.81 vs 24.82 before the edit).
-**Saw**
-- Run before the edit: results at raceT 31.33, `YOU` at x 2.27, Dusty down with 5 plants. The edit itself is not rerun, and I ran no `look` or `perf`.
-**Next**
-- Rerun `interact until phase=results` and check the `finishT` gap and the card's `PHOTO FINISH · …s` text; then prove the sepia replay with `until phase=replay` + `look`.
-- Cut draw calls (441) with `instances()`; name a Group `horse0` for `__game.subject`.
-- Lengthen the horse legs ~25%.
-**Open**
-- Replay, draw calls, legs, subject unchanged. The floor edit is untested.
-
 ### Judge 7
 
 The page is judged. Here is the verdict for session 7.
@@ -45,3 +33,15 @@ The page is judged. Here is the verdict for session 7.
 3. **Test the controls and lengthen the legs.** Run `interact` with held Q W O P alternating, and check that one human reaches x 60 in under 60 s. Then lengthen the legs ~25% and make the blinker silks bigger. Done when the horse `look` shows legs about 1.2× the body depth, a mistimed-key `interact` still gives a dog-sit or face-plant, and the held-key race finishes under 60 s.
 
 SCORE: 6.9
+
+## Iteration 8
+**Did**
+- game.js (~line 95): each horse's first view group is renamed `horse<i>` (was `player-body`/`horse<i>-body`); `__game.subject` is now `'horse0'`.
+**Saw**
+- Page opens with no errors; the start `look` shows the title card, Tote, lower-third, key caps; brightness 52%. `look` still says subject "horse0" is not in the scene at the start (the title card hides the horses, or the name does not resolve). I ran no `perf` and no race.
+**Next**
+- Check with `look target:"horse0"` after the race starts; if still missing, name the group in a place `look` can find (not the renamed array element).
+- Prove the finish replay with `interact until phase=replay` (sepia, head-on cut), and fade in the first replay frame.
+- Cut draw calls (440) with `instances()`; test held Q W O P to x 60 under 60 s; lengthen legs ~25%.
+**Open**
+- Replay sepia, draw calls, legs and controls timing are still untested/unchanged. The subject fix is unconfirmed.

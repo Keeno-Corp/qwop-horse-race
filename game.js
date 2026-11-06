@@ -92,7 +92,7 @@ function assignRoles() {
     roles.push(r);
     const groups = buildHorseView(r.color, 0, r.human === 0 ? 0xf2e1ad : r.human === 1 ? 0x6b3a22 : COATS[i], SILKS[s.color], i + 1);
     groups.forEach((g, k) => { g.name = (r.human === 0 ? 'player' : 'horse' + i) + (k === 0 ? '-body' : k === 1 ? '-head' : '-' + k); scene.add(g); });
-    views.push(groups);
+    groups[0].name = 'horse' + i;     views.push(groups);
     horses[i].homeZ = LANES[i];
   });
   buildHud();
@@ -633,7 +633,7 @@ requestAnimationFrame(frame);
 // ---------- window.__game ----------
 const r2 = (v) => +v.toFixed(2);
 window.__game = {
-  subject: 'horse0-body',
+  subject: 'horse0',
   describe: () => ({
     name: 'Photo Finish Fiasco', stack: 'three + rapier ragdoll', units: 'metres, x down the track (finish at x=60), y up, z across lanes',
     keys: { solo: { KeyQ: 'front-left leg (hold)', KeyW: 'front-right leg', KeyO: 'back-left leg', KeyP: 'back-right leg', KeyR: 'restart', Digit2: 'two players', Digit1: 'solo', Space: 'skip replay' }, twoPlayer: { p1: 'Q W E R', p2: 'U I O P', Enter: 'restart' } },
