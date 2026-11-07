@@ -9442,7 +9442,7 @@
         {
           "path": "hud.hint",
           "op": "==",
-          "value": "Press R for another race \u00b7 1 / 2 = players"
+          "value": "Press R for another race · 1 / 2 = players"
         }
       ]
     },
@@ -9680,7 +9680,1136 @@
         {
           "path": "hud.hint",
           "op": "==",
-          "value": "Press Enter for another race \u00b7 1 / 2 = players"
+          "value": "Press Enter for another race · 1 / 2 = players"
+        }
+      ]
+    },
+    {
+      "id": "share-normal",
+      "title": "share-normal",
+      "state": {},
+      "actions": [
+        {
+          "until": {
+            "phase": "race"
+          },
+          "max": 600
+        },
+        {
+          "key": "KeyQ",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyP",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "wait": 18
+        },
+        {
+          "key": "KeyQ",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyP",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyW",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyO",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "wait": 18
+        },
+        {
+          "key": "KeyW",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyO",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyQ",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyP",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "wait": 18
+        },
+        {
+          "key": "KeyQ",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyP",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyW",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyO",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "wait": 18
+        },
+        {
+          "key": "KeyW",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyO",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "until": {
+            "phase": "results"
+          },
+          "max": 9000
+        },
+        {
+          "wait": 420,
+          "draw": true
+        },
+        {
+          "mouse": "click",
+          "x": 1015,
+          "y": 675
+        },
+        {
+          "wait": 10
+        },
+        {
+          "mouse": "click",
+          "x": 1015,
+          "y": 641
+        },
+        {
+          "wait": 10
+        }
+      ],
+      "frames": 0,
+      "expect": [
+        {
+          "path": "hud.resultsShown",
+          "op": "==",
+          "value": true
+        },
+        {
+          "path": "hud.share.stage",
+          "op": "==",
+          "value": "done"
+        },
+        {
+          "path": "hud.share.clip.frames",
+          "op": ">=",
+          "value": 150
+        },
+        {
+          "path": "hud.share.clip.frames",
+          "op": "<=",
+          "value": 300
+        },
+        {
+          "path": "hud.share.clip.durationS",
+          "op": ">=",
+          "value": 5
+        },
+        {
+          "path": "hud.share.clip.durationS",
+          "op": "<=",
+          "value": 10
+        },
+        {
+          "path": "hud.share.clip.keyframes",
+          "op": ">=",
+          "value": 4
+        },
+        {
+          "path": "hud.share.clip.bytes",
+          "op": ">=",
+          "value": 100000
+        },
+        {
+          "path": "hud.share.clip.darkFrames",
+          "op": "==",
+          "value": 0
+        },
+        {
+          "path": "hud.share.clip.minLuma",
+          "op": ">=",
+          "value": 20
+        },
+        {
+          "path": "hud.share.clip.segments.0",
+          "op": "==",
+          "value": "fall"
+        },
+        {
+          "path": "hud.share.clip.segments.1",
+          "op": "==",
+          "value": "finish"
+        },
+        {
+          "path": "hud.share.clip.fallTarget",
+          "op": "exists"
+        },
+        {
+          "path": "hud.share.clip.downFrames",
+          "op": ">=",
+          "value": 3
+        },
+        {
+          "path": "hud.share.clip.falls.0.atS",
+          "op": ">=",
+          "value": 0
+        },
+        {
+          "path": "hud.share.clip.falls.0.atS",
+          "op": "<=",
+          "value": 10
+        },
+        {
+          "path": "hud.share.clip.finishAtS",
+          "op": ">=",
+          "value": 1
+        },
+        {
+          "path": "hud.share.clip.finishAtS",
+          "op": "<=",
+          "value": 10
+        },
+        {
+          "path": "hud.share.last.kind",
+          "op": "==",
+          "value": "ok"
+        },
+        {
+          "path": "hud.share.last.msg",
+          "op": "==",
+          "value": "Card PNG downloaded."
+        },
+        {
+          "path": "hud.share.clip.current",
+          "op": "==",
+          "value": true
+        },
+        {
+          "path": "hud.share.firstRaceT",
+          "op": "<=",
+          "value": 0.1
+        }
+      ]
+    },
+    {
+      "id": "share-empty-clip",
+      "title": "share-empty-clip",
+      "state": {
+        "shareFault": "norec"
+      },
+      "actions": [
+        {
+          "until": {
+            "phase": "race"
+          },
+          "max": 600
+        },
+        {
+          "key": "KeyQ",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyP",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "wait": 18
+        },
+        {
+          "key": "KeyQ",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyP",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyW",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyO",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "wait": 18
+        },
+        {
+          "key": "KeyW",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyO",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyQ",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyP",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "wait": 18
+        },
+        {
+          "key": "KeyQ",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyP",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyW",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyO",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "wait": 18
+        },
+        {
+          "key": "KeyW",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyO",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "until": {
+            "phase": "results"
+          },
+          "max": 9000
+        },
+        {
+          "wait": 220,
+          "draw": true
+        },
+        {
+          "mouse": "click",
+          "x": 1015,
+          "y": 675
+        },
+        {
+          "wait": 10
+        }
+      ],
+      "frames": 0,
+      "expect": [
+        {
+          "path": "hud.resultsShown",
+          "op": "==",
+          "value": true
+        },
+        {
+          "path": "hud.share.stage",
+          "op": "==",
+          "value": "failed"
+        },
+        {
+          "path": "hud.share.clipFailed",
+          "op": "==",
+          "value": "This browser has no WebCodecs video encoder (VideoEncoder), so the clip cannot be made. The card still works."
+        },
+        {
+          "path": "hud.share.last.kind",
+          "op": "==",
+          "value": "err"
+        },
+        {
+          "path": "hud.share.last.msg",
+          "op": "==",
+          "value": "This browser has no WebCodecs video encoder (VideoEncoder), so the clip cannot be made. The card still works."
+        }
+      ]
+    },
+    {
+      "id": "share-error-encoder",
+      "title": "share-error-encoder",
+      "state": {
+        "shareFault": "encerr"
+      },
+      "actions": [
+        {
+          "until": {
+            "phase": "race"
+          },
+          "max": 600
+        },
+        {
+          "key": "KeyQ",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyP",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "wait": 18
+        },
+        {
+          "key": "KeyQ",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyP",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyW",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyO",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "wait": 18
+        },
+        {
+          "key": "KeyW",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyO",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyQ",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyP",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "wait": 18
+        },
+        {
+          "key": "KeyQ",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyP",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyW",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyO",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "wait": 18
+        },
+        {
+          "key": "KeyW",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyO",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "until": {
+            "phase": "results"
+          },
+          "max": 9000
+        },
+        {
+          "wait": 220,
+          "draw": true
+        },
+        {
+          "mouse": "click",
+          "x": 1015,
+          "y": 675
+        },
+        {
+          "wait": 10
+        }
+      ],
+      "frames": 0,
+      "expect": [
+        {
+          "path": "hud.resultsShown",
+          "op": "==",
+          "value": true
+        },
+        {
+          "path": "hud.share.stage",
+          "op": "==",
+          "value": "failed"
+        },
+        {
+          "path": "hud.share.clipFailed",
+          "op": "==",
+          "value": "Encoder could not start: encoder rejected the configuration (test fault)"
+        },
+        {
+          "path": "hud.share.last.kind",
+          "op": "==",
+          "value": "err"
+        }
+      ]
+    },
+    {
+      "id": "share-error-copy",
+      "title": "share-error-copy",
+      "state": {
+        "shareFault": "cliperr"
+      },
+      "actions": [
+        {
+          "until": {
+            "phase": "race"
+          },
+          "max": 600
+        },
+        {
+          "key": "KeyQ",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyP",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "wait": 18
+        },
+        {
+          "key": "KeyQ",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyP",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyW",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyO",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "wait": 18
+        },
+        {
+          "key": "KeyW",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyO",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyQ",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyP",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "wait": 18
+        },
+        {
+          "key": "KeyQ",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyP",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyW",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyO",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "wait": 18
+        },
+        {
+          "key": "KeyW",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyO",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "until": {
+            "phase": "results"
+          },
+          "max": 9000
+        },
+        {
+          "wait": 220,
+          "draw": true
+        },
+        {
+          "mouse": "click",
+          "x": 1166,
+          "y": 638
+        },
+        {
+          "wait": 10
+        }
+      ],
+      "frames": 0,
+      "expect": [
+        {
+          "path": "hud.resultsShown",
+          "op": "==",
+          "value": true
+        },
+        {
+          "path": "hud.share.stripCols",
+          "op": ">=",
+          "value": 20
+        },
+        {
+          "path": "hud.share.last.kind",
+          "op": "==",
+          "value": "err"
+        },
+        {
+          "path": "hud.share.last.msg",
+          "op": "==",
+          "value": "Copy failed: clipboard write rejected (test fault)"
+        }
+      ]
+    },
+    {
+      "id": "share-restart-mid-race",
+      "title": "share-restart-mid-race",
+      "state": {},
+      "actions": [
+        {
+          "until": {
+            "phase": "race"
+          },
+          "max": 600
+        },
+        {
+          "key": "KeyQ",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyP",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "wait": 18
+        },
+        {
+          "key": "KeyQ",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyP",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyW",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyO",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "wait": 18
+        },
+        {
+          "key": "KeyW",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyO",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyQ",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyP",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "wait": 18
+        },
+        {
+          "key": "KeyQ",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyP",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyW",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyO",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "wait": 18
+        },
+        {
+          "key": "KeyW",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyO",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "wait": 600
+        },
+        {
+          "key": "KeyR"
+        },
+        {
+          "wait": 3
+        }
+      ],
+      "frames": 0,
+      "expect": [
+        {
+          "path": "phase",
+          "op": "==",
+          "value": "countdown"
+        },
+        {
+          "path": "hud.share.races",
+          "op": "==",
+          "value": 2
+        },
+        {
+          "path": "hud.share.ticks",
+          "op": "<=",
+          "value": 5
+        },
+        {
+          "path": "hud.share.finishTick",
+          "op": "==",
+          "value": -1
+        },
+        {
+          "path": "hud.share.stage",
+          "op": "==",
+          "value": "idle"
+        },
+        {
+          "path": "hud.share.panel",
+          "op": "==",
+          "value": false
+        },
+        {
+          "path": "hud.share.urls",
+          "op": "==",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "share-restart-clean",
+      "title": "share-restart-clean",
+      "state": {},
+      "actions": [
+        {
+          "until": {
+            "phase": "race"
+          },
+          "max": 600
+        },
+        {
+          "key": "KeyQ",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyP",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "wait": 18
+        },
+        {
+          "key": "KeyQ",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyP",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyW",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyO",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "wait": 18
+        },
+        {
+          "key": "KeyW",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyO",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyQ",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyP",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "wait": 18
+        },
+        {
+          "key": "KeyQ",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyP",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyW",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyO",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "wait": 18
+        },
+        {
+          "key": "KeyW",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyO",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "wait": 600
+        },
+        {
+          "key": "KeyR"
+        },
+        {
+          "wait": 2
+        },
+        {
+          "until": {
+            "phase": "race"
+          },
+          "max": 600
+        },
+        {
+          "key": "KeyQ",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyP",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "wait": 18
+        },
+        {
+          "key": "KeyQ",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyP",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyW",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyO",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "wait": 18
+        },
+        {
+          "key": "KeyW",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyO",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyQ",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyP",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "wait": 18
+        },
+        {
+          "key": "KeyQ",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyP",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyW",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "key": "KeyO",
+          "down": true,
+          "frames": 0
+        },
+        {
+          "wait": 18
+        },
+        {
+          "key": "KeyW",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "key": "KeyO",
+          "down": false,
+          "frames": 0
+        },
+        {
+          "until": {
+            "phase": "results"
+          },
+          "max": 9000
+        },
+        {
+          "wait": 420,
+          "draw": true
+        }
+      ],
+      "frames": 0,
+      "expect": [
+        {
+          "path": "hud.resultsShown",
+          "op": "==",
+          "value": true
+        },
+        {
+          "path": "hud.share.races",
+          "op": "==",
+          "value": 2
+        },
+        {
+          "path": "hud.share.stage",
+          "op": "==",
+          "value": "done"
+        },
+        {
+          "path": "hud.share.clip.current",
+          "op": "==",
+          "value": true
+        },
+        {
+          "path": "hud.share.firstRaceT",
+          "op": "<=",
+          "value": 0.1
+        },
+        {
+          "path": "hud.share.tickSpanGap",
+          "op": ">=",
+          "value": -0.5
+        },
+        {
+          "path": "hud.share.tickSpanGap",
+          "op": "<=",
+          "value": 0.5
+        },
+        {
+          "path": "hud.share.finishTick",
+          "op": ">=",
+          "value": 600
+        },
+        {
+          "path": "hud.share.clip.durationS",
+          "op": ">=",
+          "value": 5
+        },
+        {
+          "path": "hud.share.clip.durationS",
+          "op": "<=",
+          "value": 10
+        },
+        {
+          "path": "hud.share.clip.darkFrames",
+          "op": "==",
+          "value": 0
+        },
+        {
+          "path": "hud.share.urls",
+          "op": "==",
+          "value": 0
         }
       ]
     }

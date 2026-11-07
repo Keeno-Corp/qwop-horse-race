@@ -12,6 +12,7 @@ import { createHud } from './hud.js';
 import { createCamera } from './camera.js';
 import { createReplay } from './replay.js';
 import { createControls } from './controls.js';
+import { createShare } from './share.js';
 
 await RAPIER.init();
 await Promise.all(['40px Shrikhand', '30px Bungee'].map((f) => document.fonts.load(f))).catch(() => {});
@@ -155,7 +156,7 @@ const G = {
 };
 // copy property descriptors (not values) so modules' live getters/setters (ringN) stay live on G
 const mix = (o) => Object.defineProperties(G, Object.getOwnPropertyDescriptors(o));
-mix(createAudio(G)); mix(createCommentary(G)); mix(createHud(G)); mix(createCamera(G)); mix(createReplay(G)); mix(createControls(G));
+mix(createAudio(G)); mix(createCommentary(G)); mix(createHud(G)); mix(createCamera(G)); mix(createReplay(G)); mix(createControls(G)); mix(createShare(G));
 const { camLook, CUT } = G;   // shared objects (never reassigned), read live
 
 function resetRace() {
@@ -163,7 +164,7 @@ function resetRace() {
   assignRoles();
   horses.forEach((h, i) => { h.reset(STAGGER[i], LANES[i]); h.guard = 99; h.assist = 1; h.stiff = 1; h.plants = 0; h.trip = undefined; h.finished = false; h.finishT = null; h.speedBefore = 0; h.drive = 0; h.driveF = 0; h.wd = 0; h.wdX = undefined; h.wdAny = false; h.legT = [0, 0, 0, 0]; for (let k = 0; k < 4; k++) h.setHeld(k, false); });
   Object.assign(S, { phase: 'countdown', countdown: 4.6, raceT: 0, finishT: null, firstFinish: null, order: [], pending: null, pair: null, lastReplayAt: -99, replay: null, tangles: 0, lastTangle: -99, focus: null, deadHeat: true, hhGap: 0.5 + rng() * 2.8, excite: 0, results: null, resultsShown: false, camBlend: 0 });
-  G.ringN = 0; for (const d of dust) d.life = 0;
+  G.ringN = 0; for (const d of dust) d.life = 0; G.shareReset();
   for (const p of S.popups) p.el.remove(); S.popups = [];
   $('results').style.display = 'none'; G.setReplayUi(false); $('count').textContent = '';
   S.lastCount = 4; S.stretchCut = false; S.stretchSaid = false; S.titleOn = null; CUT.kind = null; CUT.snap = false; G.COMM.until = 0; G.COMM.lastLead = -1; G.COMM.fillT = S.time; G.say('Good afternoon from Channel 7! Four riderless entrants, one finish line, zero jockeys.', 1, 4.5); $('title').style.display = 'flex'; S.titleOn = true;
@@ -300,6 +301,7 @@ function frame(now) {
   const n = clamp(Math.round(dt * 60), 1, 3);
   for (let i = 0; i < n; i++) tick(1 / 60);
   if (location.search.includes('nopass')) renderer.render(scene, camera); else bc.render(scene, camera, S.time);
+  G.shareFrame(renderer.domElement);   // share.js samples the canvas right after it is drawn
 }
 function tick(dt) {
   if (S.phase === 'countdown') {
@@ -316,7 +318,7 @@ function tick(dt) {
   } else if (S.phase === 'race' || S.phase === 'finishing') {
     if (S.goT > 0) { S.goT -= dt; if (S.goT <= 0) $('count').textContent = ''; }
     updateRace(dt);
-    G.record();
+    G.record(); G.shareRecord();
     if (S.pending && S.time >= S.pending.at && S.phase === 'race') G.startPlantReplay();
   } else if (S.phase === 'replay') {
     G.advanceReplay(dt);
@@ -359,15 +361,16 @@ window.__game = {
   }),
   observe: () => ({
     cam: { p: camera.position.toArray().map(r2), look: camLook.toArray().map(r2), fov: r2(camera.fov), blend: r2(S.camBlend) },
-    phase: S.phase, mode: G.mode, raceT: r2(S.raceT), countdown: r2(Math.max(0, S.countdown)), replay: S.replay ? { kind: S.replay.kind, pos: r2(S.replay.pos), t: r2(S.replay.pos - S.replay.start), of: S.replay.end, rate: 0.25 } : null,
+    phase: S.phase, shareFault: G.shareState().fault, mode: G.mode, raceT: r2(S.raceT), countdown: r2(Math.max(0, S.countdown)), replay: S.replay ? { kind: S.replay.kind, pos: r2(S.replay.pos), t: r2(S.replay.pos - S.replay.start), of: S.replay.end, rate: 0.25 } : null,
     pendingReplay: !!S.pending, tangles: S.tangles, results: S.results ? S.results.order.map((i) => roles[i].name) : null,
     horses: horses.map((h, i) => ({ name: roles[i].name, human: roles[i].human, x: r2(h.torso.body.translation().x), y: r2(h.torso.body.translation().y), z: r2(h.torso.body.translation().z), pitch: r2(h.pitch()), state: h.state, plants: h.plants, finished: h.finished, finishT: h.finishT && r2(h.finishT), legs: h.held.map((v) => (v ? 1 : 0)).join('') })),
   }),
-  act: G.act,
+  act: G.act, share: () => G.shareState(),
   setState: (s) => {
     if (s.auto !== undefined) S.auto = !!s.auto;
     if (s.autoPeriod) AUTO.period = s.autoPeriod;
     if (s.mode && s.mode !== G.mode) G.setMode(s.mode);
+    if (s.shareFault !== undefined) G.shareFault(s.shareFault);
     if (s.restart) resetRace();
     if (s.phase === 'race' && S.phase === 'countdown') { S.countdown = 0.001; }
     if (s.phase === 'replay-skip' && S.phase === 'replay') G.endReplay();

@@ -72,9 +72,26 @@ body.replaying .pop{top:30vh!important}
 @keyframes tc{0%{transform:rotate(-1.5deg) scale(.5)}100%{transform:rotate(-1.5deg) scale(1);opacity:1}}
 </style><link rel="stylesheet" href="./replay.css"><style>
 #flash{inset:0;background:var(--cream);opacity:0}
+/* share panel inside the results graphic */
+#results .share{margin:8px 10px 0;background:var(--cream);color:var(--choc);border:4px solid var(--ink);box-shadow:4px 4px 0 var(--orange);padding:5px 7px 7px}
+#results .sh-hd{display:flex;justify-content:space-between;align-items:center;font-size:11px;letter-spacing:.5px}
+#results .sh-hd b{font-family:"Shrikhand";font-weight:400;font-size:17px;color:var(--tomato);letter-spacing:0}
+#results .sh-clip{color:var(--blue);font-size:10px;text-align:right;max-width:55%}
+#results .sh-hd{height:54px;align-items:flex-start}
+#results .sh-th{display:block;width:100%;height:auto;margin:4px 0;border:3px solid var(--ink);background:var(--ink)}
+#results .sh-btns{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+#results .sh-btns button{font:inherit;font-size:10px;line-height:1.1;padding:6px 3px;background:var(--mustard);color:var(--ink);border:3px solid var(--ink);border-radius:3px;cursor:pointer;box-shadow:0 3px 0 var(--ink)}
+#results .sh-btns button:hover,#results .sh-btns button:focus-visible{background:var(--tomato);color:var(--cream);outline:none}
+#results .sh-btns button:active{transform:translateY(3px);box-shadow:none}
+#results .sh-btns button.off{background:#cdbd8c;color:#7a6a58;box-shadow:0 3px 0 #8a7a60}
+#results .sh-msg{margin-top:6px;font-size:10px;line-height:1.25;min-height:2.5em;color:var(--choc)}
+#results .sh-msg.err{color:var(--tomato)}#results .sh-msg.warn{color:var(--orange)}
+body.shared #keys{display:none}
+@media (max-height:780px){#results{padding-top:72px!important}#results .box{max-height:calc(100vh - 90px)}}
+
 /* results: Channel 7 OFFICIAL RESULT graphic, pinned to the right so the finish line stays in view */
 #results{inset:0;display:none;align-items:flex-start;justify-content:flex-end;padding:150px 18px 0 0;pointer-events:none;background:none}
-#results .box{width:min(340px,30vw);min-width:300px;background:repeating-linear-gradient(90deg,#5a3626 0 7px,#4c2c21 7px 15px,#573322 15px 19px);color:var(--cream);border:5px solid var(--ink);box-shadow:8px 8px 0 var(--ink);padding:0 0 10px;text-align:left;text-shadow:none;pointer-events:auto;overflow:hidden;transform:rotate(-1deg)}
+#results .box{max-height:calc(100vh - 170px);width:min(340px,30vw);min-width:300px;background:repeating-linear-gradient(90deg,#5a3626 0 7px,#4c2c21 7px 15px,#573322 15px 19px);color:var(--cream);border:5px solid var(--ink);box-shadow:8px 8px 0 var(--ink);padding:0 0 10px;text-align:left;text-shadow:none;pointer-events:auto;overflow-x:hidden;overflow-y:auto;scrollbar-width:thin;transform:rotate(-1deg)}
 #results .top{display:flex;justify-content:space-between;align-items:center;background:repeating-linear-gradient(90deg,var(--tomato) 0 26px,var(--mustard) 26px 52px,var(--orange) 52px 78px);color:var(--ink);font-size:12px;letter-spacing:1px;padding:5px 10px;border-bottom:4px solid var(--ink)}
 #results .top b{background:var(--ink);color:var(--mustard);padding:2px 8px;font-weight:400;font-size:13px}
 #results h1{margin:8px 10px 6px;padding:6px 8px 7px;background:var(--cream);border:4px solid var(--ink);box-shadow:4px 4px 0 var(--orange);font-family:"Shrikhand",serif;font-weight:400;font-size:27px;line-height:1.05;color:var(--tomato);text-shadow:2px 2px 0 var(--mustard);text-align:center}

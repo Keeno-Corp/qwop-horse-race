@@ -92,6 +92,9 @@ export function createHud(G) {
     }).join('');
     const winName = roles[ord[0]].name === 'YOU' ? 'YOU WIN!' : dn(roles[ord[0]].name) + ' WINS!';
     $('results').querySelector('.box').innerHTML = `<div class="top"><span>CHANNEL 7</span><b>OFFICIAL RESULT</b></div><h1>${winName}<small>${gap < 1 ? 'PHOTO FINISH · ' : ''}${margin}</small></h1><ol>${rows}</ol>${maxP > 0 ? `<div class="most">MOST FACE-PLANTS: ${dn(roles[worst].name)} (${maxP})</div>` : ''}<div class="hint">${G.mode === 1 ? 'Press R' : 'Press Enter'} for another race · 1 / 2 = players</div>`;
+    const box = $('results').querySelector('.box');
+    G.shareMount(box, { winName: winName.replace(/<[^>]*>/g, ''), margin, raceT: (w.finished ? w.finishT : S.raceT).toFixed(1), most: maxP > 0 ? `MOST FACE-PLANTS: ${dn(roles[worst].name)} (${maxP})` : '',
+      rows: ord.map((i, k) => { const h = horses[i]; return { name: dn(roles[i].name), silk: roles[i].silk, hex: hex(i), time: h.finished ? h.finishT.toFixed(2) + 's' : 'DNF', sub: h.finished ? (k ? '+' + (h.finishT - w.finishT).toFixed(2) : 'WINNER') : Math.max(0, FINISH_X - h.headTip().x).toFixed(0) + ' m short', award: (i === worst && maxP > 0 ? 'DIRT EATER' : '') + (i === smooth ? (i === worst && maxP > 0 ? ' · ' : '') + 'SMOOTH OPERATOR' : '') }; }) });
     $('results').style.display = 'flex'; S.resultsShown = true; for (const p of S.popups) p.el.remove(); S.popups = [];
   }
 
@@ -108,7 +111,7 @@ export function createHud(G) {
       let crowd = null;
       if (arms && bodies) { let up = 0, ys = 0, hs = 0; for (let i = 0; i < arms.count; i++) if (arms.instanceMatrix.array[i * 16 + 5] > 0.5) up++; for (let i = 0; i < bodies.count; i++) { ys += bodies.instanceMatrix.array[i * 16 + 13]; hs += bodies.instanceMatrix.array[i * 16 + 5]; } crowd = { armsUpFrac: +(up / arms.count).toFixed(3), meanBodyY: +(ys / bodies.count).toFixed(3), meanBodyH: +(hs / bodies.count).toFixed(3), excite: +S.excite.toFixed(2), sum: +arms.instanceMatrix.array.reduce((a, b) => a + b, 0).toFixed(2) }; }
       const res = $('results');
-      return { ...ob(), crowd, hud: { toteClipped: clipped.length, clipped, odds: [...document.querySelectorAll('#tote .od')].map((e) => e.textContent), cut: G.CUT.kind, pops, popOverlapCentre: pops.filter((p) => p.overlapsCentre).length, resultsShown: res.style.display === 'flex', hint: (res.querySelector('.hint') || {}).textContent || null, smoothCount: res.querySelectorAll('.award.g').length, resultsRect: res.querySelector('.box') ? (({ left, top, right, bottom }) => [left, top, right, bottom].map(Math.round))(R(res.querySelector('.box'))) : null, resultsText: (res.querySelector('.box') || {}).textContent || '' } };
+      return { ...ob(), crowd, hud: { toteClipped: clipped.length, clipped, odds: [...document.querySelectorAll('#tote .od')].map((e) => e.textContent), cut: G.CUT.kind, pops, popOverlapCentre: pops.filter((p) => p.overlapsCentre).length, resultsShown: res.style.display === 'flex', hint: (res.querySelector('.hint') || {}).textContent || null, smoothCount: res.querySelectorAll('.award.g').length, resultsRect: res.querySelector('.box') ? (({ left, top, right, bottom }) => [left, top, right, bottom].map(Math.round))(R(res.querySelector('.box'))) : null, resultsText: (res.querySelector('.box') || {}).textContent || '', share: G.shareState() } };
     };
   }
   const _uh = updateHud; updateHud = function () { wrapObserve(); return _uh.apply(this, arguments); };
