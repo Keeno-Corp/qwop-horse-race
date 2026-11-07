@@ -9800,7 +9800,7 @@
         {
           "mouse": "click",
           "x": 1015,
-          "y": 675
+          "y": 713
         },
         {
           "wait": 10
@@ -9808,7 +9808,7 @@
         {
           "mouse": "click",
           "x": 1015,
-          "y": 641
+          "y": 679
         },
         {
           "wait": 10
@@ -9924,6 +9924,25 @@
           "path": "hud.share.firstRaceT",
           "op": "<=",
           "value": 0.1
+        },
+        {
+          "path": "hud.share.still.ok",
+          "op": "==",
+          "value": true
+        },
+        {
+          "path": "hud.share.still.leadX",
+          "op": ">=",
+          "value": 60
+        },
+        {
+          "path": "hud.share.still.w",
+          "op": "==",
+          "value": 1100
+        },
+        {
+          "path": "hud.share.still.lead",
+          "op": "exists"
         }
       ]
     },
@@ -10045,7 +10064,7 @@
         {
           "mouse": "click",
           "x": 1015,
-          "y": 675
+          "y": 713
         },
         {
           "wait": 10
@@ -10198,7 +10217,7 @@
         {
           "mouse": "click",
           "x": 1015,
-          "y": 675
+          "y": 713
         },
         {
           "wait": 10
@@ -10340,13 +10359,13 @@
           "max": 9000
         },
         {
-          "wait": 220,
+          "wait": 420,
           "draw": true
         },
         {
           "mouse": "click",
           "x": 1166,
-          "y": 638
+          "y": 676
         },
         {
           "wait": 10
@@ -10360,9 +10379,9 @@
           "value": true
         },
         {
-          "path": "hud.share.stripCols",
-          "op": ">=",
-          "value": 20
+          "path": "hud.share.still.ok",
+          "op": "==",
+          "value": true
         },
         {
           "path": "hud.share.last.kind",
@@ -10810,6 +10829,71 @@
           "path": "hud.share.urls",
           "op": "==",
           "value": 0
+        }
+      ]
+    },
+    {
+      "id": "share-still-nofinish",
+      "title": "share-still-nofinish",
+      "state": {},
+      "actions": [
+        {
+          "until": {
+            "phase": "race"
+          },
+          "max": 600
+        },
+        {
+          "key": "KeyQ",
+          "frames": 20
+        },
+        {
+          "state": {
+            "raceT": 151
+          }
+        },
+        {
+          "until": {
+            "phase": "results"
+          },
+          "max": 2500
+        },
+        {
+          "wait": 300,
+          "draw": true
+        }
+      ],
+      "frames": 0,
+      "expect": [
+        {
+          "path": "phase",
+          "op": "==",
+          "value": "results"
+        },
+        {
+          "path": "hud.share.still.ok",
+          "op": "==",
+          "value": false
+        },
+        {
+          "path": "hud.share.still.w",
+          "op": "==",
+          "value": 0
+        },
+        {
+          "path": "hud.share.finishTick",
+          "op": "==",
+          "value": -1
+        },
+        {
+          "path": "hud.share.stage",
+          "op": "==",
+          "value": "done"
+        },
+        {
+          "path": "hud.share.clip.segments.0",
+          "op": "==",
+          "value": "noFinish"
         }
       ]
     }
