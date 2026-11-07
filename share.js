@@ -5,7 +5,7 @@
 // WebM. Its duration is read back from the muxed file, never from wall time, so a slow GPU only makes the export take longer.
 import { silksCanvas } from './view.js';
 
-const FPS = 30, STEP = 2, CLIP_W = 640, CLIP_H = 360, KEY_EVERY = 30, MAX_TICKS = 12000, MAX_COLS = 400, STRIP_H = 360, SLIT_W = 16;
+const FPS = 30, STEP = 2, CLIP_W = 640, CLIP_H = 360, KEY_EVERY = 30, MAX_TICKS = 12000, STILL_W = 1100, STILL_H = 450, BAND_T = 34, BAND_B = 28, REG_H = STILL_H - BAND_T - BAND_B, VIEW_H = 3.6, SS = 2;
 const TITLE = 'The Photo Finish Fiasco Stakes';
 const pad = (n) => String(n).padStart(2, '0');
 
@@ -112,26 +112,57 @@ export function createShare(G) {
   const torsoX = (tick, hi) => store.poses[tick * FRAME + hi * NP * 7];
   const leaderTip = (tick) => Math.max(store.tip[tick * 4], store.tip[tick * 4 + 1], store.tip[tick * 4 + 2], store.tip[tick * 4 + 3]);
 
-  // ---------- the photo-finish print: a slit-scan rendered from the stored poses, fixed camera on the line ----------
-  const strip = { buf: {}, mark: -1 };
-  function stripReset() { strip.buf = {}; strip.mark = -1; }
-  function stripPlan() {
-    const F = store.finish; if (F < 0) return [];
-    const a = Math.max(0, F - 45), b = Math.min(store.n - 1, F + 75), out = []; for (let t = a; t <= b; t++) out.push(t); return out;
+  // ---------- the photo-finish print: ONE sharp still rebuilt from the recorded poses at the leader's first nose crossing ----------
+  // NOT a slit-scan: a single orthographic render (side-on, tilted down ~30 deg so the four lanes separate and the near rail stays below the horses),
+  // rendered once after the results show, then graded sepia and marked up in 2D (finish line, metre scale, chips). No live renders or readbacks.
+  const still = { cv: null, tick: -1, lead: -1, ok: false, leadX: 0 };
+  function stillReset() { still.cv = null; still.tick = -1; still.lead = -1; still.ok = false; still.leadX = 0; }
+  const PITCH = 30 * Math.PI / 180, VIEW_W = VIEW_H * STILL_W / REG_H, LINE_AT = 0.84;
+  function stillUnit(j) {
+    const F = store.finish, RW = STILL_W * SS, RH = REG_H * SS, rt = new T.WebGLRenderTarget(RW, RH, { depthBuffer: true }); rt.texture.colorSpace = T.SRGBColorSpace;   // rendered at 2x and averaged down (no MSAA: it is not portable to every GPU)
+    try {
+      const camX = G.FINISH_X - (LINE_AT - 0.5) * VIEW_W, cam = new T.OrthographicCamera(-VIEW_W / 2, VIEW_W / 2, VIEW_H / 2, -VIEW_H / 2, 1, 120);
+      const tx = camX, ty = 0.95, tz = 0.2, d = 50; cam.position.set(tx, ty + d * Math.sin(PITCH), tz + d * Math.cos(PITCH)); cam.lookAt(tx, ty, tz);
+      const px = new Uint8Array(RW * RH * 4);
+      withPoses(F, cam, rt, camX, true, (r) => r.readRenderTargetPixels(rt, 0, 0, RW, RH, px));
+      if (blank(px)) return false;
+      const hi = document.createElement('canvas'); hi.width = RW; hi.height = RH; const hc = hi.getContext('2d'), himg = new ImageData(RW, RH), hrow = RW * 4;
+      for (let y = 0; y < RH; y++) himg.data.set(px.subarray((RH - 1 - y) * hrow, (RH - y) * hrow), y * hrow);
+      hc.putImageData(himg, 0, 0);
+      const cv = document.createElement('canvas'); cv.width = STILL_W; cv.height = STILL_H; const c = cv.getContext('2d'); c.imageSmoothingQuality = 'high'; c.drawImage(hi, 0, BAND_T, STILL_W, REG_H);
+      const img = c.getImageData(0, BAND_T, STILL_W, REG_H), d8 = img.data, row = STILL_W * 4;
+      let seed = 1234567;   // deterministic grain
+      for (let y = 0; y < REG_H; y++) {
+        for (let x = 0; x < STILL_W; x++) {
+          const o = y * row + x * 4, r = d8[o], g = d8[o + 1], b = d8[o + 2];
+          let l = (0.3 * r + 0.59 * g + 0.11 * b) / 255; l = Math.min(1, Math.max(0, (l - 0.12) * 1.55));
+          seed = (seed * 1664525 + 1013904223) >>> 0; const n = ((seed >>> 24) - 128) * 0.1;
+          d8[o] = Math.min(255, Math.max(0, (43 + 199 * l) * 0.85 + r * 0.15 + n)); d8[o + 1] = Math.min(255, Math.max(0, (24 + 201 * l) * 0.85 + g * 0.15 + n)); d8[o + 2] = Math.min(255, Math.max(0, (16 + 157 * l) * 0.85 + b * 0.15 + n)); d8[o + 3] = 255;
+        }
+      }
+      c.putImageData(img, 0, BAND_T);
+      const lead = [0, 1, 2, 3].reduce((m, k) => (store.tip[F * 4 + k] > store.tip[F * 4 + m] ? k : m), 0);
+      Object.assign(still, { cv, tick: F, lead, ok: true, leadX: +store.tip[F * 4 + lead].toFixed(2) });
+      markStill(c);
+      return true;
+    } finally { rt.dispose(); }
   }
-  function slitUnit(j) {   // render one tick's finish-line slice
-    if (!j.slit) { const rt = new T.WebGLRenderTarget(SLIT_W, STRIP_H, { depthBuffer: true }); rt.texture.colorSpace = T.SRGBColorSpace; const cam = new T.PerspectiveCamera(22, SLIT_W / STRIP_H, 1, 80); cam.position.set(G.FINISH_X, 1.7, 17); cam.lookAt(G.FINISH_X, 1.6, 0); j.slit = { rt, cam, px: new Uint8Array(STRIP_H * 4), img: new ImageData(1, STRIP_H) }; }
-    const tick = j.stripTicks[j.si], { rt, cam, px, img } = j.slit;
-    withPoses(tick, cam, rt, G.FINISH_X, true, (r) => r.readRenderTargetPixels(rt, SLIT_W >> 1, 0, 1, STRIP_H, px));
-    if (blank(px)) return false;
-    const buf = strip.buf; if (!buf.cv) { buf.cv = document.createElement('canvas'); buf.cv.width = MAX_COLS; buf.cv.height = STRIP_H; buf.ctx = buf.cv.getContext('2d'); buf.n = 0; buf.act = []; buf.base = null; }
-    if (blank(px)) return false;
-    const d = img.data; let act = 0;
-    for (let y = 0; y < STRIP_H; y++) { const o = (STRIP_H - 1 - y) * 4; d[y * 4] = px[o]; d[y * 4 + 1] = px[o + 1]; d[y * 4 + 2] = px[o + 2]; d[y * 4 + 3] = 255; }
-    buf.ctx.putImageData(img, buf.n, 0);
-    if (buf.n < 4) buf.base = buf.base ? buf.base.map((v, i) => (v * buf.n + d[i]) / (buf.n + 1)) : Array.from(d);
-    else for (let i = 0; i < d.length; i += 4) act += Math.abs(d[i] - buf.base[i]) + Math.abs(d[i + 1] - buf.base[i + 1]) + Math.abs(d[i + 2] - buf.base[i + 2]);
-    buf.act.push(act / (STRIP_H * 3)); if (tick === store.finish) strip.mark = buf.n; buf.n++; return true;
+  function markStill(c) {   // restrained photo-timing graphics: chips and a metre scale live in their own bands, so nothing can hide a horse
+    const W = STILL_W, H = STILL_H, BU = 'Bungee, Impact, sans-serif', INK = '#2b1810', CREAM = '#f2e1ad', MUS = '#e5af2c', TOM = '#d3432b', ppm = W / VIEW_W;
+    c.save(); c.beginPath(); c.rect(0, BAND_T, W, REG_H); c.clip();
+    const g = c.createRadialGradient(W / 2, H / 2, REG_H * 0.8, W / 2, H / 2, W * 0.62); g.addColorStop(0, 'rgba(43,24,16,0)'); g.addColorStop(1, 'rgba(43,24,16,.45)'); c.fillStyle = g; c.fillRect(0, 0, W, H);
+    const lx = Math.round(W * LINE_AT);
+    c.fillStyle = 'rgba(43,24,16,.5)'; c.fillRect(lx - 2, BAND_T, 5, REG_H); c.fillStyle = 'rgba(242,225,173,.85)'; c.fillRect(lx - 1, BAND_T, 3, REG_H);   // the finish line: a hairline
+    c.restore();
+    c.fillStyle = INK; c.fillRect(0, 0, W, BAND_T); c.fillRect(0, H - BAND_B, W, BAND_B);
+    for (let m = -Math.floor(lx / ppm); lx + m * ppm < W; m++) { const x = Math.round(lx + m * ppm), big = m % 5 === 0; c.fillStyle = big ? MUS : CREAM; c.fillRect(x, H - BAND_B, big ? 2 : 1, big ? 14 : 8); if (big && m <= 0) { c.font = `12px ${BU}`; c.textAlign = 'left'; c.fillText(m === 0 ? 'LINE' : `${-m} M`, x + 5, H - 6); } }
+    c.fillStyle = CREAM; c.fillRect(lx - 1, H - BAND_B, 3, BAND_B); c.fillRect(lx - 1, 0, 3, BAND_T);
+    c.textAlign = 'left'; c.font = `17px ${BU}`;
+    const chip = (x, y, w, bg, fg, txt) => { c.fillStyle = bg; c.fillRect(x, y, w, 26); c.strokeStyle = '#6b4a35'; c.lineWidth = 2; c.strokeRect(x, y, w, 26); c.fillStyle = fg; c.textAlign = 'center'; c.fillText(txt, x + w / 2, y + 19); };
+    chip(12, 4, 156, MUS, INK, 'PHOTO FINISH');
+    chip(lx - 156, 4, 142, TOM, CREAM, 'FIRST NOSE');
+    chip(W - 164, 4, 152, '#4c2c21', MUS, 'T+' + store.t[still.tick].toFixed(2) + 'S');
+    c.textAlign = 'left';
   }
 
   // ---------- the clip plan: face-plant window(s) + finish window, in ticks, never longer than 10 s ----------
@@ -204,21 +235,19 @@ export function createShare(G) {
     c.textAlign = 'left'; c.fillStyle = '#f2e1ad'; c.font = `18px ${BU}`; c.fillText(who.slice(0, 26), 32, H - 32); c.textAlign = 'center';
   }
 
-  // ---------- the job: strip columns first (the card can be made), then clip frames; a few ms of work per rendered frame ----------
+  // ---------- the job: the still first (the card can be made), then clip frames; a few ms of work per rendered frame ----------
   const supported = () => fault !== 'norec' && typeof VideoEncoder === 'function' && typeof VideoFrame === 'function';
   function startJob(d) {
-    const my = token; job = { d, token: my, stage: 'strip', stripTicks: stripPlan(), si: 0, plan: clipPlan(), fi: 0, chunks: [], enc: null, err: null, progress: 0, clip: null, flushing: false };
-    strip.buf = {}; strip.mark = -1;
+    const my = token; job = { d, token: my, stage: 'strip', plan: clipPlan(), fi: 0, chunks: [], enc: null, err: null, progress: 0, clip: null, flushing: false };
     if (!store.n) { job.stage = 'failed'; job.err = 'No race was recorded.'; }
   }
   function pump() {
     const j = job; if (!j || j.token !== token || j.stage === 'done' || j.stage === 'failed') return;
     const t0 = performance.now();
     try {
-      if (j.stage === 'strip') {
-        while (j.si < j.stripTicks.length && (performance.now() - t0 < 14 || j.si % 3)) { if (slitUnit(j) === false) { blankRetry(j); break; } j.blank = 0; j.si++; }
-        j.progress = j.stripTicks.length ? j.si / j.stripTicks.length : 1;
-        if (j.si >= j.stripTicks.length) { if (j.slit) { j.slit.rt.dispose(); j.slit = null; } onStrip(); j.stage = 'clip'; if (!startEncoder(j)) return; }
+      if (j.stage === 'strip') {   // the one still (or nothing, when no horse crossed the line)
+        if (store.finish >= 0 && stillUnit(j) === false) { blankRetry(j); return; }
+        j.blank = 0; j.progress = 1; onStrip(); j.stage = 'clip'; if (!startEncoder(j)) return;
         return;
       }
       if (j.stage === 'clip') {
@@ -276,8 +305,8 @@ export function createShare(G) {
   // ---------- per-frame hook (after the main render): pumps the job while the results are up ----------
   function frame() { if (S.phase === 'results') pump(); }
   function reset() {
-    token++; races++; storeReset(); stripReset();
-    if (job) { try { job.enc && job.enc.state !== 'closed' && job.enc.close(); } catch { /* closed */ } if (job.slit) job.slit.rt.dispose(); } job = null;
+    token++; races++; storeReset(); stillReset();
+    if (job) { try { job.enc && job.enc.state !== 'closed' && job.enc.close(); } catch { /* closed */ } } job = null;
     if (fx) { fx.rt.dispose(); fx = null; }
     for (const u of urls) URL.revokeObjectURL(u); urls.clear();
     built = null; panel = null; document.body.classList.remove('shared');
@@ -287,25 +316,24 @@ export function createShare(G) {
 
   // ---------- card ----------
   const hex = (n) => '#' + n.toString(16).padStart(6, '0');
-  function paintStrip(ctx, x, y, w, h, hasPrint) {
-    const src = (strip.buf.n || 0) >= 20 ? { cv: strip.buf.cv, n: strip.buf.n, buf: strip.buf } : null;
+  function paintStill(ctx, x, y, w, h) {
     ctx.fillStyle = '#2b1810'; ctx.fillRect(x, y, w, h);
-    if (!src) {
-      ctx.fillStyle = '#f2e1ad'; ctx.font = '22px Bungee, Impact, sans-serif'; ctx.textAlign = 'center';
-      ctx.fillText('NO PRINT: THE CAMERA NEVER CAUGHT THE LINE', x + w / 2, y + h / 2 + 8); ctx.textAlign = 'left'; return false;
+    if (!still.ok || !still.cv) {   // honest empty state: no horse crossed the line, so there is no first nose to print
+      ctx.fillStyle = '#f2e1ad'; ctx.font = `${Math.round(h * 0.055)}px Bungee, Impact, sans-serif`; ctx.textAlign = 'center';
+      ctx.fillText('NO PRINT: NO HORSE CROSSED THE LINE', x + w / 2, y + h / 2 + 8); ctx.textAlign = 'left'; return false;
     }
-    let c0 = 0, c1 = src.n;   // crop to the stretch where something crossed the line (activity above the empty-track baseline), with a little margin either side
-    const act = src.buf.act; if (act && act.length > 30) { const thr = Math.max(14, 0.35 * Math.max(...act)); const on = act.map((a, i) => (a > thr ? i : -1)).filter((i) => i >= 0); if (on.length > 8) { c0 = Math.max(0, on[0] - 14); c1 = Math.min(src.n, on[on.length - 1] + 14); if (c1 - c0 < 40) { c0 = Math.max(0, c0 - 20); c1 = Math.min(src.n, c1 + 20); } } }
-    src.c0 = c0; src.c1 = c1; ctx.imageSmoothingEnabled = true; ctx.drawImage(src.cv, c0, 0, c1 - c0, STRIP_H, x, y, w, h);
-    ctx.save(); ctx.globalCompositeOperation = 'multiply'; ctx.fillStyle = 'rgba(214,168,104,.55)'; ctx.fillRect(x, y, w, h); ctx.restore();   // sepia tint of the print
-    ctx.fillStyle = 'rgba(43,24,16,.35)'; for (let k = 0; k < w; k += 3) ctx.fillRect(x + k, y, 1, h);   // gate-weave grain
-    ctx.fillStyle = '#f2e1ad'; for (let k = 0; k <= c1 - c0; k += 30) { const tx = x + (k / (c1 - c0)) * w; ctx.fillRect(tx, y + h - 12, 2, 12); ctx.fillRect(tx, y, 2, 8); }   // half-second ticks
-    if (strip.mark >= c0 && strip.mark <= c1) { const mx = x + ((strip.mark - c0) / (c1 - c0)) * w; ctx.fillStyle = '#d3432b'; ctx.fillRect(mx - 1, y, 3, h); ctx.font = '16px Bungee, Impact, sans-serif'; ctx.fillText('FIRST NOSE', Math.min(mx + 8, x + w - 120), y + 24); }
-    return true;
+    ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high'; ctx.drawImage(still.cv, x, y, w, h); return true;
+  }
+  function thumbStill(ctx, w, h) {   // compact panel thumbnail: the whole still letterboxed (never cropped, so no horse is cut), timing text in the side bars
+    if (!still.ok) return paintStill(ctx, 0, 0, w, h);
+    const iw = Math.round(h * STILL_W / STILL_H), x = (w - iw) >> 1; paintStill(ctx, x, 0, iw, h);
+    ctx.fillStyle = '#e5af2c'; ctx.font = '12px Bungee, Impact, sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('PHOTO', x / 2, h / 2 - 6); ctx.fillText('FINISH', x / 2, h / 2 + 14);
+    ctx.fillStyle = '#f2e1ad'; ctx.fillText('T+' + store.t[still.tick].toFixed(2), x + iw + x / 2, h / 2 - 6); ctx.fillText('FIRST NOSE', x + iw + x / 2, h / 2 + 14); ctx.textAlign = 'left'; return true;
   }
   function drawCard(d) {
     if (fault === 'cardfail') throw new Error('canvas unavailable (test fault)');
-    const W = 1200, H = 860, cv = document.createElement('canvas'); cv.width = W; cv.height = H; const c = cv.getContext('2d');
+    const W = 1200, pH = Math.round((W - 100) * STILL_H / STILL_W), by = 176 + pH + 38, ry = by + 82, H = ry + 4 * 68 + 102, cv = document.createElement('canvas'); cv.width = W; cv.height = H; const c = cv.getContext('2d');
     const SH = 'Shrikhand, Georgia, serif', BU = 'Bungee, Impact, sans-serif', INK = '#2b1810', CHOC = '#4c2c21', CREAM = '#f2e1ad', TOM = '#d3432b', MUS = '#e5af2c';
     c.fillStyle = CREAM; c.fillRect(0, 0, W, H);
     const cols = [TOM, MUS, '#305da2', '#95a641']; for (let i = 0; i < W; i += 50) { c.fillStyle = cols[(i / 50) % 4]; c.fillRect(i, 0, 50, 34); }
@@ -315,15 +343,15 @@ export function createShare(G) {
     c.fillStyle = MUS; c.fillText(TITLE, W / 2 + 4, 154); c.fillStyle = CHOC; c.fillText(TITLE, W / 2, 150);
     c.textAlign = 'left';
     // print
-    const px = 50, py = 176, pw = W - 100, ph = 190;
-    c.fillStyle = INK; c.fillRect(px - 8, py - 8, pw + 16, ph + 16); paintStrip(c, px, py, pw, ph);
-    c.fillStyle = CHOC; c.font = `15px ${BU}`; c.fillText('SLIT-SCAN PRINT · FIXED CAMERA ON THE LINE, ONE SLICE PER FRAME', px, py + ph + 30);
+    const px = 50, py = 176, pw = W - 100, ph = Math.round(pw * STILL_H / STILL_W);
+    c.fillStyle = INK; c.fillRect(px - 8, py - 8, pw + 16, ph + 16); paintStill(c, px, py, pw, ph);
+    c.fillStyle = CHOC; c.font = `15px ${BU}`; c.fillText(still.ok ? `PHOTO FINISH · FIRST NOSE · STILL REBUILT FROM THE RECORDED POSES${still.lead >= 0 ? ' · ' + G.dn(roles[still.lead].name) + ' LEADS' : ''}` : 'PHOTO FINISH · NO FIRST NOSE RECORDED', px, py + ph + 30);
     // winner banner
-    c.fillStyle = TOM; c.fillRect(50, 404, W - 100, 62); c.strokeStyle = INK; c.lineWidth = 5; c.strokeRect(50, 404, W - 100, 62);
-    c.fillStyle = CREAM; c.font = `40px ${SH}`; c.fillText(d.winName, 70, 449); c.textAlign = 'right'; c.font = `20px ${BU}`; c.fillText(d.margin, W - 70, 445); c.textAlign = 'left';
+    c.fillStyle = TOM; c.fillRect(50, by, W - 100, 62); c.strokeStyle = INK; c.lineWidth = 5; c.strokeRect(50, by, W - 100, 62);
+    c.fillStyle = CREAM; c.font = `40px ${SH}`; c.fillText(d.winName, 70, by + 45); c.textAlign = 'right'; c.font = `20px ${BU}`; c.fillText(d.margin, W - 70, by + 41); c.textAlign = 'left';
     // placings
     d.rows.forEach((r, k) => {
-      const y = 486 + k * 68;
+      const y = ry + k * 68;
       c.fillStyle = k === 0 ? 'rgba(229,175,44,.35)' : 'rgba(76,44,33,.08)'; c.fillRect(50, y, W - 100, 60);
       c.fillStyle = k === 0 ? TOM : MUS; c.beginPath(); c.arc(92, y + 30, 22, 0, 7); c.fill(); c.strokeStyle = INK; c.lineWidth = 4; c.stroke();
       c.fillStyle = k === 0 ? CREAM : INK; c.font = `24px ${BU}`; c.textAlign = 'center'; c.fillText(String(k + 1), 92, y + 39); c.textAlign = 'left';
@@ -361,7 +389,7 @@ export function createShare(G) {
     if (!built || !panel) return;
     try {
       built.card = drawCard(built.d);
-      const t = document.createElement('canvas'); t.width = 680; t.height = 117; paintStrip(t.getContext('2d'), 0, 0, 680, 117); panel.querySelector('.sh-th').src = t.toDataURL('image/png');
+      const t = document.createElement('canvas'); t.width = 680; t.height = 190; thumbStill(t.getContext('2d'), t.width, t.height); panel.querySelector('.sh-th').src = t.toDataURL('image/png');
       built.cardBlob = toBlob(built.card); built.cardBlob.catch(() => {}); enable('[data-a=card],[data-a=copy]'); say('Print ready. The clip is rendering…');
     } catch (e) { built.card = null; say('Could not draw the card: ' + (e && e.message || e), 'err'); }
   }
@@ -409,7 +437,7 @@ export function createShare(G) {
 
   const stateOut = () => ({
     fault, stage: job ? job.stage : 'idle', progress: job ? +job.progress.toFixed(2) : 0, clipFailed: job && job.stage === 'failed' ? job.err : null,
-    races, stale, ticks: store.n, firstRaceT: store.n ? +store.t[0].toFixed(3) : null, lastRaceT: store.n ? +store.t[store.n - 1].toFixed(2) : null, tickSpanGap: store.n ? +(store.t[store.n - 1] - store.n / 60).toFixed(2) : null, finishTick: store.finish, falls: store.falls.map((f) => f.tick), stripCols: strip.buf.n || 0, firstNoseCol: strip.mark, activeCols: (strip.buf.act || []).filter((a) => a > 14).length,
+    races, stale, ticks: store.n, firstRaceT: store.n ? +store.t[0].toFixed(3) : null, lastRaceT: store.n ? +store.t[store.n - 1].toFixed(2) : null, tickSpanGap: store.n ? +(store.t[store.n - 1] - store.n / 60).toFixed(2) : null, finishTick: store.finish, falls: store.falls.map((f) => f.tick), still: { ok: still.ok, tick: still.tick, lead: still.lead >= 0 ? roles[still.lead].name : null, leadX: still.leadX, w: still.ok ? STILL_W : 0, h: still.ok ? STILL_H : 0 },
     clip: built && built.clip ? { frames: built.clip.frames, planned: built.clip.planned, keyframes: built.clip.keyframes, durationS: built.clip.durationS, headerDurationS: built.clip.headerDurationS, bytes: built.clip.bytes, finishAtS: built.clip.finishAtS, falls: built.clip.falls, segments: built.clip.segments, fallTarget: built.clip.fallTarget, fallSegStartS: built.clip.fallSegStartS, fallSegEndS: built.clip.fallSegEndS, downFrames: built.clip.downFrames, minLuma: built.clip.minLuma, darkFrames: built.clip.darkFrames, current: built.clip.gen === token, raceTMin: built.clip.raceTMin, raceTMax: built.clip.raceTMax } : null,
     panel: !!panel, last: state.last, urls: urls.size, history: state.history.slice(-8),
   });
